@@ -49,7 +49,7 @@ export default function ExecutivePresentation() {
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full animate-pulse" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+            <div className="absolute inset-0 bg-[url('/carbon-fibre.png')] opacity-10" />
           </div>
 
           <div className="relative z-10 max-w-5xl mx-auto space-y-8">
@@ -594,7 +594,7 @@ export default function ExecutivePresentation() {
 
               {/* Output */}
               <div className="flex-1 bg-emerald-500/10 border border-emerald-500/30 rounded-3xl p-8 text-center relative w-full shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 rounded-3xl" />
+                <div className="absolute inset-0 bg-[url('/carbon-fibre.png')] opacity-10 rounded-3xl" />
                 <div className="w-16 h-16 mx-auto bg-emerald-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30 relative z-10">
                   <Cpu size={32} className="text-white" />
                 </div>
