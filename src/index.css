@@ -3,19 +3,43 @@
    the font payload. Each weight is a separate woff2 file that the browser
    fetches on demand once the CSS is parsed.
    ─────────────────────────────────────────────────────────────────────────── */
-@import "@fontsource/inter/300.css";   /* Inter Light */
-@import "@fontsource/inter/400.css";   /* Inter Regular */
-@import "@fontsource/inter/500.css";   /* Inter Medium */
-@import "@fontsource/inter/600.css";   /* Inter SemiBold */
-@import "@fontsource/inter/700.css";   /* Inter Bold */
+@import "@fontsource/inter/300.css";
+/* Inter Light */
+@import "@fontsource/inter/400.css";
+/* Inter Regular */
+@import "@fontsource/inter/500.css";
+/* Inter Medium */
+@import "@fontsource/inter/600.css";
+/* Inter SemiBold */
+@import "@fontsource/inter/700.css";
+/* Inter Bold */
 
-@import "@fontsource/jetbrains-mono/400.css"; /* JetBrains Mono Regular */
-@import "@fontsource/jetbrains-mono/500.css"; /* JetBrains Mono Medium */
+@import "@fontsource/jetbrains-mono/400.css";
+/* JetBrains Mono Regular */
+@import "@fontsource/jetbrains-mono/500.css";
+/* JetBrains Mono Medium */
+
+/* ── Metric-adjusted fallback for Inter ────────────────────────────────────
+   Makes Arial/system fonts occupy the EXACT same space as Inter while
+   Inter is loading (font-display: swap). When Inter swaps in, the text
+   doesn't move → zero CLS from font loading.
+   Values sourced from: https://github.com/nicholasgasior/font-metrics
+   ─────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Inter-fallback';
+  font-style: normal;
+  font-weight: 100 900;
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  ascent-override: 90.20%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+  size-adjust: 107.40%;
+}
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Inter-fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 

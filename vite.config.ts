@@ -101,6 +101,39 @@ export default defineConfig(({ mode }) => {
             const filePath = join(options.dir, entry.fileName + ext);
             if (existsSync(filePath)) unlinkSync(filePath);
           }
+
+          // ── Inject modulepreload for critical lazy chunks ───────────────────
+          // The vendor chunks are already preloaded by Vite (they're static
+          // imports). But ExecutivePresentation and Login are lazy (dynamic
+          // import) so Vite doesn't add preload hints for them.
+          //
+          // Without preloads: HTML → bootstrap runs → lazy import fires →
+          //   chunk downloads (≈100-400ms) → Suspense shows loader →
+          //   content replaces loader → 0.738 CLS on <body>!
+          //
+          // With preloads: HTML arrives → browser IMMEDIATELY fetches the
+          //   chunks in parallel with bootstrap execution → by the time
+          //   React runs the lazy import, the chunk is already ready →
+          //   Suspense never shows its fallback → 0 CLS.
+          const criticalChunkNames = ['ExecutivePresentation', 'Login'];
+          const criticalChunks = Object.values(bundle).filter(
+            (c): c is typeof bundle[string] & { type: 'chunk'; name: string; fileName: string } =>
+              c.type === 'chunk' &&
+              !('isEntry' in c && c.isEntry) &&
+              'name' in c &&
+              typeof c.name === 'string' &&
+              criticalChunkNames.some(n => c.name === n)
+          );
+
+          if (criticalChunks.length > 0) {
+            let finalHtml = readFileSync(htmlPath, 'utf8');
+            const preloadLinks = criticalChunks
+              .map(c => `  <link rel="modulepreload" crossorigin href="/${c.fileName}">`)
+              .join('\n');
+            finalHtml = finalHtml.replace('</head>', `${preloadLinks}\n</head>`);
+            writeFileSync(htmlPath, finalHtml);
+            console.log(`[inline-tiny-entry] ✓ Added modulepreload for: ${criticalChunks.map(c => c.name).join(', ')}`);
+          }
         },
       },
     ],
