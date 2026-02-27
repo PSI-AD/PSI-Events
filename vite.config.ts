@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import path from 'path';
 import { constants as zlibConstants } from 'zlib';
@@ -48,108 +48,45 @@ export default defineConfig(({ mode }) => {
           );
         },
       },
-      // Bundle visualizer — remove after analysis
-      // visualizer({ filename: 'dist/stats.html', open: false, gzipSize: true }),
-      // ── Inline tiny entry chunk into HTML ────────────────────────────────
-      // The bootstrap chunk (index-xxx.js) is only ~2 KiB but still causes
-      // a full network roundtrip (HTML → index.js = 481ms on mobile).
-      // When it's this small, inlining it into the HTML eliminates the
-      // extra request entirely — the browser has the code the instant
-      // the HTML arrives, with zero extra latency.
+      // ── Preload critical lazy chunks ──────────────────────────────────────
+      // Vite adds modulepreload for statically-imported chunks automatically.
+      // But React.lazy() chunks (ExecutivePresentation, Login) are dynamic
+      // imports — Vite does NOT preload them by default.
+      //
+      // Without preload: HTML → bootstrap → lazy import fires → wait 100-400ms
+      //   → Suspense shows loader → page content replaces loader → 0.738 CLS
+      //
+      // With preload: HTML arrives → browser fetches page chunk IMMEDIATELY
+      //   in parallel with bootstrap execution → chunk is ready before React
+      //   needs it → Suspense never shows fallback → 0 CLS
       {
-        name: 'inline-tiny-entry',
+        name: 'preload-critical-chunks',
         apply: 'build',
         enforce: 'post',
-        writeBundle(options: { dir?: string }, bundle: Record<string, { type: string; isEntry?: boolean; code?: string; fileName: string }>) {
+        writeBundle(options: { dir?: string }, bundle: Record<string, { type: string; isEntry?: boolean; name?: string; fileName: string }>) {
           if (!options.dir) return;
 
           const htmlPath = join(options.dir, 'index.html');
           if (!existsSync(htmlPath)) return;
 
-          // Find the lone entry chunk (our tiny bootstrap)
-          const entry = Object.values(bundle).find(
-            (c) => c.type === 'chunk' && c.isEntry === true
-          );
-          if (!entry || !entry.code) return;
-
-          const sizeKB = Buffer.byteLength(entry.code, 'utf8') / 1024;
-          // Safety valve — only inline if still small (< 10 KB unminified)
-          if (sizeKB >= 10) {
-            console.log(`[inline-tiny-entry] Skipping — entry chunk is ${sizeKB.toFixed(1)} KB (threshold: 10 KB)`);
-            return;
-          }
-
-          let html = readFileSync(htmlPath, 'utf8');
-
-          // ── Fix relative imports before inlining ─────────────────────────
-          // The entry chunk's static imports use relative paths (e.g. from"./vendor-react-xxx.js")
-          // because Rollup assumes the script lives at /assets/index-xxx.js.
-          // When inlined into the HTML at /, those relative paths resolve to
-          // /vendor-react-xxx.js (NOT /assets/vendor-react-xxx.js) — 404!
-          // Firebase returns its SPA index.html with MIME "text/html" for 404s,
-          // which the browser rejects as "not a valid module script" → app dies.
-          //
-          // Fix: rewrite all static `from"./..."` relative imports to
-          // absolute `from"/assets/..."` paths so they resolve correctly
-          // regardless of which URL the HTML is served from.
-          const patchedCode = entry.code
-            .trim()
-            .replace(/from"\.\/([^"]+)"/g, 'from"/assets/$1"')
-            .replace(/from'\.\/([^']+)'/g, "from'/assets/$1'");
-
-          // Replace: <script type="module" crossorigin src="/assets/index-xxx.js"></script>
-          // With:    <script type="module">...inlined + path-fixed code...</script>
-          const replaced = html.replace(
-            /<script type="module" crossorigin src="\/assets\/index-[^"]+\.js"><\/script>/,
-            `<script type="module">${patchedCode}</script>`
-          );
-
-          if (replaced === html) {
-            console.warn('[inline-tiny-entry] Entry script tag not found in HTML — skipping.');
-            return;
-          }
-
-          writeFileSync(htmlPath, replaced);
-          console.log(`[inline-tiny-entry] ✓ Inlined ${sizeKB.toFixed(2)} KB entry chunk into index.html`);
-
-          // Remove the now-redundant separate JS file (and its .gz/.br siblings)
-          for (const ext of ['', '.gz', '.br']) {
-            const filePath = join(options.dir, entry.fileName + ext);
-            if (existsSync(filePath)) unlinkSync(filePath);
-          }
-
-          // ── Inject modulepreload for critical lazy chunks ───────────────────
-          // The vendor chunks are already preloaded by Vite (they're static
-          // imports). But ExecutivePresentation and Login are lazy (dynamic
-          // import) so Vite doesn't add preload hints for them.
-          //
-          // Without preloads: HTML → bootstrap runs → lazy import fires →
-          //   chunk downloads (≈100-400ms) → Suspense shows loader →
-          //   content replaces loader → 0.738 CLS on <body>!
-          //
-          // With preloads: HTML arrives → browser IMMEDIATELY fetches the
-          //   chunks in parallel with bootstrap execution → by the time
-          //   React runs the lazy import, the chunk is already ready →
-          //   Suspense never shows its fallback → 0 CLS.
           const criticalChunkNames = ['ExecutivePresentation', 'Login'];
           const criticalChunks = Object.values(bundle).filter(
-            (c): c is typeof bundle[string] & { type: 'chunk'; name: string; fileName: string } =>
+            (c) =>
               c.type === 'chunk' &&
-              !('isEntry' in c && c.isEntry) &&
-              'name' in c &&
+              !c.isEntry &&
               typeof c.name === 'string' &&
-              criticalChunkNames.some(n => c.name === n)
+              criticalChunkNames.includes(c.name)
           );
 
-          if (criticalChunks.length > 0) {
-            let finalHtml = readFileSync(htmlPath, 'utf8');
-            const preloadLinks = criticalChunks
-              .map(c => `  <link rel="modulepreload" crossorigin href="/${c.fileName}">`)
-              .join('\n');
-            finalHtml = finalHtml.replace('</head>', `${preloadLinks}\n</head>`);
-            writeFileSync(htmlPath, finalHtml);
-            console.log(`[inline-tiny-entry] ✓ Added modulepreload for: ${criticalChunks.map(c => c.name).join(', ')}`);
-          }
+          if (criticalChunks.length === 0) return;
+
+          let html = readFileSync(htmlPath, 'utf8');
+          const preloadLinks = criticalChunks
+            .map(c => `  <link rel="modulepreload" crossorigin href="/assets/${c.fileName.replace(/^assets\//, '')}">`)
+            .join('\n');
+          html = html.replace('</head>', `${preloadLinks}\n</head>`);
+          writeFileSync(htmlPath, html);
+          console.log(`[preload-critical-chunks] ✓ Added modulepreload for: ${criticalChunks.map(c => c.name).join(', ')}`);
         },
       },
     ],
