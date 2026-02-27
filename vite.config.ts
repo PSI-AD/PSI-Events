@@ -1,5 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { join } from 'path';
 import path from 'path';
 import { constants as zlibConstants } from 'zlib';
 import { defineConfig, loadEnv } from 'vite';
@@ -48,6 +50,59 @@ export default defineConfig(({ mode }) => {
       },
       // Bundle visualizer — remove after analysis
       // visualizer({ filename: 'dist/stats.html', open: false, gzipSize: true }),
+      // ── Inline tiny entry chunk into HTML ────────────────────────────────
+      // The bootstrap chunk (index-xxx.js) is only ~2 KiB but still causes
+      // a full network roundtrip (HTML → index.js = 481ms on mobile).
+      // When it's this small, inlining it into the HTML eliminates the
+      // extra request entirely — the browser has the code the instant
+      // the HTML arrives, with zero extra latency.
+      {
+        name: 'inline-tiny-entry',
+        apply: 'build',
+        enforce: 'post',
+        writeBundle(options: { dir?: string }, bundle: Record<string, { type: string; isEntry?: boolean; code?: string; fileName: string }>) {
+          if (!options.dir) return;
+
+          const htmlPath = join(options.dir, 'index.html');
+          if (!existsSync(htmlPath)) return;
+
+          // Find the lone entry chunk (our tiny bootstrap)
+          const entry = Object.values(bundle).find(
+            (c) => c.type === 'chunk' && c.isEntry === true
+          );
+          if (!entry || !entry.code) return;
+
+          const sizeKB = Buffer.byteLength(entry.code, 'utf8') / 1024;
+          // Safety valve — only inline if still small (< 10 KB unminified)
+          if (sizeKB >= 10) {
+            console.log(`[inline-tiny-entry] Skipping — entry chunk is ${sizeKB.toFixed(1)} KB (threshold: 10 KB)`);
+            return;
+          }
+
+          let html = readFileSync(htmlPath, 'utf8');
+
+          // Replace: <script type="module" crossorigin src="/assets/index-xxx.js"></script>
+          // With:    <script type="module">...inlined code...</script>
+          const replaced = html.replace(
+            /<script type="module" crossorigin src="\/assets\/index-[^"]+\.js"><\/script>/,
+            `<script type="module">${entry.code.trim()}</script>`
+          );
+
+          if (replaced === html) {
+            console.warn('[inline-tiny-entry] Entry script tag not found in HTML — skipping.');
+            return;
+          }
+
+          writeFileSync(htmlPath, replaced);
+          console.log(`[inline-tiny-entry] ✓ Inlined ${sizeKB.toFixed(2)} KB entry chunk into index.html`);
+
+          // Remove the now-redundant separate JS file (and its .gz/.br siblings)
+          for (const ext of ['', '.gz', '.br']) {
+            const filePath = join(options.dir, entry.fileName + ext);
+            if (existsSync(filePath)) unlinkSync(filePath);
+          }
+        },
+      },
     ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
