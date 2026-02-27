@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /executive-presentation
+Disallow: /admin
+Disallow: /settings
+
+Sitemap: https://psievents-pro.web.app/sitemap.xml
