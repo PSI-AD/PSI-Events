@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# PSI Events — Firebase Hosting CI/CD Pipeline
+# Triggers on every push to `main` and deploys the Vite build to Firebase
+# Hosting project: psievents-pro
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Deploy to Firebase Hosting (main)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read      # Checkout the repo
+      id-token: write     # Required for Workload Identity Federation (future-proof)
+
+    steps:
+      # ── 1. Checkout source code ────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Node.js ─────────────────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── 3. Install dependencies ───────────────────────────────────────────
+      #    `npm ci` is preferred over `npm install` in CI:
+      #    - Uses package-lock.json for deterministic, reproducible installs
+      #    - Deletes node_modules/ first to prevent stale dep contamination
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Build the Vite production bundle ───────────────────────────────
+      #    Output lands in ./dist (configured in vite.config.ts)
+      - name: Build
+        run: npm run build
+        env:
+          # Inject all VITE_ prefixed secrets from GitHub Secrets
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # ── 5. Deploy to Firebase Hosting ─────────────────────────────────────
+      #    Uses the official FirebaseExtended action.
+      #    The service account secret must be named exactly:
+      #    FIREBASE_SERVICE_ACCOUNT_PSIEVENTS_PRO
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PSIEVENTS_PRO }}
+          projectId: psievents-pro
+          channelId: live

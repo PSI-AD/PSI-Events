@@ -1,0 +1,204 @@
+#!/usr/bin/env node
+/**
+ * setup-firebase-env.js
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Interactive setup script for PSI Events — securely collects Firebase
+ * configuration values from the terminal and writes them to .env.local
+ * at the project root.
+ *
+ * Run with:  node scripts/setup-firebase-env.js
+ *
+ * ⚠️  NEVER commit .env.local to git. It is already covered by .gitignore.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+import readline from 'readline';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Resolve project root (one level up from /scripts)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..');
+const ENV_FILE_PATH = path.join(PROJECT_ROOT, '.env.local');
+
+// ── Colour helpers (no external deps) ────────────────────────────────────────
+const c = {
+    reset: '\x1b[0m',
+    bold: '\x1b[1m',
+    dim: '\x1b[2m',
+    green: '\x1b[32m',
+    cyan: '\x1b[36m',
+    yellow: '\x1b[33m',
+    red: '\x1b[31m',
+    blue: '\x1b[34m',
+};
+const bold = (s) => `${c.bold}${s}${c.reset}`;
+const green = (s) => `${c.green}${s}${c.reset}`;
+const cyan = (s) => `${c.cyan}${s}${c.reset}`;
+const yellow = (s) => `${c.yellow}${s}${c.reset}`;
+const red = (s) => `${c.red}${s}${c.reset}`;
+const dim = (s) => `${c.dim}${s}${c.reset}`;
+
+// ── Variables to collect ──────────────────────────────────────────────────────
+// Each entry: { envKey, label, hint, required }
+const FIELDS = [
+    {
+        envKey: 'VITE_FIREBASE_API_KEY',
+        label: 'Firebase API Key',
+        hint: 'Starts with "AIza..."',
+        required: true,
+    },
+    {
+        envKey: 'VITE_FIREBASE_AUTH_DOMAIN',
+        label: 'Firebase Auth Domain',
+        hint: 'e.g. psievents-pro.firebaseapp.com',
+        required: true,
+    },
+    {
+        envKey: 'VITE_FIREBASE_PROJECT_ID',
+        label: 'Firebase Project ID',
+        hint: 'e.g. psievents-pro',
+        required: true,
+    },
+    {
+        envKey: 'VITE_FIREBASE_STORAGE_BUCKET',
+        label: 'Firebase Storage Bucket',
+        hint: 'e.g. psievents-pro.appspot.com',
+        required: true,
+    },
+    {
+        envKey: 'VITE_FIREBASE_MESSAGING_SENDER_ID',
+        label: 'Firebase Messaging Sender ID',
+        hint: 'Numeric ID from Firebase Console',
+        required: true,
+    },
+    {
+        envKey: 'VITE_FIREBASE_APP_ID',
+        label: 'Firebase App ID',
+        hint: 'e.g. 1:123456789:web:abc123...',
+        required: true,
+    },
+    {
+        envKey: 'GEMINI_API_KEY',
+        label: 'Gemini API Key',
+        hint: 'Used by vite.config.ts — leave blank to skip',
+        required: false,
+    },
+];
+
+// ── Readline setup ────────────────────────────────────────────────────────────
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
+
+// Wrap rl.question in a Promise so we can use async/await
+function ask(question) {
+    return new Promise((resolve) => rl.question(question, resolve));
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+async function main() {
+    console.log('\n' + bold('━'.repeat(60)));
+    console.log(bold('  PSI Events — Firebase Environment Setup'));
+    console.log(bold('━'.repeat(60)));
+    console.log(dim('  Values are written to .env.local and never leave your machine.'));
+    console.log(dim(`  Output file: ${ENV_FILE_PATH}`));
+    console.log(bold('━'.repeat(60)) + '\n');
+
+    // Warn if .env.local already exists
+    if (fs.existsSync(ENV_FILE_PATH)) {
+        const overwrite = await ask(
+            yellow(`  ⚠️  .env.local already exists. Overwrite it? (y/N): `)
+        );
+        if (overwrite.trim().toLowerCase() !== 'y') {
+            console.log(red('\n  Aborted. Your existing .env.local was not modified.\n'));
+            rl.close();
+            process.exit(0);
+        }
+        console.log('');
+    }
+
+    const collected = {};
+
+    for (const field of FIELDS) {
+        const label = cyan(bold(field.label));
+        const hintText = dim(`  ${field.hint}`);
+        const required = field.required ? red(' *') : dim(' (optional)');
+
+        console.log(`  ${label}${required}`);
+        console.log(hintText);
+
+        let value = '';
+        while (true) {
+            value = (await ask(`  ${bold('›')} `)).trim();
+
+            if (!value && field.required) {
+                console.log(red('  This field is required. Please enter a value.\n'));
+                continue;
+            }
+            break;
+        }
+
+        collected[field.envKey] = value;
+        console.log(green(`  ✓ Saved\n`));
+    }
+
+    // ── Build the .env.local content ────────────────────────────────────────────
+    const timestamp = new Date().toISOString();
+    const lines = [
+        `# .env.local — PSI Events Firebase Configuration`,
+        `# Generated by scripts/setup-firebase-env.js on ${timestamp}`,
+        `# ⚠️  DO NOT COMMIT THIS FILE — it is covered by .gitignore`,
+        ``,
+        `# ── Firebase Client SDK ──────────────────────────────────────────────────`,
+        `VITE_FIREBASE_API_KEY=${collected['VITE_FIREBASE_API_KEY']}`,
+        `VITE_FIREBASE_AUTH_DOMAIN=${collected['VITE_FIREBASE_AUTH_DOMAIN']}`,
+        `VITE_FIREBASE_PROJECT_ID=${collected['VITE_FIREBASE_PROJECT_ID']}`,
+        `VITE_FIREBASE_STORAGE_BUCKET=${collected['VITE_FIREBASE_STORAGE_BUCKET']}`,
+        `VITE_FIREBASE_MESSAGING_SENDER_ID=${collected['VITE_FIREBASE_MESSAGING_SENDER_ID']}`,
+        `VITE_FIREBASE_APP_ID=${collected['VITE_FIREBASE_APP_ID']}`,
+        ``,
+        `# ── Gemini AI ─────────────────────────────────────────────────────────────`,
+        `GEMINI_API_KEY=${collected['GEMINI_API_KEY'] || ''}`,
+    ];
+
+    const envContent = lines.join('\n') + '\n';
+
+    // ── Write the file ───────────────────────────────────────────────────────────
+    try {
+        fs.writeFileSync(ENV_FILE_PATH, envContent, { encoding: 'utf8', mode: 0o600 });
+    } catch (err) {
+        console.error(red(`\n  ✗ Failed to write .env.local:\n  ${err.message}\n`));
+        rl.close();
+        process.exit(1);
+    }
+
+    // ── Summary ──────────────────────────────────────────────────────────────────
+    console.log(bold('━'.repeat(60)));
+    console.log(green(bold('  ✅ .env.local created successfully!')));
+    console.log(bold('━'.repeat(60)));
+    console.log(`\n  ${bold('File:')}  ${cyan(ENV_FILE_PATH)}`);
+    console.log(`  ${bold('Mode:')}  ${dim('0600 (owner read/write only)')}`);
+    console.log(`\n  ${bold('Variables written:')}`);
+    for (const [key, val] of Object.entries(collected)) {
+        if (!val) continue;
+        // Mask all but first 6 chars for display
+        const masked = val.length > 6
+            ? val.slice(0, 6) + '•'.repeat(Math.min(val.length - 6, 20))
+            : '••••••';
+        console.log(`  ${green('✓')} ${cyan(key)} = ${dim(masked)}`);
+    }
+    console.log(`\n  ${yellow('Next steps:')}`);
+    console.log(`  ${dim('1.')} Run ${cyan('npm run dev')} — Vite will pick up .env.local automatically.`);
+    console.log(`  ${dim('2.')} Add each value to ${cyan('GitHub Secrets')} for the CI/CD pipeline.`);
+    console.log(`  ${dim('3.')} Never share or commit .env.local.\n`);
+
+    rl.close();
+}
+
+main().catch((err) => {
+    console.error(red(`\n  Unexpected error: ${err.message}\n`));
+    process.exit(1);
+});
