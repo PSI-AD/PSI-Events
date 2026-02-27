@@ -44,6 +44,20 @@ export default defineConfig(({ mode }) => {
     build: {
       // Raise the warning threshold — our single-chunk bundle is intentional for now
       chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          // Split heavy vendor libraries into separate, long-cacheable chunks.
+          // Users only re-download a chunk when THAT library changes.
+          manualChunks: {
+            // React core + router — changes rarely
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            // Framer Motion — large animation library
+            'vendor-motion': ['motion'],
+            // Lucide icons — large icon set
+            'vendor-icons': ['lucide-react'],
+          },
+        },
+      },
     },
   };
 });
