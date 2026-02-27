@@ -81,11 +81,27 @@ export default defineConfig(({ mode }) => {
 
           let html = readFileSync(htmlPath, 'utf8');
 
+          // ── Fix relative imports before inlining ─────────────────────────
+          // The entry chunk's static imports use relative paths (e.g. from"./vendor-react-xxx.js")
+          // because Rollup assumes the script lives at /assets/index-xxx.js.
+          // When inlined into the HTML at /, those relative paths resolve to
+          // /vendor-react-xxx.js (NOT /assets/vendor-react-xxx.js) — 404!
+          // Firebase returns its SPA index.html with MIME "text/html" for 404s,
+          // which the browser rejects as "not a valid module script" → app dies.
+          //
+          // Fix: rewrite all static `from"./..."` relative imports to
+          // absolute `from"/assets/..."` paths so they resolve correctly
+          // regardless of which URL the HTML is served from.
+          const patchedCode = entry.code
+            .trim()
+            .replace(/from"\.\/([^"]+)"/g, 'from"/assets/$1"')
+            .replace(/from'\.\/([^']+)'/g, "from'/assets/$1'");
+
           // Replace: <script type="module" crossorigin src="/assets/index-xxx.js"></script>
-          // With:    <script type="module">...inlined code...</script>
+          // With:    <script type="module">...inlined + path-fixed code...</script>
           const replaced = html.replace(
             /<script type="module" crossorigin src="\/assets\/index-[^"]+\.js"><\/script>/,
-            `<script type="module">${entry.code.trim()}</script>`
+            `<script type="module">${patchedCode}</script>`
           );
 
           if (replaced === html) {
