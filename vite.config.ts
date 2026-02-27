@@ -27,6 +27,24 @@ export default defineConfig(({ mode }) => {
         deleteOriginFile: false,
         compressionOptions: { params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 11 } },
       }),
+      // ── Non-blocking CSS loading ──────────────────────────────────────────
+      // Converts Vite's render-blocking <link rel="stylesheet"> into a
+      // preload + media="print" pattern so it no longer blocks the first paint.
+      // The onload handler swaps media to "all" once the stylesheet is fetched.
+      {
+        name: 'non-blocking-css',
+        apply: 'build',
+        transformIndexHtml(html: string) {
+          // Match Vite's emitted CSS link tags
+          return html.replace(
+            /<link rel="stylesheet" crossorigin href="([^"]+\.css)">/g,
+            (_, href) =>
+              `<link rel="preload" as="style" href="${href}">` +
+              `<link rel="stylesheet" media="print" onload="this.media='all';this.onload=null" href="${href}">` +
+              `<noscript><link rel="stylesheet" href="${href}"></noscript>`
+          );
+        },
+      },
     ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),

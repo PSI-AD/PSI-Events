@@ -1,4 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+/* ─── Fonts: self-hosted via @fontsource (no Google CDN roundtrip) ─────────
+   Only import the exact weights actually used in the app to minimise
+   the font payload. Each weight is a separate woff2 file that the browser
+   fetches on demand once the CSS is parsed.
+   ─────────────────────────────────────────────────────────────────────────── */
+@import "@fontsource/inter/300.css";   /* Inter Light */
+@import "@fontsource/inter/400.css";   /* Inter Regular */
+@import "@fontsource/inter/500.css";   /* Inter Medium */
+@import "@fontsource/inter/600.css";   /* Inter SemiBold */
+@import "@fontsource/inter/700.css";   /* Inter Bold */
+
+@import "@fontsource/jetbrains-mono/400.css"; /* JetBrains Mono Regular */
+@import "@fontsource/jetbrains-mono/500.css"; /* JetBrains Mono Medium */
+
 @import "tailwindcss";
 
 @theme {
