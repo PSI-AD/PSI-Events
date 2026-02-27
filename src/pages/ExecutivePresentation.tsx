@@ -832,7 +832,7 @@ export default function ExecutivePresentation() {
                 <Zap className="text-emerald-400 fill-emerald-400" size={20} />
               </div>
               <div>
-                <h1 className="text-xl font-extrabold tracking-tight text-white">PSI ROI Portal</h1>
+                <p className="text-xl font-extrabold tracking-tight text-white">PSI ROI Portal</p>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-bold">Executive Vision 2026</p>
               </div>
             </div>
