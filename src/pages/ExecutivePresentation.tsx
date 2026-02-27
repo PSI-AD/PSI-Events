@@ -24,7 +24,11 @@ import {
   ArrowDown,
   Globe,
   Activity,
-  Server
+  Server,
+  Terminal,
+  History,
+  ShieldAlert,
+  Calculator
 } from 'lucide-react';
 
 const Section = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
@@ -676,6 +680,107 @@ export default function ExecutivePresentation() {
             </div>
           </div>
 
+        </div>
+      </Section>
+
+      {/* Section: The Command Center */}
+      <Section className="bg-[#050505] text-white border-t border-white/5">
+        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                <Terminal size={14} />
+                Command Center
+              </div>
+              <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-white">
+                Absolute Accountability <br/><span className="text-slate-500">& Traceability.</span>
+              </h2>
+              <p className="text-xl text-slate-400 font-medium leading-relaxed">
+                When enterprise money is moving, "I don't know what happened" is not an acceptable answer.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Pillar 1 */}
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                  <History size={20} className="text-blue-400" />
+                </div>
+                <h4 className="text-lg font-extrabold text-white">The Human Trail</h4>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">Every status change, document verification, and expense entry is permanently time-stamped with the actor's exact CRM ID.</p>
+              </div>
+              {/* Pillar 2 */}
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                  <Activity size={20} className="text-emerald-400" />
+                </div>
+                <h4 className="text-lg font-extrabold text-white">API Health Monitoring</h4>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">Webhooks are actively monitored. Dead Letter Queues automatically retry failed CRM property syncs before alerting DevOps.</p>
+              </div>
+              {/* Pillar 3 */}
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
+                  <ShieldAlert size={20} className="text-rose-400" />
+                </div>
+                <h4 className="text-lg font-extrabold text-white">Intrusion Detection</h4>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">If an agent attempts to bypass Row-Level Security to view company margins, the system physically blocks them and flags an immediate security alert.</p>
+              </div>
+              {/* Pillar 4 */}
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20">
+                  <Calculator size={20} className="text-amber-400" />
+                </div>
+                <h4 className="text-lg font-extrabold text-white">Mathematical Failsafes</h4>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">Cloud Functions are hardcoded to catch divide-by-zero errors. If zero agents arrive, the target math defaults to zero gracefully instead of crashing the dashboard.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Terminal UI */}
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-b from-emerald-500/20 via-rose-500/20 to-amber-500/20 blur-2xl opacity-50 rounded-[3rem]" />
+            <div className="relative bg-[#0a0a0a] border border-white/10 rounded-3xl overflow-hidden shadow-2xl font-mono text-sm">
+              {/* Terminal Header */}
+              <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="ml-4 text-xs text-slate-500 font-bold tracking-widest uppercase">system_audit_log.tail</span>
+              </div>
+              {/* Terminal Body */}
+              <div className="p-6 space-y-4">
+                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }} className="flex gap-3">
+                  <span className="text-slate-600 shrink-0">14:02:11</span>
+                  <span className="text-emerald-400 shrink-0">[🟢 SUCCESS]</span>
+                  <span className="text-slate-300">API Webhook: Mamsha Gardens Sync Complete</span>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="flex gap-3">
+                  <span className="text-slate-600 shrink-0">14:05:43</span>
+                  <span className="text-amber-400 shrink-0">[🟡 AUDIT]</span>
+                  <span className="text-slate-300">Manager ID-8472 Approved Agent 'Gold Tier'</span>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="flex gap-3">
+                  <span className="text-slate-600 shrink-0">14:12:09</span>
+                  <span className="text-emerald-400 shrink-0">[🟢 SUCCESS]</span>
+                  <span className="text-slate-300">Cloud Function: Target Dilution Executed (75/Agent)</span>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.7 }} className="flex gap-3">
+                  <span className="text-slate-600 shrink-0">14:18:22</span>
+                  <span className="text-rose-400 shrink-0">[🔴 BLOCKED]</span>
+                  <span className="text-rose-200">403 Intrusion: Agent attempted Gross Profit read</span>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: 0.9 }} className="flex gap-3">
+                  <span className="text-slate-600 shrink-0">14:18:23</span>
+                  <span className="text-amber-400 shrink-0">[🟡 ALERT]</span>
+                  <span className="text-slate-300">Security Notification dispatched to Admin</span>
+                </motion.div>
+                <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ repeat: Infinity, duration: 1 }} className="flex gap-3 pt-4">
+                  <span className="text-slate-600 shrink-0">14:18:24</span>
+                  <span className="text-emerald-500">_</span>
+                </motion.div>
+              </div>
+            </div>
+          </div>
         </div>
       </Section>
 
