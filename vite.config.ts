@@ -5,6 +5,7 @@ import { constants as zlibConstants } from 'zlib';
 import { defineConfig, loadEnv } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
@@ -45,6 +46,8 @@ export default defineConfig(({ mode }) => {
           );
         },
       },
+      // Bundle visualizer — remove after analysis
+      // visualizer({ filename: 'dist/stats.html', open: false, gzipSize: true }),
     ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
@@ -64,15 +67,48 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
-          // Split heavy vendor libraries into separate, long-cacheable chunks.
-          // Users only re-download a chunk when THAT library changes.
-          manualChunks: {
-            // React core + router — changes rarely
-            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            // Framer Motion — large animation library
-            'vendor-motion': ['motion'],
-            // Lucide icons — large icon set
-            'vendor-icons': ['lucide-react'],
+          // Function form of manualChunks catches ALL transitive sub-modules
+          // by matching on the actual resolved file path. This is more reliable
+          // than the object form which only matches the top-level package entry.
+          manualChunks(id: string) {
+            // ── Recharts (huge, only Analytics page needs it) ──────────────
+            if (id.includes('node_modules/recharts') ||
+              id.includes('node_modules/d3-') ||
+              id.includes('node_modules/victory-vendor')) {
+              return 'vendor-recharts';
+            }
+            // ── Framer Motion (all sub-modules) ───────────────────────────
+            if (id.includes('node_modules/motion') ||
+              id.includes('node_modules/framer-motion') ||
+              id.includes('node_modules/@motionone')) {
+              return 'vendor-motion';
+            }
+            // ── React ecosystem (react-dom is the 552KB culprit) ──────────
+            if (id.includes('node_modules/react-dom') ||
+              id.includes('node_modules/react-router') ||
+              id.includes('node_modules/react-router-dom') ||
+              id.includes('node_modules/scheduler')) {
+              return 'vendor-react';
+            }
+            // ── React core ────────────────────────────────────────────────
+            if (id.includes('node_modules/react/')) {
+              return 'vendor-react';
+            }
+            // ── Lucide icons ──────────────────────────────────────────────
+            if (id.includes('node_modules/lucide-react')) {
+              return 'vendor-icons';
+            }
+            // ── Firebase SDK ─────────────────────────────────────────────
+            if (id.includes('node_modules/firebase') ||
+              id.includes('node_modules/@firebase')) {
+              return 'vendor-firebase';
+            }
+            // ── Utility libraries ─────────────────────────────────────────
+            if (id.includes('node_modules/clsx') ||
+              id.includes('node_modules/tailwind-merge') ||
+              id.includes('node_modules/date-fns')) {
+              return 'vendor-utils';
+            }
           },
         },
       },
