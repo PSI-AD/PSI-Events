@@ -169,14 +169,14 @@ export default function ExecutivePresentation() {
               </div>
               <ul className="space-y-6">
                 {[
-                  { icon: <Database className="text-slate-500" aria-hidden="true" />, text: "Manual Spreadsheets & Email Chains" },
-                  { icon: <Activity className="text-slate-500" aria-hidden="true" />, text: "Opaque ROI & Untracked Expenses" },
-                  { icon: <Users className="text-slate-500" aria-hidden="true" />, text: "WhatsApp-based Approvals" },
-                  { icon: <Target className="text-slate-500" aria-hidden="true" />, text: "Static, Unrealistic Lead Targets" },
-                  { icon: <Clock className="text-slate-500" aria-hidden="true" />, text: "Missing Visas & Last-Minute Chaos" }
+                  { icon: <Database className="text-slate-400" aria-hidden="true" />, text: "Manual Spreadsheets & Email Chains" },
+                  { icon: <Activity className="text-slate-400" aria-hidden="true" />, text: "Opaque ROI & Untracked Expenses" },
+                  { icon: <Users className="text-slate-400" aria-hidden="true" />, text: "WhatsApp-based Approvals" },
+                  { icon: <Target className="text-slate-400" aria-hidden="true" />, text: "Static, Unrealistic Lead Targets" },
+                  { icon: <Clock className="text-slate-400" aria-hidden="true" />, text: "Missing Visas & Last-Minute Chaos" }
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-4 text-slate-500 line-through opacity-70">
-                    <div className="p-2 bg-white rounded-lg border border-slate-200">{item.icon}</div>
+                  <li key={i} className="flex items-center gap-4 text-slate-600 line-through decoration-slate-400 decoration-2">
+                    <div className="p-2 bg-white rounded-lg border border-slate-200 opacity-60">{item.icon}</div>
                     <span className="font-bold">{item.text}</span>
                   </li>
                 ))}
