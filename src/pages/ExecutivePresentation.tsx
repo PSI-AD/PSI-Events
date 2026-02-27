@@ -164,7 +164,7 @@ export default function ExecutivePresentation() {
                 <AlertCircle size={120} />
               </div>
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-widest text-red-500">The Legacy Problem</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-red-700">The Legacy Problem</span>
                 <h3 className="text-4xl font-extrabold text-slate-900">The "Cost Center" Model</h3>
               </div>
               <ul className="space-y-6">
@@ -395,7 +395,7 @@ export default function ExecutivePresentation() {
             <div className="grid lg:grid-cols-3 gap-16 relative">
               <div className="lg:col-span-1 space-y-12">
                 <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-widest text-emerald-500">London Roadshow 2026</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-emerald-700">London Roadshow 2026</span>
                   <h3 className="text-4xl font-extrabold text-slate-900">P&L Readout</h3>
                 </div>
 
@@ -638,12 +638,12 @@ export default function ExecutivePresentation() {
                   <p className="text-2xl font-extrabold text-slate-900">120,000 AED</p>
                 </div>
                 <div className="p-6 bg-amber-50 rounded-2xl border border-amber-200">
-                  <p className="text-xs text-amber-600 font-bold uppercase tracking-widest mb-1">Developer Sponsorship</p>
-                  <p className="text-2xl font-extrabold text-amber-700">150,000 AED</p>
+                  <p className="text-xs text-amber-800 font-bold uppercase tracking-widest mb-1">Developer Sponsorship</p>
+                  <p className="text-2xl font-extrabold text-amber-900">150,000 AED</p>
                 </div>
                 <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-200">
-                  <p className="text-xs text-emerald-600 font-bold uppercase tracking-widest mb-1">Gross Profit</p>
-                  <p className="text-2xl font-extrabold text-emerald-700">390,000 AED</p>
+                  <p className="text-xs text-emerald-800 font-bold uppercase tracking-widest mb-1">Gross Profit</p>
+                  <p className="text-2xl font-extrabold text-emerald-900">390,000 AED</p>
                 </div>
               </div>
             </div>
