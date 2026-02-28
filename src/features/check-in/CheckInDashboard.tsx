@@ -7,9 +7,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { QrCode, ScanLine, Calendar, ChevronDown, Loader2, Info } from 'lucide-react';
+import { QrCode, ScanLine, Calendar, ChevronDown, Loader2, Info, Trophy } from 'lucide-react';
 import AgentPassView from './AgentPassView';
 import OrganizerScannerView from './OrganizerScannerView';
+import LiveLeaderboard from '../events/LiveLeaderboard';
 import {
     CheckInAgent,
     CheckInEvent,
@@ -18,7 +19,7 @@ import {
     fetchUpcomingEvents,
 } from './CheckInUtils';
 
-type Role = 'agent' | 'organizer';
+type Role = 'agent' | 'organizer' | 'leaderboard';
 
 function clsx(...c: (string | false | undefined | null)[]) {
     return c.filter(Boolean).join(' ');
@@ -66,7 +67,8 @@ export default function CheckInDashboard() {
                 <div className="flex gap-1 bg-slate-800 rounded-xl p-1 mb-3">
                     {([
                         { id: 'agent', label: 'My QR Pass', icon: <QrCode size={14} /> },
-                        { id: 'organizer', label: 'Scanner Console', icon: <ScanLine size={14} /> },
+                        { id: 'organizer', label: 'Scanner', icon: <ScanLine size={14} /> },
+                        { id: 'leaderboard', label: 'Leaderboard', icon: <Trophy size={14} /> },
                     ] as { id: Role; label: string; icon: React.ReactNode }[]).map(r => (
                         <button
                             key={r.id}
@@ -123,24 +125,21 @@ export default function CheckInDashboard() {
             {/* ── Role view ────────────────────────────────────────────────── */}
             <AnimatePresence mode="wait">
                 {role === 'agent' ? (
-                    <motion.div
-                        key="agent"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <AgentPassView
-                            agent={demoAgent}
-                            event={selectedEvent}
+                    <motion.div key="agent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                        <AgentPassView agent={demoAgent} event={selectedEvent} />
+                    </motion.div>
+                ) : role === 'leaderboard' ? (
+                    <motion.div key="leaderboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                        <LiveLeaderboard
+                            eventId={selectedEvent.eventId}
+                            eventName={selectedEvent.eventName}
+                            currentAgentId={demoAgent.agentId}
+                            currentAgentStatus={demoAgent.status}
+                            useDemoData={useDemoData}
                         />
                     </motion.div>
                 ) : (
-                    <motion.div
-                        key="organizer"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
+                    <motion.div key="organizer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                         <OrganizerScannerView
                             event={selectedEvent}
                             organizerUid="demo_organizer"
