@@ -27,6 +27,8 @@ const CheckIn = lazy(() => import('./features/check-in/CheckInDashboard'));
 const ProductManual = lazy(() => import('./pages/ProductManual'));
 const Settings = lazy(() => import('./pages/Settings'));
 const ApprovalQueue = lazy(() => import('./features/approvals/ApprovalQueue'));
+const EventJournalPage = lazy(() => import('./pages/EventJournalPage'));
+const MediaCompliancePage = lazy(() => import('./pages/MediaCompliancePage'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -197,6 +199,22 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <ApprovalQueue />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/journal"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <EventJournalPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/compliance"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <MediaCompliancePage />
               </Suspense>
             }
           />
