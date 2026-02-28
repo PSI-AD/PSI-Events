@@ -17,6 +17,7 @@ import {
     BookOpen,
     Sun,
     Moon,
+    BrainCircuit,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -36,6 +37,7 @@ const NAV_ITEMS = [
     { to: '/proposals', icon: FileText, label: 'Proposals' },
     { to: '/projects', icon: Briefcase, label: 'Projects' },
     { to: '/team', icon: Users, label: 'Team' },
+    { to: '/approvals', icon: BrainCircuit, label: 'AI Approvals' },
     { to: '/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/settlement', icon: Calculator, label: 'Settlement' },
     { to: '/check-in', icon: QrCode, label: 'Check-In' },
@@ -46,7 +48,7 @@ const NAV_ITEMS = [
 const BOTTOM_NAV_ITEMS = [
     { to: '/', icon: LayoutDashboard, label: 'Home' },
     { to: '/events', icon: Calendar, label: 'Events' },
-    { to: '/check-in', icon: QrCode, label: 'Check-In' },
+    { to: '/approvals', icon: BrainCircuit, label: 'Approvals' },
     { to: '/analytics', icon: TrendingUp, label: 'Analytics' },
 ];
 

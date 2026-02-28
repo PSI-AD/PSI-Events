@@ -25,6 +25,7 @@ const Settlement = lazy(() => import('./features/settlement/SettlementDashboard'
 const CheckIn = lazy(() => import('./features/check-in/CheckInDashboard'));
 const ProductManual = lazy(() => import('./pages/ProductManual'));
 const Settings = lazy(() => import('./pages/Settings'));
+const ApprovalQueue = lazy(() => import('./features/approvals/ApprovalQueue'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -179,6 +180,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <Settings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/approvals"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <ApprovalQueue />
               </Suspense>
             }
           />
