@@ -15,11 +15,14 @@ import {
     X,
     TrendingUp,
     BookOpen,
+    Sun,
+    Moon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -129,6 +132,61 @@ function usePageTitle(): string {
  * ─  Mobile: top header bar + fixed bottom navigation bar (below md)
  * ─  Content: pb-20 on mobile so bottom nav never covers content
  */
+// ── Theme toggle button (reusable in sidebar + drawer) ──────────────────────
+
+function ThemeToggle({ compact = false }: { compact?: boolean }) {
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === 'dark';
+
+    return (
+        <button
+            id="theme-toggle-btn"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            className="
+                w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                transition-all duration-200 group min-h-[44px] select-none
+                text-slate-400 hover:bg-slate-800/50 hover:text-slate-200
+                active:scale-[0.97]
+            "
+        >
+            {/* Animated icon swap */}
+            <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+                {isDark ? (
+                    <Sun size={20} className="text-amber-400" />
+                ) : (
+                    <Moon size={20} className="text-slate-400" />
+                )}
+            </span>
+
+            {/* Label */}
+            {!compact && (
+                <span className="font-medium flex-1 text-left">
+                    {isDark ? 'Light Mode' : 'Dark Mode'}
+                </span>
+            )}
+
+            {/* Pill toggle switch */}
+            <div
+                className={`
+                    relative flex-shrink-0 w-10 h-5 rounded-full transition-colors duration-300
+                    ${isDark ? 'bg-amber-500' : 'bg-slate-700'}
+                `}
+            >
+                <div
+                    className={`
+                        absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm
+                        transition-transform duration-300
+                        ${isDark ? 'translate-x-5' : 'translate-x-0.5'}
+                    `}
+                />
+            </div>
+        </button>
+    );
+}
+
+// ── Main Layout ───────────────────────────────────────────────────────────────
+
 export default function DashboardLayout() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const pageTitle = usePageTitle();
@@ -163,6 +221,8 @@ export default function DashboardLayout() {
                         </span>
                         <span className="font-bold text-sm">ROI Vision</span>
                     </a>
+                    {/* Theme toggle — sits above Settings */}
+                    <ThemeToggle />
                     <SidebarLink to="/settings" icon={Settings} label="Settings" />
                 </div>
             </aside>
@@ -246,7 +306,9 @@ export default function DashboardLayout() {
                                     />
                                 ))}
                             </nav>
-                            <div className="p-4 border-t border-slate-800">
+                            <div className="p-4 border-t border-slate-800 space-y-1">
+                                {/* Theme toggle in the mobile drawer */}
+                                <ThemeToggle />
                                 <SidebarLink to="/settings" icon={Settings} label="Settings" onClick={() => setDrawerOpen(false)} />
                             </div>
                         </motion.div>
