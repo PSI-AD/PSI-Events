@@ -1,3 +1,5 @@
+import type { EventJournalConfig } from './types/journal';
+
 export type UserRole = 'Agent' | 'Manager' | 'Organizer' | 'BD' | 'HR' | 'Marketing';
 
 export interface User {
@@ -16,7 +18,7 @@ export interface User {
 
 export type EventStatus = 'Draft' | 'Proposal' | 'Active' | 'Completed';
 
-export interface Event {
+export interface Event extends Partial<EventJournalConfig> {
   id: string;
   name: string;
   type: string;
