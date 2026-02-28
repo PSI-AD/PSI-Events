@@ -7,12 +7,12 @@
  * ── Safety guardrails ──────────────────────────────────────────────────────
  * • Requires GOOGLE_APPLICATION_CREDENTIALS to point to a Service Account key,
  *   OR runs inside a CI environment with Application Default Credentials.
- * • Prompts for a "Y" confirmation before writing to Firestore.
  * • Uses ONLY .doc('clean_id').set({...}) — ZERO auto-generated UUIDs.
  * • All batch writes are atomic: all succeed or all fail together.
  *
  * ── Run command ────────────────────────────────────────────────────────────
- *   node scripts/seedLiveFirebase.js
+ *   node scripts/seedLiveFirebase.js --force     ← skip confirmation (recommended)
+ *   node scripts/seedLiveFirebase.js              ← interactive Y/N prompt
  *
  * ── Prerequisites ──────────────────────────────────────────────────────────
  *   1. Download a Service Account key from Firebase Console:
@@ -31,9 +31,17 @@ import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// ── CLI flags ─────────────────────────────────────────────────────────────────
+// --force skips the interactive Y/N prompt.
+// Use this when running from a terminal that already has focus.
+
+const FORCE = process.argv.includes('--force');
+
 // ── Confirmation prompt ────────────────────────────────────────────────────────
+// Only runs when --force is NOT passed.
 
 async function confirm(question) {
+    if (FORCE) return true; // --force bypasses prompt
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     return new Promise(resolve => {
         rl.question(question, answer => {
@@ -435,10 +443,14 @@ async function seed() {
     console.log('  📁 events/evt_london.../expenses   ×4 documents');
     console.log('\n  All existing documents with the same IDs will be OVERWRITTEN.\n');
 
-    const ok = await confirm('  Type Y and press Enter to proceed, or anything else to abort: ');
-    if (!ok) {
-        console.log('\n  ❌ Seeding aborted. No data was written.\n');
-        process.exit(0);
+    if (FORCE) {
+        console.log('  ⚡ --force flag detected. Skipping confirmation prompt.\n');
+    } else {
+        const ok = await confirm('  Type Y and press Enter to proceed, or anything else to abort: ');
+        if (!ok) {
+            console.log('\n  ❌ Seeding aborted. No data was written.\n');
+            process.exit(0);
+        }
     }
 
     console.log('\n  🌱 Seeding in progress...\n');
