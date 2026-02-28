@@ -21,6 +21,7 @@ const Proposals = lazy(() => import('./components/Proposals'));
 const Projects = lazy(() => import('./components/Projects'));
 const Team = lazy(() => import('./components/Team'));
 const Analytics = lazy(() => import('./components/Analytics'));
+const Settlement = lazy(() => import('./features/settlement/SettlementDashboard'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -143,6 +144,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <Analytics />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/settlement"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <Settlement />
               </Suspense>
             }
           />
