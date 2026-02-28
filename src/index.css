@@ -1,30 +1,28 @@
-/* ─── Fonts: self-hosted via @fontsource (no Google CDN roundtrip) ─────────
+/* ─── Fonts: self-hosted via @fontsource ──────────────────────────────────────
    Only import the exact weights actually used in the app to minimise
-   the font payload. Each weight is a separate woff2 file that the browser
-   fetches on demand once the CSS is parsed.
+   the font payload. Each weight is a separate woff2 file the browser
+   fetches on demand once CSS is parsed.
    ─────────────────────────────────────────────────────────────────────────── */
 @import "@fontsource/inter/300.css";
-/* Inter Light */
+/* Inter Light   */
 @import "@fontsource/inter/400.css";
 /* Inter Regular */
 @import "@fontsource/inter/500.css";
-/* Inter Medium */
+/* Inter Medium  */
 @import "@fontsource/inter/600.css";
-/* Inter SemiBold */
+/* Inter SemiBold*/
 @import "@fontsource/inter/700.css";
-/* Inter Bold */
+/* Inter Bold    */
 
 @import "@fontsource/jetbrains-mono/400.css";
 /* JetBrains Mono Regular */
 @import "@fontsource/jetbrains-mono/500.css";
-/* JetBrains Mono Medium */
+/* JetBrains Mono Medium  */
 
-/* ── Metric-adjusted fallback for Inter ────────────────────────────────────
-   Makes Arial/system fonts occupy the EXACT same space as Inter while
-   Inter is loading (font-display: swap). When Inter swaps in, the text
-   doesn't move → zero CLS from font loading.
-   Values sourced from: https://github.com/nicholasgasior/font-metrics
-   ─────────────────────────────────────────────────────────────────────── */
+/* ── Metric-adjusted fallback for Inter ─────────────────────────────────────
+   Makes Arial occupy the same space as Inter while it's loading (swap).
+   Values: https://github.com/nicholasgasior/font-metrics
+   ─────────────────────────────────────────────────────────────────────────── */
 @font-face {
   font-family: 'Inter-fallback';
   font-style: normal;
@@ -43,16 +41,392 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   PSI DESIGN SYSTEM — Centralized Theme Tokens
+   ───────────────────────────────────────────────────────────────────────────
+   All semantic tokens are defined here as CSS custom properties.
+   Components reference these tokens through Tailwind utility classes that
+   map to these vars — enforcing consistent dual-theme behaviour everywhere.
+
+   Naming convention: --psi-{role}-{variant}
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Page & Layout ──────────────────────────────────────────────────────── */
+  --psi-bg: #f8fafc;
+  /* slate-50  — page background           */
+  --psi-bg-subtle: #f1f5f9;
+  /* slate-100 — inset/secondary bg        */
+  --psi-surface: #ffffff;
+  /* white     — card / panel surface      */
+  --psi-surface-raised: #ffffff;
+  /* white     — modal / popover           */
+  --psi-surface-overlay: rgba(255, 255, 255, 0.85);
+  /* frosted glass            */
+
+  /* ── Borders ────────────────────────────────────────────────────────────── */
+  --psi-border: #e2e8f0;
+  /* slate-200                             */
+  --psi-border-subtle: #f1f5f9;
+  /* slate-100                             */
+  --psi-border-strong: #cbd5e1;
+  /* slate-300                             */
+
+  /* ── Text hierarchy ─────────────────────────────────────────────────────── */
+  --psi-text-primary: #0f172a;
+  /* slate-900 — headings / key data       */
+  --psi-text-secondary: #475569;
+  /* slate-600 — supporting text           */
+  --psi-text-muted: #94a3b8;
+  /* slate-400 — placeholders / labels     */
+  --psi-text-disabled: #cbd5e1;
+  /* slate-300                             */
+
+  /* ── Accent — Emerald (primary brand) ──────────────────────────────────── */
+  --psi-accent: #10b981;
+  /* emerald-500                           */
+  --psi-accent-subtle: #d1fae5;
+  /* emerald-100                           */
+  --psi-accent-text: #047857;
+  /* emerald-700                           */
+  --psi-accent-border: #6ee7b7;
+  /* emerald-300                           */
+
+  /* ── Status tokens ──────────────────────────────────────────────────────── */
+  --psi-success-bg: #d1fae5;
+  /* emerald-100                           */
+  --psi-success-text: #047857;
+  /* emerald-700                           */
+  --psi-warning-bg: #fef3c7;
+  /* amber-100                             */
+  --psi-warning-text: #b45309;
+  /* amber-700                             */
+  --psi-error-bg: #fee2e2;
+  /* rose-100                              */
+  --psi-error-text: #be123c;
+  /* rose-700                              */
+  --psi-info-bg: #dbeafe;
+  /* blue-100                              */
+  --psi-info-text: #1d4ed8;
+  /* blue-700                              */
+
+  /* ── Chart grid / axis ──────────────────────────────────────────────────── */
+  --psi-chart-grid: #f1f5f9;
+  /* slate-100                             */
+  --psi-chart-tick: #94a3b8;
+  /* slate-400                             */
+
+  /* ── Tooltip ────────────────────────────────────────────────────────────── */
+  --psi-tooltip-bg: #ffffff;
+  --psi-tooltip-border: #e2e8f0;
+  --psi-tooltip-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+
+  /* ── Sidebar (always dark — part of brand identity) ────────────────────── */
+  --psi-sidebar-bg: #0f172a;
+  /* slate-900                             */
+  --psi-sidebar-border: #1e293b;
+  /* slate-800                             */
+  --psi-sidebar-text: #94a3b8;
+  /* slate-400                             */
+  --psi-sidebar-active: #1e293b;
+  /* slate-800                             */
+}
+
+/* ── Dark Mode overrides ───────────────────────────────────────────────────────
+   Only the above tokens change. Every component inherits the correct value
+   automatically — no per-component dark mode work needed for tokens.
+   ─────────────────────────────────────────────────────────────────────────── */
+.dark {
+  /* Layout */
+  --psi-bg: #020617;
+  /* slate-950 — deepest bg                */
+  --psi-bg-subtle: #0f172a;
+  /* slate-900 — inset panels              */
+  --psi-surface: #0f172a;
+  /* slate-900 — card surface              */
+  --psi-surface-raised: #1e293b;
+  /* slate-800 — modal/popover             */
+  --psi-surface-overlay: rgba(15, 23, 42, 0.90);
+
+  /* Borders — subtle, low-contrast */
+  --psi-border: rgba(255, 255, 255, 0.08);
+  --psi-border-subtle: rgba(255, 255, 255, 0.04);
+  --psi-border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Text */
+  --psi-text-primary: #f1f5f9;
+  /* slate-100                             */
+  --psi-text-secondary: #94a3b8;
+  /* slate-400                             */
+  --psi-text-muted: #475569;
+  /* slate-600                             */
+  --psi-text-disabled: #334155;
+  /* slate-700                             */
+
+  /* Accent stays the same hue, slightly adjusted */
+  --psi-accent: #10b981;
+  --psi-accent-subtle: rgba(16, 185, 129, 0.12);
+  --psi-accent-text: #34d399;
+  /* emerald-400                           */
+  --psi-accent-border: rgba(16, 185, 129, 0.30);
+
+  /* Status — dark-safe tints */
+  --psi-success-bg: rgba(16, 185, 129, 0.12);
+  --psi-success-text: #34d399;
+  --psi-warning-bg: rgba(245, 158, 11, 0.12);
+  --psi-warning-text: #fbbf24;
+  --psi-error-bg: rgba(239, 68, 68, 0.12);
+  --psi-error-text: #fb7185;
+  --psi-info-bg: rgba(59, 130, 246, 0.12);
+  --psi-info-text: #60a5fa;
+
+  /* Charts */
+  --psi-chart-grid: rgba(255, 255, 255, 0.06);
+  --psi-chart-tick: #475569;
+
+  /* Tooltip */
+  --psi-tooltip-bg: #1e293b;
+  --psi-tooltip-border: rgba(255, 255, 255, 0.10);
+  --psi-tooltip-shadow: 0 4px 24px rgba(0, 0, 0, 0.50);
+
+  /* Sidebar stays the same (always dark) */
+  --psi-sidebar-bg: #0f172a;
+  --psi-sidebar-border: #1e293b;
+  --psi-sidebar-text: #94a3b8;
+  --psi-sidebar-active: #1e293b;
+}
+
+/* ── Base layer ───────────────────────────────────────────────────────────────
+   Apply the page background and default text from tokens.
+   This ensures the body itself switches between light/dark correctly.
+   ─────────────────────────────────────────────────────────────────────────── */
 @layer base {
+  html {
+    @apply antialiased;
+    background-color: var(--psi-bg);
+    color: var(--psi-text-primary);
+  }
+
   body {
-    @apply text-slate-900 antialiased;
+    background-color: var(--psi-bg);
+    color: var(--psi-text-primary);
+    font-family: var(--font-sans);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Smooth transitions when theme is toggled */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 0.15s;
+    transition-timing-function: ease;
+  }
+
+  /* Suppress transitions on page load (only during toggle) */
+  .no-transition * {
+    transition: none !important;
   }
 }
 
-.glass-card {
-  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm;
-}
+/* ── Utility layer: PSI semantic class aliases ────────────────────────────────
+   These Tailwind-style utility classes allow components to reference semantic
+   tokens. They are the official way to color elements without hardcoding.
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer utilities {
 
-.sidebar-active {
-  @apply bg-slate-800 text-white;
+  /* Backgrounds */
+  .bg-psi-page {
+    background-color: var(--psi-bg);
+  }
+
+  .bg-psi-subtle {
+    background-color: var(--psi-bg-subtle);
+  }
+
+  .bg-psi-surface {
+    background-color: var(--psi-surface);
+  }
+
+  .bg-psi-raised {
+    background-color: var(--psi-surface-raised);
+  }
+
+  .bg-psi-accent {
+    background-color: var(--psi-accent);
+  }
+
+  .bg-psi-accent-subtle {
+    background-color: var(--psi-accent-subtle);
+  }
+
+  /* Success / Warning / Error */
+  .bg-psi-success {
+    background-color: var(--psi-success-bg);
+  }
+
+  .bg-psi-warning {
+    background-color: var(--psi-warning-bg);
+  }
+
+  .bg-psi-error {
+    background-color: var(--psi-error-bg);
+  }
+
+  .bg-psi-info {
+    background-color: var(--psi-info-bg);
+  }
+
+  /* Borders */
+  .border-psi {
+    border-color: var(--psi-border);
+  }
+
+  .border-psi-subtle {
+    border-color: var(--psi-border-subtle);
+  }
+
+  .border-psi-strong {
+    border-color: var(--psi-border-strong);
+  }
+
+  .border-psi-accent {
+    border-color: var(--psi-accent-border);
+  }
+
+  /* Text */
+  .text-psi-primary {
+    color: var(--psi-text-primary);
+  }
+
+  .text-psi-secondary {
+    color: var(--psi-text-secondary);
+  }
+
+  .text-psi-muted {
+    color: var(--psi-text-muted);
+  }
+
+  .text-psi-accent {
+    color: var(--psi-accent-text);
+  }
+
+  .text-psi-success {
+    color: var(--psi-success-text);
+  }
+
+  .text-psi-warning {
+    color: var(--psi-warning-text);
+  }
+
+  .text-psi-error {
+    color: var(--psi-error-text);
+  }
+
+  .text-psi-info {
+    color: var(--psi-info-text);
+  }
+
+  /* ── Card — the most commonly used compound surface ─────────────────────── */
+  .psi-card {
+    background-color: var(--psi-surface);
+    border: 1px solid var(--psi-border);
+    border-radius: 1.25rem;
+    /* rounded-2xl */
+  }
+
+  .psi-card-sm {
+    background-color: var(--psi-surface);
+    border: 1px solid var(--psi-border);
+    border-radius: 0.75rem;
+    /* rounded-xl */
+  }
+
+  /* ── Input / Select ─────────────────────────────────────────────────────── */
+  .psi-input {
+    background-color: var(--psi-bg-subtle);
+    border: 1px solid var(--psi-border);
+    color: var(--psi-text-primary);
+    border-radius: 0.75rem;
+  }
+
+  .psi-input:focus {
+    outline: none;
+    border-color: var(--psi-accent);
+    box-shadow: 0 0 0 3px var(--psi-accent-subtle);
+  }
+
+  .psi-input::placeholder {
+    color: var(--psi-text-muted);
+  }
+
+  /* ── Status badges ──────────────────────────────────────────────────────── */
+  .badge-success {
+    background-color: var(--psi-success-bg);
+    color: var(--psi-success-text);
+  }
+
+  .badge-warning {
+    background-color: var(--psi-warning-bg);
+    color: var(--psi-warning-text);
+  }
+
+  .badge-error {
+    background-color: var(--psi-error-bg);
+    color: var(--psi-error-text);
+  }
+
+  .badge-info {
+    background-color: var(--psi-info-bg);
+    color: var(--psi-info-text);
+  }
+
+  .badge-neutral {
+    background-color: var(--psi-bg-subtle);
+    color: var(--psi-text-secondary);
+  }
+
+  /* ── glass-card (kept for backward compat) ──────────────────────────────── */
+  .glass-card {
+    background-color: var(--psi-surface-overlay);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--psi-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── sidebar-active (kept for backward compat) ──────────────────────────── */
+  .sidebar-active {
+    background-color: var(--psi-sidebar-active);
+    color: #ffffff;
+  }
+
+  /* ── Scrollbar polish ───────────────────────────────────────────────────── */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Recharts tooltip — theme-aware override ────────────────────────────── */
+  .recharts-tooltip-wrapper .recharts-default-tooltip {
+    background-color: var(--psi-tooltip-bg) !important;
+    border: 1px solid var(--psi-tooltip-border) !important;
+    box-shadow: var(--psi-tooltip-shadow) !important;
+    border-radius: 12px !important;
+    color: var(--psi-text-primary) !important;
+  }
+
+  .recharts-tooltip-item-name,
+  .recharts-tooltip-item-value {
+    color: var(--psi-text-secondary) !important;
+  }
+
+  /* Recharts grid / axis adaptations */
+  .recharts-cartesian-grid-horizontal line,
+  .recharts-cartesian-grid-vertical line {
+    stroke: var(--psi-chart-grid) !important;
+  }
 }

@@ -194,7 +194,7 @@ export default function DashboardLayout() {
     const pageTitle = usePageTitle();
 
     return (
-        <div className="flex h-screen bg-slate-50 font-sans">
+        <div className="flex h-screen bg-psi-page font-sans">
 
             {/* ── Desktop Sidebar (hidden on mobile) ───────────────── */}
             <aside className="hidden md:flex w-64 bg-slate-900 text-white flex-col flex-shrink-0">
