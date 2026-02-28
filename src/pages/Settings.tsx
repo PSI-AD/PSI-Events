@@ -1,0 +1,553 @@
+/**
+ * Settings.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Application Settings page — macOS / Linear-style split layout.
+ * Left column: vertical tab rail. Right column: section content.
+ * Fully respects dark: Tailwind variants from ThemeContext.
+ *
+ * Sections:
+ *   Profile     — read-only authenticated user card
+ *   Preferences — theme selector (Light / Dark / System) + notification toggles
+ *   Security    — change-password placeholder + 2FA placeholder
+ */
+
+import React, { useState } from 'react';
+import {
+    User, Sliders, ShieldCheck,
+    Sun, Moon, Monitor,
+    Mail, MessageCircle,
+    Lock, Smartphone,
+    CheckCircle2, ChevronRight,
+    Building2, BadgeCheck, Globe,
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useTheme } from '../contexts/ThemeContext';
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+type Section = 'profile' | 'preferences' | 'security';
+
+// ── Profile data (fallback / hardcoded) ───────────────────────────────────────
+
+const PROFILE = {
+    name: 'Amr ElFangary',
+    email: 'propertyshopinvest@gmail.com',
+    role: 'System Administrator',
+    branch: 'Global',
+    initials: 'AE',
+};
+
+// ── Reusable sub-components ───────────────────────────────────────────────────
+
+/** A toggle switch with a smooth animated knob */
+function ToggleSwitch({
+    id,
+    checked,
+    onChange,
+}: {
+    id: string;
+    checked: boolean;
+    onChange: (val: boolean) => void;
+}) {
+    return (
+        <button
+            id={id}
+            role="switch"
+            aria-checked={checked}
+            onClick={() => onChange(!checked)}
+            className={`
+                relative flex-shrink-0 w-12 h-6 rounded-full
+                transition-colors duration-300 select-none focus:outline-none
+                focus-visible:ring-2 focus-visible:ring-emerald-500/60
+                ${checked ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}
+            `}
+        >
+            <div
+                className={`
+                    absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-md
+                    transition-transform duration-300
+                    ${checked ? 'translate-x-6' : 'translate-x-0.5'}
+                `}
+            />
+        </button>
+    );
+}
+
+/** A card wrapper consistent with settings content area */
+function SettingsCard({
+    title,
+    description,
+    children,
+}: {
+    title: string;
+    description?: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <div className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm">{title}</h3>
+                {description && (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
+                )}
+            </div>
+            <div className="px-6 py-5">{children}</div>
+        </div>
+    );
+}
+
+/** A row inside a settings card with a label + right-side control */
+function SettingsRow({
+    icon: Icon,
+    label,
+    description,
+    children,
+    iconColor = 'text-slate-400 dark:text-slate-500',
+}: {
+    icon: React.ElementType;
+    label: string;
+    description?: string;
+    children: React.ReactNode;
+    iconColor?: string;
+}) {
+    return (
+        <div className="flex items-center justify-between gap-4 py-3.5 border-b border-slate-100 dark:border-slate-700/40 last:border-0">
+            <div className="flex items-start gap-3 min-w-0">
+                <Icon size={18} className={`flex-shrink-0 mt-0.5 ${iconColor}`} />
+                <div className="min-w-0">
+                    <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{label}</p>
+                    {description && (
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
+                    )}
+                </div>
+            </div>
+            <div className="flex-shrink-0">{children}</div>
+        </div>
+    );
+}
+
+// ── Section: Profile ──────────────────────────────────────────────────────────
+
+function ProfileSection() {
+    return (
+        <div className="space-y-5">
+            {/* Avatar + identity card */}
+            <SettingsCard title="Identity" description="Your authorised PSI Event Portal account.">
+                <div className="flex items-center gap-5">
+                    {/* Avatar */}
+                    <div className="relative flex-shrink-0">
+                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <span className="text-white font-extrabold text-2xl tracking-tight">
+                                {PROFILE.initials}
+                            </span>
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center">
+                            <CheckCircle2 size={11} className="text-white" />
+                        </div>
+                    </div>
+
+                    {/* Details */}
+                    <div className="min-w-0">
+                        <h4 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                            {PROFILE.name}
+                        </h4>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{PROFILE.email}</p>
+                        <div className="flex items-center gap-2 mt-2">
+                            <span className="px-2.5 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                                {PROFILE.role}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </SettingsCard>
+
+            {/* Read-only profile fields */}
+            <SettingsCard title="Account Details" description="Read-only. Contact your administrator to change these values.">
+                <div className="space-y-0">
+                    <SettingsRow icon={User} label="Full Name" iconColor="text-slate-400">
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300 select-all">
+                            {PROFILE.name}
+                        </span>
+                    </SettingsRow>
+                    <SettingsRow icon={Mail} label="Email Address" iconColor="text-blue-400">
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300 select-all font-mono">
+                            {PROFILE.email}
+                        </span>
+                    </SettingsRow>
+                    <SettingsRow icon={BadgeCheck} label="System Role" iconColor="text-amber-400">
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                            {PROFILE.role}
+                        </span>
+                    </SettingsRow>
+                    <SettingsRow icon={Globe} label="Branch" iconColor="text-emerald-400">
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                            {PROFILE.branch}
+                        </span>
+                    </SettingsRow>
+                </div>
+            </SettingsCard>
+        </div>
+    );
+}
+
+// ── Section: Preferences ──────────────────────────────────────────────────────
+
+type ThemeChoice = 'light' | 'dark' | 'system';
+
+const THEME_OPTIONS: { id: ThemeChoice; label: string; icon: React.ElementType; description: string }[] = [
+    { id: 'light', label: 'Light', icon: Sun, description: 'Clean, bright interface' },
+    { id: 'dark', label: 'Dark', icon: Moon, description: 'Easy on the eyes at night' },
+    { id: 'system', label: 'System', icon: Monitor, description: 'Follow OS preference' },
+];
+
+function PreferencesSection() {
+    const { theme, toggleTheme } = useTheme();
+
+    // Map the 3-way choice to the 2-way toggle
+    // 'system' falls back to the current applied theme
+    const [themeChoice, setThemeChoice] = useState<ThemeChoice>(
+        (localStorage.getItem('psi-theme') as ThemeChoice | null) === 'light'
+            ? 'light'
+            : (localStorage.getItem('psi-theme') as ThemeChoice | null) === 'dark'
+                ? 'dark'
+                : 'system'
+    );
+
+    const [notifications, setNotifications] = useState({
+        emailAlerts: true,
+        whatsappNudges: false,
+    });
+
+    function handleThemeSelect(choice: ThemeChoice) {
+        setThemeChoice(choice);
+        if (choice === 'light') {
+            // Force light
+            if (theme === 'dark') toggleTheme();
+            else localStorage.setItem('psi-theme', 'light');
+        } else if (choice === 'dark') {
+            // Force dark
+            if (theme === 'light') toggleTheme();
+            else localStorage.setItem('psi-theme', 'dark');
+        } else {
+            // System — read OS preference and apply
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const shouldBeDark = prefersDark;
+            if ((theme === 'dark') !== shouldBeDark) toggleTheme();
+            localStorage.removeItem('psi-theme');
+        }
+    }
+
+    return (
+        <div className="space-y-5">
+
+            {/* Theme selector */}
+            <SettingsCard
+                title="Appearance"
+                description="Choose how the PSI Event Portal looks on your device."
+            >
+                <div className="grid grid-cols-3 gap-3">
+                    {THEME_OPTIONS.map(({ id, label, icon: Icon, description }) => {
+                        const isSelected = themeChoice === id;
+                        return (
+                            <button
+                                key={id}
+                                id={`theme-btn-${id}`}
+                                onClick={() => handleThemeSelect(id)}
+                                className={`
+                                    relative flex flex-col items-center gap-2.5 p-4 rounded-2xl
+                                    border-2 transition-all duration-200 cursor-pointer select-none
+                                    active:scale-[0.97]
+                                    ${isSelected
+                                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-sm shadow-emerald-500/10'
+                                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-800/40'
+                                    }
+                                `}
+                            >
+                                {/* Selected indicator */}
+                                {isSelected && (
+                                    <div className="absolute top-2.5 right-2.5 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                                    </div>
+                                )}
+
+                                {/* Icon */}
+                                <div className={`
+                                    w-10 h-10 rounded-xl flex items-center justify-center
+                                    ${isSelected
+                                        ? 'bg-emerald-100 dark:bg-emerald-800/40'
+                                        : 'bg-slate-200 dark:bg-slate-700'
+                                    }
+                                `}>
+                                    <Icon
+                                        size={20}
+                                        className={isSelected
+                                            ? 'text-emerald-600 dark:text-emerald-400'
+                                            : 'text-slate-500 dark:text-slate-400'
+                                        }
+                                    />
+                                </div>
+
+                                {/* Label */}
+                                <div className="text-center">
+                                    <p className={`text-sm font-bold ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300'}`}>
+                                        {label}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 leading-tight hidden sm:block">
+                                        {description}
+                                    </p>
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+            </SettingsCard>
+
+            {/* Notifications */}
+            <SettingsCard
+                title="Notifications"
+                description="Control when and how the system alerts you about agent activity."
+            >
+                <div className="space-y-0">
+                    <SettingsRow
+                        icon={Mail}
+                        label="Email Alerts"
+                        description="Receive email reminders for upcoming document deadlines and manager approvals."
+                        iconColor="text-blue-400"
+                    >
+                        <ToggleSwitch
+                            id="toggle-email-alerts"
+                            checked={notifications.emailAlerts}
+                            onChange={v => setNotifications(n => ({ ...n, emailAlerts: v }))}
+                        />
+                    </SettingsRow>
+                    <SettingsRow
+                        icon={MessageCircle}
+                        label="WhatsApp Nudges"
+                        description="Send automated WhatsApp messages via Twilio to non-compliant agents."
+                        iconColor="text-emerald-400"
+                    >
+                        <ToggleSwitch
+                            id="toggle-whatsapp-nudges"
+                            checked={notifications.whatsappNudges}
+                            onChange={v => setNotifications(n => ({ ...n, whatsappNudges: v }))}
+                        />
+                    </SettingsRow>
+                </div>
+
+                {/* Status summary pill */}
+                <div className="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Active channels: </span>
+                        {[
+                            notifications.emailAlerts && 'Email',
+                            notifications.whatsappNudges && 'WhatsApp',
+                        ].filter(Boolean).join(', ') || 'None — all notifications disabled'}
+                    </p>
+                </div>
+            </SettingsCard>
+        </div>
+    );
+}
+
+// ── Section: Security ─────────────────────────────────────────────────────────
+
+function ComingSoonBadge() {
+    return (
+        <span className="px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            Coming Soon
+        </span>
+    );
+}
+
+function SecuritySection() {
+    return (
+        <div className="space-y-5">
+            {/* Password */}
+            <SettingsCard title="Password" description="Manage your portal login credentials.">
+                <div className="space-y-0">
+                    <SettingsRow
+                        icon={Lock}
+                        label="Change Password"
+                        description="Update the password linked to your Google account via Firebase Auth."
+                        iconColor="text-rose-400"
+                    >
+                        <ComingSoonBadge />
+                    </SettingsRow>
+                    <SettingsRow
+                        icon={ShieldCheck}
+                        label="Password Strength"
+                        description="Managed by Google — PSI does not store passwords directly."
+                        iconColor="text-emerald-400"
+                    >
+                        <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+                            <CheckCircle2 size={14} />
+                            <span>Google-managed</span>
+                        </div>
+                    </SettingsRow>
+                </div>
+            </SettingsCard>
+
+            {/* 2FA */}
+            <SettingsCard
+                title="Two-Factor Authentication"
+                description="Add a second layer of security to your account."
+            >
+                <div className="space-y-0">
+                    <SettingsRow
+                        icon={Smartphone}
+                        label="Authenticator App"
+                        description="Use Google Authenticator, Authy, or a compatible TOTP app."
+                        iconColor="text-violet-400"
+                    >
+                        <ComingSoonBadge />
+                    </SettingsRow>
+                    <SettingsRow
+                        icon={MessageCircle}
+                        label="SMS One-Time Code"
+                        description="Receive a 6-digit code via SMS for every login attempt."
+                        iconColor="text-blue-400"
+                    >
+                        <ComingSoonBadge />
+                    </SettingsRow>
+                </div>
+
+                {/* Info box */}
+                <div className="mt-4 p-4 rounded-xl bg-violet-50 dark:bg-violet-900/10 border border-violet-200 dark:border-violet-800/40">
+                    <div className="flex items-start gap-2.5">
+                        <ShieldCheck size={16} className="text-violet-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-xs text-violet-700 dark:text-violet-400 leading-relaxed">
+                            Two-Factor Authentication will be enforced for all{' '}
+                            <span className="font-bold">God-Mode Organizer</span> accounts in the next
+                            portal update. You will receive an email notification before it becomes mandatory.
+                        </p>
+                    </div>
+                </div>
+            </SettingsCard>
+
+            {/* Active sessions */}
+            <SettingsCard title="Active Sessions" description="Devices currently signed into the portal.">
+                <div className="flex items-center justify-between py-1">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                            <Monitor size={16} className="text-slate-500 dark:text-slate-400" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">This device</p>
+                            <p className="text-xs text-slate-400">macOS · Chrome · Abu Dhabi</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                        <span>Current</span>
+                    </div>
+                </div>
+            </SettingsCard>
+        </div>
+    );
+}
+
+// ── Nav rail items ────────────────────────────────────────────────────────────
+
+const NAV_ITEMS: { id: Section; label: string; icon: React.ElementType; description: string }[] = [
+    { id: 'profile', label: 'Profile', icon: User, description: 'Account & identity' },
+    { id: 'preferences', label: 'Preferences', icon: Sliders, description: 'Theme & notifications' },
+    { id: 'security', label: 'Security', icon: ShieldCheck, description: 'Password & 2FA' },
+];
+
+// ── Main component ────────────────────────────────────────────────────────────
+
+export default function Settings() {
+    const [activeSection, setActiveSection] = useState<Section>('profile');
+
+    return (
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8">
+
+            {/* Page header */}
+            <header className="max-w-5xl mx-auto mb-8">
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                    Settings
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+                    Manage your account, preferences, and security.
+                </p>
+            </header>
+
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-6">
+
+                {/* ── Left nav rail ── */}
+                <nav
+                    aria-label="Settings sections"
+                    className="
+                        md:w-56 flex-shrink-0
+                        flex md:flex-col
+                        gap-1
+                        overflow-x-auto md:overflow-visible
+                        bg-white dark:bg-slate-900/60
+                        md:bg-transparent
+                        rounded-2xl md:rounded-none
+                        border md:border-0
+                        border-slate-200 dark:border-slate-700/50
+                        p-2 md:p-0
+                        scrollbar-none
+                    "
+                >
+                    {NAV_ITEMS.map(({ id, label, icon: Icon, description }) => {
+                        const isActive = activeSection === id;
+                        return (
+                            <button
+                                key={id}
+                                id={`settings-tab-${id}`}
+                                onClick={() => setActiveSection(id)}
+                                className={`
+                                    relative flex items-center gap-3 px-3 py-3 rounded-xl
+                                    transition-all duration-200 select-none text-left
+                                    flex-shrink-0 md:flex-shrink min-w-max md:min-w-0 md:w-full
+                                    ${isActive
+                                        ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm'
+                                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
+                                    }
+                                `}
+                            >
+                                <span className={`flex-shrink-0 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
+                                    <Icon size={18} className={isActive ? 'text-emerald-400' : ''} />
+                                </span>
+                                <span className="hidden md:block">
+                                    <span className="block text-sm font-bold leading-tight">{label}</span>
+                                    <span className={`text-[10px] leading-tight ${isActive ? 'text-slate-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                                        {description}
+                                    </span>
+                                </span>
+                                {/* Mobile: just label */}
+                                <span className="md:hidden text-sm font-bold">{label}</span>
+
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="settings-active-indicator"
+                                        className="hidden md:block absolute right-3 w-1.5 h-1.5 rounded-full bg-emerald-400"
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
+                </nav>
+
+                {/* ── Right content panel ── */}
+                <div className="flex-1 min-w-0">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeSection}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            transition={{ duration: 0.18, ease: 'easeOut' }}
+                        >
+                            {activeSection === 'profile' && <ProfileSection />}
+                            {activeSection === 'preferences' && <PreferencesSection />}
+                            {activeSection === 'security' && <SecuritySection />}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </div>
+        </div>
+    );
+}
