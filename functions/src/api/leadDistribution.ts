@@ -65,7 +65,7 @@ interface Agent {
     agentId: string;
     name: string;
     email: string;
-    status: 'approved' | 'pending' | 'rejected';
+    status: 'approved' | 'pending' | 'rejected' | 'physically_present';
     verified: boolean;
 }
 
@@ -276,9 +276,20 @@ export const distributeLeads = functions.https.onRequest(async (req, res) => {
             const eventData = eventSnap.data() as { agents?: Agent[] };
             const allAgents: Agent[] = eventData.agents ?? [];
 
-            // ── 4. Filter to strictly approved AND verified agents only ───────────
+            // ── 4. Filter to PHYSICALLY PRESENT agents only ───────────────────────
+            // THE LOCK-IN GATE (per Feature 3 — Physical Venue Check-In module):
+            //
+            //   Agent lifecycle:  pending → approved → physically_present
+            //
+            //   Lead distribution is LOCKED until an agent has been physically
+            //   verified at the venue by an organizer using the QR scanner.
+            //   An agent who is only 'approved' by a manager has NOT yet been
+            //   granted access to leads — they must physically scan in first.
+            //
+            //   This prevents agents from receiving leads for events they did not
+            //   physically attend, closing a compliance and revenue leakage gap.
             const verifiedAgents = allAgents.filter(
-                (a) => a.status === 'approved' && a.verified === true
+                (a) => a.status === 'physically_present'
             );
 
             functions.logger.info(

@@ -10,6 +10,7 @@ import {
     Briefcase,
     Sparkles,
     Calculator,
+    QrCode,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -85,6 +86,7 @@ export default function DashboardLayout() {
                     <SidebarLink to="/team" icon={<Users size={20} />} label="Team" />
                     <SidebarLink to="/analytics" icon={<BarChart3 size={20} />} label="Analytics" />
                     <SidebarLink to="/settlement" icon={<Calculator size={20} />} label="Settlement" />
+                    <SidebarLink to="/check-in" icon={<QrCode size={20} />} label="Check-In" />
                 </nav>
 
                 <div className="p-4 border-t border-slate-800 space-y-2">
