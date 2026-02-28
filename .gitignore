@@ -7,3 +7,7 @@ coverage/
 .env*
 !.env.example
 .firebase/
+
+# Firebase Service Account Key — NEVER commit this
+scripts/serviceAccountKey.json
+serviceAccountKey.json
