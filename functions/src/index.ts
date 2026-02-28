@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import { syncUsers } from './api/syncUsers';
 import { syncProjects } from './api/syncProjects';
 import { distributeLeads } from './api/leadDistribution';
+import { logisticsNudger } from './scheduledJobs/logisticsNudger';
 
 /**
  * index.ts
@@ -14,4 +15,5 @@ export {
   syncUsers,
   syncProjects,
   distributeLeads,
+  logisticsNudger,
 };
