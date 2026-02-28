@@ -13,6 +13,7 @@ import PublicLayout from './layouts/PublicLayout';
 // Public (no sidebar)
 const ExecutivePresentation = lazy(() => import('./pages/ExecutivePresentation'));
 const Login = lazy(() => import('./pages/Login'));
+const DeveloperPitch = lazy(() => import('./pages/public/DeveloperPitch'));
 
 // Dashboard (authenticated)
 const Dashboard = lazy(() => import('./components/Dashboard'));
@@ -93,6 +94,14 @@ export default function App() {
             element={
               <Suspense fallback={<PublicPageLoader />}>
                 <ExecutivePresentation />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/pitch/:token"
+            element={
+              <Suspense fallback={<PublicPageLoader />}>
+                <DeveloperPitch />
               </Suspense>
             }
           />
