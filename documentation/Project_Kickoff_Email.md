@@ -2,7 +2,7 @@
 
 **Subject:** PROJECT KICKOFF: Enterprise Event Management & ROI Tracking Portal 🚀  
 **To:** Lead Engineering Team, Front-End Architects, Backend Developers  
-**From:** Said Abu Laila (propertyshopinvest@gmail.com)
+**From:** Amr ElFangary (propertyshopinvest@gmail.com)
 
 ---
 

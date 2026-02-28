@@ -229,7 +229,7 @@ const CRM_USERS = [
     {
         id: 'usr_said_abu_laila_admin',
         data: {
-            name: 'Said Abu Laila',
+            name: 'Amr ElFangary',
             email: 'propertyshopinvest@gmail.com',
             role: 'God-Mode Organizer',
             branch: 'Abu Dhabi HQ',

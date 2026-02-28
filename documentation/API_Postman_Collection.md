@@ -19,7 +19,7 @@
 
 ### Request Body Schema:
 *   `crm_user_id` (String, Required): The absolute source-of-truth ID. Example: `"USR-84729"`
-*   `full_name` (String, Required): Example: `"Said Abu Laila"`
+*   `full_name` (String, Required): Example: `"Amr ElFangary"`
 *   `email` (String, Required): Example: `"propertyshopinvest@gmail.com"`
 *   `company_entity` (String, Required): Example: `"PROPERTY SHOP INVESTMENT LLC"`
 *   `branch_name` (String, Required): Example: `"Abu Dhabi HQ"`

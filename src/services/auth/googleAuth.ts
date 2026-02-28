@@ -100,7 +100,7 @@ export async function signInWithGoogle(): Promise<UserProfile> {
         // This makes Firestore queries, console debugging, and audit trails
         // human-readable — a critical requirement for a small, named team.
         const newProfile: Omit<UserProfile, 'id'> = {
-            name: 'Said Abu Laila',
+            name: 'Amr ElFangary',
             email: AUTHORISED_EMAIL,
             role: 'God-Mode Organizer',
             branch: 'Abu Dhabi HQ',

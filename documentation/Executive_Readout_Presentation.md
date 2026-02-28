@@ -2,7 +2,7 @@
 
 **Project:** Enterprise Event Management & ROI Tracking Portal  
 **Company:** Property Shop Investment (PSI) LLC  
-**Presenter:** Said Abu Laila  
+**Presenter:** Amr ElFangary  
 **Audience:** Executive Board, Investors, and Lead Developers
 
 > **Speaker Note:** The goal of this presentation is to prove that roadshows are no longer a logistical expense, but a measurable, predictable, and highly accountable revenue engine.
