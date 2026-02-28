@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logisticsNudger = exports.distributeLeads = exports.syncProjects = exports.syncUsers = void 0;
+exports.processReceiptOCR = exports.logisticsNudger = exports.distributeLeads = exports.syncProjects = exports.syncUsers = void 0;
 const admin = __importStar(require("firebase-admin"));
 const syncUsers_1 = require("./api/syncUsers");
 Object.defineProperty(exports, "syncUsers", { enumerable: true, get: function () { return syncUsers_1.syncUsers; } });
@@ -33,6 +33,8 @@ const leadDistribution_1 = require("./api/leadDistribution");
 Object.defineProperty(exports, "distributeLeads", { enumerable: true, get: function () { return leadDistribution_1.distributeLeads; } });
 const logisticsNudger_1 = require("./scheduledJobs/logisticsNudger");
 Object.defineProperty(exports, "logisticsNudger", { enumerable: true, get: function () { return logisticsNudger_1.logisticsNudger; } });
+const processReceiptOCR_1 = require("./processReceiptOCR");
+Object.defineProperty(exports, "processReceiptOCR", { enumerable: true, get: function () { return processReceiptOCR_1.processReceiptOCR; } });
 /**
  * index.ts
  * Entry point for Firebase Cloud Functions.

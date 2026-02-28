@@ -3,6 +3,7 @@ import { syncUsers } from './api/syncUsers';
 import { syncProjects } from './api/syncProjects';
 import { distributeLeads } from './api/leadDistribution';
 import { logisticsNudger } from './scheduledJobs/logisticsNudger';
+import { processReceiptOCR } from './processReceiptOCR';
 
 /**
  * index.ts
@@ -16,4 +17,5 @@ export {
   syncProjects,
   distributeLeads,
   logisticsNudger,
+  processReceiptOCR,
 };
