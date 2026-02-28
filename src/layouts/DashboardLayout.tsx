@@ -14,6 +14,7 @@ import {
     Menu,
     X,
     TrendingUp,
+    BookOpen,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -35,6 +36,7 @@ const NAV_ITEMS = [
     { to: '/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/settlement', icon: Calculator, label: 'Settlement' },
     { to: '/check-in', icon: QrCode, label: 'Check-In' },
+    { to: '/manual', icon: BookOpen, label: 'System Manual' },
 ];
 
 // Bottom nav shows the 4 highest-traffic items on mobile

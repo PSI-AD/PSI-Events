@@ -23,6 +23,7 @@ const Team = lazy(() => import('./components/Team'));
 const Analytics = lazy(() => import('./components/Analytics'));
 const Settlement = lazy(() => import('./features/settlement/SettlementDashboard'));
 const CheckIn = lazy(() => import('./features/check-in/CheckInDashboard'));
+const ProductManual = lazy(() => import('./pages/ProductManual'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -161,6 +162,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <CheckIn />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/manual"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <ProductManual />
               </Suspense>
             }
           />
