@@ -15,10 +15,10 @@ export default function Proposals() {
   const [activeTab, setActiveTab] = useState<'developer' | 'branch' | 'agent'>('developer');
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
       <header className="flex justify-between items-end mb-10">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Proposal Engine</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Proposal Engine</h2>
           <p className="text-slate-500 mt-1">Generate automated sponsorship pitches and participation offers.</p>
         </div>
         <button className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-emerald-700 transition-all shadow-sm">

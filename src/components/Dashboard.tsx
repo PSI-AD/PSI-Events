@@ -43,9 +43,9 @@ const COLORS = ['#10b981', '#3b82f6', '#f59e0b'];
 
 export default function Dashboard() {
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
       <header className="mb-10">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Performance Overview</h2>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Performance Overview</h2>
         <p className="text-slate-500 mt-1">Real-time ROI and lead funnel analytics.</p>
       </header>
 

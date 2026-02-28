@@ -96,61 +96,83 @@ function AgentRow({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: -24 }}
-            className="grid grid-cols-[1fr_1fr_140px_160px_36px] gap-3 items-center"
+            className="bg-slate-800/40 md:bg-transparent rounded-xl p-3 md:p-0 border border-slate-700/50 md:border-0"
         >
-            {/* Agent Name */}
-            <input
-                id={`agent-name-${agent.id}`}
-                type="text"
-                value={agent.name}
-                onChange={(e) => onChange({ ...agent, name: e.target.value })}
-                placeholder="Agent full name"
-                className="bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-            />
-            {/* Branch */}
-            <input
-                id={`agent-branch-${agent.id}`}
-                type="text"
-                value={agent.branch}
-                onChange={(e) => onChange({ ...agent, branch: e.target.value })}
-                placeholder="Branch / office"
-                className="bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-            />
-            {/* Tier selector */}
-            <div className="relative">
-                <select
-                    id={`agent-tier-${agent.id}`}
-                    value={agent.tier}
-                    onChange={(e) => onChange({ ...agent, tier: e.target.value as RiskTier })}
-                    className="w-full appearance-none bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 pr-8"
-                >
-                    <option value="gold">Gold (50%)</option>
-                    <option value="silver">Silver (30%)</option>
-                    <option value="bronze">Bronze (20%)</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-2.5 top-3 text-slate-400 pointer-events-none" />
+            {/* Mobile: stacked card | Desktop: 5-col grid */}
+            <div className="flex flex-col gap-2 md:grid md:grid-cols-[1fr_1fr_140px_160px_36px] md:gap-3 md:items-center">
+
+                {/* Mobile labels + inputs */}
+                <div className="grid grid-cols-2 gap-2 md:contents">
+                    <div className="md:contents flex flex-col gap-0.5">
+                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest md:hidden">Agent Name</span>
+                        <input
+                            id={`agent-name-${agent.id}`}
+                            type="text"
+                            value={agent.name}
+                            onChange={(e) => onChange({ ...agent, name: e.target.value })}
+                            placeholder="Agent full name"
+                            className="bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-3 md:py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 min-h-[44px]"
+                        />
+                    </div>
+                    <div className="md:contents flex flex-col gap-0.5">
+                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest md:hidden">Branch</span>
+                        <input
+                            id={`agent-branch-${agent.id}`}
+                            type="text"
+                            value={agent.branch}
+                            onChange={(e) => onChange({ ...agent, branch: e.target.value })}
+                            placeholder="Branch / office"
+                            className="bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-3 md:py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 min-h-[44px]"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 md:contents">
+                    <div className="md:contents flex flex-col gap-0.5">
+                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest md:hidden">Risk Tier</span>
+                        <div className="relative">
+                            <select
+                                id={`agent-tier-${agent.id}`}
+                                value={agent.tier}
+                                onChange={(e) => onChange({ ...agent, tier: e.target.value as RiskTier })}
+                                className="w-full appearance-none bg-slate-700/60 border border-slate-600 rounded-xl px-3 py-3 md:py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 pr-8 min-h-[44px]"
+                            >
+                                <option value="gold">Gold (50%)</option>
+                                <option value="silver">Silver (30%)</option>
+                                <option value="bronze">Bronze (20%)</option>
+                            </select>
+                            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        </div>
+                    </div>
+                    <div className="md:contents flex flex-col gap-0.5">
+                        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest md:hidden">Closed Revenue</span>
+                        <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-bold">AED</span>
+                            <input
+                                id={`agent-revenue-${agent.id}`}
+                                type="number"
+                                min={0}
+                                value={agent.closedRevenue || ''}
+                                onChange={(e) => onChange({ ...agent, closedRevenue: Number(e.target.value) })}
+                                placeholder="0"
+                                className="w-full bg-slate-700/60 border border-slate-600 rounded-xl pl-11 pr-3 py-3 md:py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 min-h-[44px]"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Remove button */}
+                <div className="flex justify-end md:block">
+                    <button
+                        id={`remove-agent-${agent.id}`}
+                        onClick={onRemove}
+                        className="flex items-center gap-1.5 md:w-9 md:h-9 px-3 py-2 md:px-0 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors text-xs md:text-base min-h-[44px] md:min-h-0 md:justify-center"
+                    >
+                        <Trash2 size={15} />
+                        <span className="md:hidden">Remove</span>
+                    </button>
+                </div>
             </div>
-            {/* Closed Revenue */}
-            <div className="relative">
-                <span className="absolute left-3 top-2.5 text-xs text-slate-400 font-bold">AED</span>
-                <input
-                    id={`agent-revenue-${agent.id}`}
-                    type="number"
-                    min={0}
-                    value={agent.closedRevenue || ''}
-                    onChange={(e) => onChange({ ...agent, closedRevenue: Number(e.target.value) })}
-                    placeholder="0"
-                    className="w-full bg-slate-700/60 border border-slate-600 rounded-xl pl-11 pr-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
-                />
-            </div>
-            {/* Remove */}
-            <button
-                id={`remove-agent-${agent.id}`}
-                onClick={onRemove}
-                className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-            >
-                <Trash2 size={15} />
-            </button>
         </motion.div>
     );
 }
@@ -367,10 +389,10 @@ export default function SettlementDashboard() {
         }
       `}</style>
 
-            <div className="min-h-screen bg-slate-950 p-6 space-y-6 no-print">
+            <div className="min-h-screen bg-slate-950 p-4 md:p-6 space-y-4 md:space-y-6 no-print">
 
                 {/* ── Page Header ── */}
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
@@ -378,11 +400,11 @@ export default function SettlementDashboard() {
                             </div>
                             <span className="text-amber-400 text-xs font-bold tracking-[0.2em] uppercase">Commission Engine</span>
                         </div>
-                        <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                        <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
                             Post-Event Settlement
                         </h1>
                         <p className="text-slate-400 mt-1 text-sm">
-                            Calculate exact AED payouts per agent · Eliminate commission disputes · Generate locked reports
+                            Calculate AED payouts per agent · Eliminate commission disputes · Generate locked reports
                         </p>
                     </div>
                     {report && (
@@ -399,8 +421,8 @@ export default function SettlementDashboard() {
                     )}
                 </div>
 
-                {/* ── Live KPI Strip ── */}
-                <div className="grid grid-cols-4 gap-4">
+                {/* ── Live KPI Strip (2-col mobile, 4-col desktop) ── */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     <StatCard label="Gross Revenue" value={formatAED(liveGross)} sub={`${validAgents.length} agents`} accent="blue" icon={<TrendingUp size={18} />} />
                     <StatCard label="Agent Payouts" value={formatAED(liveCommissions)} sub={liveGross > 0 ? `${((liveCommissions / liveGross) * 100).toFixed(1)}% of gross` : '0%'} accent="gold" icon={<Award size={18} />} />
                     <StatCard label="Branch Gross Profit" value={formatAED(liveProfit)} sub={liveGross > 0 ? `${((liveProfit / liveGross) * 100).toFixed(1)}% retention` : '0%'} accent="emerald" icon={<Building2 size={18} />} />
@@ -408,12 +430,12 @@ export default function SettlementDashboard() {
                 </div>
 
                 {/* ── Event Details Panel ── */}
-                <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+                <div className="bg-slate-900 rounded-2xl border border-slate-800 p-4 md:p-6">
                     <h2 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
                         <FileText size={18} className="text-amber-400" />
                         Event Details
                     </h2>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {[
                             { id: 'event-name', label: 'Roadshow / Event Name', value: eventName, setter: setEventName, type: 'text', placeholder: 'e.g. Abu Dhabi Luxury Roadshow Q1 2026' },
                             { id: 'event-date', label: 'Event Date', value: eventDate, setter: setEventDate, type: 'date', placeholder: '' },
@@ -438,8 +460,8 @@ export default function SettlementDashboard() {
                 </div>
 
                 {/* ── Agent Roster Builder ── */}
-                <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
-                    <div className="flex items-center justify-between mb-5">
+                <div className="bg-slate-900 rounded-2xl border border-slate-800 p-4 md:p-6">
+                    <div className="flex items-center justify-between mb-4 md:mb-5">
                         <h2 className="text-white font-bold text-lg flex items-center gap-2">
                             <Users size={18} className="text-amber-400" />
                             Agent Roster
@@ -457,8 +479,8 @@ export default function SettlementDashboard() {
                         </button>
                     </div>
 
-                    {/* Column headers */}
-                    <div className="grid grid-cols-[1fr_1fr_140px_160px_36px] gap-3 mb-3 px-1">
+                    {/* Column headers: hidden on mobile, shown on md+ */}
+                    <div className="hidden md:grid grid-cols-[1fr_1fr_140px_160px_36px] gap-3 mb-3 px-1">
                         {['Agent Name', 'Branch / Office', 'Risk Tier', 'Closed Revenue (AED)', ''].map((h) => (
                             <p key={h} className="text-xs text-slate-500 font-bold uppercase tracking-widest">{h}</p>
                         ))}

@@ -49,10 +49,10 @@ export default function EventsList() {
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
       <header className="flex justify-between items-end mb-10">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Events</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Events</h2>
           <p className="text-slate-500 mt-1">Manage roadshows and track participation.</p>
         </div>
         <button 

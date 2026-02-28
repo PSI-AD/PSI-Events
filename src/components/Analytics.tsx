@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import PredictiveAnalyticsDashboard from '../features/analytics/PredictiveAnalyticsDashboard';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   LineChart,
   Line,
@@ -13,10 +14,10 @@ import {
   ComposedChart,
   Area
 } from 'recharts';
-import { 
-  Download, 
-  Calendar, 
-  ChevronDown, 
+import {
+  Download,
+  Calendar,
+  ChevronDown,
   PieChart as PieChartIcon,
   Target,
   Zap,
@@ -66,11 +67,11 @@ export default function Analytics() {
   }));
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <header className="flex justify-between items-end mb-10">
+    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-8 md:space-y-12">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Advanced Analytics</h2>
-          <p className="text-slate-500 mt-1">Granular ROI tracking and P&L scenarios.</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Advanced Analytics</h2>
+          <p className="text-slate-500 mt-1 text-sm">Granular ROI tracking and P&amp;L scenarios.</p>
         </div>
         <div className="flex gap-3">
           <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-bold uppercase tracking-widest">
@@ -100,10 +101,10 @@ export default function Analytics() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dynamicFunnel} layout="vertical" margin={{ left: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                <XAxis type="number" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12, fontWeight: 500}} />
-                <Tooltip 
-                  cursor={{fill: '#f8fafc'}}
+                <XAxis type="number" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 12, fontWeight: 500 }} />
+                <Tooltip
+                  cursor={{ fill: '#f8fafc' }}
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
@@ -120,13 +121,13 @@ export default function Analytics() {
             <Zap size={20} className="text-amber-400" />
             P&L: {eventData?.is_sponsored ? 'Sponsored' : 'Branch Funded'}
           </h3>
-          
+
           <div className="space-y-6">
             <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
               <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Branch Net Profit</div>
               <div className="text-2xl font-bold text-emerald-400">AED {eventData?.branch_net_profit?.toLocaleString() || '0'}</div>
             </div>
-            
+
             <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
               <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Gross Profit</div>
               <div className="text-2xl font-bold text-slate-200">AED {eventData?.gross_profit?.toLocaleString() || '0'}</div>
@@ -165,9 +166,9 @@ export default function Analytics() {
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={timeLapseData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <Tooltip 
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <Tooltip
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
                 <Legend iconType="circle" />
@@ -194,6 +195,11 @@ export default function Analytics() {
           </div>
         </div>
       </div>
+
+      {/* ── Predictive Analytics & Sponsorship Engine ────────────── */}
+      <div className="border-t border-slate-100 pt-8 md:pt-12">
+        <PredictiveAnalyticsDashboard defaultCity="London" targetMargin={40} />
+      </div>
     </div>
   );
 }
@@ -210,11 +216,11 @@ function BranchProgress({ name, target, actual, color }: { name: string; target:
         <div className="text-sm font-black text-slate-900">{Math.round(pct)}%</div>
       </div>
       <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-        <motion.div 
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className={`h-full ${color}`} 
+          className={`h-full ${color}`}
         />
       </div>
     </div>

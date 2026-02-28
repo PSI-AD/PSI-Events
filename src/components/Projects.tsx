@@ -22,10 +22,10 @@ export default function Projects() {
   ];
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
       <header className="flex justify-between items-end mb-10">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Projects & L&D</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Projects & L&D</h2>
           <p className="text-slate-500 mt-1">Manage project inventory and training assessments.</p>
         </div>
         <button className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-slate-800 transition-all shadow-sm">
