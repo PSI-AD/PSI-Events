@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  TrendingUp, 
-  Users, 
-  Target, 
-  DollarSign, 
-  ArrowUpRight, 
+import {
+  TrendingUp,
+  Users,
+  Target,
+  DollarSign,
+  ArrowUpRight,
   ArrowDownRight,
   Activity
 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   AreaChart,
   Area,
@@ -44,40 +44,40 @@ const COLORS = ['#10b981', '#3b82f6', '#f59e0b'];
 export default function Dashboard() {
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
-      <header className="mb-10">
+      <header className="mb-8">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Performance Overview</h2>
-        <p className="text-slate-500 mt-1">Real-time ROI and lead funnel analytics.</p>
+        <p className="text-slate-500 mt-1 text-sm">Real-time ROI and lead funnel analytics.</p>
       </header>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <StatCard 
-          title="Total Revenue" 
-          value="AED 1.2M" 
-          change="+12.5%" 
-          trend="up" 
-          icon={<DollarSign className="text-emerald-500" />} 
+        <StatCard
+          title="Total Revenue"
+          value="AED 1.2M"
+          change="+12.5%"
+          trend="up"
+          icon={<DollarSign className="text-emerald-500" />}
         />
-        <StatCard 
-          title="Avg. ROI" 
-          value="245%" 
-          change="+4.2%" 
-          trend="up" 
-          icon={<TrendingUp className="text-blue-500" />} 
+        <StatCard
+          title="Avg. ROI"
+          value="245%"
+          change="+4.2%"
+          trend="up"
+          icon={<TrendingUp className="text-blue-500" />}
         />
-        <StatCard 
-          title="Active Leads" 
-          value="1,482" 
-          change="-2.1%" 
-          trend="down" 
-          icon={<Target className="text-amber-500" />} 
+        <StatCard
+          title="Active Leads"
+          value="1,482"
+          change="-2.1%"
+          trend="down"
+          icon={<Target className="text-amber-500" />}
         />
-        <StatCard 
-          title="Conversion Rate" 
-          value="3.8%" 
-          change="+0.5%" 
-          trend="up" 
-          icon={<Activity className="text-purple-500" />} 
+        <StatCard
+          title="Conversion Rate"
+          value="3.8%"
+          change="+0.5%"
+          trend="up"
+          icon={<Activity className="text-purple-500" />}
         />
       </div>
 
@@ -96,14 +96,14 @@ export default function Dashboard() {
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <Tooltip 
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <Tooltip
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
@@ -152,21 +152,25 @@ export default function Dashboard() {
 
 function StatCard({ title, value, change, trend, icon }: { title: string; value: string; change: string; trend: 'up' | 'down'; icon: React.ReactNode }) {
   return (
-    <motion.div 
-      whileHover={{ y: -5 }}
-      className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm"
+    <motion.div
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      className="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm select-none min-w-0"
     >
-      <div className="flex justify-between items-start mb-4">
-        <div className="p-3 bg-slate-50 rounded-2xl">
+      <div className="flex justify-between items-start mb-3 md:mb-4">
+        <div className="p-2.5 md:p-3 bg-slate-50 rounded-2xl flex-shrink-0">
           {icon}
         </div>
-        <div className={`flex items-center gap-1 text-xs font-bold ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
+        <div className={`flex items-center gap-1 text-xs font-bold flex-shrink-0 ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
           {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
           <span>{change}</span>
         </div>
       </div>
-      <h4 className="text-slate-500 text-sm font-medium">{title}</h4>
-      <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
+      {/* min-w-0 on text wrapper allows truncate to work inside flex parent */}
+      <div className="min-w-0">
+        <h4 className="text-slate-500 text-xs md:text-sm font-medium truncate">{title}</h4>
+        <p className="text-xl md:text-2xl font-bold text-slate-900 mt-0.5 truncate tracking-tight">{value}</p>
+      </div>
     </motion.div>
   );
 }

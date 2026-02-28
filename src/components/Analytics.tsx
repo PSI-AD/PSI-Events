@@ -73,14 +73,15 @@ export default function Analytics() {
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Advanced Analytics</h2>
           <p className="text-slate-500 mt-1 text-sm">Granular ROI tracking and P&amp;L scenarios.</p>
         </div>
-        <div className="flex gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-bold uppercase tracking-widest">
+        <div className="flex gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-bold uppercase tracking-widest select-none">
             <Users size={14} />
-            <span>{eventData?.attendee_count || 0} Agents Confirmed</span>
+            <span>{eventData?.attendee_count || 0} Agents</span>
           </div>
-          <button className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-slate-800 transition-all shadow-sm">
+          <button className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-800 active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
             <Download size={16} />
-            <span>Export Report</span>
+            <span className="hidden sm:inline">Export Report</span>
+            <span className="sm:hidden">Export</span>
           </button>
         </div>
       </header>
@@ -116,37 +117,37 @@ export default function Analytics() {
         </div>
 
         {/* P&L Scenario Card */}
-        <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl">
-          <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+        <div className="bg-slate-900 text-white p-5 md:p-8 rounded-3xl shadow-xl select-none">
+          <h3 className="text-lg font-bold mb-5 flex items-center gap-2">
             <Zap size={20} className="text-amber-400" />
-            P&L: {eventData?.is_sponsored ? 'Sponsored' : 'Branch Funded'}
+            P&amp;L: {eventData?.is_sponsored ? 'Sponsored' : 'Branch Funded'}
           </h3>
 
-          <div className="space-y-6">
-            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+          <div className="space-y-4 md:space-y-6">
+            <div className="p-4 bg-white/5 rounded-2xl border border-white/10 min-w-0">
               <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Branch Net Profit</div>
-              <div className="text-2xl font-bold text-emerald-400">AED {eventData?.branch_net_profit?.toLocaleString() || '0'}</div>
+              <div className="text-xl md:text-2xl font-bold text-emerald-400 truncate">AED {eventData?.branch_net_profit?.toLocaleString() || '0'}</div>
             </div>
 
-            <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+            <div className="p-4 bg-white/5 rounded-2xl border border-white/10 min-w-0">
               <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Gross Profit</div>
-              <div className="text-2xl font-bold text-slate-200">AED {eventData?.gross_profit?.toLocaleString() || '0'}</div>
+              <div className="text-xl md:text-2xl font-bold text-slate-200 truncate">AED {eventData?.gross_profit?.toLocaleString() || '0'}</div>
             </div>
 
-            <div className="pt-4 border-t border-white/10 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Organizer Comm. (10%)</span>
-                <span className="font-bold text-rose-400">-AED {eventData?.organizer_commission?.toLocaleString() || '0'}</span>
+            <div className="pt-3 md:pt-4 border-t border-white/10 space-y-2 md:space-y-3">
+              <div className="flex justify-between text-sm gap-2">
+                <span className="text-slate-400 flex-shrink-0">Organizer Comm. (10%)</span>
+                <span className="font-bold text-rose-400 truncate">-AED {eventData?.organizer_commission?.toLocaleString() || '0'}</span>
               </div>
               {eventData?.is_sponsored && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Sponsorship Profit</span>
-                  <span className="font-bold text-emerald-400">+AED {eventData?.sponsorship_profit?.toLocaleString() || '0'}</span>
+                <div className="flex justify-between text-sm gap-2">
+                  <span className="text-slate-400 flex-shrink-0">Sponsorship Profit</span>
+                  <span className="font-bold text-emerald-400 truncate">+AED {eventData?.sponsorship_profit?.toLocaleString() || '0'}</span>
                 </div>
               )}
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-400">Total Expenses</span>
-                <span className="font-bold">AED {eventData?.total_expenses?.toLocaleString() || '0'}</span>
+              <div className="flex justify-between text-sm gap-2">
+                <span className="text-slate-400 flex-shrink-0">Total Expenses</span>
+                <span className="font-bold truncate">AED {eventData?.total_expenses?.toLocaleString() || '0'}</span>
               </div>
             </div>
           </div>

@@ -59,13 +59,17 @@ function StatCard({
     };
     const c = accentMap[accent];
     return (
-        <div className={clsx('bg-slate-800/60 rounded-2xl p-5 ring-1', c.ring)}>
-            <div className={clsx('w-10 h-10 rounded-xl flex items-center justify-center mb-3', c.bg)}>
+        // select-none: prevents accidental text highlight on mobile tap
+        <div className={clsx('bg-slate-800/60 rounded-2xl p-4 md:p-5 ring-1 select-none min-w-0', c.ring)}>
+            <div className={clsx('w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center mb-2 md:mb-3 flex-shrink-0', c.bg)}>
                 <span className={c.text}>{icon}</span>
             </div>
-            <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest mb-1">{label}</p>
-            <p className={clsx('text-2xl font-bold', c.text)}>{value}</p>
-            {sub && <p className="text-xs text-slate-500 mt-1">{sub}</p>}
+            {/* min-w-0 on text container is critical: allows truncate to work in flex/grid children */}
+            <div className="min-w-0">
+                <p className="text-[10px] md:text-xs text-slate-400 font-semibold uppercase tracking-widest mb-0.5 truncate">{label}</p>
+                <p className={clsx('text-lg md:text-xl lg:text-2xl font-bold tracking-tight truncate', c.text)}>{value}</p>
+                {sub && <p className="text-[10px] md:text-xs text-slate-500 mt-0.5 truncate">{sub}</p>}
+            </div>
         </div>
     );
 }
@@ -507,110 +511,113 @@ export default function SettlementDashboard() {
                     </div>
 
                     {/* Tier reference */}
-                    <div className="mt-6 pt-4 border-t border-slate-800 flex gap-4">
-                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mr-4 self-center">Tier Reference:</p>
-                        {(Object.entries(TIER_CONFIG) as [RiskTier, typeof TIER_CONFIG[RiskTier]][]).map(([key, cfg]) => (
-                            <div key={key} className={clsx('flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs', cfg.tailwindBg, cfg.tailwindBorder)}>
-                                <span className={clsx('font-bold', cfg.tailwindText)}>{cfg.label}</span>
-                                <span className="text-slate-400">→ Agent earns <strong className="text-white">{(cfg.agentShare * 100).toFixed(0)}%</strong>, Branch keeps <strong className="text-white">{(cfg.branchShare * 100).toFixed(0)}%</strong></span>
-                            </div>
-                        ))}
+                    {/* Tier Reference: stacks on mobile, flows row on md+ to prevent crush */}
+                    <div className="mt-6 pt-4 border-t border-slate-800">
+                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-3">Tier Reference:</p>
+                        <div className="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-3">
+                            {(Object.entries(TIER_CONFIG) as [RiskTier, typeof TIER_CONFIG[RiskTier]][]).map(([key, cfg]) => (
+                                <div key={key} className={clsx('flex items-center gap-2 px-3 py-2 rounded-xl border text-xs select-none', cfg.tailwindBg, cfg.tailwindBorder)}>
+                                    <span className={clsx('font-bold flex-shrink-0', cfg.tailwindText)}>{cfg.label}</span>
+                                    <span className="text-slate-400">→ Agent earns <strong className="text-white">{(cfg.agentShare * 100).toFixed(0)}%</strong>, Branch keeps <strong className="text-white">{(cfg.branchShare * 100).toFixed(0)}%</strong></span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ── Generate Button ── */}
+                    <div className="flex justify-center">
+                        <motion.button
+                            id="generate-settlement-btn"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={generateReport}
+                            disabled={isGenerating || validAgents.length === 0}
+                            className="flex items-center gap-3 px-6 md:px-10 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-base md:text-lg tracking-tight transition-all select-none shadow-lg shadow-amber-500/20"
+                        >
+                            {isGenerating ? (
+                                <>
+                                    <div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                                    Calculating...
+                                </>
+                            ) : (
+                                <>
+                                    <Sparkles size={20} />
+                                    Generate Final Settlement Report
+                                </>
+                            )}
+                        </motion.button>
                     </div>
                 </div>
 
-                {/* ── Generate Button ── */}
-                <div className="flex justify-center">
-                    <motion.button
-                        id="generate-settlement-btn"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={generateReport}
-                        disabled={isGenerating || validAgents.length === 0}
-                        className="flex items-center gap-3 px-10 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-lg tracking-tight transition-colors shadow-lg shadow-amber-500/20"
-                    >
-                        {isGenerating ? (
-                            <>
-                                <div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                                Calculating...
-                            </>
-                        ) : (
-                            <>
-                                <Sparkles size={20} />
-                                Generate Final Settlement Report
-                            </>
-                        )}
-                    </motion.button>
-                </div>
+                {/* ── Settlement Report (printable) ── */}
+                <AnimatePresence>
+                    {report && (
+                        <motion.div
+                            ref={reportRef}
+                            initial={{ opacity: 0, y: 32 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-6 pt-0 no-print"
+                        >
+                            {/* Action bar */}
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <Star className="text-amber-400" size={18} />
+                                    <span className="text-white font-bold text-lg">Final Settlement Report</span>
+                                    <span className="text-xs text-amber-400 font-mono bg-amber-500/10 px-2 py-0.5 rounded-full">
+                                        {report.eventId}
+                                    </span>
+                                </div>
+                                <div className="flex gap-3">
+                                    <button
+                                        id="print-report-btn-2"
+                                        onClick={handlePrint}
+                                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition-colors text-sm font-semibold"
+                                    >
+                                        <Printer size={15} />
+                                        Save as PDF
+                                    </button>
+                                    <button
+                                        id="download-report-btn"
+                                        onClick={handlePrint}
+                                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold transition-colors"
+                                    >
+                                        <Download size={15} />
+                                        Download Report
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ReportCard report={report} />
+
+                            {/* Highest earner callout */}
+                            {report.summary.highestEarner && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="mt-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl px-6 py-4 flex items-center gap-4"
+                                >
+                                    <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <Award size={20} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-amber-400 text-xs font-bold uppercase tracking-widest mb-0.5">Top Performer This Roadshow</p>
+                                        <p className="text-white font-bold">
+                                            {report.summary.highestEarner.agent.name}
+                                            <span className="text-amber-400 ml-2">
+                                                → {formatAED(report.summary.highestEarner.agentCommission)} commission earned
+                                            </span>
+                                        </p>
+                                        <p className="text-slate-400 text-xs">
+                                            {report.summary.highestEarner.agent.branch} · {report.summary.highestEarner.tier.label} tier · {formatAED(report.summary.highestEarner.agent.closedRevenue)} closed
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
-
-            {/* ── Settlement Report (printable) ── */}
-            <AnimatePresence>
-                {report && (
-                    <motion.div
-                        ref={reportRef}
-                        initial={{ opacity: 0, y: 32 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="p-6 pt-0 no-print"
-                    >
-                        {/* Action bar */}
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <Star className="text-amber-400" size={18} />
-                                <span className="text-white font-bold text-lg">Final Settlement Report</span>
-                                <span className="text-xs text-amber-400 font-mono bg-amber-500/10 px-2 py-0.5 rounded-full">
-                                    {report.eventId}
-                                </span>
-                            </div>
-                            <div className="flex gap-3">
-                                <button
-                                    id="print-report-btn-2"
-                                    onClick={handlePrint}
-                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 transition-colors text-sm font-semibold"
-                                >
-                                    <Printer size={15} />
-                                    Save as PDF
-                                </button>
-                                <button
-                                    id="download-report-btn"
-                                    onClick={handlePrint}
-                                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold transition-colors"
-                                >
-                                    <Download size={15} />
-                                    Download Report
-                                </button>
-                            </div>
-                        </div>
-
-                        <ReportCard report={report} />
-
-                        {/* Highest earner callout */}
-                        {report.summary.highestEarner && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
-                                className="mt-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl px-6 py-4 flex items-center gap-4"
-                            >
-                                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                    <Award size={20} className="text-white" />
-                                </div>
-                                <div>
-                                    <p className="text-amber-400 text-xs font-bold uppercase tracking-widest mb-0.5">Top Performer This Roadshow</p>
-                                    <p className="text-white font-bold">
-                                        {report.summary.highestEarner.agent.name}
-                                        <span className="text-amber-400 ml-2">
-                                            → {formatAED(report.summary.highestEarner.agentCommission)} commission earned
-                                        </span>
-                                    </p>
-                                    <p className="text-slate-400 text-xs">
-                                        {report.summary.highestEarner.agent.branch} · {report.summary.highestEarner.tier.label} tier · {formatAED(report.summary.highestEarner.agent.closedRevenue)} closed
-                                    </p>
-                                </div>
-                            </motion.div>
-                        )}
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </>
     );
 }
