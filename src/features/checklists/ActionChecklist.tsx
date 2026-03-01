@@ -34,7 +34,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -49,6 +49,10 @@ import {
     ExternalLink,
     Flame,
     CheckSquare,
+    Upload,
+    Loader2,
+    FileCheck,
+    XCircle,
 } from 'lucide-react';
 import type { ChecklistTask } from '../../types/checklist';
 import {
@@ -56,6 +60,91 @@ import {
     getUrgentTasks,
     sortByPriority,
 } from '../../utils/checklistEngine';
+import { storage, db } from '../../services/firebase/firebaseConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+
+// ── Document upload hook ──────────────────────────────────────────────────────
+
+type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+
+/**
+ * Self-contained hook for document-category checklist tasks.
+ * Uploads to Firebase Storage under agent_documents/{userId}/{taskId}_{filename}
+ * then writes isCompleted + completedAt + documentUrl to Firestore.
+ *
+ * Note: userId falls back to 'agent_alice_001' (the demo agent ID) when auth
+ * is not yet wired. Replace with auth.currentUser?.uid in production.
+ */
+function useDocumentUpload(task: ChecklistTask) {
+    const [status, setStatus] = useState<UploadStatus>('idle');
+    const [progress, setProgress] = useState(0);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Click the hidden file input
+    const openPicker = () => fileInputRef.current?.click();
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        // Reset input so the same file can be re-selected after an error
+        e.target.value = '';
+
+        setStatus('uploading');
+        setProgress(0);
+        setErrorMsg(null);
+
+        try {
+            // ── 1. Determine userId (real auth when wired, demo fallback) ────
+            const userId = 'agent_alice_001'; // TODO: replace with auth.currentUser?.uid
+
+            // ── 2. Upload to Firebase Storage ────────────────────────────────
+            const storagePath = `agent_documents/${userId}/${task.id}_${file.name}`;
+            const storageRef = ref(storage, storagePath);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+                uploadTask.on(
+                    'state_changed',
+                    snapshot => {
+                        const pct = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        setProgress(pct);
+                    },
+                    reject,
+                    resolve,
+                );
+            });
+
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            setDownloadUrl(url);
+
+            // ── 3. Update Firestore task document ────────────────────────────
+            // Firestore path: agent_documents/{taskId}
+            // Adjust the collection path to match your production schema.
+            const taskDocRef = doc(db, 'agent_documents', task.id);
+            await updateDoc(taskDocRef, {
+                isCompleted: true,
+                completedAt: serverTimestamp(),
+                documentUrl: url,
+                fileName: file.name,
+                fileSize: file.size,
+            });
+
+            setStatus('success');
+        } catch (err: unknown) {
+            console.error('[document upload]', err);
+            const msg = err instanceof Error ? err.message : 'Upload failed';
+            setErrorMsg(msg);
+            setStatus('error');
+        }
+    };
+
+    return { status, progress, errorMsg, downloadUrl, openPicker, fileInputRef, handleFileChange };
+}
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -260,6 +349,9 @@ function ProgressHeader({
 
 // ── Task Card ─────────────────────────────────────────────────────────────────
 
+/** Categories that require a document file upload instead of a page route. */
+const DOCUMENT_CATEGORIES = new Set(['documents', 'compliance']);
+
 interface TaskCardProps {
     key?: React.Key;
     task: ChecklistTask;
@@ -269,6 +361,8 @@ interface TaskCardProps {
 
 function TaskCard({ task, index, onNavigate }: TaskCardProps) {
     const [expanded, setExpanded] = useState(false);
+    const isDocTask = DOCUMENT_CATEGORIES.has(task.category ?? '');
+    const upload = useDocumentUpload(task);
 
     const deadlineUrgent = !task.isCompleted && isUrgent(task.deadline);
     const deadlineOverdue = !task.isCompleted && isOverdue(task.deadline);
@@ -305,7 +399,7 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
             >
                 {/* Check / circle icon */}
                 <div className="flex-shrink-0 mt-0.5">
-                    {task.isCompleted ? (
+                    {task.isCompleted || upload.status === 'success' ? (
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -333,7 +427,7 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                         {/* Title + badges */}
                         <div className="min-w-0">
                             <p
-                                className={`text-sm font-semibold leading-snug ${task.isCompleted
+                                className={`text-sm font-semibold leading-snug ${task.isCompleted || upload.status === 'success'
                                     ? 'line-through text-psi-muted'
                                     : 'text-psi-primary'
                                     }`}
@@ -375,12 +469,22 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                                         Awaiting Approval
                                     </span>
                                 )}
+
+                                {/* Upload success badge */}
+                                {upload.status === 'success' && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5
+                    rounded-full text-[10px] font-bold uppercase tracking-widest
+                    bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400">
+                                        <FileCheck size={9} />
+                                        Uploaded
+                                    </span>
+                                )}
                             </div>
                         </div>
 
                         {/* Deadline + chevron */}
                         <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                            {!task.isCompleted && (
+                            {!task.isCompleted && upload.status !== 'success' && (
                                 <div
                                     className={`
                     flex items-center gap-1 text-[11px] font-bold rounded-full
@@ -399,7 +503,7 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                                 </div>
                             )}
 
-                            {task.isCompleted && (
+                            {(task.isCompleted || upload.status === 'success') && (
                                 <div className="flex items-center gap-1 text-[11px] font-bold
                   text-emerald-600 dark:text-emerald-400 select-none">
                                     <CheckCircle2 size={11} />
@@ -435,8 +539,99 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
 
                             {/* Action row */}
                             <div className="flex items-center gap-3 flex-wrap">
-                                {/* Primary CTA — only for pending tasks */}
-                                {!task.isCompleted && (
+
+                                {/* ── DOCUMENT UPLOAD CTA ─────────────────── */}
+                                {!task.isCompleted && isDocTask && (
+                                    <>
+                                        {/* Hidden file input */}
+                                        <input
+                                            ref={upload.fileInputRef}
+                                            type="file"
+                                            accept=".pdf,.jpg,.jpeg,.png"
+                                            className="hidden"
+                                            onChange={upload.handleFileChange}
+                                        />
+
+                                        {/* Upload button — idle */}
+                                        {upload.status === 'idle' && (
+                                            <motion.button
+                                                whileHover={{ x: 3 }}
+                                                whileTap={{ scale: 0.97 }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    upload.openPicker();
+                                                }}
+                                                className="flex items-center gap-2 px-4 py-2.5
+                                                    rounded-xl text-sm font-semibold shadow-sm
+                                                    btn-accent active:scale-[0.97] transition-all select-none"
+                                            >
+                                                <Upload size={14} />
+                                                {task.actionLabel ?? 'Upload Document'}
+                                            </motion.button>
+                                        )}
+
+                                        {/* Upload button — uploading */}
+                                        {upload.status === 'uploading' && (
+                                            <div className="flex items-center gap-2.5 px-4 py-2.5
+                                                rounded-xl text-sm font-semibold
+                                                bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400">
+                                                <Loader2 size={14} className="animate-spin" />
+                                                Uploading… {upload.progress}%
+                                                {/* Mini progress bar */}
+                                                <div className="w-16 h-1 bg-blue-500/20 rounded-full overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                                                        style={{ width: `${upload.progress}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Upload button — success */}
+                                        {upload.status === 'success' && (
+                                            <motion.div
+                                                initial={{ scale: 0.8, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                className="flex items-center gap-2 px-4 py-2.5
+                                                    rounded-xl text-sm font-bold
+                                                    bg-emerald-500/10 border border-emerald-500/30
+                                                    text-emerald-600 dark:text-emerald-400"
+                                            >
+                                                <FileCheck size={14} />
+                                                Saved to Firebase ✓
+                                            </motion.div>
+                                        )}
+
+                                        {/* Upload button — error */}
+                                        {upload.status === 'error' && (
+                                            <div className="flex flex-col gap-1.5">
+                                                <div className="flex items-center gap-2 px-4 py-2.5
+                                                    rounded-xl text-sm font-semibold
+                                                    bg-rose-500/10 border border-rose-500/30
+                                                    text-rose-600 dark:text-rose-400">
+                                                    <XCircle size={14} />
+                                                    {upload.errorMsg ?? 'Upload failed'}
+                                                </div>
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); upload.openPicker(); }}
+                                                    className="text-xs text-psi-muted hover:text-psi-primary underline underline-offset-2 transition-colors"
+                                                >
+                                                    Try again
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* Accepted file types hint */}
+                                        {upload.status === 'idle' && (
+                                            <span className="text-[11px] text-psi-muted">
+                                                PDF, JPG or PNG · max 10 MB
+                                            </span>
+                                        )}
+                                    </>
+                                )}
+
+                                {/* ── NAVIGATE CTA (non-document tasks) ──── */}
+                                {!task.isCompleted && !isDocTask && (
                                     <motion.button
                                         whileHover={{ x: 3 }}
                                         whileTap={{ scale: 0.97 }}
@@ -474,6 +669,21 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                                     >
                                         <ExternalLink size={11} />
                                         Reference
+                                    </a>
+                                )}
+
+                                {/* Uploaded file link */}
+                                {upload.downloadUrl && (
+                                    <a
+                                        href={upload.downloadUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={e => e.stopPropagation()}
+                                        className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400
+                      hover:text-blue-500 transition-colors"
+                                    >
+                                        <ExternalLink size={11} />
+                                        View uploaded file
                                     </a>
                                 )}
                             </div>
