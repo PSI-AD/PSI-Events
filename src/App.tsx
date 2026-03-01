@@ -44,6 +44,7 @@ const FastPassPage = lazy(() => import('./features/clients/FastPass'));
 const FloorplanHeatmap = lazy(() => import('./features/analytics/FloorplanHeatmap'));
 const TravelDesk = lazy(() => import('./features/logistics/TravelDesk'));
 const BusinessCardScanner = lazy(() => import('./features/leads/BusinessCardScanner'));
+const LocalizedPitch = lazy(() => import('./features/events/LocalizedPitch'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -328,6 +329,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <BusinessCardScanner eventId="event_demo" agentId="agent_demo" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/localized-pitch"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <LocalizedPitch />
               </Suspense>
             }
           />
