@@ -48,6 +48,7 @@ const LocalizedPitch = lazy(() => import('./features/events/LocalizedPitch'));
 const AIPitchSimulator = lazy(() => import('./features/training/AIPitchSimulator'));
 const IntelDropPage = lazy(() => import('./features/events/IntelDrop'));
 const ExecutiveDebrief = lazy(() => import('./features/analytics/ExecutiveDebrief'));
+const VIPConcierge = lazy(() => import('./features/clients/VIPConcierge'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -364,6 +365,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <ExecutiveDebrief eventId="event_demo" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/vip-concierge"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <VIPConcierge eventId="event_demo" />
               </Suspense>
             }
           />
