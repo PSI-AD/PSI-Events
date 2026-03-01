@@ -750,15 +750,51 @@ const MOCK_EVENT_ID = 'evt_dubai_q1_2026';
 const MOCK_AGENT_ID = 'agent_alice_001';
 const MOCK_MANAGER_ID = 'manager_bob_001';
 
+// ── Demo seed: IDs of tasks that are already completed ────────────────────────
+// 11 of 13 tasks complete → 85% progress bar for presentation.
+// Pending: upload_visa (URGENT — 12h deadline) + qr_check_in (event day gate).
+const _DEMO_COMPLETED = new Set([
+    `select_package_tier_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `upload_passport_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `upload_rera_certificate_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `complete_payment_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `complete_ld_quiz_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `review_floor_plan_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `confirm_travel_details_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `log_first_lead_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `submit_lead_report_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `complete_feedback_survey_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+    `review_settlement_statement_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`,
+]);
+
 /**
- * MOCK_AGENT_TASKS
- * Pre-hydrated tasks for the default Agent template, simulating an event
- * that starts in 5 days. Useful for dev, storybook, and E2E tests.
+ * MOCK_AGENT_TASKS — Demo-seeded (presentation-ready)
+ * 11 / 13 tasks completed = 85% progress.
+ * - upload_visa: pending, deadline = NOW + 12 h → shows URGENT orange badge.
+ * - qr_check_in: pending, normal deadline → shows as the next action to take.
  */
 export const MOCK_AGENT_TASKS: ChecklistTask[] = hydrateTemplate(AGENT_TEMPLATE, {
     eventId: MOCK_EVENT_ID,
     userId: MOCK_AGENT_ID,
     eventStartMs: MOCK_EVENT_START_MS,
+}).map(task => {
+    // ① upload_visa → pending but URGENT (12 h window)
+    if (task.id === `upload_visa_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`) {
+        return { ...task, isCompleted: false, deadline: hoursFromNow(12) };
+    }
+    // ② qr_check_in → pending (event hasn't started yet)
+    if (task.id === `qr_check_in_${MOCK_EVENT_ID}_${MOCK_AGENT_ID}`) {
+        return { ...task, isCompleted: false };
+    }
+    // ③ All other tasks → completed (+ validated where required)
+    if (_DEMO_COMPLETED.has(task.id)) {
+        return {
+            ...task,
+            isCompleted: true,
+            isValidated: task.requiresValidation ? true : task.isValidated,
+        };
+    }
+    return task;
 });
 
 /**
