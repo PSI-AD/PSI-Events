@@ -46,6 +46,7 @@ const TravelDesk = lazy(() => import('./features/logistics/TravelDesk'));
 const BusinessCardScanner = lazy(() => import('./features/leads/BusinessCardScanner'));
 const LocalizedPitch = lazy(() => import('./features/events/LocalizedPitch'));
 const AIPitchSimulator = lazy(() => import('./features/training/AIPitchSimulator'));
+const IntelDropPage = lazy(() => import('./features/events/IntelDrop'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -346,6 +347,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <AIPitchSimulator eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/market-intel"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <IntelDropPage eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" view="hq" />
               </Suspense>
             }
           />
