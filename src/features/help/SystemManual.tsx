@@ -23,6 +23,7 @@ import {
     ChevronRight, ArrowRight, Info,
     Calculator, TrendingUp, Award,
     FileCheck2, UserCheck,
+    Building2, Lock, Database, Users,
 } from 'lucide-react';
 
 // ── Tiny utility ──────────────────────────────────────────────────────────────
@@ -54,6 +55,13 @@ const SECTIONS = [
         label: 'Understanding Settlements',
         sublabel: 'Commissions & ROI calculation',
         accent: 'amber',
+    },
+    {
+        id: 'security',
+        number: 4,
+        label: 'Enterprise Security & Privacy',
+        sublabel: 'Row-Level Security & RLS model',
+        accent: 'violet',
     },
 ] as const;
 
@@ -97,19 +105,25 @@ function ManualNav({
                             ? 'bg-emerald-500'
                             : sec.accent === 'blue'
                                 ? 'bg-blue-500'
-                                : 'bg-amber-500';
+                                : sec.accent === 'amber'
+                                    ? 'bg-amber-500'
+                                    : 'bg-violet-500';
                     const activeText =
                         sec.accent === 'emerald'
                             ? 'text-emerald-600 dark:text-emerald-400'
                             : sec.accent === 'blue'
                                 ? 'text-blue-600 dark:text-blue-400'
-                                : 'text-amber-600 dark:text-amber-400';
+                                : sec.accent === 'amber'
+                                    ? 'text-amber-600 dark:text-amber-400'
+                                    : 'text-violet-600 dark:text-violet-400';
                     const activeBg =
                         sec.accent === 'emerald'
                             ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20'
                             : sec.accent === 'blue'
                                 ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20'
-                                : 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20';
+                                : sec.accent === 'amber'
+                                    ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20'
+                                    : 'bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-500/20';
 
                     return (
                         <button
@@ -193,7 +207,9 @@ function MobileNav({
                             ? 'bg-emerald-500 text-white shadow-emerald-500/30'
                             : sec.accent === 'blue'
                                 ? 'bg-blue-500 text-white shadow-blue-500/30'
-                                : 'bg-amber-500 text-white shadow-amber-500/30';
+                                : sec.accent === 'amber'
+                                    ? 'bg-amber-500 text-white shadow-amber-500/30'
+                                    : 'bg-violet-500 text-white shadow-violet-500/30';
                     return (
                         <button
                             key={sec.id}
@@ -226,18 +242,20 @@ function SectionHeader({
     number: number;
     title: string;
     subtitle: string;
-    accent: 'emerald' | 'blue' | 'amber';
+    accent: 'emerald' | 'blue' | 'amber' | 'violet';
 }) {
     const badgeColors = {
         emerald:
             'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30',
-        blue: 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30',
-        amber: 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30',
+        blue: 'bg-blue-50   dark:bg-blue-500/10   text-blue-700   dark:text-blue-400   border border-blue-200   dark:border-blue-500/30',
+        amber: 'bg-amber-50  dark:bg-amber-500/10  text-amber-700  dark:text-amber-400  border border-amber-200  dark:border-amber-500/30',
+        violet: 'bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-400 border border-violet-200 dark:border-violet-500/30',
     };
     const barColors = {
         emerald: 'from-emerald-500 to-emerald-400',
-        blue: 'from-blue-500 to-blue-400',
-        amber: 'from-amber-500 to-amber-400',
+        blue: 'from-blue-500    to-blue-400',
+        amber: 'from-amber-500   to-amber-400',
+        violet: 'from-violet-500  to-violet-400',
     };
 
     return (
@@ -1476,6 +1494,314 @@ function SettlementsSection() {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+// ─── Section 4: Enterprise Security & Privacy ───────────────────────────────────
+
+const RLS_LAYERS = [
+    {
+        id: 'executive',
+        role: 'Executive',
+        icon: Building2,
+        label: 'Full P&L Visibility',
+        desc: 'Sees all branches, all events, all agent settlements — real-time gross profit and net ROI.',
+        access: ['All Events', 'All Agents', 'All P&L', 'All Branches'],
+        // Light mode
+        border: 'border-blue-200',
+        bg: 'bg-blue-50',
+        iconBg: 'bg-blue-100',
+        iconColor: 'text-blue-700',
+        badgeBg: 'bg-blue-100 text-blue-700',
+        tagBg: 'bg-blue-100/80 text-blue-700',
+        // Dark mode
+        darkBorder: 'dark:border-blue-500/30',
+        darkBg: 'dark:bg-gradient-to-br dark:from-blue-950/60 dark:to-slate-900',
+        darkIconBg: 'dark:bg-blue-500/20',
+        darkIconColor: 'dark:text-blue-400',
+        darkBadge: 'dark:bg-blue-500/20 dark:text-blue-300',
+        darkTag: 'dark:bg-blue-500/10 dark:text-blue-400',
+        lineColor: '#3b82f6',
+        width: 'w-full',
+    },
+    {
+        id: 'manager',
+        role: 'Manager',
+        icon: ShieldCheck,
+        label: 'Branch-Level Visibility',
+        desc: 'Sees all agents and events within their assigned branch. Cannot access other branches.',
+        access: ['Branch Events', 'Branch Agents', 'Branch P&L'],
+        border: 'border-emerald-200',
+        bg: 'bg-emerald-50',
+        iconBg: 'bg-emerald-100',
+        iconColor: 'text-emerald-700',
+        badgeBg: 'bg-emerald-100 text-emerald-700',
+        tagBg: 'bg-emerald-100/80 text-emerald-700',
+        darkBorder: 'dark:border-emerald-500/30',
+        darkBg: 'dark:bg-gradient-to-br dark:from-emerald-950/50 dark:to-slate-900',
+        darkIconBg: 'dark:bg-emerald-500/20',
+        darkIconColor: 'dark:text-emerald-400',
+        darkBadge: 'dark:bg-emerald-500/20 dark:text-emerald-300',
+        darkTag: 'dark:bg-emerald-500/10 dark:text-emerald-400',
+        lineColor: '#10b981',
+        width: 'w-4/5',
+    },
+    {
+        id: 'agent',
+        role: 'Agent',
+        icon: Users,
+        label: 'Personal Leads Only',
+        desc: 'Restricted to their own leads, their own QR pass, and their own settlement data. Zero cross-agent visibility.',
+        access: ['Own Leads Only', 'Own QR Pass', 'Own Settlement'],
+        border: 'border-slate-300',
+        bg: 'bg-slate-50',
+        iconBg: 'bg-slate-200',
+        iconColor: 'text-slate-600',
+        badgeBg: 'bg-slate-200 text-slate-600',
+        tagBg: 'bg-slate-200/80 text-slate-600',
+        darkBorder: 'dark:border-slate-600/40',
+        darkBg: 'dark:bg-gradient-to-br dark:from-slate-800/80 dark:to-slate-900',
+        darkIconBg: 'dark:bg-slate-700',
+        darkIconColor: 'dark:text-slate-400',
+        darkBadge: 'dark:bg-slate-700 dark:text-slate-300',
+        darkTag: 'dark:bg-slate-700/60 dark:text-slate-400',
+        lineColor: '#94a3b8',
+        width: 'w-3/5',
+    },
+];
+
+function RLSDiagram() {
+    return (
+        <div className="relative my-10 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden shadow-xl shadow-slate-900/5">
+
+            {/* ── Giant background lock watermark ── */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                <Lock
+                    size={320}
+                    className="text-violet-500 dark:text-violet-400 opacity-[0.03]"
+                    strokeWidth={1.2}
+                />
+            </div>
+
+            <div className="relative z-10 p-6 md:p-10">
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500 dark:text-violet-400 mb-2 text-center">
+                    Row-Level Security Model
+                </p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 text-center mb-8">
+                    Every Firestore read is filtered server-side — no client-side bypass possible
+                </p>
+
+                {/* Central database node */}
+                <div className="flex justify-center mb-2">
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, ease: 'backOut' }}
+                        className="flex flex-col items-center gap-2"
+                    >
+                        <div className="w-16 h-16 rounded-2xl bg-violet-100 dark:bg-violet-500/20 border-2 border-violet-300 dark:border-violet-500/50 flex items-center justify-center shadow-lg shadow-violet-500/10">
+                            <Database size={28} className="text-violet-600 dark:text-violet-400" />
+                        </div>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-600 dark:text-violet-400">
+                            Firestore DB
+                        </span>
+                        <div className="flex items-center gap-1 bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20 rounded-full px-2.5 py-0.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+                            <span className="text-[9px] font-bold text-violet-600 dark:text-violet-400">RLS Active</span>
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* SVG connector lines from DB to layers */}
+                <div className="flex justify-center mb-4">
+                    <svg width="320" height="56" viewBox="0 0 320 56" fill="none" className="overflow-visible">
+                        {/* Centre trunk */}
+                        <line x1="160" y1="0" x2="160" y2="24" stroke="#8b5cf6" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="opacity-60" />
+                        {/* Horizontal spread */}
+                        <line x1="60" y1="24" x2="260" y2="24" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" className="opacity-40" />
+                        {/* Left branch to Executive */}
+                        <line x1="60" y1="24" x2="60" y2="56" stroke="#3b82f6" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="opacity-70" />
+                        {/* Centre branch to Manager */}
+                        <line x1="160" y1="24" x2="160" y2="56" stroke="#10b981" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="opacity-70" />
+                        {/* Right branch to Agent */}
+                        <line x1="260" y1="24" x2="260" y2="56" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="opacity-70" />
+                        {/* Arrowheads */}
+                        <polyline points="55,50 60,56 65,50" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        <polyline points="155,50 160,56 165,50" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        <polyline points="255,50 260,56 265,50" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    </svg>
+                </div>
+
+                {/* Three role layer cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {RLS_LAYERS.map((layer, idx) => {
+                        const Icon = layer.icon;
+                        return (
+                            <motion.div
+                                key={layer.id}
+                                initial={{ opacity: 0, y: 24 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, margin: '-30px' }}
+                                transition={{ duration: 0.45, delay: idx * 0.13, ease: [0.25, 0.46, 0.45, 0.94] }}
+                                className={cn(
+                                    'rounded-2xl border-2 overflow-hidden',
+                                    layer.border, layer.bg,
+                                    layer.darkBorder, layer.darkBg,
+                                )}
+                            >
+                                {/* Header */}
+                                <div className="px-4 pt-4 pb-3 flex items-center gap-3">
+                                    <div className={cn(
+                                        'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0',
+                                        layer.iconBg, layer.darkIconBg,
+                                    )}>
+                                        <Icon size={18} className={cn(layer.iconColor, layer.darkIconColor)} />
+                                    </div>
+                                    <div>
+                                        <span className={cn(
+                                            'text-[9px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded-full',
+                                            layer.badgeBg, layer.darkBadge,
+                                        )}>
+                                            {layer.role}
+                                        </span>
+                                        <p className="text-sm font-extrabold text-slate-900 dark:text-white mt-0.5 leading-tight">
+                                            {layer.label}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Access scope tags */}
+                                <div className="px-4 pb-3 flex flex-wrap gap-1.5">
+                                    {layer.access.map(tag => (
+                                        <span
+                                            key={tag}
+                                            className={cn(
+                                                'text-[9px] font-bold px-2 py-0.5 rounded-md',
+                                                layer.tagBg, layer.darkTag,
+                                            )}
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                {/* Funnel width bar — represents data scope */}
+                                <div className="px-4 pb-3">
+                                    <div className="h-1.5 bg-white/50 dark:bg-slate-800/50 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: '0%' }}
+                                            whileInView={{ width: layer.width.replace('w-full', '100%').replace('w-4/5', '80%').replace('w-3/5', '60%') }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.7, delay: idx * 0.13 + 0.3 }}
+                                            className="h-full rounded-full"
+                                            style={{ backgroundColor: layer.lineColor, opacity: 0.7 }}
+                                        />
+                                    </div>
+                                    <p className="text-[9px] text-slate-400 dark:text-slate-500 mt-1 font-mono">
+                                        Data scope: {layer.id === 'executive' ? '100%' : layer.id === 'manager' ? '~80%' : '~20%'}
+                                    </p>
+                                </div>
+
+                                {/* Description */}
+                                <div className="px-4 pb-4">
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                                        {layer.desc}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                {/* Bottom principle box */}
+                <div className="mt-6 flex items-start gap-3 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-700/40 rounded-2xl px-4 py-4">
+                    <Lock size={16} className="text-violet-500 dark:text-violet-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-violet-700 dark:text-violet-300 leading-relaxed">
+                        <strong>Zero Trust Architecture:</strong>{' '}
+                        Firestore Security Rules enforce role checks server-side on every read and write. No client code can bypass this — even if an agent modifies the frontend JS, the server rejects unauthorized queries at the database level.
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function SecuritySection() {
+    return (
+        <section id="security" className="scroll-mt-6 pb-16 border-t border-slate-200 dark:border-slate-800/60 pt-12">
+            <SectionHeader
+                number={4}
+                title="Enterprise Security & Privacy"
+                subtitle="The PSI portal enforces strict Row-Level Security (RLS) rules. Every Firestore query is filtered server-side based on the authenticated user's role. Agents can never see each other's data."
+                accent="violet"
+            />
+
+            <Callout type="warning">
+                <strong>Zero-Override Policy:</strong> Access boundaries are enforced at the database layer via
+                Firestore Security Rules. There is no admin UI switch to bypass them — a code deployment
+                is required to change any access policy.
+            </Callout>
+
+            {/* RLS Funnel Diagram */}
+            <RLSDiagram />
+
+            {/* Feature grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                {[
+                    {
+                        icon: ShieldCheck,
+                        title: 'JWT Authentication',
+                        desc: 'Every session is authenticated via Firebase Auth. QR tokens are signed JWTs that expire after 24h — non-repudiable and tamper-proof.',
+                        color: 'violet',
+                    },
+                    {
+                        icon: Database,
+                        title: 'Atomic Writes',
+                        desc: 'All multi-document operations use Firestore writeBatch — either 100% succeeds or 100% fails. No partial state corruption possible.',
+                        color: 'blue',
+                    },
+                    {
+                        icon: Lock,
+                        title: 'No Raw DB Access',
+                        desc: 'Agents and managers never interact with Firestore directly. All queries are mediated through typed service layers.',
+                        color: 'emerald',
+                    },
+                    {
+                        icon: CheckCircle2,
+                        title: 'Immutable Audit Trail',
+                        desc: 'Every check-in, approval, and settlement write is timestamped server-side. Firestore timestamps cannot be overwritten by client code.',
+                        color: 'amber',
+                    },
+                ].map((card, idx) => {
+                    const Icon = card.icon;
+                    const colorMap: Record<string, string> = {
+                        violet: 'bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-500/20 text-violet-600 dark:text-violet-400',
+                        blue: 'bg-blue-50   dark:bg-blue-500/10   border-blue-200   dark:border-blue-500/20   text-blue-600   dark:text-blue-400',
+                        emerald: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+                        amber: 'bg-amber-50  dark:bg-amber-500/10  border-amber-200  dark:border-amber-500/20  text-amber-600  dark:text-amber-400',
+                    };
+                    return (
+                        <motion.div
+                            key={card.title}
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: idx * 0.1 }}
+                            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/50 p-5 flex gap-4"
+                        >
+                            <div className={cn('w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0', colorMap[card.color])}>
+                                <Icon size={17} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-extrabold text-slate-900 dark:text-white">{card.title}</p>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{card.desc}</p>
+                            </div>
+                        </motion.div>
+                    );
+                })}
+            </div>
+        </section>
+    );
+}
+
 export default function SystemManual() {
     const [activeSection, setActiveSection] = useState<SectionId>('journey');
     const contentRef = useRef<HTMLDivElement>(null);
@@ -1554,6 +1880,7 @@ export default function SystemManual() {
                                 <JourneySection />
                                 <CheckInSection />
                                 <SettlementsSection />
+                                <SecuritySection />
                             </motion.div>
                         </AnimatePresence>
                     </div>
