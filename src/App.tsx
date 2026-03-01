@@ -15,6 +15,7 @@ const ExecutivePresentation = lazy(() => import('./pages/ExecutivePresentation')
 const Login = lazy(() => import('./pages/Login'));
 const DeveloperPitch = lazy(() => import('./pages/public/DeveloperPitch'));
 const LiveHQ = lazy(() => import('./pages/LiveHQ'));
+const SponsorDashboard = lazy(() => import('./pages/public/SponsorDashboard'));
 
 // Dashboard (authenticated)
 const Dashboard = lazy(() => import('./components/Dashboard'));
@@ -30,6 +31,19 @@ const Settings = lazy(() => import('./pages/Settings'));
 const ApprovalQueue = lazy(() => import('./features/approvals/ApprovalQueue'));
 const EventJournalPage = lazy(() => import('./pages/EventJournalPage'));
 const MediaCompliancePage = lazy(() => import('./pages/MediaCompliancePage'));
+const BountySystemPage = lazy(() => import('./pages/BountySystemPage'));
+const VIPIntercept = lazy(() => import('./features/leads/VIPIntercept'));
+const BurnRateAuditor = lazy(() => import('./features/expenses/BurnRateAuditor'));
+const DigitalBrochurePage = lazy(() =>
+  import('./features/events/DigitalBrochure').then(m => ({ default: m.DigitalBrochurePage }))
+);
+const ClientPortalPage = lazy(() =>
+  import('./features/events/DigitalBrochure').then(m => ({ default: m.ClientPortalPage }))
+);
+const FastPassPage = lazy(() => import('./features/clients/FastPass'));
+const FloorplanHeatmap = lazy(() => import('./features/analytics/FloorplanHeatmap'));
+const TravelDesk = lazy(() => import('./features/logistics/TravelDesk'));
+const BusinessCardScanner = lazy(() => import('./features/leads/BusinessCardScanner'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -113,6 +127,32 @@ export default function App() {
             element={
               <Suspense fallback={<PublicPageLoader />}>
                 <LiveHQ />
+              </Suspense>
+            }
+          />
+          {/* Sponsor ROI Portal — standalone, token-gated */}
+          <Route
+            path="/sponsor/:token"
+            element={
+              <Suspense fallback={<PublicPageLoader />}>
+                <SponsorDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sponsor"
+            element={
+              <Suspense fallback={<PublicPageLoader />}>
+                <SponsorDashboard />
+              </Suspense>
+            }
+          />
+          {/* Client-facing Digital Brochure portal — no auth, no sidebar */}
+          <Route
+            path="/client-portal/:token"
+            element={
+              <Suspense fallback={<PublicPageLoader />}>
+                <ClientPortalPage />
               </Suspense>
             }
           />
@@ -224,6 +264,70 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <MediaCompliancePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/bounties"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <BountySystemPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/vip-intercept"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <VIPIntercept />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/burn-rate"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <BurnRateAuditor />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/digital-brochure"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <DigitalBrochurePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/fast-pass"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <FastPassPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/floorplan-heatmap"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <FloorplanHeatmap useDemoData />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/travel-desk"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <TravelDesk useDemoData />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/card-scanner"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <BusinessCardScanner eventId="event_demo" agentId="agent_demo" />
               </Suspense>
             }
           />
