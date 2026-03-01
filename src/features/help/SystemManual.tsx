@@ -305,24 +305,40 @@ function ScreenshotPlaceholder({
     caption,
     url,
 }: {
-    filename: string;   // any extension: agent-pass.png, scanner-step.jpg, etc.
+    filename: string;
     alt: string;
     caption?: string;
-    url?: string;       // app route to navigate to before taking the screenshot
+    url?: string;
 }) {
     const [imgError, setImgError] = useState(false);
-    // Works with any browser-supported image format — png, jpg, jpeg, webp, avif.
-    // Just drop the file into public/manual/ with the exact filename used here.
+    const [copied, setCopied] = useState(false);
     const src = `/manual/${filename}`;
 
-    // Derive a clean, clickable href from the descriptive url string
-    // e.g. "localhost:5173/check-in  →  My QR Pass tab"  →  "http://localhost:5173/check-in"
-    const clickHref = url
-        ? (() => {
-            const cleanPath = url.split(/\s*[→>]\s*|\s{2,}/)[0].trim();
-            return cleanPath.startsWith('http') ? cleanPath : `http://${cleanPath}`;
-        })()
-        : null;
+    function copyFilename(e: React.MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        navigator.clipboard.writeText(filename).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+        });
+    }
+
+    // Split "localhost:5173/check-in → Scanner tab" into:
+    //   baseHref:        "http://localhost:5173/check-in"   ← the link to open
+    //   thenInstruction: "Scanner tab"                      ← distinct action once there
+    const { baseHref, thenInstruction } = (() => {
+        if (!url) return { baseHref: null, thenInstruction: null };
+        const arrowMatch = url.match(/^([^→>]+?)\s*[→>]\s*(.+)$/);
+        if (arrowMatch) {
+            const raw = arrowMatch[1].trim();
+            return {
+                baseHref: raw.startsWith('http') ? raw : `http://${raw}`,
+                thenInstruction: arrowMatch[2].trim().replace(/^["']|["']$/g, ''),
+            };
+        }
+        const raw = url.trim();
+        return { baseHref: raw.startsWith('http') ? raw : `http://${raw}`, thenInstruction: null };
+    })();
 
     return (
         <figure className="my-6">
@@ -335,22 +351,22 @@ function ScreenshotPlaceholder({
                         className="w-full h-auto rounded-xl border border-white/10 block"
                     />
                 ) : (
-                    /* ── Fallback placeholder — ENTIRE AREA is clickable ── */
+                    /* ── Fallback placeholder — entire area is a link, opens target page ── */
                     <a
-                        href={clickHref ?? '#'}
-                        target={clickHref ? '_blank' : undefined}
+                        href={baseHref ?? '#'}
+                        target={baseHref ? '_blank' : undefined}
                         rel="noopener noreferrer"
-                        onClick={!clickHref ? (e) => e.preventDefault() : undefined}
+                        onClick={!baseHref ? (e) => e.preventDefault() : undefined}
                         className={[
                             'block rounded-xl border border-white/10 bg-slate-800/60',
-                            'min-h-[220px] md:min-h-[280px] flex flex-col items-center justify-center gap-4 px-6 py-10',
-                            clickHref
+                            'min-h-[240px] md:min-h-[300px] flex flex-col items-center justify-center gap-5 px-6 py-10',
+                            baseHref
                                 ? 'cursor-pointer hover:bg-slate-700/60 hover:border-blue-500/50 hover:ring-2 hover:ring-blue-500/30 transition-all duration-200 group'
                                 : 'cursor-default',
                         ].join(' ')}
                     >
-                        {/* Decorative fake UI chrome */}
-                        <div className="w-full max-w-xs flex flex-col gap-2 opacity-30 pointer-events-none select-none group-hover:opacity-50 transition-opacity duration-200">
+                        {/* Decorative UI chrome */}
+                        <div className="w-full max-w-xs flex flex-col gap-2 opacity-25 pointer-events-none select-none group-hover:opacity-40 transition-opacity duration-200">
                             <div className="flex items-center gap-1.5 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-red-400" />
                                 <div className="w-2 h-2 rounded-full bg-amber-400" />
@@ -365,30 +381,54 @@ function ScreenshotPlaceholder({
                             </div>
                         </div>
 
-                        {/* CTA — prominent blue button + instructions */}
-                        <div className="text-center space-y-3">
-                            {clickHref ? (
-                                <>
-                                    <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105 group-hover:shadow-blue-500/40">
-                                        <span>📸 Click to open this screen</span>
-                                        {/* External link icon */}
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                            <polyline points="15 3 21 3 21 9" />
-                                            <line x1="10" y1="14" x2="21" y2="3" />
-                                        </svg>
-                                    </div>
-                                    <p className="text-slate-400 text-[10px] font-mono break-all">{clickHref}</p>
-                                </>
+                        {/* CTA block */}
+                        <div className="text-center space-y-3 w-full max-w-sm">
+
+                            {/* ── Step 1: Open the page ── */}
+                            {baseHref ? (
+                                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
+                                    <span>📸 Click to open this screen</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                        <polyline points="15 3 21 3 21 9" />
+                                        <line x1="10" y1="14" x2="21" y2="3" />
+                                    </svg>
+                                </div>
                             ) : (
-                                <p className="text-slate-300 font-bold text-sm">Screenshot coming soon</p>
+                                <p className="text-slate-300 font-bold text-sm">Screenshot needed</p>
                             )}
-                            <p className="text-slate-500 text-xs font-mono">
-                                Save screenshot as{' '}
-                                <span className="text-emerald-400 font-semibold">{filename}</span>
-                                {' '}→{' '}
+
+                            {/* ── Step 2: What to do once on that page (distinct per screenshot) ── */}
+                            {thenInstruction && (
+                                <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2 text-left">
+                                    <span className="text-amber-400 text-[10px] font-black uppercase tracking-widest mt-0.5 flex-shrink-0">Then:</span>
+                                    <span className="text-amber-200 text-xs font-semibold leading-snug">{thenInstruction}</span>
+                                </div>
+                            )}
+
+                            {/* ── Step 3: Click-to-copy filename ── */}
+                            <div className="flex items-center justify-center gap-1.5 text-xs font-mono">
+                                <span className="text-slate-500">Save as</span>
+                                <button
+                                    type="button"
+                                    onClick={copyFilename}
+                                    title="Click to copy filename"
+                                    className="relative inline-flex items-center gap-1 bg-slate-700/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer select-all"
+                                >
+                                    {filename}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 flex-shrink-0">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                    </svg>
+                                    {/* Copied! flash */}
+                                    {copied && (
+                                        <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
+                                            ✓ Copied!
+                                        </span>
+                                    )}
+                                </button>
+                                <span className="text-slate-500">→</span>
                                 <span className="text-blue-400">public/manual/</span>
-                            </p>
+                            </div>
                         </div>
                     </a>
                 )}
