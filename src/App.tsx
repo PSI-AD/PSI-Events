@@ -34,6 +34,7 @@ const MediaCompliancePage = lazy(() => import('./pages/MediaCompliancePage'));
 const BountySystemPage = lazy(() => import('./pages/BountySystemPage'));
 const VIPIntercept = lazy(() => import('./features/leads/VIPIntercept'));
 const BurnRateAuditor = lazy(() => import('./features/expenses/BurnRateAuditor'));
+const ChecklistPage = lazy(() => import('./pages/ChecklistPage'));
 const DigitalBrochurePage = lazy(() => import('./features/events/DigitalBrochure'));
 const ClientPortalPage = lazy(() =>
   import('./features/events/DigitalBrochure').then(m => ({ default: m.ClientPortalPage }))
@@ -294,6 +295,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <BurnRateAuditor />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/checklist"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <ChecklistPage />
               </Suspense>
             }
           />

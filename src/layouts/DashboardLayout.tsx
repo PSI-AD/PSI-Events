@@ -6,7 +6,7 @@ import {
     QrCode, Menu, X, TrendingUp, BookOpen,
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
-    ChevronRight, ChevronLeft, Search,
+    ChevronRight, ChevronLeft, Search, ClipboardCheck,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -47,6 +47,7 @@ const NAV_GROUPS = [
         label: 'Operations',
         items: [
             { to: '/check-in', icon: QrCode, label: 'Check-In' },
+            { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
             { to: '/traffic-controller', icon: Radio, label: 'Traffic Control' },
             { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
             { to: '/vip-concierge', icon: MessageSquare, label: 'VIP Concierge' },
@@ -77,6 +78,7 @@ const NAV_ITEMS = NAV_GROUPS.flatMap(g => g.items);
 const EXTRA_TITLE_MAP: Record<string, string> = {
     '/manual': 'System Manual',
     '/settings': 'Settings',
+    '/checklist': 'Action Checklist',
     '/executive-debrief': 'Executive Debrief',
     '/cash-advance': 'Commission Advance',
     '/traffic-controller': 'Traffic Controller',

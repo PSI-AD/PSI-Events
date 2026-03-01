@@ -6,14 +6,13 @@
  */
 
 import React from 'react';
-import { TrendingUp, Users, Target, DollarSign, Activity } from 'lucide-react';
+import { TrendingUp, Target, DollarSign, Activity } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
 } from 'recharts';
 import { PageShell, PageHeader, SectionCard, StatCard } from './shared/ui';
-import ActionChecklist from '../features/checklists/ActionChecklist';
-import { MOCK_AGENT_TASKS } from '../utils/checklistEngine';
+import ChecklistSummaryWidget from '../features/checklists/ChecklistSummaryWidget';
 
 const data = [
   { name: 'Jan', revenue: 4000, cost: 2400 },
@@ -48,15 +47,6 @@ export default function Dashboard() {
         title="Performance Overview"
         subtitle="Real-time ROI and lead funnel analytics."
       />
-
-      {/* ── Guided Checklist ── */}
-      <ActionChecklist
-        tasks={MOCK_AGENT_TASKS}
-        role="agent"
-        eventName="Dubai Marina Roadshow — Q1 2026"
-        className="mb-8"
-      />
-
 
       {/* ── KPI Cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
@@ -149,6 +139,11 @@ export default function Dashboard() {
             ))}
           </div>
         </SectionCard>
+      </div>
+
+      {/* ── Bottom row: Checklist widget + spacer ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        <ChecklistSummaryWidget className="lg:col-span-1" />
       </div>
     </PageShell>
   );
