@@ -81,13 +81,13 @@ const DEMO_EVENTS: Event[] = [
 
 export default function MediaCompliancePage() {
     return (
-        <div className="min-h-screen bg-slate-950 px-4 py-8 md:px-8">
+        <div className="min-h-screen bg-psi-page px-4 py-8 md:px-8">
             <div className="max-w-2xl mx-auto">
                 <header className="mb-8">
-                    <h1 className="text-2xl font-extrabold text-white">
+                    <h1 className="text-2xl font-extrabold text-psi-primary">
                         Media Compliance Tracker
                     </h1>
-                    <p className="text-slate-400 text-sm mt-1">
+                    <p className="text-psi-secondary text-sm mt-1">
                         Journal coverage accountability for all active events.
                     </p>
                 </header>

@@ -62,14 +62,14 @@ interface Phase {
     steps: Step[];
 }
 
-// ── Color maps ────────────────────────────────────────────────────────────────
+// ── Color maps (theme-aware) ─────────────────────────────────────────────────
 
 const ACCENT = {
-    slate: { bg: 'bg-slate-800/60', border: 'border-slate-700', text: 'text-slate-300', bullet: 'bg-slate-500' },
-    emerald: { bg: 'bg-emerald-950/60', border: 'border-emerald-800/60', text: 'text-emerald-200', bullet: 'bg-emerald-500' },
-    amber: { bg: 'bg-amber-950/50', border: 'border-amber-800/50', text: 'text-amber-200', bullet: 'bg-amber-400' },
-    blue: { bg: 'bg-blue-950/50', border: 'border-blue-800/50', text: 'text-blue-200', bullet: 'bg-blue-400' },
-    violet: { bg: 'bg-violet-950/50', border: 'border-violet-800/50', text: 'text-violet-200', bullet: 'bg-violet-400' },
+    slate: { bg: 'bg-psi-subtle border border-psi', border: 'border-psi', text: 'text-psi-secondary', bullet: 'bg-psi-border-strong' },
+    emerald: { bg: 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60', border: 'border-emerald-200 dark:border-emerald-800', text: 'text-emerald-700 dark:text-emerald-200', bullet: 'bg-emerald-500' },
+    amber: { bg: 'bg-amber-50   dark:bg-amber-950/40   border border-amber-200   dark:border-amber-800/50', border: 'border-amber-200   dark:border-amber-800', text: 'text-amber-700   dark:text-amber-200', bullet: 'bg-amber-500' },
+    blue: { bg: 'bg-blue-50    dark:bg-blue-950/40    border border-blue-200    dark:border-blue-800/50', border: 'border-blue-200    dark:border-blue-800', text: 'text-blue-700    dark:text-blue-200', bullet: 'bg-blue-500' },
+    violet: { bg: 'bg-violet-50  dark:bg-violet-950/40  border border-violet-200  dark:border-violet-800/50', border: 'border-violet-200  dark:border-violet-800', text: 'text-violet-700  dark:text-violet-200', bullet: 'bg-violet-500' },
 };
 
 const TAB_COLOR = {
@@ -513,15 +513,15 @@ const PHASES: Phase[] = [
 
 function ScreenshotPlaceholder({ label, icon }: { label: string; icon: React.ReactNode }) {
     return (
-        <div className="w-full aspect-video bg-slate-800/60 border-2 border-dashed border-slate-700 rounded-2xl flex flex-col items-center justify-center gap-3 text-slate-500 select-none my-6">
-            <div className="w-14 h-14 bg-slate-700/60 rounded-2xl flex items-center justify-center">
+        <div className="w-full aspect-video bg-psi-subtle border-2 border-dashed border-psi rounded-2xl flex flex-col items-center justify-center gap-3 text-psi-muted select-none my-6">
+            <div className="w-14 h-14 bg-psi-subtle border border-psi rounded-2xl flex items-center justify-center">
                 {icon}
             </div>
             <div className="text-center">
-                <p className="text-sm font-semibold text-slate-400">UI Screenshot Placeholder</p>
-                <p className="text-xs text-slate-600 mt-0.5">{label}</p>
+                <p className="text-sm font-semibold text-psi-secondary">UI Screenshot Placeholder</p>
+                <p className="text-xs text-psi-muted mt-0.5">{label}</p>
             </div>
-            <Monitor size={14} className="text-slate-700" />
+            <Monitor size={14} className="text-psi-muted" />
         </div>
     );
 }
@@ -529,7 +529,7 @@ function ScreenshotPlaceholder({ label, icon }: { label: string; icon: React.Rea
 function BentoCard({ box }: { box: BentoBox }) {
     const style = ACCENT[box.accent];
     return (
-        <div className={cn('rounded-2xl border p-5 flex flex-col gap-3', style.bg, style.border)}>
+        <div className={cn('rounded-2xl p-5 flex flex-col gap-3', style.bg)}>
             <div className="flex items-center gap-2">
                 <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0', style.bg, 'border', style.border)}>
                     <span className={style.text}>{box.icon}</span>
@@ -538,14 +538,14 @@ function BentoCard({ box }: { box: BentoBox }) {
             </div>
             <ul className="space-y-2">
                 {box.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-300 leading-relaxed">
+                    <li key={i} className="flex items-start gap-2 text-sm text-psi-secondary leading-relaxed">
                         <div className={cn('w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0', style.bullet)} />
                         <span>{item}</span>
                     </li>
                 ))}
             </ul>
             {box.note && (
-                <p className="text-[11px] text-slate-500 border-t border-slate-700/50 pt-2 mt-auto leading-relaxed">
+                <p className="text-[11px] text-psi-muted border-t border-psi pt-2 mt-auto leading-relaxed">
                     ⓘ {box.note}
                 </p>
             )}
@@ -593,9 +593,9 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
             {/* Divider (not on last step) */}
             {!isLast && (
                 <div className="flex items-center gap-4 mt-10 md:mt-12">
-                    <div className="flex-1 h-px bg-slate-800" />
-                    <ArrowRight size={14} className="text-slate-700" />
-                    <div className="flex-1 h-px bg-slate-800" />
+                    <div className="flex-1 h-px bg-psi-border" />
+                    <ArrowRight size={14} className="text-psi-muted" />
+                    <div className="flex-1 h-px bg-psi-border" />
                 </div>
             )}
         </section>
@@ -651,20 +651,20 @@ export default function ProductManual() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans">
+        <div className="min-h-screen bg-psi-page font-sans">
 
             {/* ── Sticky top header ── */}
-            <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800">
+            <div className="sticky top-0 z-30 bg-psi-raised/95 backdrop-blur-sm border-b border-psi">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
 
                     {/* Title row */}
-                    <div className="flex items-center gap-3 py-3 md:py-4 border-b border-slate-800/50">
+                    <div className="flex items-center gap-3 py-3 md:py-4 border-b border-psi">
                         <div className="w-8 h-8 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <BookOpen size={16} className="text-amber-400" />
+                            <BookOpen size={16} className="text-amber-500 dark:text-amber-400" />
                         </div>
                         <div className="min-w-0">
-                            <h1 className="text-white text-sm md:text-base font-extrabold tracking-tight truncate">PSI Event Portal — System Manual</h1>
-                            <p className="text-slate-500 text-[10px] md:text-xs">Property Shop Investment LLC · Interactive Lifecycle Guide</p>
+                            <h1 className="text-psi-primary text-sm md:text-base font-extrabold tracking-tight truncate">PSI Event Portal — System Manual</h1>
+                            <p className="text-psi-muted text-[10px] md:text-xs">Property Shop Investment LLC · Interactive Lifecycle Guide</p>
                         </div>
                     </div>
 
@@ -687,7 +687,7 @@ export default function ProductManual() {
                                     <span>{p.label}</span>
                                     <span className={cn(
                                         'text-[10px] font-bold px-1.5 py-0.5 rounded-full',
-                                        isActive ? 'bg-white/20' : 'bg-slate-800 text-slate-500'
+                                        isActive ? 'bg-white/20' : 'bg-psi-subtle text-psi-muted'
                                     )}>
                                         {p.steps.length}
                                     </span>
@@ -722,13 +722,13 @@ export default function ProductManual() {
                                 )}>
                                     {phase.label}
                                 </p>
-                                <p className="text-slate-500 text-xs leading-relaxed">{phase.tagline}</p>
+                                <p className="text-psi-muted text-xs leading-relaxed">{phase.tagline}</p>
                             </div>
 
                             {/* Step list */}
                             <nav className="space-y-1 relative">
                                 {/* Vertical line */}
-                                <div className="absolute left-3.5 top-0 bottom-0 w-px bg-slate-800" />
+                                <div className="absolute left-3.5 top-0 bottom-0 w-px bg-psi-border" />
 
                                 {phase.steps.map(step => {
                                     const isActive = step.id === activeStep;
@@ -741,16 +741,16 @@ export default function ProductManual() {
                                             className={cn(
                                                 'relative w-full flex items-center gap-3 pl-3 pr-3 py-2.5 rounded-xl text-left transition-all group select-none',
                                                 isActive
-                                                    ? 'bg-slate-800 text-white'
-                                                    : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/40'
+                                                    ? 'bg-psi-subtle text-psi-primary'
+                                                    : 'text-psi-muted hover:text-psi-secondary hover:bg-psi-subtle/60'
                                             )}
                                         >
                                             {/* Timeline dot */}
                                             <div className={cn(
                                                 'w-2 h-2 rounded-full flex-shrink-0 relative z-10 transition-all ring-2',
                                                 isActive
-                                                    ? cn(c.dot, 'ring-slate-950', 'scale-125')
-                                                    : 'bg-slate-700 ring-slate-950'
+                                                    ? cn(c.dot, 'ring-psi-page', 'scale-125')
+                                                    : 'bg-psi-border-strong ring-psi-page'
                                             )} />
 
                                             <div className="min-w-0">
@@ -758,20 +758,20 @@ export default function ProductManual() {
                                                     'text-[10px] font-bold uppercase tracking-widest',
                                                     isActive
                                                         ? phase.color === 'amber' ? 'text-amber-400' : phase.color === 'emerald' ? 'text-emerald-400' : 'text-blue-400'
-                                                        : 'text-slate-600'
+                                                        : 'text-psi-muted'
                                                 )}>
                                                     Step {step.number}
                                                 </p>
                                                 <p className={cn(
                                                     'text-xs font-semibold leading-tight',
-                                                    isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-300'
+                                                    isActive ? 'text-psi-primary' : 'text-psi-secondary group-hover:text-psi-primary'
                                                 )}>
                                                     {step.title}
                                                 </p>
                                             </div>
 
                                             {isActive && (
-                                                <ChevronRight size={12} className="ml-auto flex-shrink-0 text-slate-500" />
+                                                <ChevronRight size={12} className="ml-auto flex-shrink-0 text-psi-muted" />
                                             )}
                                         </button>
                                     );
@@ -779,8 +779,8 @@ export default function ProductManual() {
                             </nav>
 
                             {/* Progress footer */}
-                            <div className="mt-6 pt-4 border-t border-slate-800">
-                                <p className="text-[10px] text-slate-600 uppercase tracking-widest font-bold mb-2">Progress</p>
+                            <div className="mt-6 pt-4 border-t border-psi">
+                                <p className="text-[10px] text-psi-muted uppercase tracking-widest font-bold mb-2">Progress</p>
                                 <div className="flex gap-1">
                                     {phase.steps.map(step => (
                                         <div
@@ -789,7 +789,7 @@ export default function ProductManual() {
                                                 'h-1 rounded-full flex-1 transition-all',
                                                 step.id === activeStep || phase.steps.indexOf(step) < phase.steps.findIndex(s => s.id === activeStep)
                                                     ? phase.color === 'amber' ? 'bg-amber-500' : phase.color === 'emerald' ? 'bg-emerald-500' : 'bg-blue-500'
-                                                    : 'bg-slate-800'
+                                                    : 'bg-psi-subtle'
                                             )}
                                         />
                                     ))}
@@ -812,13 +812,13 @@ export default function ProductManual() {
                                             className={cn(
                                                 'flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all select-none',
                                                 isActive
-                                                    ? cn('bg-slate-800 text-white border border-slate-700')
-                                                    : 'bg-slate-900 text-slate-500 border border-slate-800'
+                                                    ? cn('bg-psi-raised text-psi-primary border border-psi')
+                                                    : 'bg-psi-subtle text-psi-muted border border-psi'
                                             )}
                                         >
                                             <div className={cn(
                                                 'w-1.5 h-1.5 rounded-full flex-shrink-0',
-                                                isActive ? c.dot : 'bg-slate-700'
+                                                isActive ? c.dot : 'bg-psi-border'
                                             )} />
                                             Step {step.number}
                                         </button>
@@ -870,12 +870,12 @@ export default function ProductManual() {
                             ))}
 
                             {/* Phase complete footer */}
-                            <div className="mt-8 bg-slate-900 rounded-2xl border border-slate-800 p-6 text-center">
-                                <div className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center mx-auto mb-3">
-                                    <CheckSquare size={18} className="text-emerald-400" />
+                            <div className="mt-8 psi-card rounded-2xl p-6 text-center">
+                                <div className="w-10 h-10 bg-psi-subtle rounded-xl flex items-center justify-center mx-auto mb-3">
+                                    <CheckSquare size={18} className="text-emerald-500" />
                                 </div>
-                                <p className="text-white font-bold mb-1">Phase Complete</p>
-                                <p className="text-slate-500 text-sm">
+                                <p className="text-psi-primary font-bold mb-1">Phase Complete</p>
+                                <p className="text-psi-secondary text-sm">
                                     {phase.id === 'before'
                                         ? 'Your event is fully planned. Move to "During the Event" when roadshow day arrives.'
                                         : phase.id === 'during'

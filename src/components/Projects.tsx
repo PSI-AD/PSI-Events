@@ -53,9 +53,9 @@ function soldPct(p: CrmProject): number {
 }
 
 const TIER_STYLE: Record<string, string> = {
-  Luxury: 'bg-amber-100 text-amber-700',
-  Medium: 'bg-blue-100 text-blue-700',
-  Average: 'bg-slate-100 text-slate-600',
+  Luxury: 'badge-warning',
+  Medium: 'badge-info',
+  Average: 'badge-neutral',
 };
 
 const TIER_BAR: Record<string, string> = {
@@ -129,13 +129,13 @@ export default function Projects() {
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-8">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Projects & L&D</h2>
-          <p className="text-slate-500 mt-1 text-sm">
-            Live from <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded font-mono">crm_projects</code> ·{' '}
-            <span className="text-emerald-600 font-bold">{projects.length} projects</span>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-psi-primary">Projects & L&D</h2>
+          <p className="text-psi-secondary mt-1 text-sm">
+            Live from <code className="text-xs bg-psi-subtle px-1.5 py-0.5 rounded font-mono">crm_projects</code> ·{' '}
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{projects.length} projects</span>
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-slate-800 active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
+        <button className="flex items-center gap-2 btn-accent px-5 py-2.5 rounded-xl font-medium active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
           <Plus size={18} />
           <span>Add Project</span>
         </button>
@@ -147,20 +147,20 @@ export default function Projects() {
         <div className="space-y-5">
 
           {/* Tier filter */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-            <h3 className="font-bold text-slate-900 mb-3 text-sm">Filter by Tier</h3>
+          <div className="psi-card p-5">
+            <h3 className="font-bold text-psi-primary mb-3 text-sm">Filter by Tier</h3>
             <div className="space-y-1">
               {(['All', 'Luxury', 'Medium', 'Average'] as TierFilter[]).map(tier => (
                 <button
                   key={tier}
                   onClick={() => setActiveTier(tier)}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all select-none ${activeTier === tier
-                      ? 'bg-slate-900 text-white shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-50'
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-psi-secondary hover:bg-psi-subtle'
                     }`}
                 >
                   <span>{tier}</span>
-                  <span className={`text-xs font-bold ${activeTier === tier ? 'text-slate-300' : 'text-slate-400'}`}>
+                  <span className={`text-xs font-bold ${activeTier === tier ? 'text-emerald-100' : 'text-psi-muted'}`}>
                     {tierCounts[tier]}
                   </span>
                 </button>
@@ -169,29 +169,29 @@ export default function Projects() {
           </div>
 
           {/* L&D stats */}
-          <div className="bg-emerald-50 p-5 rounded-3xl border border-emerald-100">
-            <div className="flex items-center gap-2 text-emerald-700 mb-2">
+          <div className="psi-card bg-psi-success p-5">
+            <div className="flex items-center gap-2 text-psi-success mb-2">
               <Award size={18} />
-              <h3 className="font-bold text-sm">L&D Stats</h3>
+              <h3 className="font-bold text-sm">L&amp;D Stats</h3>
             </div>
-            <p className="text-xs text-emerald-600/80 mb-3">Training completion across active projects.</p>
-            <div className="text-3xl font-extrabold text-emerald-700">84%</div>
-            <div className="w-full bg-emerald-200 h-1.5 rounded-full mt-3 overflow-hidden">
+            <p className="text-xs text-psi-success opacity-80 mb-3">Training completion across active projects.</p>
+            <div className="text-3xl font-extrabold text-psi-success">84%</div>
+            <div className="w-full bg-emerald-200 dark:bg-emerald-900/40 h-1.5 rounded-full mt-3 overflow-hidden">
               <div className="bg-emerald-500 h-full rounded-full" style={{ width: '84%' }} />
             </div>
           </div>
 
           {/* Commission summary */}
           {projects.length > 0 && !loading && (
-            <div className="bg-amber-50 p-5 rounded-3xl border border-amber-100">
-              <div className="flex items-center gap-2 text-amber-700 mb-2">
+            <div className="psi-card bg-psi-warning p-5">
+              <div className="flex items-center gap-2 text-psi-warning mb-2">
                 <Percent size={18} />
                 <h3 className="font-bold text-sm">Avg. Commission</h3>
               </div>
-              <div className="text-3xl font-extrabold text-amber-700">
+              <div className="text-3xl font-extrabold text-psi-warning">
                 {(projects.reduce((s, p) => s + (p.commission_pct ?? 0), 0) / projects.length).toFixed(1)}%
               </div>
-              <p className="text-xs text-amber-600/80 mt-1">Across {projects.length} active projects</p>
+              <p className="text-xs text-psi-warning opacity-80 mt-1">Across {projects.length} active projects</p>
             </div>
           )}
         </div>
@@ -201,18 +201,18 @@ export default function Projects() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-psi-muted" size={16} />
             <input
               type="text" value={query} onChange={e => setQuery(e.target.value)}
               placeholder="Search projects, developers, or communities…"
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-slate-900/5 transition-all text-sm"
+              className="psi-input w-full pl-11 pr-4 py-3 text-sm"
             />
           </div>
 
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {[1, 2].map(i => (
-                <div key={i} className="h-72 bg-slate-100 animate-pulse rounded-3xl" />
+                <div key={i} className="h-72 bg-psi-subtle animate-pulse rounded-3xl" />
               ))}
             </div>
           ) : (
@@ -223,18 +223,18 @@ export default function Projects() {
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.07 }}
-                  className="bg-white border border-slate-200 rounded-3xl overflow-hidden hover:shadow-lg hover:shadow-slate-200/60 transition-all group cursor-pointer"
+                  className="psi-card overflow-hidden hover:shadow-lg dark:hover:shadow-black/40 hover:shadow-slate-200/60 transition-all group cursor-pointer"
                   onClick={() => setExpandedId(expandedId === project.id ? null : project.id)}
                 >
                   {/* Card header */}
                   <div className="p-6 pb-4">
                     <div className="flex justify-between items-start mb-4">
-                      <div className="p-3 bg-slate-50 rounded-2xl group-hover:bg-slate-900 group-hover:text-white transition-all duration-200">
+                      <div className="p-3 bg-psi-subtle rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200">
                         <Building size={22} />
                       </div>
                       <div className="flex items-center gap-2">
                         {project.is_featured && (
-                          <span className="px-2 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 rounded-full text-[9px] font-bold uppercase tracking-widest">
+                          <span className="px-2 py-0.5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 text-amber-600 dark:text-amber-400 rounded-full text-[9px] font-bold uppercase tracking-widest">
                             Featured
                           </span>
                         )}
@@ -244,39 +244,37 @@ export default function Projects() {
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-extrabold text-slate-900 truncate">{project.name}</h3>
-                    <p className="text-sm text-slate-500 font-medium">{project.developer}</p>
+                    <h3 className="text-lg font-extrabold text-psi-primary truncate">{project.name}</h3>
+                    <p className="text-sm text-psi-secondary font-medium">{project.developer}</p>
 
-                    {/* Location */}
                     {(project.location?.community || project.location?.city) && (
                       <div className="flex items-center gap-1.5 mt-2">
-                        <MapPin size={12} className="text-slate-400 flex-shrink-0" />
-                        <span className="text-xs text-slate-400 truncate">
+                        <MapPin size={12} className="text-psi-muted flex-shrink-0" />
+                        <span className="text-xs text-psi-muted truncate">
                           {[project.location.community, project.location.city].filter(Boolean).join(', ')}
                         </span>
                       </div>
                     )}
 
-                    {/* Price range */}
                     {project.price_range_aed && (
                       <div className="mt-3 flex items-baseline gap-1">
-                        <span className="text-xs text-slate-400 font-medium">From</span>
-                        <span className="text-sm font-extrabold text-slate-900">{fmtAed(project.price_range_aed.min)}</span>
-                        <span className="text-xs text-slate-400">to</span>
-                        <span className="text-sm font-extrabold text-slate-900">{fmtAed(project.price_range_aed.max)}</span>
+                        <span className="text-xs text-psi-muted font-medium">From</span>
+                        <span className="text-sm font-extrabold text-psi-primary">{fmtAed(project.price_range_aed.min)}</span>
+                        <span className="text-xs text-psi-muted">to</span>
+                        <span className="text-sm font-extrabold text-psi-primary">{fmtAed(project.price_range_aed.max)}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Stats row */}
                   <div className="grid grid-cols-2 gap-3 px-6 pb-4">
-                    <div className="bg-slate-50 p-3 rounded-2xl">
-                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Commission</div>
-                      <div className="text-sm font-extrabold text-slate-900">{project.commission_pct ?? '—'}%</div>
+                    <div className="bg-psi-subtle p-3 rounded-2xl">
+                      <div className="text-[10px] font-bold text-psi-muted uppercase tracking-widest mb-0.5">Commission</div>
+                      <div className="text-sm font-extrabold text-psi-primary tabular-nums">{project.commission_pct ?? '—'}%</div>
                     </div>
-                    <div className="bg-slate-50 p-3 rounded-2xl">
-                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Handover</div>
-                      <div className="text-sm font-bold text-slate-900 truncate">{project.handover_status ?? '—'}</div>
+                    <div className="bg-psi-subtle p-3 rounded-2xl">
+                      <div className="text-[10px] font-bold text-psi-muted uppercase tracking-widest mb-0.5">Handover</div>
+                      <div className="text-sm font-bold text-psi-primary truncate">{project.handover_status ?? '—'}</div>
                     </div>
                   </div>
 
@@ -284,17 +282,17 @@ export default function Projects() {
                   {project.total_units && (
                     <div className="px-6 pb-4">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Units Sold</span>
-                        <span className="text-[10px] font-bold text-slate-600">{project.sold_units} / {project.total_units}</span>
+                        <span className="text-[10px] font-bold text-psi-muted uppercase tracking-widest">Units Sold</span>
+                        <span className="text-[10px] font-bold text-psi-secondary tabular-nums">{project.sold_units} / {project.total_units}</span>
                       </div>
-                      <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                      <div className="w-full bg-psi-subtle h-1.5 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${TIER_BAR[project.tier]}`}
                           style={{ width: `${soldPct(project)}%` }}
                         />
                       </div>
                       <div className="text-right mt-0.5">
-                        <span className="text-[10px] text-slate-400">{soldPct(project)}% sold</span>
+                        <span className="text-[10px] text-psi-muted tabular-nums">{soldPct(project)}% sold</span>
                       </div>
                     </div>
                   )}
@@ -308,44 +306,44 @@ export default function Projects() {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 pb-4 border-t border-slate-100 pt-4">
-                          <p className="text-xs text-slate-500 leading-relaxed mb-3">{project.description}</p>
+                        <div className="px-6 pb-4 border-t border-psi pt-4">
+                          <p className="text-xs text-psi-secondary leading-relaxed mb-3">{project.description}</p>
                           {project.commission_notes && (
-                            <p className="text-[11px] text-amber-600 bg-amber-50 rounded-xl px-3 py-2 font-medium">
+                            <p className="text-[11px] text-amber-700 dark:text-amber-400 bg-psi-warning rounded-xl px-3 py-2 font-medium">
                               💼 {project.commission_notes}
                             </p>
                           )}
                           {project.unit_types && project.unit_types.length > 0 && (
                             <div className="mt-3 flex flex-wrap gap-1">
                               {project.unit_types.map(ut => (
-                                <span key={ut} className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">{ut}</span>
+                                <span key={ut} className="text-[10px] badge-neutral px-2 py-0.5 rounded-full font-medium">{ut}</span>
                               ))}
                             </div>
                           )}
-                          <p className="text-[10px] text-slate-300 font-mono mt-3">doc: {project.id}</p>
+                          <p className="text-[10px] text-psi-muted font-mono mt-3">doc: {project.id}</p>
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
 
                   {/* Action buttons */}
-                  <div className="px-6 py-4 border-t border-slate-100 flex gap-2">
-                    <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 active:scale-[0.98] transition-all select-none">
+                  <div className="px-6 py-4 border-t border-psi flex gap-2">
+                    <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 active:scale-[0.98] transition-all select-none">
                       <BookOpen size={14} />
-                      <span>L&D Portal</span>
+                      <span>L&amp;D Portal</span>
                     </button>
-                    <button className="p-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 active:scale-[0.98] transition-all">
-                      <ExternalLink size={16} className="text-slate-400" />
+                    <button className="p-2.5 border border-psi rounded-xl hover:bg-psi-subtle active:scale-[0.98] transition-all text-psi-muted hover:text-psi-primary">
+                      <ExternalLink size={16} />
                     </button>
                   </div>
                 </motion.div>
               ))}
 
               {filtered.length === 0 && (
-                <div className="md:col-span-2 py-20 text-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-3xl">
-                  <Layers size={36} className="mx-auto text-slate-300 mb-3" />
-                  <p className="font-bold text-slate-900">No projects found</p>
-                  <p className="text-slate-400 text-sm mt-1">
+                <div className="md:col-span-2 py-20 text-center bg-psi-subtle border-2 border-dashed border-psi rounded-3xl">
+                  <Layers size={36} className="mx-auto text-psi-muted mb-3" />
+                  <p className="font-bold text-psi-primary">No projects found</p>
+                  <p className="text-psi-secondary text-sm mt-1">
                     {query ? 'Try different search terms.' : 'Run the seeder to populate crm_projects.'}
                   </p>
                 </div>

@@ -16,18 +16,33 @@
  * denominated Gross Revenue to produce the Net Revenue on which the tier
  * split is calculated.
  *
+ * ── v3: Clawback & Carry-Forward Ledger ──────────────────────────────────────
+ * The engine now queries agent_debts/{agentId} from Firestore before
+ * finalising any agent's payout. Outstanding debts (e.g. from a cancelled
+ * deal at a prior roadshow) are automatically subtracted from the current
+ * agentCommission and recorded as ClawbackLineItems for the audit trail.
+ *
+ * Clawback formula:
+ *   effectiveCommission = max(0, agentCommission - totalClawbackAed)
+ *   residualDebt = max(0, totalClawbackAed - agentCommission)   ← carry-forward
+ *
  * Formula (per agent):
  *   travelCostAed   = travelCostLocal × fxRateToAed
  *   eventCostAed    = eventCostLocal  × fxRateToAed
  *   netRevenue      = closedRevenue - travelCostAed - eventCostAed
  *   agentCommission = max(0, netRevenue) × tier.agentShare
- *   branchContrib   = max(0, netRevenue) - agentCommission
+ *   effectiveCommission = max(0, agentCommission - totalClawbackAed)
+ *   branchContrib   = max(0, netRevenue) - effectiveCommission
  *
- * The fx rate snapshot (rate, source, lockedAt) is embedded in every
- * SettlementReport so agents can audit the exact conversion used.
- *
- * No side-effects. All functions are pure and deterministic.
+ * No side-effects outside the Firestore fetch. All math is deterministic.
  */
+
+import {
+    collection, getDocs, query, where,
+    doc, addDoc, serverTimestamp, Timestamp,
+} from 'firebase/firestore';
+import { db } from '../../services/firebase/firebaseConfig';
+
 
 // ── Tier model ────────────────────────────────────────────────────────────────
 
@@ -141,26 +156,90 @@ export interface AgentEntry {
     eventCostLocal: number; // Booth/stand share in LOCAL event currency
 }
 
+// ── Clawback & Carry-Forward types ────────────────────────────────────────────
+
+/**
+ * DebtReason — categorises why a debt was created.
+ * Used for PDF audit trail labels.
+ */
+export type DebtReason =
+    | 'cancelled_deal'      // Buyer withdrew after SPA, commission reversed
+    | 'chargeback'          // Payment dispute resolved against PSI
+    | 'compliance_penalty'  // Internal disciplinary deduction
+    | 'advance_recovery'    // Recovery of commission advance paid before close
+    | 'other';
+
+/**
+ * AgentDebt — a single outstanding debt for an agent.
+ *
+ * Firestore path:  agent_debts/{debtId}
+ * Fields mirrored exactly so Firestore docs map directly.
+ */
+export interface AgentDebt {
+    id: string;                  // Firestore document ID
+    agentId: string;             // Matches AgentEntry.id
+    agentName: string;           // For display without join
+    amountAed: number;           // Always AED — outstanding amount
+    reason: DebtReason;          // Why it was created
+    description: string;         // Human-readable detail
+    sourceEventId: string;       // Which past event triggered this
+    sourceEventName: string;     // For PDF audit trail
+    createdAt: string;           // ISO timestamp
+    status: 'outstanding' | 'partially_recovered' | 'cleared';
+    recoveredAed: number;        // How much has already been recovered
+    remainingAed: number;        // amountAed - recoveredAed
+}
+
+/**
+ * ClawbackLineItem — the deduction record generated during settlement.
+ * Embedded in AgentSettlement and printed in the PDF.
+ */
+export interface ClawbackLineItem {
+    debtId: string;
+    description: string;
+    sourceEventName: string;
+    reason: DebtReason;
+    originalAmountAed: number;
+    appliedAed: number;          // How much was actually deducted (≤ originalAmountAed)
+    residualAed: number;         // Remainder carried forward to next settlement
+}
+
+/** Human-readable labels for debt reason codes */
+export const DEBT_REASON_LABELS: Record<DebtReason, string> = {
+    cancelled_deal: 'Cancelled Deal — Commission Reversal',
+    chargeback: 'Chargeback / Payment Dispute',
+    compliance_penalty: 'Compliance Penalty',
+    advance_recovery: 'Commission Advance Recovery',
+    other: 'Other Deduction',
+};
+
+
 // ── Settlement outputs ────────────────────────────────────────────────────────
 
 export interface AgentSettlement {
     agent: AgentEntry;
     tier: TierConfig;
-    travelCostAed: number;   // Converted travel cost in AED
-    eventCostAed: number;   // Converted event cost in AED
-    totalDeductionsAed: number;   // travelCostAed + eventCostAed
-    netRevenue: number;   // closedRevenue - totalDeductionsAed (floor 0)
-    agentCommission: number;   // AED — agent's payout (on netRevenue)
-    branchContribution: number;   // AED — flows to Branch Gross Profit
+    travelCostAed: number;           // Converted travel cost in AED
+    eventCostAed: number;            // Converted event cost in AED
+    totalDeductionsAed: number;      // travelCostAed + eventCostAed
+    netRevenue: number;              // closedRevenue - totalDeductionsAed (floor 0)
+    agentCommission: number;         // AED — gross commission (before clawbacks)
+    clawbacks: ClawbackLineItem[];   // ← NEW: applied debt deductions
+    totalClawbackAed: number;        // ← NEW: sum of all applied clawbacks
+    effectiveCommission: number;     // ← NEW: agentCommission - totalClawbackAed (floor 0)
+    residualDebtAed: number;         // ← NEW: unrecovered debt to carry forward
+    branchContribution: number;      // AED — flows to Branch Gross Profit
 }
 
 export interface SettlementSummary {
-    grossRevenue: number;  // Sum of all closedRevenue
-    totalDeductionsAed: number;  // Sum of all converted costs
-    totalNetRevenue: number;  // Sum of all netRevenue
-    totalAgentCommissions: number;
+    grossRevenue: number;            // Sum of all closedRevenue
+    totalDeductionsAed: number;      // Sum of all converted costs
+    totalNetRevenue: number;         // Sum of all netRevenue
+    totalAgentCommissions: number;   // Sum of grossCommissions (pre-clawback)
+    totalClawbacksAed: number;       // ← NEW: total recovered via clawbacks
+    totalEffectiveCommissions: number; // ← NEW: sum of effectiveCommission
     branchGrossProfit: number;
-    roiPercent: number;  // (branchGrossProfit / grossRevenue) * 100
+    roiPercent: number;              // (branchGrossProfit / grossRevenue) * 100
     agentCount: number;
     highestEarner: AgentSettlement | null;
 }
@@ -171,11 +250,13 @@ export interface SettlementReport {
     eventDate: string;
     venue: string;
     branchManager: string;
-    fx: FxSnapshot;        // ← NEW: FX audit field
+    fx: FxSnapshot;                  // FX audit field
     agents: AgentSettlement[];
     summary: SettlementSummary;
-    generatedAt: string;            // ISO string
+    generatedAt: string;             // ISO string
+    hasClawbacks: boolean;           // ← NEW: quick flag for UI/PDF
 }
+
 
 // ── Core FX math ──────────────────────────────────────────────────────────────
 
@@ -214,10 +295,12 @@ export function buildFxSnapshot(
  *
  * @param agent    AgentEntry with costs expressed in LOCAL event currency
  * @param fx       The FxSnapshot for this settlement run
+ * @param debts    Outstanding debts to deduct from this agent's commission
  */
 export function calculateAgentSettlement(
     agent: AgentEntry,
-    fx: FxSnapshot
+    fx: FxSnapshot,
+    debts: AgentDebt[] = []
 ): AgentSettlement {
     const tier = TIER_CONFIG[agent.tier];
     const travelCostAed = toAed(agent.travelCostLocal, fx.rateToAed);
@@ -227,7 +310,48 @@ export function calculateAgentSettlement(
     // Net revenue can't go below 0 — agent is never liable for more than they earned
     const netRevenue = Math.max(0, agent.closedRevenue - totalDeductions);
     const agentCommission = Math.round(netRevenue * tier.agentShare);
-    const branchContribution = netRevenue - agentCommission;
+
+    // ── Clawback application ──────────────────────────────────────────────────
+    // Work through each outstanding debt in order of creation.
+    // Deduct from the gross commission until either all debts are cleared or
+    // the commission is exhausted. Residual debt carries forward.
+    let remainingCommission = agentCommission;
+    const clawbacks: ClawbackLineItem[] = [];
+
+    for (const debt of debts) {
+        if (remainingCommission <= 0) {
+            // No more commission left — record full amount as carry-forward
+            clawbacks.push({
+                debtId: debt.id,
+                description: debt.description,
+                sourceEventName: debt.sourceEventName,
+                reason: debt.reason,
+                originalAmountAed: debt.remainingAed,
+                appliedAed: 0,
+                residualAed: debt.remainingAed,
+            });
+        } else {
+            const applied = Math.min(remainingCommission, debt.remainingAed);
+            const residual = debt.remainingAed - applied;
+            remainingCommission -= applied;
+            clawbacks.push({
+                debtId: debt.id,
+                description: debt.description,
+                sourceEventName: debt.sourceEventName,
+                reason: debt.reason,
+                originalAmountAed: debt.remainingAed,
+                appliedAed: applied,
+                residualAed: residual,
+            });
+        }
+    }
+
+    const totalClawbackAed = clawbacks.reduce((s, c) => s + c.appliedAed, 0);
+    const effectiveCommission = Math.max(0, agentCommission - totalClawbackAed);
+    const residualDebtAed = clawbacks.reduce((s, c) => s + c.residualAed, 0);
+
+    // Branch gets net revenue minus what the agent actually takes home
+    const branchContribution = netRevenue - effectiveCommission;
 
     return {
         agent,
@@ -237,30 +361,46 @@ export function calculateAgentSettlement(
         totalDeductionsAed: totalDeductions,
         netRevenue,
         agentCommission,
+        clawbacks,
+        totalClawbackAed,
+        effectiveCommission,
+        residualDebtAed,
         branchContribution,
     };
 }
 
+
 // ── Full settlement report ────────────────────────────────────────────────────
 
+/**
+ * calculateSettlement
+ *
+ * @param debtsMap  Optional map of agentId → AgentDebt[]; loaded from Firestore
+ *                  before calling this function. Pass {} if no clawbacks.
+ */
 export function calculateSettlement(
     eventName: string,
     eventDate: string,
     venue: string,
     branchManager: string,
     agents: AgentEntry[],
-    fx: FxSnapshot
+    fx: FxSnapshot,
+    debtsMap: Record<string, AgentDebt[]> = {}
 ): SettlementReport {
-    const settlements = agents.map(a => calculateAgentSettlement(a, fx));
+    const settlements = agents.map(a =>
+        calculateAgentSettlement(a, fx, debtsMap[a.id] ?? [])
+    );
 
     const grossRevenue = agents.reduce((s, a) => s + a.closedRevenue, 0);
     const totalDeductionsAed = settlements.reduce((s, r) => s + r.totalDeductionsAed, 0);
     const totalNetRevenue = settlements.reduce((s, r) => s + r.netRevenue, 0);
     const totalAgentCommissions = settlements.reduce((s, r) => s + r.agentCommission, 0);
-    const branchGrossProfit = totalNetRevenue - totalAgentCommissions;
+    const totalClawbacksAed = settlements.reduce((s, r) => s + r.totalClawbackAed, 0);
+    const totalEffectiveCommissions = settlements.reduce((s, r) => s + r.effectiveCommission, 0);
+    const branchGrossProfit = totalNetRevenue - totalEffectiveCommissions;
 
     const highestEarner = settlements.length > 0
-        ? settlements.reduce((best, s) => s.agentCommission > best.agentCommission ? s : best)
+        ? settlements.reduce((best, s) => s.effectiveCommission > best.effectiveCommission ? s : best)
         : null;
 
     return {
@@ -271,11 +411,14 @@ export function calculateSettlement(
         branchManager,
         fx,
         agents: settlements,
+        hasClawbacks: totalClawbacksAed > 0,
         summary: {
             grossRevenue,
             totalDeductionsAed,
             totalNetRevenue,
             totalAgentCommissions,
+            totalClawbacksAed,
+            totalEffectiveCommissions,
             branchGrossProfit,
             roiPercent: grossRevenue > 0 ? (branchGrossProfit / grossRevenue) * 100 : 0,
             agentCount: agents.length,
@@ -284,6 +427,7 @@ export function calculateSettlement(
         generatedAt: new Date().toISOString(),
     };
 }
+
 
 // ── Formatters ────────────────────────────────────────────────────────────────
 
@@ -327,6 +471,108 @@ export function formatDate(iso: string): string {
     }).format(new Date(iso));
 }
 
+// ── Firestore: agent_debts helpers ───────────────────────────────────────────
+
+/**
+ * fetchAgentDebts
+ * ───────────────
+ * Fetches all outstanding debts for a given set of agentIds from Firestore.
+ * Returns a map of agentId → AgentDebt[] for fast lookup during settlement.
+ *
+ * Firestore path:  agent_debts/{debtId}
+ *   Fields: agentId, agentName, amountAed, reason, description,
+ *           sourceEventId, sourceEventName, createdAt,
+ *           status, recoveredAed, remainingAed
+ */
+export async function fetchAgentDebts(
+    agentIds: string[]
+): Promise<Record<string, AgentDebt[]>> {
+    if (agentIds.length === 0) return {};
+
+    // Firestore 'in' queries support max 30 items; for larger rosters batch.
+    const BATCH = 30;
+    const result: Record<string, AgentDebt[]> = {};
+
+    for (let i = 0; i < agentIds.length; i += BATCH) {
+        const batch = agentIds.slice(i, i + BATCH);
+        const snap = await getDocs(
+            query(
+                collection(db, 'agent_debts'),
+                where('agentId', 'in', batch),
+                where('status', 'in', ['outstanding', 'partially_recovered'])
+            )
+        );
+        snap.docs.forEach(d => {
+            const data = d.data();
+            const debt: AgentDebt = {
+                id: d.id,
+                agentId: data.agentId,
+                agentName: data.agentName ?? '',
+                amountAed: data.amountAed ?? 0,
+                reason: data.reason ?? 'other',
+                description: data.description ?? '',
+                sourceEventId: data.sourceEventId ?? '',
+                sourceEventName: data.sourceEventName ?? 'Unknown Event',
+                createdAt: data.createdAt instanceof Timestamp
+                    ? data.createdAt.toDate().toISOString()
+                    : (data.createdAt ?? new Date().toISOString()),
+                status: data.status ?? 'outstanding',
+                recoveredAed: data.recoveredAed ?? 0,
+                remainingAed: data.remainingAed ?? data.amountAed ?? 0,
+            };
+            if (!result[debt.agentId]) result[debt.agentId] = [];
+            result[debt.agentId].push(debt);
+        });
+    }
+    return result;
+}
+
+/**
+ * recordDebtRecovery
+ * ──────────────────
+ * After a settlement is finalised, mark each clawback as recovered
+ * in Firestore. Call this from the settlement confirmation step.
+ * (Non-blocking — fire-and-forget is acceptable for the demo.)
+ */
+export async function recordDebtRecovery(
+    clawbacks: ClawbackLineItem[],
+    settlementEventId: string
+): Promise<void> {
+    const { updateDoc, doc: fsDoc } = await import('firebase/firestore');
+    await Promise.all(
+        clawbacks
+            .filter(c => c.appliedAed > 0)
+            .map(c =>
+                updateDoc(fsDoc(db, 'agent_debts', c.debtId), {
+                    recoveredAed: c.originalAmountAed - c.residualAed,
+                    remainingAed: c.residualAed,
+                    status: c.residualAed <= 0 ? 'cleared' : 'partially_recovered',
+                    lastRecoveredAt: serverTimestamp(),
+                    lastRecoveredByEventId: settlementEventId,
+                })
+            )
+    );
+}
+
+/**
+ * addAgentDebt
+ * ────────────
+ * Create a new debt record in Firestore — called when a deal is cancelled
+ * or a penalty is issued post-settlement.
+ */
+export async function addAgentDebt(
+    debt: Omit<AgentDebt, 'id' | 'createdAt' | 'recoveredAed' | 'remainingAed' | 'status'>
+): Promise<string> {
+    const ref = await addDoc(collection(db, 'agent_debts'), {
+        ...debt,
+        status: 'outstanding',
+        recoveredAed: 0,
+        remainingAed: debt.amountAed,
+        createdAt: serverTimestamp(),
+    });
+    return ref.id;
+}
+
 // ── Demo seed data ────────────────────────────────────────────────────────────
 
 /** Demo: London event in GBP. Travel + stand costs are in GBP. */
@@ -341,3 +587,73 @@ export const DEMO_AGENTS: AgentEntry[] = [
 
 /** Default FX snapshot for the demo (London → GBP) */
 export const DEMO_FX: FxSnapshot = buildFxSnapshot('GBP');
+
+/**
+ * DEMO_DEBTS — pre-loaded mock debts for offline/demo mode.
+ * Maps agentId → AgentDebt[].  Mirrors what fetchAgentDebts returns.
+ */
+export const DEMO_DEBTS: Record<string, AgentDebt[]> = {
+    '1': [
+        {
+            id: 'debt_demo_001',
+            agentId: '1',
+            agentName: 'Khalid Al-Mansouri',
+            amountAed: 75_000,
+            reason: 'cancelled_deal',
+            description: 'Commission reversal — Marina Blue Unit 1204 buyer withdrawal (post-SPA)',
+            sourceEventId: 'PSI-EVT-EGY-Q3-2025',
+            sourceEventName: 'Cairo Cityscape Q3 2025',
+            createdAt: '2025-09-20T10:00:00.000Z',
+            status: 'outstanding',
+            recoveredAed: 0,
+            remainingAed: 75_000,
+        },
+    ],
+    '3': [
+        {
+            id: 'debt_demo_002',
+            agentId: '3',
+            agentName: 'Omar Bin Rashid',
+            amountAed: 15_000,
+            reason: 'advance_recovery',
+            description: 'Commission advance paid Feb 2025 — not yet recovered',
+            sourceEventId: 'PSI-EVT-DXB-Q1-2025',
+            sourceEventName: 'Dubai Motor Show Roadshow Q1 2025',
+            createdAt: '2025-02-01T08:30:00.000Z',
+            status: 'outstanding',
+            recoveredAed: 0,
+            remainingAed: 15_000,
+        },
+        {
+            id: 'debt_demo_003',
+            agentId: '3',
+            agentName: 'Omar Bin Rashid',
+            amountAed: 8_500,
+            reason: 'compliance_penalty',
+            description: 'Media compliance breach — Q2 2025 audit finding',
+            sourceEventId: 'internal',
+            sourceEventName: 'Internal Audit Q2 2025',
+            createdAt: '2025-06-15T09:00:00.000Z',
+            status: 'outstanding',
+            recoveredAed: 0,
+            remainingAed: 8_500,
+        },
+    ],
+    '5': [
+        {
+            id: 'debt_demo_004',
+            agentId: '5',
+            agentName: 'Fatima Al-Zaabi',
+            amountAed: 22_000,
+            reason: 'chargeback',
+            description: 'Payment chargeback — Saadiyat unit 3B, buyer dispute resolved against PSI',
+            sourceEventId: 'PSI-EVT-AUH-Q4-2025',
+            sourceEventName: 'Abu Dhabi Cityscape Q4 2025',
+            createdAt: '2025-11-10T14:00:00.000Z',
+            status: 'outstanding',
+            recoveredAed: 0,
+            remainingAed: 22_000,
+        },
+    ],
+};
+

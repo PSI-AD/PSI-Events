@@ -18,6 +18,12 @@ import {
     Sun,
     Moon,
     BrainCircuit,
+    Zap,
+    Crown,
+    Flame,
+    Gift,
+    Map as MapIcon,
+    Plane,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -41,6 +47,13 @@ const NAV_ITEMS = [
     { to: '/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/settlement', icon: Calculator, label: 'Settlement' },
     { to: '/check-in', icon: QrCode, label: 'Check-In' },
+    { to: '/bounties', icon: Zap, label: 'Bounties' },
+    { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
+    { to: '/burn-rate', icon: Flame, label: 'Burn Rate' },
+    { to: '/digital-brochure', icon: Gift, label: 'Digital Brochure' },
+    { to: '/fast-pass', icon: Crown, label: 'VIP Fast-Pass' },
+    { to: '/floorplan-heatmap', icon: MapIcon, label: 'Floor Heatmap' },
+    { to: '/travel-desk', icon: Plane, label: 'Travel Desk' },
     { to: '/manual', icon: BookOpen, label: 'System Manual' },
 ];
 
@@ -48,8 +61,8 @@ const NAV_ITEMS = [
 const BOTTOM_NAV_ITEMS = [
     { to: '/', icon: LayoutDashboard, label: 'Home' },
     { to: '/events', icon: Calendar, label: 'Events' },
-    { to: '/approvals', icon: BrainCircuit, label: 'Approvals' },
-    { to: '/analytics', icon: TrendingUp, label: 'Analytics' },
+    { to: '/vip-intercept', icon: Crown, label: 'VIP' },
+    { to: '/burn-rate', icon: Flame, label: 'Burn Rate' },
 ];
 
 // ── Sidebar link ──────────────────────────────────────────────────────────────

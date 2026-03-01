@@ -290,6 +290,18 @@
     border-color: var(--psi-border-strong);
   }
 
+  .bg-psi-border {
+    background-color: var(--psi-border);
+  }
+
+  .bg-psi-border-strong {
+    background-color: var(--psi-border-strong);
+  }
+
+  .divide-psi-subtle>*+* {
+    border-color: var(--psi-border-subtle);
+  }
+
   .border-psi-accent {
     border-color: var(--psi-accent-border);
   }
@@ -428,5 +440,49 @@
   .recharts-cartesian-grid-horizontal line,
   .recharts-cartesian-grid-vertical line {
     stroke: var(--psi-chart-grid) !important;
+  }
+
+  /* ── Accent-action button (--psi-action set by ThemeContext.tsx) ──────────── */
+  .btn-accent {
+    background-color: var(--psi-action, #3b82f6);
+    color: #ffffff;
+    border: 1px solid transparent;
+    transition: filter 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn-accent:hover {
+    filter: brightness(1.10);
+  }
+
+  .btn-accent:active {
+    filter: brightness(0.95);
+    transform: scale(0.98);
+  }
+
+  .btn-accent-outline {
+    background-color: transparent;
+    color: var(--psi-action, #3b82f6);
+    border: 1px solid var(--psi-action, #3b82f6);
+    transition: background-color 0.15s ease;
+  }
+
+  .btn-accent-outline:hover {
+    background-color: var(--psi-action-subtle, rgba(59, 130, 246, 0.10));
+  }
+
+  .text-psi-action {
+    color: var(--psi-action, #3b82f6);
+  }
+
+  .bg-psi-action {
+    background-color: var(--psi-action, #3b82f6);
+  }
+
+  .bg-psi-action-subtle {
+    background-color: var(--psi-action-subtle, rgba(59, 130, 246, 0.10));
+  }
+
+  .border-psi-action {
+    border-color: var(--psi-action, #3b82f6);
   }
 }

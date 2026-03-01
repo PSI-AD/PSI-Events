@@ -140,7 +140,7 @@ export default function EventsList() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-slate-900 dark:bg-slate-700 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-slate-600 active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]"
+          className="btn-accent flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium shadow-sm select-none min-h-[44px]"
         >
           <Plus size={18} />
           <span>New Event</span>
@@ -215,7 +215,7 @@ export default function EventsList() {
                 <div className="pt-2">
                   <button
                     type="submit" disabled={saving}
-                    className="w-full py-3 bg-slate-900 dark:bg-emerald-600 text-white rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-emerald-500 active:scale-[0.98] transition-all disabled:opacity-60 select-none"
+                    className="btn-accent w-full py-3 rounded-xl font-bold active:scale-[0.98] transition-all disabled:opacity-60 select-none"
                   >
                     {saving ? 'Creating…' : 'Create Event'}
                   </button>

@@ -58,13 +58,13 @@ export default function CheckInDashboard() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-950">
+        <div className="min-h-screen bg-psi-page">
 
-            {/* ── Controls bar ─────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-4 py-3 no-print">
+            {/* ── Controls bar ──────────────────────────────────────────────────── */}
+            <div className="bg-psi-raised border-b border-psi px-4 py-3 no-print">
 
                 {/* Role switcher */}
-                <div className="flex gap-1 bg-slate-800 rounded-xl p-1 mb-3">
+                <div className="flex gap-1 bg-psi-subtle p-1 mb-3 rounded-xl">
                     {([
                         { id: 'agent', label: 'My QR Pass', icon: <QrCode size={14} /> },
                         { id: 'organizer', label: 'Scanner', icon: <ScanLine size={14} /> },
@@ -78,7 +78,7 @@ export default function CheckInDashboard() {
                                 'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all',
                                 role === r.id
                                     ? 'bg-amber-500 text-white shadow'
-                                    : 'text-slate-400 hover:text-white'
+                                    : 'text-psi-muted hover:text-psi-primary'
                             )}
                         >
                             {r.icon}
@@ -91,9 +91,9 @@ export default function CheckInDashboard() {
                 <div className="relative">
                     <Calendar size={13} className="absolute left-3 top-3 text-slate-500" />
                     {loadingEvents ? (
-                        <div className="flex items-center gap-2 bg-slate-800 rounded-xl pl-9 pr-4 py-2.5">
-                            <Loader2 size={14} className="animate-spin text-slate-500" />
-                            <span className="text-slate-500 text-xs">Loading events...</span>
+                        <div className="flex items-center gap-2 bg-psi-subtle rounded-xl pl-9 pr-4 py-2.5">
+                            <Loader2 size={14} className="animate-spin text-psi-muted" />
+                            <span className="text-psi-muted text-xs">Loading events...</span>
                         </div>
                     ) : (
                         <select
@@ -103,7 +103,7 @@ export default function CheckInDashboard() {
                                 const ev = events.find(ev => ev.eventId === e.target.value);
                                 if (ev) setSelectedEvent(ev);
                             }}
-                            className="w-full appearance-none bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-8 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                            className="psi-input w-full pl-9 pr-8 py-2.5 text-xs appearance-none"
                         >
                             {events.map(ev => (
                                 <option key={ev.eventId} value={ev.eventId}>{ev.eventName}</option>

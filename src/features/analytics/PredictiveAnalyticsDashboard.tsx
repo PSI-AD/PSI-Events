@@ -79,15 +79,15 @@ function CustomTooltip({ active, payload, label }: {
 }) {
     if (!active || !payload?.length) return null;
     return (
-        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-4 shadow-2xl min-w-[200px]">
-            <p className="text-white font-bold text-sm mb-3">{label}</p>
+        <div className="psi-card rounded-2xl p-4 shadow-2xl min-w-[200px]">
+            <p className="text-psi-primary font-bold text-sm mb-3">{label}</p>
             {payload.map((p, i) => (
                 <div key={i} className="flex items-center justify-between gap-4 mb-1.5">
                     <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full" style={{ background: p.color }} />
-                        <span className="text-slate-400 text-xs">{p.name}</span>
+                        <span className="text-psi-secondary text-xs">{p.name}</span>
                     </div>
-                    <span className="text-white text-xs font-bold">
+                    <span className="text-psi-primary text-xs font-bold">
                         {p.name === 'Margin %' ? `${p.value}%` : formatAED(p.value)}
                     </span>
                 </div>
@@ -108,9 +108,9 @@ function formatYAxis(value: number): string {
 
 function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
     const confidenceConfig = {
-        high: { label: 'High Confidence', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', icon: <ShieldCheck size={13} /> },
-        medium: { label: 'Medium Confidence', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', icon: <AlertTriangle size={13} /> },
-        low: { label: 'Low Confidence', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', icon: <Info size={13} /> },
+        high: { label: 'High Confidence', color: 'text-psi-success', bg: 'bg-psi-success', border: 'border-psi-accent', icon: <ShieldCheck size={13} /> },
+        medium: { label: 'Medium Confidence', color: 'text-psi-warning', bg: 'bg-psi-warning', border: 'border-psi-accent', icon: <AlertTriangle size={13} /> },
+        low: { label: 'Low Confidence', color: 'text-psi-error', bg: 'bg-psi-error', border: 'border-psi-accent', icon: <Info size={13} /> },
     };
     const conf = confidenceConfig[rec.confidenceLevel];
 
@@ -123,14 +123,14 @@ function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
             className="h-full flex flex-col"
         >
             {/* Header */}
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-amber-500/20 p-5 mb-4 flex-shrink-0">
+            <div className="psi-card rounded-2xl border-amber-500/30 p-5 mb-4 flex-shrink-0">
                 <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
                         <Lightbulb size={16} className="text-white" />
                     </div>
                     <div>
-                        <p className="text-amber-400 text-[10px] font-bold tracking-[0.2em] uppercase">System Recommendation</p>
-                        <p className="text-white text-sm font-extrabold">{rec.city} Roadshow</p>
+                        <p className="text-amber-600 dark:text-amber-400 text-[10px] font-bold tracking-[0.2em] uppercase">System Recommendation</p>
+                        <p className="text-psi-primary text-sm font-extrabold">{rec.city} Roadshow</p>
                     </div>
                 </div>
 
@@ -142,40 +142,40 @@ function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
             </div>
 
             {/* Main recommendation */}
-            <div className="bg-amber-500/5 border border-amber-500/25 rounded-2xl p-5 mb-4 flex-shrink-0">
-                <p className="text-amber-400 text-[10px] font-bold uppercase tracking-widest mb-2">
+            <div className="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-5 mb-4 flex-shrink-0">
+                <p className="text-amber-600 dark:text-amber-400 text-[10px] font-bold uppercase tracking-widest mb-2">
                     Minimum Developer Sponsorship
                 </p>
-                <p className="text-white text-4xl font-extrabold tracking-tight leading-none mb-1">
+                <p className="text-psi-primary text-4xl font-extrabold tracking-tight leading-none mb-1">
                     {rec.minSponsorshipAED.toLocaleString('en-AE')}
-                    <span className="text-amber-400 text-lg ml-2">AED</span>
+                    <span className="text-amber-500 text-lg ml-2">AED</span>
                 </p>
-                <p className="text-slate-400 text-xs mt-2">
-                    To guarantee a <strong className="text-white">{rec.targetMargin}% profit margin</strong> on your next {rec.city} roadshow
+                <p className="text-psi-secondary text-xs mt-2">
+                    To guarantee a <strong className="text-psi-primary">{rec.targetMargin}% profit margin</strong> on your next {rec.city} roadshow
                 </p>
             </div>
 
             {/* Formula breakdown */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-700 p-4 mb-4 space-y-3 flex-shrink-0">
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
+            <div className="psi-card rounded-2xl p-4 mb-4 space-y-3 flex-shrink-0">
+                <p className="text-psi-muted text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
                     <BarChart3 size={12} />
                     Historical Averages ({rec.eventCount} events)
                 </p>
                 {[
-                    { label: 'Avg Total Event Cost', value: formatAED(rec.avgCost), color: 'text-red-400' },
-                    { label: 'Avg Gross Profit', value: formatAED(rec.avgProfit), color: 'text-blue-400' },
-                    { label: 'Avg Profit Margin', value: `${rec.avgMargin}%`, color: 'text-violet-400' },
-                    { label: 'Target Margin', value: `${rec.targetMargin}%`, color: 'text-emerald-400' },
+                    { label: 'Avg Total Event Cost', value: formatAED(rec.avgCost), color: 'text-psi-error' },
+                    { label: 'Avg Gross Profit', value: formatAED(rec.avgProfit), color: 'text-psi-info' },
+                    { label: 'Avg Profit Margin', value: `${rec.avgMargin}%`, color: 'text-violet-600 dark:text-violet-400' },
+                    { label: 'Target Margin', value: `${rec.targetMargin}%`, color: 'text-psi-success' },
                 ].map(({ label, value, color }) => (
                     <div key={label} className="flex items-center justify-between">
-                        <span className="text-slate-500 text-xs">{label}</span>
+                        <span className="text-psi-muted text-xs">{label}</span>
                         <span className={clsx('text-xs font-bold', color)}>{value}</span>
                     </div>
                 ))}
 
                 {/* Formula */}
-                <div className="pt-2 border-t border-slate-700/50">
-                    <p className="text-slate-600 text-[10px] font-mono leading-relaxed">
+                <div className="pt-2 border-t border-psi">
+                    <p className="text-psi-muted text-[10px] font-mono leading-relaxed">
                         gross_needed = avg_cost ÷ (1 − {rec.targetMargin}%)<br />
                         sponsor_floor = gross_needed − avg_branch_contribution<br />
                         result = ↑ rounded to nearest 10,000 AED
@@ -184,13 +184,13 @@ function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
             </div>
 
             {/* ROI callout */}
-            <div className="bg-emerald-950/50 border border-emerald-800/50 rounded-2xl p-4 flex-1">
+            <div className="bg-psi-success border border-psi-accent rounded-2xl p-4 flex-1">
                 <div className="flex items-start gap-2">
-                    <Target size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" />
+                    <Target size={14} className="text-psi-success mt-0.5 flex-shrink-0" />
                     <div>
-                        <p className="text-emerald-300 text-xs font-bold mb-1">ROI Guarantee Logic</p>
-                        <p className="text-slate-400 text-[11px] leading-relaxed">
-                            At <strong className="text-white">{formatAED(rec.minSponsorshipAED)}</strong> developer contribution,
+                        <p className="text-psi-success text-xs font-bold mb-1">ROI Guarantee Logic</p>
+                        <p className="text-psi-secondary text-[11px] leading-relaxed">
+                            At <strong className="text-psi-primary">{formatAED(rec.minSponsorshipAED)}</strong> developer contribution,
                             even if agent sales underperform by 15%, the event breaks even.
                             Anything above this floor is pure Branch Gross Profit.
                         </p>
@@ -204,31 +204,25 @@ function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
 // ── City Summary Mini-Chart ───────────────────────────────────────────────────
 
 function CitySummaryRow({
-    city,
-    avgProfit,
-    avgMargin,
-    maxProfit,
+    city, avgProfit, avgMargin, maxProfit,
 }: {
-    city: string;
-    avgProfit: number;
-    avgMargin: number;
-    maxProfit: number;
+    city: string; avgProfit: number; avgMargin: number; maxProfit: number;
 }) {
     const pct = maxProfit > 0 ? (avgProfit / maxProfit) * 100 : 0;
     return (
         <div className="flex items-center gap-3">
-            <div className="w-20 text-xs text-slate-400 font-medium truncate">{city}</div>
-            <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div className="w-20 text-xs text-psi-secondary font-medium truncate">{city}</div>
+            <div className="flex-1 h-2 bg-psi-subtle rounded-full overflow-hidden">
                 <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-blue-600 to-emerald-500"
+                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500"
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
                 />
             </div>
             <div className="text-right min-w-[80px]">
-                <span className="text-white text-xs font-bold">{formatAED(avgProfit)}</span>
-                <span className="text-slate-500 text-[10px] ml-1">({avgMargin}%)</span>
+                <span className="text-psi-primary text-xs font-bold">{formatAED(avgProfit)}</span>
+                <span className="text-psi-muted text-[10px] ml-1">({avgMargin}%)</span>
             </div>
         </div>
     );
@@ -270,30 +264,30 @@ export default function PredictiveAnalyticsDashboard({
                         <div className="w-7 h-7 bg-violet-600 rounded-lg flex items-center justify-center">
                             <Sparkles size={15} className="text-white" />
                         </div>
-                        <span className="text-violet-400 text-xs font-bold tracking-[0.15em] uppercase">AI Analytics Engine</span>
+                        <span className="text-violet-600 dark:text-violet-400 text-xs font-bold tracking-[0.15em] uppercase">AI Analytics Engine</span>
                     </div>
-                    <h2 className="text-white text-2xl font-extrabold tracking-tight">
-                        Predictive Analytics & Sponsorship
+                    <h2 className="text-psi-primary text-2xl font-extrabold tracking-tight">
+                        Predictive Analytics &amp; Sponsorship
                     </h2>
-                    <p className="text-slate-400 text-sm mt-0.5">
+                    <p className="text-psi-secondary text-sm mt-0.5">
                         Historical aggregation · Sponsorship recommender · Multi-city P&amp;L
                     </p>
                 </div>
 
                 {/* City selector */}
                 <div className="relative flex-shrink-0">
-                    <Globe size={14} className="absolute left-3 top-3 text-slate-500" />
+                    <Globe size={14} className="absolute left-3 top-3 text-psi-muted" />
                     <select
                         id="prediction-city-selector"
                         value={city}
                         onChange={e => setCity(e.target.value)}
-                        className="appearance-none bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-8 py-2.5 text-sm text-white font-semibold focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 cursor-pointer min-w-[160px]"
+                        className="psi-input appearance-none pl-8 pr-8 py-2.5 text-sm font-semibold cursor-pointer min-w-[160px]"
                     >
                         {cities.map(c => (
                             <option key={c} value={c}>{c}</option>
                         ))}
                     </select>
-                    <ChevronDown size={13} className="absolute right-3 top-3 text-slate-500 pointer-events-none" />
+                    <ChevronDown size={13} className="absolute right-3 top-3 text-psi-muted pointer-events-none" />
                 </div>
             </div>
 
@@ -306,16 +300,16 @@ export default function PredictiveAnalyticsDashboard({
                     className="grid grid-cols-2 sm:grid-cols-4 gap-3"
                 >
                     {[
-                        { label: 'Avg Total Cost', value: formatAED(cityAgg.get(city)!.avgTotalCost), color: 'text-red-400', icon: <TrendingUp size={16} /> },
-                        { label: 'Avg Gross Profit', value: formatAED(cityAgg.get(city)!.avgGrossProfit), color: 'text-blue-400', icon: <BarChart3 size={16} /> },
-                        { label: 'Avg Profit Margin', value: `${cityAgg.get(city)!.avgProfitMargin}%`, color: 'text-violet-400', icon: <Percent size={16} /> },
-                        { label: 'Avg Leads Closed', value: `${cityAgg.get(city)!.avgLeadsClosed}`, color: 'text-emerald-400', icon: <Target size={16} /> },
+                        { label: 'Avg Total Cost', value: formatAED(cityAgg.get(city)!.avgTotalCost), color: 'text-psi-error', icon: <TrendingUp size={16} /> },
+                        { label: 'Avg Gross Profit', value: formatAED(cityAgg.get(city)!.avgGrossProfit), color: 'text-psi-info', icon: <BarChart3 size={16} /> },
+                        { label: 'Avg Profit Margin', value: `${cityAgg.get(city)!.avgProfitMargin}%`, color: 'text-violet-600 dark:text-violet-400', icon: <Percent size={16} /> },
+                        { label: 'Avg Leads Closed', value: `${cityAgg.get(city)!.avgLeadsClosed}`, color: 'text-psi-success', icon: <Target size={16} /> },
                     ].map(({ label, value, color, icon }) => (
-                        <div key={label} className="bg-slate-900 rounded-2xl border border-slate-800 p-4">
+                        <div key={label} className="psi-card rounded-2xl p-4">
                             <div className={clsx('mb-2', color)}>{icon}</div>
-                            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-0.5">{label}</p>
+                            <p className="text-psi-muted text-[10px] font-bold uppercase tracking-widest mb-0.5">{label}</p>
                             <p className={clsx('text-xl font-extrabold', color)}>{value}</p>
-                            <p className="text-slate-600 text-[10px]">{cityAgg.get(city)!.eventCount} events</p>
+                            <p className="text-psi-muted text-[10px]">{cityAgg.get(city)!.eventCount} events</p>
                         </div>
                     ))}
                 </motion.div>
@@ -325,13 +319,13 @@ export default function PredictiveAnalyticsDashboard({
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
                 {/* CHART — occupies 2/3 */}
-                <div className="xl:col-span-2 bg-slate-900 rounded-2xl border border-slate-800 p-5">
+                <div className="xl:col-span-2 psi-card rounded-2xl p-5">
                     <div className="flex items-center justify-between mb-5">
-                        <h3 className="text-white font-bold text-base flex items-center gap-2">
-                            <BarChart3 size={16} className="text-violet-400" />
+                        <h3 className="text-psi-primary font-bold text-base flex items-center gap-2">
+                            <BarChart3 size={16} className="text-violet-500 dark:text-violet-400" />
                             Cost vs. Revenue vs. Profit — {city} Roadshows
                         </h3>
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-psi-muted">
                             {chartData.length} event{chartData.length !== 1 ? 's' : ''}
                         </span>
                     </div>
@@ -341,10 +335,10 @@ export default function PredictiveAnalyticsDashboard({
                             data={chartData}
                             margin={{ top: 8, right: 40, left: 0, bottom: 4 }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--psi-chart-grid)" vertical={false} />
                             <XAxis
                                 dataKey="label"
-                                tick={{ fill: '#64748b', fontSize: 11 }}
+                                tick={{ fill: 'var(--psi-chart-tick)', fontSize: 11 }}
                                 axisLine={false}
                                 tickLine={false}
                             />
@@ -352,7 +346,7 @@ export default function PredictiveAnalyticsDashboard({
                             <YAxis
                                 yAxisId="left"
                                 tickFormatter={formatYAxis}
-                                tick={{ fill: '#64748b', fontSize: 11 }}
+                                tick={{ fill: 'var(--psi-chart-tick)', fontSize: 11 }}
                                 axisLine={false}
                                 tickLine={false}
                                 width={52}
@@ -443,7 +437,7 @@ export default function PredictiveAnalyticsDashboard({
                     </ResponsiveContainer>
 
                     {/* Legend chips */}
-                    <div className="flex flex-wrap gap-2 mt-2 pt-3 border-t border-slate-800">
+                    <div className="flex flex-wrap gap-2 mt-2 pt-3 border-t border-psi">
                         {[
                             { color: PALETTE.cost, label: 'Total Cost — bar' },
                             { color: PALETTE.revenue, label: 'Gross Revenue — bar' },
@@ -451,7 +445,7 @@ export default function PredictiveAnalyticsDashboard({
                             { color: PALETTE.sponsorship, label: 'Sponsorship — dashed' },
                             { color: PALETTE.margin, label: 'Margin % — right axis' },
                         ].map(({ color, label }) => (
-                            <div key={label} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+                            <div key={label} className="flex items-center gap-1.5 text-[10px] text-psi-muted">
                                 <div className="w-3 h-1.5 rounded-full" style={{ background: color }} />
                                 {label}
                             </div>
@@ -474,16 +468,16 @@ export default function PredictiveAnalyticsDashboard({
             </div>
 
             {/* ── Cross-city comparison ─────────────────────────────────── */}
-            <div className="bg-slate-900 rounded-2xl border border-slate-800 p-5">
+            <div className="psi-card rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-5">
-                    <h3 className="text-white font-bold text-base flex items-center gap-2">
-                        <Globe size={16} className="text-violet-400" />
+                    <h3 className="text-psi-primary font-bold text-base flex items-center gap-2">
+                        <Globe size={16} className="text-violet-500 dark:text-violet-400" />
                         Cross-City Avg Gross Profit Comparison
                     </h3>
                     <button
                         id="toggle-summary-btn"
                         onClick={() => setShowAllCities(p => !p)}
-                        className="text-xs text-slate-500 hover:text-violet-400 flex items-center gap-1 transition-colors"
+                        className="text-xs text-psi-muted hover:text-psi-action flex items-center gap-1 transition-colors"
                     >
                         {showAllCities ? 'Collapse' : 'Expand all'}
                         <ChevronDown size={12} className={clsx('transition-transform', showAllCities && 'rotate-180')} />
@@ -503,8 +497,8 @@ export default function PredictiveAnalyticsDashboard({
                 </div>
 
                 {/* Sponsor min table */}
-                <div className="mt-5 pt-4 border-t border-slate-800">
-                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                <div className="mt-5 pt-4 border-t border-psi">
+                    <p className="text-psi-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
                         <Building2 size={12} />
                         Min. Sponsorship for {targetMargin}% Margin — All Cities
                     </p>
@@ -521,21 +515,21 @@ export default function PredictiveAnalyticsDashboard({
                                     className={clsx(
                                         'rounded-xl p-3 border text-left transition-all',
                                         isSelected
-                                            ? 'bg-violet-600/20 border-violet-500/40 ring-1 ring-violet-500/30'
-                                            : 'bg-slate-800/60 border-slate-700 hover:border-slate-600'
+                                            ? 'bg-psi-action-subtle border-psi-action ring-1 ring-psi-action'
+                                            : 'bg-psi-subtle border-psi hover:border-psi-strong'
                                     )}
                                 >
-                                    <p className={clsx('text-xs font-bold mb-1', isSelected ? 'text-violet-300' : 'text-slate-300')}>
+                                    <p className={clsx('text-xs font-bold mb-1', isSelected ? 'text-psi-action' : 'text-psi-secondary')}>
                                         {c}
                                     </p>
-                                    <p className={clsx('text-sm font-extrabold', isSelected ? 'text-white' : 'text-slate-400')}>
+                                    <p className={clsx('text-sm font-extrabold', isSelected ? 'text-psi-primary' : 'text-psi-muted')}>
                                         {formatAED(rec.minSponsorshipAED)}
                                     </p>
                                     <div className={clsx(
                                         'mt-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full inline-block',
-                                        rec.confidenceLevel === 'high' ? 'bg-emerald-500/20 text-emerald-400' :
-                                            rec.confidenceLevel === 'medium' ? 'bg-amber-500/20 text-amber-400' :
-                                                'bg-red-500/20 text-red-400'
+                                        rec.confidenceLevel === 'high' ? 'bg-psi-success text-psi-success' :
+                                            rec.confidenceLevel === 'medium' ? 'bg-psi-warning text-psi-warning' :
+                                                'bg-psi-error   text-psi-error'
                                     )}>
                                         {rec.eventCount} evt{rec.eventCount > 1 ? 's' : ''}
                                     </div>

@@ -121,31 +121,31 @@ function RoiPreview({
         : 0;
 
     return (
-        <div className="bg-slate-900 dark:bg-slate-800 rounded-2xl p-5 space-y-4">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">ROI Preview — as developer will see it</p>
+        <div className="bg-psi-raised rounded-2xl p-5 space-y-4 border border-psi">
+            <p className="text-[10px] font-bold text-psi-muted uppercase tracking-widest">ROI Preview — as developer will see it</p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                    { label: 'Target Leads', value: event.targetLeads.toLocaleString(), icon: <Users size={14} />, color: 'text-blue-400' },
-                    { label: 'Meetings', value: meetings.toLocaleString(), icon: <TrendingUp size={14} />, color: 'text-violet-400' },
-                    { label: 'Expected Deals', value: deals.toLocaleString(), icon: <BarChart3 size={14} />, color: 'text-amber-400' },
-                    { label: 'Pipeline Value', value: fmtAed(pipeline), icon: <DollarSign size={14} />, color: 'text-emerald-400' },
+                    { label: 'Target Leads', value: event.targetLeads.toLocaleString(), icon: <Users size={14} />, color: 'text-blue-500 dark:text-blue-400' },
+                    { label: 'Meetings', value: meetings.toLocaleString(), icon: <TrendingUp size={14} />, color: 'text-violet-500 dark:text-violet-400' },
+                    { label: 'Expected Deals', value: deals.toLocaleString(), icon: <BarChart3 size={14} />, color: 'text-amber-500 dark:text-amber-400' },
+                    { label: 'Pipeline Value', value: fmtAed(pipeline), icon: <DollarSign size={14} />, color: 'text-emerald-600 dark:text-emerald-400' },
                 ].map(({ label, value, icon, color }) => (
-                    <div key={label} className="bg-white/5 rounded-xl p-3">
+                    <div key={label} className="bg-psi-subtle rounded-xl p-3">
                         <div className={`flex items-center gap-1.5 mb-1 ${color}`}>{icon}<span className="text-[10px] font-bold uppercase tracking-wider">{label}</span></div>
-                        <p className="text-white font-extrabold text-lg">{value}</p>
+                        <p className="text-psi-primary font-extrabold text-lg">{value}</p>
                     </div>
                 ))}
             </div>
 
             {sponsorship > 0 && (
-                <div className="flex items-center gap-3 pt-2 border-t border-white/10">
-                    <Zap size={14} className="text-amber-400 flex-shrink-0" />
-                    <p className="text-sm text-slate-300">
-                        With a <span className="text-amber-400 font-bold">{fmtAed(sponsorship)}</span> sponsorship, developer brokerage exposure is{' '}
-                        <span className="text-emerald-400 font-bold">{fmtAed(brokerFee)}</span>.
+                <div className="flex items-center gap-3 pt-2 border-t border-psi">
+                    <Zap size={14} className="text-amber-500 flex-shrink-0" />
+                    <p className="text-sm text-psi-secondary">
+                        With a <span className="text-amber-500 font-bold">{fmtAed(sponsorship)}</span> sponsorship, developer brokerage exposure is{' '}
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">{fmtAed(brokerFee)}</span>.
                         {margin >= 0
-                            ? <> Projected margin: <span className="text-emerald-400 font-bold">{margin}%</span>.</>
+                            ? <> Projected margin: <span className="text-emerald-600 dark:text-emerald-400 font-bold">{margin}%</span>.</>
                             : <> Sponsorship exceeds projected brokerage return — adjust amount.</>
                         }
                     </p>
@@ -175,14 +175,14 @@ function SelectDropdown<T extends { id: string; name: string }>({
     const [open, setOpen] = useState(false);
     return (
         <div className="relative">
-            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">{label}</label>
+            <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">{label}</label>
             <button
                 type="button"
                 onClick={() => setOpen(v => !v)}
-                className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-left hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-all select-none"
+                className="w-full flex items-center justify-between gap-3 px-4 py-3 psi-input rounded-xl text-left hover:bg-psi-subtle transition-all select-none"
             >
-                {value ? renderOption(value) : <span className="text-slate-400 text-sm">{placeholder}</span>}
-                <ChevronDown size={16} className={`text-slate-400 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+                {value ? renderOption(value) : <span className="text-psi-muted text-sm">{placeholder}</span>}
+                <ChevronDown size={16} className={`text-psi-muted flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
             </button>
             <AnimatePresence>
                 {open && (
@@ -191,14 +191,14 @@ function SelectDropdown<T extends { id: string; name: string }>({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.98 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden"
+                        className="absolute left-0 right-0 mt-2 psi-card shadow-2xl z-50 overflow-hidden"
                     >
                         {options.map(opt => (
                             <button
                                 key={opt.id}
                                 type="button"
                                 onClick={() => { onChange(opt); setOpen(false); }}
-                                className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors border-b border-slate-100 dark:border-slate-700/40 last:border-0"
+                                className="w-full text-left px-4 py-3 hover:bg-psi-subtle transition-colors border-b border-psi last:border-0"
                             >
                                 {renderOption(opt)}
                             </button>
@@ -280,8 +280,8 @@ export default function PitchGenerator() {
                     <Sparkles size={20} className="text-white" />
                 </div>
                 <div>
-                    <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Pitch Generator</h2>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Create a shareable, read-only sponsorship pitch for any developer.</p>
+                    <h2 className="text-xl font-extrabold text-psi-primary tracking-tight">Pitch Generator</h2>
+                    <p className="text-xs text-psi-muted">Create a shareable, read-only sponsorship pitch for any developer.</p>
                 </div>
             </div>
 
@@ -298,8 +298,8 @@ export default function PitchGenerator() {
                         placeholder="Choose a roadshow event…"
                         renderOption={ev => (
                             <div>
-                                <p className="text-sm font-bold text-slate-800 dark:text-white">{ev.name}</p>
-                                <p className="text-xs text-slate-400">{ev.city}, {ev.country} · {ev.dateStart}</p>
+                                <p className="text-sm font-bold text-psi-primary">{ev.name}</p>
+                                <p className="text-xs text-psi-muted">{ev.city}, {ev.country} · {ev.dateStart}</p>
                             </div>
                         )}
                     />
@@ -315,8 +315,8 @@ export default function PitchGenerator() {
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">{dev.logo}</span>
                                 <div>
-                                    <p className="text-sm font-bold text-slate-800 dark:text-white">{dev.name}</p>
-                                    <p className="text-xs text-slate-400">{dev.hq} · {dev.tier}</p>
+                                    <p className="text-sm font-bold text-psi-primary">{dev.name}</p>
+                                    <p className="text-xs text-psi-muted">{dev.hq} · {dev.tier}</p>
                                 </div>
                             </div>
                         )}
@@ -324,11 +324,11 @@ export default function PitchGenerator() {
 
                     {/* Sponsorship amount */}
                     <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">
+                        <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">
                             Requested Sponsorship (AED)
                         </label>
                         <div className="relative">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">AED</span>
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-psi-muted">AED</span>
                             <input
                                 type="number"
                                 min="0"
@@ -336,14 +336,14 @@ export default function PitchGenerator() {
                                 value={sponsorAmount}
                                 onChange={e => { setSponsorAmount(e.target.value); setGeneratedUrl(''); }}
                                 placeholder="150,000"
-                                className="w-full pl-14 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-mono text-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all"
+                                className="psi-input w-full pl-14 pr-4 py-3 rounded-xl font-mono text-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all"
                             />
                         </div>
                     </div>
 
                     {/* Quick-fill presets */}
                     <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Quick Presets</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-2">Quick Presets</p>
                         <div className="flex gap-2 flex-wrap">
                             {[100_000, 150_000, 200_000, 300_000].map(amt => (
                                 <button
@@ -353,7 +353,7 @@ export default function PitchGenerator() {
                                     className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all select-none
                                         ${sponsorAmount === String(amt)
                                             ? 'bg-amber-500 text-white border-amber-500'
-                                            : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-amber-400'
+                                            : 'psi-card text-psi-secondary hover:border-amber-400'
                                         }`}
                                 >
                                     {fmtAed(amt)}
@@ -397,9 +397,9 @@ export default function PitchGenerator() {
 
                     {/* Empty state */}
                     {!selectedEvent && (
-                        <div className="bg-slate-100 dark:bg-slate-800/40 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-12 flex flex-col items-center justify-center text-center">
-                            <Building2 size={36} className="text-slate-300 dark:text-slate-600 mb-3" />
-                            <p className="text-sm font-bold text-slate-400 dark:text-slate-500">Select an event to preview ROI projections</p>
+                        <div className="bg-psi-subtle border-2 border-dashed border-psi rounded-2xl p-12 flex flex-col items-center justify-center text-center">
+                            <Building2 size={36} className="text-psi-muted mb-3" />
+                            <p className="text-sm font-bold text-psi-muted">Select an event to preview ROI projections</p>
                         </div>
                     )}
 
@@ -410,14 +410,14 @@ export default function PitchGenerator() {
                                 initial={{ opacity: 0, y: 16 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 16 }}
-                                className="bg-white dark:bg-slate-800/60 border-2 border-emerald-200 dark:border-emerald-700/50 rounded-2xl overflow-hidden"
+                                className="psi-card border-2 border-emerald-200 dark:border-emerald-700/50 rounded-2xl overflow-hidden"
                             >
-                                <div className="px-5 py-3 bg-emerald-50 dark:bg-emerald-900/20 border-b border-emerald-100 dark:border-emerald-800/40 flex items-center gap-2">
+                                <div className="px-5 py-3 bg-psi-success border-b border-psi-accent flex items-center gap-2">
                                     <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                    <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Pitch URL generated — ready to share</p>
+                                    <p className="text-xs font-bold text-psi-success">Pitch URL generated — ready to share</p>
                                 </div>
                                 <div className="p-5 space-y-3">
-                                    <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900/40 rounded-xl font-mono text-xs break-all text-slate-600 dark:text-slate-300">
+                                    <div className="flex items-start gap-3 p-3 bg-psi-subtle rounded-xl font-mono text-xs break-all text-psi-secondary">
                                         <span className="flex-1">{generatedUrl}</span>
                                     </div>
                                     <div className="flex gap-2">
@@ -426,7 +426,7 @@ export default function PitchGenerator() {
                                             onClick={handleCopy}
                                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all select-none active:scale-[0.97]
                                                 ${copied
-                                                    ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
+                                                    ? 'bg-psi-success text-psi-success'
                                                     : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/20'
                                                 }`}
                                         >
@@ -437,7 +437,7 @@ export default function PitchGenerator() {
                                             href={generatedUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-all select-none"
+                                            className="flex items-center justify-center gap-2 px-4 py-3 psi-card text-psi-primary rounded-xl font-bold text-sm hover:bg-psi-subtle transition-all select-none"
                                         >
                                             <ExternalLink size={16} />
                                             Preview
@@ -445,12 +445,12 @@ export default function PitchGenerator() {
                                         <button
                                             onClick={handleReset}
                                             title="Start over"
-                                            className="px-3 py-3 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition-all select-none"
+                                            className="px-3 py-3 psi-card text-psi-muted rounded-xl hover:bg-psi-subtle transition-all select-none"
                                         >
                                             <RefreshCcw size={16} />
                                         </button>
                                     </div>
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center flex items-center justify-center gap-1">
+                                    <p className="text-[10px] text-psi-muted text-center flex items-center justify-center gap-1">
                                         <ArrowRight size={10} />
                                         Share this link directly with {selectedDev?.name}. No login required.
                                     </p>

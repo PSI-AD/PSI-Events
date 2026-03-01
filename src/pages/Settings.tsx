@@ -18,10 +18,11 @@ import {
     Mail, MessageCircle,
     Lock, Smartphone,
     CheckCircle2, ChevronRight,
-    Building2, BadgeCheck, Globe,
+    Building2, BadgeCheck, Globe, Palette,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme, ACCENT_OPTIONS } from '../contexts/ThemeContext';
+import type { AccentColor } from '../contexts/ThemeContext';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -84,11 +85,11 @@ function SettingsCard({
     children: React.ReactNode;
 }) {
     return (
-        <div className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
-                <h3 className="font-bold text-slate-900 dark:text-white text-sm">{title}</h3>
+        <div className="psi-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-psi">
+                <h3 className="font-bold text-psi-primary text-sm">{title}</h3>
                 {description && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
+                    <p className="text-xs text-psi-muted mt-0.5">{description}</p>
                 )}
             </div>
             <div className="px-6 py-5">{children}</div>
@@ -201,7 +202,7 @@ const THEME_OPTIONS: { id: ThemeChoice; label: string; icon: React.ElementType; 
 ];
 
 function PreferencesSection() {
-    const { theme, toggleTheme } = useTheme();
+    const { theme, toggleTheme, accent, setAccent } = useTheme();
 
     // Map the 3-way choice to the 2-way toggle
     // 'system' falls back to the current applied theme
@@ -258,14 +259,14 @@ function PreferencesSection() {
                                     border-2 transition-all duration-200 cursor-pointer select-none
                                     active:scale-[0.97]
                                     ${isSelected
-                                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-sm shadow-emerald-500/10'
-                                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-800/40'
+                                        ? 'border-psi-action bg-psi-action-subtle shadow-sm'
+                                        : 'border-psi hover:border-psi-strong bg-psi-subtle'
                                     }
                                 `}
                             >
                                 {/* Selected indicator */}
                                 {isSelected && (
-                                    <div className="absolute top-2.5 right-2.5 w-4 h-4 bg-emerald-500 rounded-full flex items-center justify-center">
+                                    <div className="absolute top-2.5 right-2.5 w-4 h-4 bg-psi-action rounded-full flex items-center justify-center">
                                         <div className="w-1.5 h-1.5 bg-white rounded-full" />
                                     </div>
                                 )}
@@ -273,32 +274,66 @@ function PreferencesSection() {
                                 {/* Icon */}
                                 <div className={`
                                     w-10 h-10 rounded-xl flex items-center justify-center
-                                    ${isSelected
-                                        ? 'bg-emerald-100 dark:bg-emerald-800/40'
-                                        : 'bg-slate-200 dark:bg-slate-700'
-                                    }
+                                    ${isSelected ? 'bg-psi-action-subtle' : 'bg-psi-subtle'}
                                 `}>
                                     <Icon
                                         size={20}
-                                        className={isSelected
-                                            ? 'text-emerald-600 dark:text-emerald-400'
-                                            : 'text-slate-500 dark:text-slate-400'
-                                        }
+                                        className={isSelected ? 'text-psi-action' : 'text-psi-muted'}
                                     />
                                 </div>
 
                                 {/* Label */}
                                 <div className="text-center">
-                                    <p className={`text-sm font-bold ${isSelected ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-700 dark:text-slate-300'}`}>
+                                    <p className={`text-sm font-bold ${isSelected ? 'text-psi-action' : 'text-psi-primary'}`}>
                                         {label}
                                     </p>
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 leading-tight hidden sm:block">
+                                    <p className="text-[10px] text-psi-muted mt-0.5 leading-tight hidden sm:block">
                                         {description}
                                     </p>
                                 </div>
                             </button>
                         );
                     })}
+                </div>
+            </SettingsCard>
+
+            {/* Accent colour picker */}
+            <SettingsCard
+                title="Accent Colour"
+                description="Choose your brand accent colour — applied to buttons, tabs, and highlights across the entire portal."
+            >
+                <div className="flex items-center gap-3 flex-wrap">
+                    {ACCENT_OPTIONS.map(opt => {
+                        const isSelected = accent === opt.id;
+                        return (
+                            <button
+                                key={opt.id}
+                                id={`accent-btn-${opt.id}`}
+                                onClick={() => setAccent(opt.id as AccentColor)}
+                                title={opt.label}
+                                className={`
+                                    relative w-10 h-10 rounded-full transition-all duration-200
+                                    active:scale-95 select-none
+                                    ${opt.bg}
+                                    ${isSelected
+                                        ? `ring-2 ${opt.ring} ring-offset-2 ring-offset-white dark:ring-offset-slate-800 scale-110`
+                                        : 'opacity-60 hover:opacity-90'
+                                    }
+                                `}
+                            >
+                                {isSelected && (
+                                    <span className="absolute inset-0 flex items-center justify-center">
+                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                            <path d="M2 7L5.5 10.5L12 4" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </span>
+                                )}
+                            </button>
+                        );
+                    })}
+                    <span className="text-xs text-psi-muted ml-1">
+                        {ACCENT_OPTIONS.find(o => o.id === accent)?.label}
+                    </span>
                 </div>
             </SettingsCard>
 
@@ -335,9 +370,9 @@ function PreferencesSection() {
                 </div>
 
                 {/* Status summary pill */}
-                <div className="mt-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                        <span className="font-bold text-slate-700 dark:text-slate-300">Active channels: </span>
+                <div className="mt-4 p-3 rounded-xl bg-psi-subtle border border-psi">
+                    <p className="text-xs text-psi-secondary">
+                        <span className="font-bold text-psi-primary">Active channels: </span>
                         {[
                             notifications.emailAlerts && 'Email',
                             notifications.whatsappNudges && 'WhatsApp',
@@ -428,12 +463,12 @@ function SecuritySection() {
             <SettingsCard title="Active Sessions" description="Devices currently signed into the portal.">
                 <div className="flex items-center justify-between py-1">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                            <Monitor size={16} className="text-slate-500 dark:text-slate-400" />
+                        <div className="w-8 h-8 rounded-xl bg-psi-subtle flex items-center justify-center">
+                            <Monitor size={16} className="text-psi-muted" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">This device</p>
-                            <p className="text-xs text-slate-400">macOS · Chrome · Abu Dhabi</p>
+                            <p className="text-sm font-medium text-psi-primary">This device</p>
+                            <p className="text-xs text-psi-muted">macOS · Chrome · Abu Dhabi</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
@@ -460,14 +495,14 @@ export default function Settings() {
     const [activeSection, setActiveSection] = useState<Section>('profile');
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8">
+        <div className="min-h-screen bg-psi-page p-4 md:p-8">
 
             {/* Page header */}
             <header className="max-w-5xl mx-auto mb-8">
-                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-psi-primary">
                     Settings
                 </h1>
-                <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+                <p className="text-psi-muted mt-1 text-sm">
                     Manage your account, preferences, and security.
                 </p>
             </header>
@@ -482,7 +517,7 @@ export default function Settings() {
                         flex md:flex-col
                         gap-1
                         overflow-x-auto md:overflow-visible
-                        bg-white dark:bg-slate-900/60
+                    bg-psi-card
                         md:bg-transparent
                         rounded-2xl md:rounded-none
                         border md:border-0
@@ -503,17 +538,17 @@ export default function Settings() {
                                     transition-all duration-200 select-none text-left
                                     flex-shrink-0 md:flex-shrink min-w-max md:min-w-0 md:w-full
                                     ${isActive
-                                        ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm'
-                                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-200'
+                                        ? 'bg-psi-action-subtle border border-psi-action text-psi-action shadow-sm'
+                                        : 'text-psi-secondary hover:bg-psi-subtle hover:text-psi-primary'
                                     }
                                 `}
                             >
                                 <span className={`flex-shrink-0 transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>
-                                    <Icon size={18} className={isActive ? 'text-emerald-400' : ''} />
+                                    <Icon size={18} className={isActive ? 'text-psi-action' : ''} />
                                 </span>
                                 <span className="hidden md:block">
                                     <span className="block text-sm font-bold leading-tight">{label}</span>
-                                    <span className={`text-[10px] leading-tight ${isActive ? 'text-slate-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                                    <span className={`text-[10px] leading-tight ${isActive ? 'text-psi-secondary' : 'text-psi-muted'}`}>
                                         {description}
                                     </span>
                                 </span>
@@ -523,7 +558,7 @@ export default function Settings() {
                                 {isActive && (
                                     <motion.div
                                         layoutId="settings-active-indicator"
-                                        className="hidden md:block absolute right-3 w-1.5 h-1.5 rounded-full bg-emerald-400"
+                                        className="hidden md:block absolute right-3 w-1.5 h-1.5 rounded-full bg-psi-action"
                                     />
                                 )}
                             </button>

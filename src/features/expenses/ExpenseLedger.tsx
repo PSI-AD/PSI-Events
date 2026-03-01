@@ -268,14 +268,14 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                         `}
           >
             {/* Panel header */}
-            <div className="flex items-center justify-between px-5 py-3 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
+            <div className="flex items-center justify-between px-5 py-3 bg-psi-subtle border-b border-psi">
               <div className={`flex items-center gap-2 text-sm font-bold ${ocrStatusConfig[ocrState].color}`}>
                 {ocrStatusConfig[ocrState].icon}
                 <span>OCR Scanner — {ocrStatusConfig[ocrState].label}</span>
               </div>
               <button
                 onClick={() => { setShowOcrPanel(false); setOcrState('idle'); setOcrCandidate(null); }}
-                className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
+                className="text-psi-muted hover:text-psi-primary transition-colors"
               >
                 <X size={18} />
               </button>
@@ -288,13 +288,13 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                   <div className="absolute inset-0 bg-violet-100 dark:bg-violet-900/20 rounded-2xl animate-pulse" />
                   <ScanLine size={32} className="absolute inset-0 m-auto text-violet-500 animate-bounce" />
                 </div>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center">
+                <p className="text-sm text-psi-secondary text-center">
                   {ocrState === 'uploading'
                     ? 'Securely uploading your receipt to Firebase Storage…'
                     : 'Google Cloud Vision is reading your receipt. This takes 2–5 seconds…'}
                 </p>
                 {/* Scan line animation */}
-                <div className="w-full h-1 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                <div className="w-full h-1 bg-psi-subtle rounded-full overflow-hidden">
                   <div className="h-full bg-violet-400 animate-[scan_1.5s_ease-in-out_infinite] rounded-full" />
                 </div>
               </div>
@@ -315,15 +315,15 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
 
                 {/* Extracted data */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-zinc-50 dark:bg-zinc-800/60 rounded-xl p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">Vendor Name</p>
-                    <p className="text-base font-extrabold text-zinc-900 dark:text-white truncate">
+                  <div className="bg-psi-subtle rounded-xl p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-1">Vendor Name</p>
+                    <p className="text-base font-extrabold text-psi-primary truncate">
                       {ocrCandidate.vendorName}
                     </p>
                   </div>
-                  <div className="bg-zinc-50 dark:bg-zinc-800/60 rounded-xl p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-1">Total Amount</p>
-                    <p className="text-base font-extrabold text-zinc-900 dark:text-white font-mono">
+                  <div className="bg-psi-subtle rounded-xl p-4">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-1">Total Amount</p>
+                    <p className="text-base font-extrabold text-psi-primary font-mono">
                       AED {ocrCandidate.totalAmount.toLocaleString()}
                     </p>
                   </div>
@@ -331,22 +331,22 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
 
                 <div className="flex items-center justify-between px-1">
                   <div className="flex items-center gap-2">
-                    <Sparkles size={13} className="text-zinc-400" />
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">OCR Confidence:</span>
+                    <Sparkles size={13} className="text-psi-muted" />
+                    <span className="text-xs text-psi-secondary">OCR Confidence:</span>
                     <ConfidenceBadge confidence={ocrCandidate.confidence} />
                   </div>
-                  <span className="text-[10px] font-mono text-zinc-400">ID: {ocrCandidate.expenseId.slice(0, 8)}…</span>
+                  <span className="text-[10px] font-mono text-psi-muted">ID: {ocrCandidate.expenseId.slice(0, 8)}…</span>
                 </div>
 
                 {/* Preview thumbnail */}
-                <div className="relative w-full h-32 bg-zinc-100 dark:bg-zinc-800 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700">
+                <div className="relative w-full h-32 bg-psi-subtle rounded-xl overflow-hidden border border-psi">
                   <img
                     src={ocrCandidate.imageUrl}
                     alt="Receipt preview"
                     className="w-full h-full object-cover opacity-70"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 bg-white/80 dark:bg-black/60 px-2 py-1 rounded-lg">
+                    <span className="text-xs font-bold text-psi-secondary bg-psi-surface/80 px-2 py-1 rounded-lg">
                       Receipt Image
                     </span>
                   </div>
@@ -364,7 +364,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                   </button>
                   <button
                     onClick={() => { setShowOcrPanel(false); setOcrState('idle'); setOcrCandidate(null); if (onRefresh) onRefresh(); }}
-                    className="px-4 py-3 bg-zinc-100 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded-xl font-bold text-sm hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-all select-none"
+                    className="px-4 py-3 psi-card text-psi-secondary rounded-xl font-bold text-sm hover:bg-psi-subtle transition-all select-none"
                   >
                     Dismiss
                   </button>
@@ -400,7 +400,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                 </div>
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full py-2.5 bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 rounded-xl font-bold text-sm hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-all select-none"
+                  className="w-full py-2.5 psi-card text-psi-secondary rounded-xl font-bold text-sm hover:bg-psi-subtle transition-all select-none"
                 >
                   Try Again
                 </button>
@@ -425,11 +425,11 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
       )}
 
       {/* ── Total Event Cost Header ── */}
-      <div className="bg-zinc-900 text-white p-6 md:p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-xl">
+      <div className="bg-psi-raised border border-psi p-6 md:p-8 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-xl">
         <div>
-          <p className="text-zinc-400 text-sm font-medium uppercase tracking-widest mb-1">Total Event Cost</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            {totalEventCost.toLocaleString()} <span className="text-xl font-normal text-zinc-500">AED</span>
+          <p className="text-psi-muted text-sm font-medium uppercase tracking-widest mb-1">Total Event Cost</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-psi-primary">
+            {totalEventCost.toLocaleString()} <span className="text-xl font-normal text-psi-muted">AED</span>
           </h2>
         </div>
 
@@ -471,7 +471,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
       </div>
 
       {/* ── Category Tabs ── */}
-      <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl w-fit overflow-x-auto">
+      <div className="flex gap-2 p-1 bg-psi-subtle border border-psi rounded-xl w-fit overflow-x-auto">
         {categories.map(cat => (
           <button
             key={cat}
@@ -479,8 +479,8 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
             className={`
                             px-5 py-2.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap flex-shrink-0
                             ${activeTab === cat
-                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                ? 'btn-accent shadow-sm'
+                : 'text-psi-muted hover:text-psi-primary'
               }
                         `}
           >
@@ -490,18 +490,18 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
       </div>
 
       {/* ── Ledger Table ── */}
-      <div className="bg-white dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700/50 rounded-2xl overflow-hidden shadow-sm">
+      <div className="psi-card overflow-hidden shadow-sm">
         <div className="w-full overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[500px]">
             <thead>
-              <tr className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-700">
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500">Subcategory</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500">Paid By</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500">Source</th>
-                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-zinc-500 text-right">Amount (AED)</th>
+              <tr className="bg-psi-subtle border-b border-psi">
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-psi-muted">Subcategory</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-psi-muted">Paid By</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-psi-muted">Source</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-psi-muted text-right">Amount (AED)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700/40">
+            <tbody className="divide-y divide-psi-subtle">
               <AnimatePresence mode="popLayout">
                 {filteredExpenses.length > 0 ? (
                   filteredExpenses.map((expense, idx) => {
@@ -512,15 +512,15 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className={`hover:bg-zinc-50 dark:hover:bg-zinc-700/30 transition-colors ${ext.requiresHumanVerification ? 'border-l-4 border-l-amber-400' : ''}`}
+                        className={`hover:bg-psi-subtle/60 transition-colors ${ext.requiresHumanVerification ? 'border-l-4 border-l-amber-400' : ''}`}
                       >
                         <td className="px-6 py-4">
-                          <p className="font-bold text-zinc-900 dark:text-white">{expense.subcategory}</p>
+                          <p className="font-bold text-psi-primary">{expense.subcategory}</p>
                           {expense.description && (
-                            <p className="text-xs text-zinc-400 mt-0.5">{expense.description}</p>
+                            <p className="text-xs text-psi-muted mt-0.5">{expense.description}</p>
                           )}
                           {ext.requiresHumanVerification && (
-                            <span className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded text-[10px] font-bold">
+                            <span className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-psi-warning text-psi-warning rounded text-[10px] font-bold">
                               <AlertTriangle size={9} /> Pending verification
                             </span>
                           )}
@@ -530,7 +530,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                             {expense.paidBy === 'Branch' && <Landmark size={14} className="text-blue-500" />}
                             {expense.paidBy === 'Sponsor' && <Building2 size={14} className="text-emerald-500" />}
                             {expense.paidBy === 'Agent' && <User size={14} className="text-amber-500" />}
-                            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{expense.paidBy}</span>
+                            <span className="text-sm font-medium text-psi-secondary">{expense.paidBy}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -539,10 +539,10 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                               <ScanLine size={9} /> OCR
                             </span>
                           ) : (
-                            <span className="text-[10px] text-zinc-400">Manual</span>
+                            <span className="text-[10px] text-psi-muted">Manual</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-right font-mono font-bold text-zinc-900 dark:text-white">
+                        <td className="px-6 py-4 text-right font-mono font-bold text-psi-primary">
                           {expense.amount.toLocaleString()}
                         </td>
                       </motion.tr>
@@ -551,8 +551,8 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                 ) : (
                   <tr>
                     <td colSpan={4} className="px-6 py-12 text-center">
-                      <Receipt size={28} className="mx-auto text-zinc-300 dark:text-zinc-600 mb-2" />
-                      <p className="text-zinc-400 dark:text-zinc-500 text-sm italic">
+                      <Receipt size={28} className="mx-auto text-psi-muted mb-2" />
+                      <p className="text-psi-muted text-sm italic">
                         No expenses logged for {activeTab} yet.
                       </p>
                       <button
@@ -578,42 +578,42 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+              className="psi-card rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
             >
-              <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50 dark:bg-zinc-800/60">
-                <h3 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+              <div className="p-6 border-b border-psi flex justify-between items-center bg-psi-subtle">
+                <h3 className="text-xl font-bold text-psi-primary flex items-center gap-2">
                   <Receipt className="text-emerald-500" />
                   Add {activeTab} Expense
                 </h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                <button onClick={() => setIsModalOpen(false)} className="text-psi-muted hover:text-psi-primary">
                   <X size={24} />
                 </button>
               </div>
 
               <form onSubmit={handleAddExpense} className="p-8 space-y-6">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2">Amount (AED)</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">Amount (AED)</label>
                   <input
                     type="number" required value={amount}
                     onChange={e => setAmount(e.target.value)}
                     placeholder="0.00"
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all font-mono text-lg"
+                    className="psi-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all font-mono text-lg"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2">Subcategory</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">Subcategory</label>
                   <input
                     type="text" required value={subcategory}
                     onChange={e => setSubcategory(e.target.value)}
                     placeholder="e.g., Booth Rental, Catering, Flights"
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                    className="psi-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2">Paid By</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">Paid By</label>
                   <select
                     value={paidBy} onChange={e => setPaidBy(e.target.value as PaidBy)}
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                    className="psi-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
                   >
                     <option value="Branch">Branch</option>
                     <option value="Sponsor">Sponsor</option>
@@ -621,16 +621,16 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2">Description (Optional)</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-psi-muted mb-2">Description (Optional)</label>
                   <textarea
                     value={description} onChange={e => setDescription(e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all resize-none"
+                    className="psi-input w-full px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all resize-none"
                   />
                 </div>
                 <button
                   type="submit" disabled={isSubmitting}
-                  className="w-full bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 disabled:bg-zinc-400 text-white dark:text-zinc-900 py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] select-none"
+                  className="w-full btn-accent py-4 rounded-xl font-bold transition-all shadow-lg active:scale-[0.98] select-none"
                 >
                   {isSubmitting ? 'Processing…' : 'Confirm Expense'}
                 </button>

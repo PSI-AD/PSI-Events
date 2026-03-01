@@ -78,7 +78,7 @@ export default function Analytics() {
             <Users size={14} />
             <span>{eventData?.attendee_count || 0} Agents</span>
           </div>
-          <button className="flex items-center gap-2 bg-slate-900 dark:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-slate-800 dark:hover:bg-slate-600 active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
+          <button className="btn-accent flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
             <Download size={16} />
             <span className="hidden sm:inline">Export Report</span>
             <span className="sm:hidden">Export</span>

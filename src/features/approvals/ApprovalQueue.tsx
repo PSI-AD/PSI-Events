@@ -120,10 +120,7 @@ function CompliancePill({ ok, label }: { ok: boolean; label: string }) {
     return (
         <span className={`
             flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider
-            ${ok
-                ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400'
-                : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400'
-            }
+            ${ok ? 'badge-success' : 'badge-error'}
         `}>
             {ok ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
             {label}
@@ -214,11 +211,10 @@ function AgentRow({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.07 }}
             className={`
-                bg-white dark:bg-slate-800/60 border rounded-2xl overflow-hidden
+                psi-card rounded-2xl overflow-hidden
                 transition-all duration-200
-                ${action === 'approved' ? 'border-emerald-200 dark:border-emerald-700/50' :
-                    action === 'rejected' ? 'border-rose-200 dark:border-rose-700/50' :
-                        'border-slate-200 dark:border-slate-700/50'}
+                ${action === 'approved' ? 'border-emerald-300 dark:border-emerald-700/50' :
+                    action === 'rejected' ? 'border-rose-300 dark:border-rose-700/50' : ''}
             `}
         >
             {/* Main row */}
@@ -228,7 +224,7 @@ function AgentRow({
                     {/* Avatar + identity */}
                     <div className="flex items-start gap-3 min-w-0 flex-1">
                         {/* Rank badge */}
-                        <div className="w-8 h-8 flex-shrink-0 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-extrabold text-slate-500 dark:text-slate-400">
+                        <div className="w-8 h-8 flex-shrink-0 rounded-full bg-psi-subtle border border-psi flex items-center justify-center text-xs font-extrabold text-psi-secondary">
                             {index + 1}
                         </div>
 
@@ -240,7 +236,7 @@ function AgentRow({
                         <div className="min-w-0">
                             {/* Name + AI badge */}
                             <div className="flex flex-wrap items-center gap-2 mb-1">
-                                <span className="font-extrabold text-slate-900 dark:text-white">
+                                <span className="font-extrabold text-psi-primary">
                                     {agent.name}
                                 </span>
                                 <AiBadge
@@ -251,7 +247,7 @@ function AgentRow({
                             </div>
 
                             {/* Meta */}
-                            <p className="text-xs text-slate-400 dark:text-slate-500">
+                            <p className="text-xs text-psi-muted">
                                 {agent.email} · {agent.branch}
                             </p>
 
@@ -261,7 +257,7 @@ function AgentRow({
                                     {agent.tier} {Math.round(agent.tierPct * 100)}%
                                 </span>
                                 {agent.languages.map(l => (
-                                    <span key={l} className="px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full text-[10px] font-bold uppercase">
+                                    <span key={l} className="px-2 py-0.5 bg-psi-subtle border border-psi text-psi-secondary rounded-full text-[10px] font-bold uppercase">
                                         {l}
                                     </span>
                                 ))}
@@ -288,8 +284,8 @@ function AgentRow({
                                         flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold
                                         transition-all active:scale-[0.97] select-none
                                         ${isBlocked
-                                            ? 'bg-slate-100 dark:bg-slate-700 text-slate-300 dark:text-slate-600 cursor-not-allowed'
-                                            : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/20'
+                                            ? 'bg-psi-subtle border border-psi text-psi-muted cursor-not-allowed'
+                                            : 'btn-accent shadow-sm'
                                         }
                                     `}
                                     title={isBlocked ? 'Cannot approve — penalty on record' : 'Approve agent'}
@@ -300,7 +296,7 @@ function AgentRow({
                                 <button
                                     id={`reject-btn-${agent.id}`}
                                     onClick={() => onAction(agent.id, 'rejected')}
-                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/20 dark:hover:text-rose-400 transition-all active:scale-[0.97] select-none"
+                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-psi-subtle border border-psi text-psi-secondary hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-600 dark:hover:text-rose-400 transition-all active:scale-[0.97] select-none"
                                 >
                                     <UserX size={14} />
                                     Reject
@@ -384,10 +380,10 @@ function Legend() {
         { tier: 'BLOCK', label: 'Block', desc: 'No-show or penalty on record' },
     ];
     return (
-        <div className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-4">
+        <div className="psi-card rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-3">
-                <BrainCircuit size={15} className="text-slate-500 dark:text-slate-400" />
-                <p className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">AI Badge Legend</p>
+                <BrainCircuit size={15} className="text-psi-muted" />
+                <p className="text-xs font-bold text-psi-secondary uppercase tracking-widest">AI Badge Legend</p>
             </div>
             <div className="space-y-2">
                 {items.map(({ tier, label, desc }) => {
@@ -397,7 +393,7 @@ function Legend() {
                             <div className={`flex-shrink-0 mt-0.5 w-2 h-2 rounded-full ${style.dot}`} />
                             <div>
                                 <p className={`text-[11px] font-bold ${style.text}`}>{label}</p>
-                                <p className="text-[10px] text-slate-400 dark:text-slate-500">{desc}</p>
+                                <p className="text-[10px] text-psi-muted">{desc}</p>
                             </div>
                         </div>
                     );
@@ -464,11 +460,11 @@ export default function ApprovalQueue() {
                             <button
                                 id="event-selector-btn"
                                 onClick={() => setShowEventDrop(v => !v)}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-all shadow-sm select-none"
+                                className="psi-card flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-psi-primary hover:bg-psi-subtle transition-all shadow-sm select-none"
                             >
-                                <MapPin size={14} className="text-emerald-500" />
+                                <MapPin size={14} className="text-psi-action" />
                                 {selectedEvent.label}
-                                <ChevronDown size={14} className="text-slate-400" />
+                                <ChevronDown size={14} className="text-psi-muted" />
                             </button>
                             <AnimatePresence>
                                 {showEventDrop && (
@@ -476,15 +472,15 @@ export default function ApprovalQueue() {
                                         initial={{ opacity: 0, y: -8 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -8 }}
-                                        className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl z-50 overflow-hidden"
+                                        className="absolute right-0 mt-2 w-64 psi-card rounded-2xl shadow-xl z-50 overflow-hidden"
                                     >
                                         {EVENT_OPTIONS.map(ev => (
                                             <button
                                                 key={ev.id}
                                                 onClick={() => { setSelectedEvent(ev); setShowEventDrop(false); setSortMode('applied'); setActions({}); }}
-                                                className={`w-full text-left px-4 py-3 text-sm transition-colors ${ev.id === selectedEvent.id
-                                                        ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 font-bold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60'
+                                                className={`w-full text-left px-4 py-3 text-sm transition-colors border-b border-psi last:border-0 ${ev.id === selectedEvent.id
+                                                    ? 'bg-psi-action-subtle text-psi-action font-bold'
+                                                    : 'text-psi-primary hover:bg-psi-subtle'
                                                     }`}
                                             >
                                                 <p className="font-bold">{ev.label}</p>
@@ -509,19 +505,19 @@ export default function ApprovalQueue() {
                         <div className="grid grid-cols-3 lg:grid-cols-1 gap-3">
                             {[
                                 { label: 'Pending', value: pendingCount, color: 'text-amber-500' },
-                                { label: 'Approved', value: approvedCount, color: 'text-emerald-500' },
-                                { label: 'Rejected', value: rejectedCount, color: 'text-rose-500' },
+                                { label: 'Approved', value: approvedCount, color: 'text-psi-success' },
+                                { label: 'Rejected', value: rejectedCount, color: 'text-psi-error' },
                             ].map(({ label, value, color }) => (
-                                <div key={label} className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-4">
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{label}</p>
+                                <div key={label} className="psi-card rounded-2xl p-4">
+                                    <p className="text-[10px] font-bold text-psi-muted uppercase tracking-widest">{label}</p>
                                     <p className={`text-3xl font-extrabold ${color}`}>{value}</p>
                                 </div>
                             ))}
                         </div>
 
                         {/* Sort button */}
-                        <div className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-4 space-y-2">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Sort Order</p>
+                        <div className="psi-card rounded-2xl p-4 space-y-2">
+                            <p className="text-[10px] font-bold text-psi-muted uppercase tracking-widest mb-2">Sort Order</p>
                             <button
                                 id="sort-by-ai-btn"
                                 onClick={() => setSortMode('ai')}
@@ -529,8 +525,8 @@ export default function ApprovalQueue() {
                                     w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold
                                     transition-all select-none active:scale-[0.97]
                                     ${sortMode === 'ai'
-                                        ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/20'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                                        ? 'btn-accent shadow-sm'
+                                        : 'bg-psi-subtle text-psi-secondary hover:bg-psi-raised'
                                     }
                                 `}
                             >
@@ -544,8 +540,8 @@ export default function ApprovalQueue() {
                                     w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold
                                     transition-all select-none active:scale-[0.97]
                                     ${sortMode === 'applied'
-                                        ? 'bg-slate-800 dark:bg-slate-600 text-white'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                                        ? 'psi-card border-psi-action text-psi-action'
+                                        : 'bg-psi-subtle text-psi-secondary hover:bg-psi-raised'
                                     }
                                 `}
                             >
@@ -567,14 +563,14 @@ export default function ApprovalQueue() {
                         <Legend />
 
                         {/* Event context card */}
-                        <div className="bg-slate-900 dark:bg-slate-800 text-white rounded-2xl p-4">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Context</p>
-                            <p className="font-extrabold text-sm">{selectedEvent.label}</p>
+                        <div className="psi-card rounded-2xl p-4">
+                            <p className="text-[10px] font-bold text-psi-muted uppercase tracking-widest mb-1">Context</p>
+                            <p className="font-extrabold text-psi-primary text-sm">{selectedEvent.label}</p>
                             <div className="flex items-center gap-1 mt-1">
-                                <MapPin size={11} className="text-emerald-400" />
-                                <p className="text-xs text-slate-400">{selectedEvent.city}</p>
+                                <MapPin size={11} className="text-psi-action" />
+                                <p className="text-xs text-psi-secondary">{selectedEvent.city}</p>
                             </div>
-                            <div className="mt-3 text-[10px] text-slate-500 leading-relaxed">
+                            <div className="mt-3 text-[10px] text-psi-muted leading-relaxed">
                                 AI recommendations are calculated using historical conversion data for the {selectedEvent.city} market across all PSI agents on record.
                             </div>
                         </div>
@@ -617,14 +613,14 @@ export default function ApprovalQueue() {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="py-16 text-center bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl"
+                                className="py-16 text-center psi-card rounded-2xl"
                             >
-                                <CheckCircle2 size={36} className="mx-auto text-emerald-400 mb-3" />
-                                <p className="font-extrabold text-slate-900 dark:text-white">Queue cleared</p>
-                                <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">
+                                <CheckCircle2 size={36} className="mx-auto text-psi-success mb-3" />
+                                <p className="font-extrabold text-psi-primary">Queue cleared</p>
+                                <p className="text-psi-muted text-sm mt-1">
                                     All {PENDING_AGENTS.length} agents have been actioned.
                                 </p>
-                                <button onClick={resetAll} className="mt-4 text-xs font-bold text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-1.5 mx-auto transition-colors">
+                                <button onClick={resetAll} className="mt-4 text-xs font-bold text-psi-muted hover:text-psi-primary flex items-center gap-1.5 mx-auto transition-colors">
                                     <RotateCcw size={12} /> Reset queue
                                 </button>
                             </motion.div>
