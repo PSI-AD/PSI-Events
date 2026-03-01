@@ -13,7 +13,7 @@ import SystemManual from '../features/help/SystemManual';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     BookOpen, Calendar, Zap, CheckSquare,
-    Monitor, ChevronRight, Users, FileText,
+    ChevronRight, Users, FileText,
     QrCode, BarChart3, Award, AlertTriangle,
     Building2, TrendingUp, Shield, Clock,
     DollarSign, Target, Sparkles, MapPin,
@@ -44,6 +44,8 @@ interface Step {
     icon: React.ReactNode;
     screenshotLabel: string;
     screenshotIcon: React.ReactNode;
+    url: string;       // descriptive url — "localhost:5173/path → instruction"
+    filename: string;  // save screenshot as this name in public/manual/
     boxes: [BentoBox, BentoBox];
 }
 
@@ -90,6 +92,8 @@ const PHASES: Phase[] = [
                 icon: <MapPin size={20} />,
                 screenshotLabel: 'Events → New Roadshow Form',
                 screenshotIcon: <Calendar size={28} className="text-slate-500" />,
+                url: 'localhost:5173/events → click "Create New Event" button',
+                filename: 'create-event.png',
                 boxes: [
                     {
                         icon: <FileText size={16} />,
@@ -125,6 +129,8 @@ const PHASES: Phase[] = [
                 icon: <Award size={20} />,
                 screenshotLabel: 'Events → Risk Tier Assignment Panel',
                 screenshotIcon: <Award size={28} className="text-slate-500" />,
+                url: 'localhost:5173/settlement → open the Roster Builder and assign tiers',
+                filename: 'risk-tiers.png',
                 boxes: [
                     {
                         icon: <DollarSign size={16} />,
@@ -161,6 +167,8 @@ const PHASES: Phase[] = [
                 icon: <Users size={20} />,
                 screenshotLabel: 'Events → Agent Roster → Approval Queue',
                 screenshotIcon: <Users size={28} className="text-slate-500" />,
+                url: 'localhost:5173/proposals → open a proposal and view the Approval Queue tab',
+                filename: 'agent-approval.png',
                 boxes: [
                     {
                         icon: <CheckSquare size={16} />,
@@ -197,6 +205,8 @@ const PHASES: Phase[] = [
                 icon: <Bell size={20} />,
                 screenshotLabel: 'System → Automated Nudger Cloud Function',
                 screenshotIcon: <Upload size={28} className="text-slate-500" />,
+                url: 'localhost:5173/settings → scroll to Nudger / Notification settings',
+                filename: 'nudger-config.png',
                 boxes: [
                     {
                         icon: <Clock size={16} />,
@@ -234,6 +244,8 @@ const PHASES: Phase[] = [
                 icon: <BarChart3 size={20} />,
                 screenshotLabel: 'Analytics → Predictive Dashboard → City Selector',
                 screenshotIcon: <BarChart3 size={28} className="text-slate-500" />,
+                url: 'localhost:5173/analytics → select a city in the Predictive Dashboard dropdown',
+                filename: 'predictive-dashboard.png',
                 boxes: [
                     {
                         icon: <TrendingUp size={16} />,
@@ -279,6 +291,8 @@ const PHASES: Phase[] = [
                 icon: <QrCode size={20} />,
                 screenshotLabel: 'Check-In → Agent Pass View + Organiser Scanner',
                 screenshotIcon: <QrCode size={28} className="text-slate-500" />,
+                url: 'localhost:5173/check-in → show both the "My Pass" tab (agent) and "Scanner" tab (organiser)',
+                filename: 'qr-check-in.png',
                 boxes: [
                     {
                         icon: <CheckSquare size={16} />,
@@ -316,6 +330,8 @@ const PHASES: Phase[] = [
                 icon: <Target size={20} />,
                 screenshotLabel: 'System → Lead Distribution Cloud Function (HTTP Webhook)',
                 screenshotIcon: <Users size={28} className="text-slate-500" />,
+                url: 'localhost:5173/analytics → Lead Funnel Chart section',
+                filename: 'lead-distribution.png',
                 boxes: [
                     {
                         icon: <Zap size={16} />,
@@ -353,6 +369,8 @@ const PHASES: Phase[] = [
                 icon: <TrendingUp size={20} />,
                 screenshotLabel: 'Analytics → P&L Scenario Card + Lead Funnel Chart',
                 screenshotIcon: <BarChart3 size={28} className="text-slate-500" />,
+                url: 'localhost:5173/analytics → P&L Scenario Card at the top of the page',
+                filename: 'pl-monitoring.png',
                 boxes: [
                     {
                         icon: <BarChart3 size={16} />,
@@ -398,6 +416,8 @@ const PHASES: Phase[] = [
                 icon: <FileText size={20} />,
                 screenshotLabel: 'CRM Leads Collection → Firestore Console or Future Leads UI',
                 screenshotIcon: <FileText size={28} className="text-slate-500" />,
+                url: 'localhost:5173/vip-concierge → leads queue and status columns',
+                filename: 'lead-followup.png',
                 boxes: [
                     {
                         icon: <Users size={16} />,
@@ -434,6 +454,8 @@ const PHASES: Phase[] = [
                 icon: <Award size={20} />,
                 screenshotLabel: 'Settlement → Commission Engine → Generate Report',
                 screenshotIcon: <Award size={28} className="text-slate-500" />,
+                url: 'localhost:5173/settlement → add agents to roster, click "Generate Final Settlement Report"',
+                filename: 'settlement-report.png',
                 boxes: [
                     {
                         icon: <DollarSign size={16} />,
@@ -471,6 +493,8 @@ const PHASES: Phase[] = [
                 icon: <BarChart3 size={20} />,
                 screenshotLabel: 'Analytics → Predictive Dashboard (Post-Event City Update)',
                 screenshotIcon: <Sparkles size={28} className="text-slate-500" />,
+                url: 'localhost:5173/analytics → select city in Predictive dropdown — confirm updated confidence level',
+                filename: 'predictive-update.png',
                 boxes: [
                     {
                         icon: <TrendingUp size={16} />,
@@ -505,18 +529,100 @@ const PHASES: Phase[] = [
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
-function ScreenshotPlaceholder({ label, icon }: { label: string; icon: React.ReactNode }) {
+function ScreenshotPlaceholder({
+    label, filename, url,
+}: {
+    label: string;
+    filename: string;
+    url: string;
+}) {
+    const [copied, setCopied] = React.useState(false);
+
+    // Split "localhost:5173/path → instruction" into baseHref + thenInstruction
+    const { baseHref, thenInstruction } = (() => {
+        const arrowMatch = url.match(/^([^→>]+?)→(.+)$/);
+        if (arrowMatch) {
+            const raw = arrowMatch[1].trim();
+            return {
+                baseHref: raw.startsWith('http') ? raw : `http://${raw}`,
+                thenInstruction: arrowMatch[2].trim(),
+            };
+        }
+        return { baseHref: `http://${url.trim()}`, thenInstruction: null };
+    })();
+
+    function copyFilename(e: React.MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        navigator.clipboard.writeText(filename).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+        });
+    }
+
     return (
-        <div className="w-full aspect-video bg-psi-subtle border-2 border-dashed border-psi rounded-2xl flex flex-col items-center justify-center gap-3 text-psi-muted select-none my-6">
-            <div className="w-14 h-14 bg-psi-subtle border border-psi rounded-2xl flex items-center justify-center">
-                {icon}
+        <a
+            href={baseHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block w-full aspect-video bg-slate-900 border-2 border-dashed border-slate-700 hover:border-blue-500/60 hover:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-4 my-6 transition-all duration-200 hover:ring-2 hover:ring-blue-500/20 cursor-pointer px-6"
+        >
+            {/* Decorative chrome */}
+            <div className="w-full max-w-xs flex flex-col gap-1.5 opacity-20 group-hover:opacity-35 transition-opacity pointer-events-none select-none">
+                <div className="flex gap-1 mb-1">
+                    <div className="w-2 h-2 rounded-full bg-red-400" />
+                    <div className="w-2 h-2 rounded-full bg-amber-400" />
+                    <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                </div>
+                <div className="h-2.5 bg-slate-600 rounded w-3/4" />
+                <div className="h-2.5 bg-slate-700 rounded w-1/2" />
+                <div className="h-14 bg-slate-700/60 rounded-xl mt-1" />
             </div>
-            <div className="text-center">
-                <p className="text-sm font-semibold text-psi-secondary">UI Screenshot Placeholder</p>
-                <p className="text-xs text-psi-muted mt-0.5">{label}</p>
+
+            {/* CTA */}
+            <div className="text-center space-y-2.5 w-full max-w-sm">
+                {/* Open button */}
+                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
+                    <span>📸 Click to open this screen</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                </div>
+
+                {/* Then instruction chip */}
+                {thenInstruction && (
+                    <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2 text-left">
+                        <span className="text-amber-400 text-[10px] font-black uppercase tracking-widest mt-0.5 flex-shrink-0">Then:</span>
+                        <span className="text-amber-200 text-xs font-semibold leading-snug">{thenInstruction}</span>
+                    </div>
+                )}
+
+                {/* Click-to-copy filename */}
+                <div className="flex items-center justify-center gap-1.5 text-xs font-mono">
+                    <span className="text-slate-500">Save as</span>
+                    <button
+                        type="button"
+                        onClick={copyFilename}
+                        title="Click to copy filename"
+                        className="relative inline-flex items-center gap-1 bg-slate-700/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer"
+                    >
+                        {filename}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        {copied && (
+                            <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
+                                ✓ Copied!
+                            </span>
+                        )}
+                    </button>
+                    <span className="text-slate-500">→</span>
+                    <span className="text-blue-400">public/manual/</span>
+                </div>
             </div>
-            <Monitor size={14} className="text-psi-muted" />
-        </div>
+        </a>
     );
 }
 
@@ -552,7 +658,7 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
     return (
         <section id={step.id} className="scroll-mt-32 md:scroll-mt-24 pb-12 md:pb-16">
             {/* Step header */}
-            <div className="flex items-start gap-4 mb-6">
+            <div className="flex items-start gap-4 mb-4">
                 <div className={cn(
                     'w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 border',
                     `bg-${phase.color === 'amber' ? 'amber' : phase.color === 'emerald' ? 'emerald' : 'blue'}-500/10`,
@@ -572,11 +678,32 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
                         {step.title}
                     </h2>
                     <p className="text-slate-400 text-sm md:text-base mt-1.5 leading-relaxed">{step.subtitle}</p>
+                    {/* URL breadcrumb — shows where to go for screenshot */}
+                    {(() => {
+                        const raw = step.url.split(/→/)[0].trim();
+                        const href = raw.startsWith('http') ? raw : `http://${raw}`;
+                        return (
+                            <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                                className="mt-2 inline-flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 hover:border-blue-500/40 rounded-lg px-2.5 py-1 group transition-all duration-150"
+                            >
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">📸 screen</span>
+                                <span className="text-[11px] font-mono font-semibold text-blue-400 group-hover:text-blue-300 truncate max-w-[280px]">{step.url}</span>
+                            </a>
+                        );
+                    })()}
                 </div>
             </div>
 
             {/* Screenshot placeholder */}
-            <ScreenshotPlaceholder label={step.screenshotLabel} icon={step.screenshotIcon} />
+            <ScreenshotPlaceholder
+                label={step.screenshotLabel}
+                url={step.url}
+                filename={step.filename}
+            />
 
             {/* Bento grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
