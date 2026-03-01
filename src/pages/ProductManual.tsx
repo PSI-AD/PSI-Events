@@ -1,21 +1,15 @@
 /**
  * ProductManual.tsx
  * ─────────────────────────────────────────────────────────────────────────────
- * Interactive System Manual — a Stripe/Linear-style sticky-scroll doc page.
- *
- * Layout:
- *   ┌─────────────────────────────────────────────────────────┐
- *   │  3-Tab switcher  [Before] [During] [After]              │
- *   ├──────────────┬──────────────────────────────────────────┤
- *   │ Sticky left  │  Scrollable right content                │
- *   │ timeline nav │  Step sections (header + screenshot      │
- *   │              │  placeholder + 2-col bento grid)         │
- *   └──────────────┴──────────────────────────────────────────┘
+ * Manual page shell — switches between:
+ *   1. Visual System Manual  (new, default) — SystemManual.tsx
+ *   2. Lifecycle Guide       (original)     — inline component below
  *
  * Mobile: left nav collapses to a horizontal scroll pill strip above content.
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import SystemManual from '../features/help/SystemManual';
 import { motion, AnimatePresence } from 'motion/react';
 import {
     BookOpen, Calendar, Zap, CheckSquare,
@@ -604,7 +598,8 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
 
 // ── Main Component ─────────────────────────────────────────────────────────────
 
-export default function ProductManual() {
+/** Internal: the original Lifecycle Guide (Before / During / After) */
+function LifecycleGuide() {
     const [activePhase, setActivePhase] = useState<'before' | 'during' | 'after'>('before');
     const [activeStep, setActiveStep] = useState<string>('');
     const contentRef = useRef<HTMLDivElement>(null);
@@ -861,12 +856,13 @@ export default function ProductManual() {
 
                             {/* Steps */}
                             {phase.steps.map((step, i) => (
-                                <StepSection
-                                    key={step.id}
-                                    step={step}
-                                    phase={phase}
-                                    isLast={i === phase.steps.length - 1}
-                                />
+                                <React.Fragment key={step.id}>
+                                    <StepSection
+                                        step={step}
+                                        phase={phase}
+                                        isLast={i === phase.steps.length - 1}
+                                    />
+                                </React.Fragment>
                             ))}
 
                             {/* Phase complete footer */}
@@ -901,6 +897,65 @@ export default function ProductManual() {
                     </motion.div>
                 </AnimatePresence>
             </div>
+        </div>
+    );
+}
+
+// ── Shell: ProductManual — tab switcher between Visual Manual & Lifecycle Guide ─
+
+type ManualTab = 'visual' | 'lifecycle';
+
+export default function ProductManual() {
+    const [tab, setTab] = useState<ManualTab>('visual');
+
+    return (
+        <div className="min-h-screen bg-psi-page font-sans flex flex-col">
+            {/* ── Top tab switcher ── */}
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/60 px-4 py-2 flex items-center gap-1 flex-shrink-0 z-20">
+                {([
+                    { id: 'visual' as ManualTab, label: '📘 Visual System Manual', active: 'bg-emerald-500 text-white shadow-emerald-500/20', inactive: 'text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400' },
+                    { id: 'lifecycle' as ManualTab, label: '📋 Lifecycle Guide', active: 'bg-blue-500 text-white shadow-blue-500/20', inactive: 'text-slate-500 hover:text-blue-600 dark:hover:text-blue-400' },
+                ] as { id: ManualTab; label: string; active: string; inactive: string }[]).map((t) => (
+                    <button
+                        key={t.id}
+                        id={`manual-tab-${t.id}`}
+                        onClick={() => setTab(t.id)}
+                        className={cn(
+                            'px-4 py-2 rounded-xl text-xs font-bold transition-all select-none min-h-[36px]',
+                            tab === t.id ? cn(t.active, 'shadow-md') : t.inactive
+                        )}
+                    >
+                        {t.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* ── Content ── */}
+            <AnimatePresence mode="wait">
+                {tab === 'visual' ? (
+                    <motion.div
+                        key="visual"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-1"
+                    >
+                        <SystemManual />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="lifecycle"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-1"
+                    >
+                        <LifecycleGuide />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

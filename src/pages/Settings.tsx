@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useTheme, ACCENT_OPTIONS, UI_THEME_OPTIONS } from '../contexts/ThemeContext';
 import type { AccentColor, UITheme } from '../contexts/ThemeContext';
 import ChecklistBuilder from '../features/settings/ChecklistBuilder';
+import { injectSeedData } from '../utils/firebaseSeeder';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -615,6 +616,30 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ElementType; descript
 
 export default function Settings() {
     const [activeSection, setActiveSection] = useState<Section>('profile');
+    const [seeding, setSeeding] = useState(false);
+
+    async function handleSeedData() {
+        if (!window.confirm('⚠️  This will write seed data to Firestore.\n\nOnly run this ONCE on a fresh database.\n\nProceed?')) return;
+        setSeeding(true);
+        try {
+            const result = await injectSeedData();
+            if (result.success) {
+                alert(
+                    `✅ Data Injection Successful!\n\n` +
+                    Object.entries(result.written)
+                        .map(([col, n]) => `  • ${col}: ${n} docs`)
+                        .join('\n') +
+                    `\n\nTotal: ${Object.values(result.written).reduce((s, n) => s + n, 0)} documents\nTime: ${result.durationMs}ms`
+                );
+            } else {
+                alert(`❌ Seeder completed with errors:\n\n${result.errors.join('\n')}`);
+            }
+        } catch (err) {
+            alert(`❌ Seeder crashed:\n\n${err instanceof Error ? err.message : String(err)}`);
+        } finally {
+            setSeeding(false);
+        }
+    }
 
     return (
         <div className="min-h-screen bg-psi-page p-4 md:p-8">
@@ -706,6 +731,31 @@ export default function Settings() {
                     </AnimatePresence>
                 </div>
             </div>
+
+            {/* ── DEV: Seed Trigger — fixed bottom-right, low opacity, hidden in plain sight ── */}
+            <button
+                id="dev-seed-trigger"
+                onClick={handleSeedData}
+                disabled={seeding}
+                title="DEV: Inject Firestore seed data"
+                className="fixed bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                           bg-slate-800 text-slate-400 border border-slate-700
+                           text-[10px] font-mono font-bold tracking-wider
+                           opacity-30 hover:opacity-90 transition-opacity duration-300
+                           disabled:cursor-not-allowed select-none shadow-lg"
+            >
+                {seeding ? (
+                    <>
+                        <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        Seeding…
+                    </>
+                ) : (
+                    <>⚡ DEV: Run Seeder</>
+                )}
+            </button>
         </div>
     );
 }

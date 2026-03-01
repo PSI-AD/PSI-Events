@@ -6,7 +6,7 @@ import {
     QrCode, Menu, X, TrendingUp, BookOpen,
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
-    ChevronRight, Search,
+    ChevronRight, ChevronLeft, Search,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -96,9 +96,14 @@ const BOTTOM_NAV_ITEMS = [
 // ── Sidebar link ──────────────────────────────────────────────────────────────
 
 function SidebarLink({
-    to, icon: Icon, label, onClick,
+    to, icon: Icon, label, onClick, collapsed,
 }: {
-    key?: React.Key; to: string; icon: React.ElementType; label: string; onClick?: () => void;
+    key?: React.Key;
+    to: string;
+    icon: React.ElementType;
+    label: string;
+    onClick?: () => void;
+    collapsed?: boolean;
 }) {
     const location = useLocation();
     const isActive = location.pathname === to;
@@ -107,8 +112,10 @@ function SidebarLink({
         <Link
             to={to}
             onClick={onClick}
+            title={collapsed ? label : undefined}
             className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group min-h-[40px] relative',
+                collapsed && 'justify-center px-0',
                 isActive
                     ? 'bg-slate-100 text-emerald-600 dark:bg-slate-800 dark:text-white shadow-none dark:shadow-lg dark:shadow-black/20'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200'
@@ -120,11 +127,25 @@ function SidebarLink({
             )}>
                 <Icon size={17} />
             </span>
-            <span className="text-sm font-medium leading-tight">{label}</span>
-            {isActive && (
+
+            {/* Label + active dot — hidden when collapsed */}
+            {!collapsed && (
+                <>
+                    <span className="text-sm font-medium leading-tight truncate">{label}</span>
+                    {isActive && (
+                        <motion.div
+                            layoutId="sidebar-active-dot"
+                            className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 flex-shrink-0"
+                        />
+                    )}
+                </>
+            )}
+
+            {/* Collapsed active indicator — small dot below icon */}
+            {collapsed && isActive && (
                 <motion.div
                     layoutId="sidebar-active-dot"
-                    className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-500 dark:bg-emerald-400"
                 />
             )}
         </Link>
@@ -168,12 +189,11 @@ function usePageTitle(): string {
     return EXTRA_TITLE_MAP[location.pathname] ?? 'PSI Portal';
 }
 
-// (Theme toggle removed — theme is controlled exclusively from Settings → Appearance)
-
 // ── Main Layout ───────────────────────────────────────────────────────────────
 
 export default function DashboardLayout() {
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const pageTitle = usePageTitle();
 
     return (
@@ -181,51 +201,113 @@ export default function DashboardLayout() {
             <div className="flex h-screen bg-psi-page font-sans overflow-hidden">
 
                 {/* ── Desktop Sidebar ──────────────────────────────────── */}
-                <aside className="hidden md:flex w-60 bg-white dark:bg-slate-900 text-slate-900 dark:text-white flex-col flex-shrink-0 border-r border-slate-200 dark:border-slate-800/60">
-
-                    {/* Logo */}
-                    <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 dark:border-slate-800/60">
+                <aside
+                    className={cn(
+                        'hidden md:flex flex-col flex-shrink-0',
+                        'bg-white dark:bg-slate-900 text-slate-900 dark:text-white',
+                        'border-r border-slate-200 dark:border-slate-800/60',
+                        'transition-all duration-300 ease-in-out',
+                        isCollapsed ? 'w-[72px]' : 'w-60',
+                    )}
+                >
+                    {/* ── Logo / Branding ── */}
+                    <div className={cn(
+                        'flex items-center gap-3 border-b border-slate-200 dark:border-slate-800/60',
+                        'transition-all duration-300 ease-in-out overflow-hidden',
+                        isCollapsed ? 'px-0 py-4 justify-center' : 'px-5 py-4',
+                    )}>
+                        {/* Icon — always visible */}
                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
                             <TrendingUp size={16} className="text-white" />
                         </div>
-                        <div>
-                            <p className="text-slate-900 dark:text-white font-extrabold text-sm tracking-tight leading-none">ROI Portal</p>
-                            <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest mt-0.5">Real Estate Events</p>
-                        </div>
+                        {/* Text — hidden when collapsed */}
+                        {!isCollapsed && (
+                            <div className="min-w-0 overflow-hidden">
+                                <p className="text-slate-900 dark:text-white font-extrabold text-sm tracking-tight leading-none whitespace-nowrap">ROI Portal</p>
+                                <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest mt-0.5 whitespace-nowrap">Real Estate Events</p>
+                            </div>
+                        )}
                     </div>
 
-                    {/* Nav groups */}
+                    {/* ── Nav groups ── */}
                     <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-4">
                         {NAV_GROUPS.map(group => (
                             <div key={group.label}>
-                                <div className="px-3 mb-1">
-                                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">{group.label}</p>
-                                </div>
+                                {/* Group label — hidden when collapsed */}
+                                {!isCollapsed && (
+                                    <div className="px-3 mb-1">
+                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">{group.label}</p>
+                                    </div>
+                                )}
+                                {/* Collapsed: thin divider line instead of label */}
+                                {isCollapsed && (
+                                    <div className="mx-3 mb-1 h-px bg-slate-100 dark:bg-slate-800/60" />
+                                )}
                                 <div className="space-y-0.5">
                                     {group.items.map(({ to, icon, label }) => (
-                                        <SidebarLink key={to} to={to} icon={icon} label={label} />
+                                        <SidebarLink
+                                            key={to}
+                                            to={to}
+                                            icon={icon}
+                                            label={label}
+                                            collapsed={isCollapsed}
+                                        />
                                     ))}
                                 </div>
                             </div>
                         ))}
                     </nav>
 
-                    {/* Footer */}
+                    {/* ── Footer links ── */}
                     <div className="border-t border-slate-200 dark:border-slate-800/60 p-2 space-y-0.5">
+                        {/* ROI Vision special link */}
                         <a
                             href="/executive-presentation"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-150 group border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]"
+                            title={isCollapsed ? 'ROI Vision' : undefined}
+                            className={cn(
+                                'flex items-center gap-3 px-3 py-2.5 rounded-xl',
+                                'text-emerald-600 dark:text-emerald-400',
+                                'hover:bg-emerald-50 dark:hover:bg-emerald-500/10',
+                                'transition-all duration-150 group',
+                                'border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]',
+                                isCollapsed && 'justify-center px-0',
+                            )}
                         >
                             <span className="group-hover:scale-105 transition-transform flex-shrink-0">
                                 <Sparkles size={17} />
                             </span>
-                            <span className="font-bold text-sm">ROI Vision</span>
+                            {!isCollapsed && <span className="font-bold text-sm">ROI Vision</span>}
                         </a>
-                        <SidebarLink to="/manual" icon={BookOpen} label="System Manual" />
-                        <SidebarLink to="/settings" icon={Settings} label="Settings" />
+                        <SidebarLink to="/manual" icon={BookOpen} label="System Manual" collapsed={isCollapsed} />
+                        <SidebarLink to="/settings" icon={Settings} label="Settings" collapsed={isCollapsed} />
                     </div>
+
+                    {/* ── Collapse toggle button ── */}
+                    <button
+                        id="sidebar-collapse-toggle"
+                        onClick={() => setIsCollapsed(c => !c)}
+                        title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        className={cn(
+                            'w-full flex items-center gap-2 px-4 py-3',
+                            'border-t border-slate-200 dark:border-slate-800/60',
+                            'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200',
+                            'hover:bg-slate-50 dark:hover:bg-slate-800',
+                            'transition-all duration-150 select-none',
+                            isCollapsed ? 'justify-center' : 'justify-between',
+                        )}
+                    >
+                        {!isCollapsed && (
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                Collapse
+                            </span>
+                        )}
+                        {isCollapsed
+                            ? <ChevronRight size={16} />
+                            : <ChevronLeft size={16} />
+                        }
+                    </button>
                 </aside>
 
                 {/* ── Main content column ─────────────────────────────── */}
