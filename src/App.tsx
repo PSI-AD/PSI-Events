@@ -49,6 +49,7 @@ const AIPitchSimulator = lazy(() => import('./features/training/AIPitchSimulator
 const IntelDropPage = lazy(() => import('./features/events/IntelDrop'));
 const ExecutiveDebrief = lazy(() => import('./features/analytics/ExecutiveDebrief'));
 const VIPConcierge = lazy(() => import('./features/clients/VIPConcierge'));
+const FollowUpCopilot = lazy(() => import('./features/leads/FollowUpCopilot'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -373,6 +374,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <VIPConcierge eventId="event_demo" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/follow-up-copilot"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <FollowUpCopilot eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
               </Suspense>
             }
           />
