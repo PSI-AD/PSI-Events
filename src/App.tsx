@@ -34,9 +34,7 @@ const MediaCompliancePage = lazy(() => import('./pages/MediaCompliancePage'));
 const BountySystemPage = lazy(() => import('./pages/BountySystemPage'));
 const VIPIntercept = lazy(() => import('./features/leads/VIPIntercept'));
 const BurnRateAuditor = lazy(() => import('./features/expenses/BurnRateAuditor'));
-const DigitalBrochurePage = lazy(() =>
-  import('./features/events/DigitalBrochure').then(m => ({ default: m.DigitalBrochurePage }))
-);
+const DigitalBrochurePage = lazy(() => import('./features/events/DigitalBrochure'));
 const ClientPortalPage = lazy(() =>
   import('./features/events/DigitalBrochure').then(m => ({ default: m.ClientPortalPage }))
 );
