@@ -22,6 +22,7 @@ import {
     DollarSign, BarChart3, BookOpen,
     ChevronRight, ArrowRight, Info,
     Calculator, TrendingUp, Award,
+    FileCheck2, UserCheck,
 } from 'lucide-react';
 
 // ── Tiny utility ──────────────────────────────────────────────────────────────
@@ -715,6 +716,227 @@ function JourneySection() {
     );
 }
 
+// ─── Section 2: Check-In Flow Diagram ────────────────────────────────────────
+
+const FLOW_STEPS = [
+    {
+        id: 1,
+        icon: QrCode,
+        label: 'Digital Pass',
+        sublabel: 'Agent presents Apple / Google Wallet Pass',
+        accent: 'blue' as const,
+    },
+    {
+        id: 2,
+        icon: ScanLine,
+        label: 'Security Scan',
+        sublabel: 'Organizer scans QR via mobile portal',
+        accent: 'blue' as const,
+    },
+    {
+        id: 3,
+        icon: FileCheck2,
+        label: 'Logistics Check',
+        sublabel: 'System verifies Visa & Flight uploads',
+        accent: 'blue' as const,
+    },
+    {
+        id: 4,
+        icon: UserCheck,
+        label: 'Floor Access',
+        sublabel: 'Agent status → Physically Present',
+        accent: 'emerald' as const,
+    },
+];
+
+const ACCENT_STYLES = {
+    blue: {
+        ring: 'ring-2 ring-blue-300/40 dark:ring-blue-500/30',
+        iconBg: 'bg-blue-50 dark:bg-blue-500/10',
+        iconColor: 'text-blue-600 dark:text-blue-400',
+        badge: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300',
+        labelColor: 'text-slate-800 dark:text-white',
+        sublabelColor: 'text-slate-500 dark:text-slate-400',
+        border: 'border-blue-100 dark:border-blue-500/20',
+        glow: '',
+    },
+    emerald: {
+        ring: 'ring-2 ring-emerald-300/60 dark:ring-emerald-500/40',
+        iconBg: 'bg-emerald-50 dark:bg-emerald-500/15',
+        iconColor: 'text-emerald-600 dark:text-emerald-400',
+        badge: 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300',
+        labelColor: 'text-emerald-700 dark:text-emerald-300',
+        sublabelColor: 'text-emerald-600/80 dark:text-emerald-400/80',
+        border: 'border-emerald-200 dark:border-emerald-500/30',
+        glow: 'shadow-emerald-500/20 shadow-xl',
+    },
+};
+
+function CheckInFlowDiagram() {
+    return (
+        <div className="my-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 shadow-lg shadow-slate-900/5 overflow-hidden">
+            {/* CSS for dashed line animation */}
+            <style>{`
+                @keyframes dash-flow {
+                    from { stroke-dashoffset: 24; }
+                    to   { stroke-dashoffset: 0; }
+                }
+                .dash-animated {
+                    animation: dash-flow 1.2s linear infinite;
+                    stroke-dasharray: 6 6;
+                }
+            `}</style>
+
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 mb-6 text-center">
+                Check-In Process · Event Day Flow
+            </p>
+
+            {/* ── Mobile: vertical stack ── Desktop: horizontal row ── */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-0">
+                {FLOW_STEPS.map((step, idx) => {
+                    const Icon = step.icon;
+                    const s = ACCENT_STYLES[step.accent];
+                    const isLast = idx === FLOW_STEPS.length - 1;
+
+                    return (
+                        <React.Fragment key={step.id}>
+                            {/* ── Step card ── */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: idx * 0.12 }}
+                                className={cn(
+                                    'flex flex-col items-center gap-3 p-5 rounded-2xl border',
+                                    'w-full md:w-44 flex-shrink-0 transition-shadow duration-300',
+                                    s.ring, s.border, s.glow,
+                                    step.accent === 'emerald'
+                                        ? 'bg-gradient-to-b from-emerald-50/80 to-white dark:from-emerald-950/40 dark:to-slate-900'
+                                        : 'bg-white dark:bg-slate-800/60',
+                                )}
+                            >
+                                {/* Step badge */}
+                                <span className={cn(
+                                    'text-[9px] font-black uppercase tracking-[0.18em] px-2 py-0.5 rounded-full',
+                                    s.badge,
+                                )}>
+                                    Step {step.id}
+                                </span>
+
+                                {/* Icon circle */}
+                                <div className={cn(
+                                    'w-14 h-14 rounded-2xl flex items-center justify-center',
+                                    s.iconBg,
+                                    step.accent === 'emerald' && 'ring-2 ring-emerald-400/30',
+                                )}>
+                                    {step.accent === 'emerald' ? (
+                                        <motion.div
+                                            animate={{ scale: [1, 1.08, 1] }}
+                                            transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
+                                        >
+                                            <Icon size={26} className={s.iconColor} />
+                                        </motion.div>
+                                    ) : (
+                                        <Icon size={26} className={s.iconColor} />
+                                    )}
+                                </div>
+
+                                {/* Text */}
+                                <div className="text-center">
+                                    <p className={cn('text-sm font-extrabold leading-tight', s.labelColor)}>
+                                        {step.label}
+                                    </p>
+                                    <p className={cn('text-[11px] mt-1 leading-snug', s.sublabelColor)}>
+                                        {step.sublabel}
+                                    </p>
+                                </div>
+
+                                {/* Emerald success pulse */}
+                                {step.accent === 'emerald' && (
+                                    <div className="flex items-center gap-1.5">
+                                        <motion.div
+                                            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.4, 1] }}
+                                            transition={{ repeat: Infinity, duration: 1.8 }}
+                                            className="w-2 h-2 rounded-full bg-emerald-500"
+                                        />
+                                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                                            Live
+                                        </span>
+                                    </div>
+                                )}
+                            </motion.div>
+
+                            {/* ── Animated connector — hidden after last step ── */}
+                            {!isLast && (
+                                <div className="flex md:flex-row flex-col items-center justify-center flex-shrink-0">
+                                    {/* Desktop: horizontal SVG arrow */}
+                                    <div className="hidden md:block w-10">
+                                        <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <line
+                                                x1="2" y1="12" x2="34" y2="12"
+                                                stroke={idx === FLOW_STEPS.length - 2 ? '#10b981' : '#94a3b8'}
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                className="dash-animated"
+                                            />
+                                            <polyline
+                                                points="28,6 36,12 28,18"
+                                                stroke={idx === FLOW_STEPS.length - 2 ? '#10b981' : '#94a3b8'}
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                fill="none"
+                                            />
+                                        </svg>
+                                    </div>
+                                    {/* Mobile: vertical SVG arrow */}
+                                    <div className="md:hidden h-8 flex items-center">
+                                        <svg width="24" height="32" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <line
+                                                x1="12" y1="2" x2="12" y2="26"
+                                                stroke={idx === FLOW_STEPS.length - 2 ? '#10b981' : '#94a3b8'}
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                className="dash-animated"
+                                            />
+                                            <polyline
+                                                points="6,22 12,30 18,22"
+                                                stroke={idx === FLOW_STEPS.length - 2 ? '#10b981' : '#94a3b8'}
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                fill="none"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            )}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+
+            {/* Legend */}
+            <div className="flex items-center justify-center gap-6 mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-blue-400/60" />
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Security Gate</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Access Granted</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <svg width="20" height="6" viewBox="0 0 20 6" fill="none">
+                        <line x1="0" y1="3" x2="20" y2="3" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" />
+                    </svg>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">Data flow</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ─── Section 2: How to Check-In ──────────────────────────────────────────────
 
 const CHECKIN_STEPS = [
@@ -768,6 +990,9 @@ function CheckInSection() {
                 receive <strong>zero leads</strong> from the automated distribution engine — regardless of
                 approval status. There are no overrides.
             </Callout>
+
+            {/* ── Animated flow diagram ── */}
+            <CheckInFlowDiagram />
 
             <div className="mt-8 space-y-12">
                 {CHECKIN_STEPS.map((s, idx) => {
