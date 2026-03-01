@@ -50,6 +50,7 @@ const IntelDropPage = lazy(() => import('./features/events/IntelDrop'));
 const ExecutiveDebrief = lazy(() => import('./features/analytics/ExecutiveDebrief'));
 const VIPConcierge = lazy(() => import('./features/clients/VIPConcierge'));
 const FollowUpCopilot = lazy(() => import('./features/leads/FollowUpCopilot'));
+const CashAdvancePage = lazy(() => import('./features/settlement/CashAdvance'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -382,6 +383,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <FollowUpCopilot eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/cash-advance"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <CashAdvancePage eventId="event_demo" eventName="London Luxury Expo 2026" />
               </Suspense>
             }
           />
