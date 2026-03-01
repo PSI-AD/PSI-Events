@@ -47,6 +47,7 @@ const BusinessCardScanner = lazy(() => import('./features/leads/BusinessCardScan
 const LocalizedPitch = lazy(() => import('./features/events/LocalizedPitch'));
 const AIPitchSimulator = lazy(() => import('./features/training/AIPitchSimulator'));
 const IntelDropPage = lazy(() => import('./features/events/IntelDrop'));
+const ExecutiveDebrief = lazy(() => import('./features/analytics/ExecutiveDebrief'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -355,6 +356,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <IntelDropPage eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" view="hq" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/executive-debrief"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <ExecutiveDebrief eventId="event_demo" />
               </Suspense>
             }
           />
