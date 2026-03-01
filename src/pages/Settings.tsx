@@ -19,15 +19,17 @@ import {
     Lock, Smartphone,
     CheckCircle2,
     BadgeCheck, Globe, Palette,
-    LayoutDashboard, Sparkles,
+    LayoutDashboard, Sparkles, Layers, Building2, Minus,
+    ListChecks,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTheme, ACCENT_OPTIONS, UI_THEME_OPTIONS } from '../contexts/ThemeContext';
 import type { AccentColor, UITheme } from '../contexts/ThemeContext';
+import ChecklistBuilder from '../features/settings/ChecklistBuilder';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type Section = 'profile' | 'preferences' | 'security';
+type Section = 'profile' | 'preferences' | 'security' | 'checklist';
 
 // ── Profile data (fallback / hardcoded) ───────────────────────────────────────
 
@@ -204,6 +206,14 @@ const THEME_OPTIONS: { id: ThemeChoice; label: string; icon: React.ElementType; 
 
 // ── UI Theme Picker ──────────────────────────────────────────────────────────
 
+const THEME_ICONS: Record<string, React.ElementType> = {
+    default: LayoutDashboard,
+    modern: Sparkles,
+    glass: Layers,
+    corporate: Building2,
+    minimal: Minus,
+};
+
 function UIThemePicker() {
     const { uiTheme, setUITheme } = useTheme();
 
@@ -212,9 +222,11 @@ function UIThemePicker() {
             title="UI Style"
             description="Choose the overall look and feel of the portal. Changes take effect immediately."
         >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {UI_THEME_OPTIONS.map(opt => {
                     const isSelected = uiTheme === opt.id;
+                    const ThemeIcon = THEME_ICONS[opt.id] ?? Sparkles;
+                    const darkSidebar = opt.id === 'default' || opt.id === 'glass' || opt.id === 'corporate';
                     return (
                         <button
                             key={opt.id}
@@ -241,25 +253,30 @@ function UIThemePicker() {
 
                             {/* Mini preview mockup */}
                             <div
-                                className="w-full aspect-[16/7] rounded-xl overflow-hidden border border-psi-border shadow-sm relative flex"
-                                style={{ backgroundColor: opt.preview.bg }}
+                                className="w-full aspect-[16/7] rounded-xl overflow-hidden shadow-sm relative flex"
+                                style={{ backgroundColor: opt.preview.bg, border: `1px solid ${opt.preview.border}` }}
                             >
                                 {/* Sidebar strip */}
                                 <div
                                     className="w-10 h-full flex flex-col items-center pt-2 gap-1.5"
-                                    style={{ backgroundColor: opt.id === 'default' ? '#0f172a' : opt.preview.bg, borderRight: `1px solid ${opt.preview.border}` }}
+                                    style={
+                                        darkSidebar && opt.id !== 'glass'
+                                            ? { backgroundColor: opt.preview.text === '#1a2332' ? '#1a2332' : '#0f172a', borderRight: `1px solid ${opt.preview.border}` }
+                                            : { backgroundColor: opt.preview.bg, borderRight: `1px solid ${opt.preview.border}` }
+                                    }
                                 >
                                     <div className="w-5 h-1.5 rounded-full" style={{ backgroundColor: opt.preview.accent, opacity: 0.9 }} />
                                     {[1, 2, 3].map(i => (
-                                        <div key={i} className="w-6 h-1 rounded-full" style={{ backgroundColor: opt.id === 'default' ? 'rgba(255,255,255,.2)' : opt.preview.border }} />
+                                        <div key={i} className="w-6 h-1 rounded-full"
+                                            style={{ backgroundColor: (darkSidebar && opt.id !== 'glass') ? 'rgba(255,255,255,.2)' : opt.preview.border }} />
                                     ))}
                                 </div>
                                 {/* Content area */}
                                 <div className="flex-1 p-2 flex flex-col gap-1.5">
                                     {/* Header bar */}
                                     <div className="w-full h-3 rounded flex items-center justify-between px-1.5"
-                                        style={{ backgroundColor: opt.id === 'default' ? '#0f172a' : opt.preview.surface, border: `1px solid ${opt.preview.border}` }}>
-                                        <div className="w-6 h-1 rounded-full" style={{ backgroundColor: opt.id === 'default' ? 'rgba(255,255,255,.4)' : opt.preview.text, opacity: 0.5 }} />
+                                        style={{ backgroundColor: opt.preview.surface, border: `1px solid ${opt.preview.border}` }}>
+                                        <div className="w-6 h-1 rounded-full" style={{ backgroundColor: opt.preview.text, opacity: 0.35 }} />
                                         <div className="w-3 h-1.5 rounded-full" style={{ backgroundColor: opt.preview.accent }} />
                                     </div>
                                     {/* Cards row */}
@@ -267,7 +284,7 @@ function UIThemePicker() {
                                         {[1, 2, 3].map(i => (
                                             <div key={i} className="flex-1 rounded"
                                                 style={{ backgroundColor: opt.preview.surface, border: `1px solid ${opt.preview.border}` }}>
-                                                <div className="w-full h-1.5 rounded-t" style={{ backgroundColor: opt.preview.accent, opacity: i === 1 ? 1 : 0.3 }} />
+                                                <div className="w-full h-1.5 rounded-t" style={{ backgroundColor: opt.preview.accent, opacity: i === 1 ? 0.9 : 0.25 }} />
                                             </div>
                                         ))}
                                     </div>
@@ -277,7 +294,10 @@ function UIThemePicker() {
                             {/* Label */}
                             <div>
                                 <p className={`text-sm font-bold ${isSelected ? 'text-psi-action' : 'text-psi-primary'}`}>
-                                    {opt.id === 'default' ? <span className="flex items-center gap-1.5"><LayoutDashboard size={13} />{opt.label}</span> : <span className="flex items-center gap-1.5"><Sparkles size={13} />{opt.label}</span>}
+                                    <span className="flex items-center gap-1.5">
+                                        <ThemeIcon size={13} />
+                                        {opt.label}
+                                    </span>
                                 </p>
                                 <p className="text-[11px] text-psi-muted mt-0.5 leading-snug">{opt.description}</p>
                             </div>
@@ -588,6 +608,7 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ElementType; descript
     { id: 'profile', label: 'Profile', icon: User, description: 'Account & identity' },
     { id: 'preferences', label: 'Preferences', icon: Sliders, description: 'Theme & notifications' },
     { id: 'security', label: 'Security', icon: ShieldCheck, description: 'Password & 2FA' },
+    { id: 'checklist', label: 'Checklist Builder', icon: ListChecks, description: 'Onboarding templates' },
 ];
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -680,6 +701,7 @@ export default function Settings() {
                             {activeSection === 'profile' && <ProfileSection />}
                             {activeSection === 'preferences' && <PreferencesSection />}
                             {activeSection === 'security' && <SecuritySection />}
+                            {activeSection === 'checklist' && <ChecklistBuilder />}
                         </motion.div>
                     </AnimatePresence>
                 </div>

@@ -16,7 +16,6 @@ import {
 } from 'recharts';
 import {
   Download,
-  Calendar,
   ChevronDown,
   PieChart as PieChartIcon,
   Target,
@@ -25,6 +24,7 @@ import {
   Users
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { PageShell, PageHeader, SectionCard, ProgressBar, Btn, StatusBadge } from './shared/ui';
 
 const funnelData = [
   { name: 'Marketing Leads', target: 300, actual: 280 },
@@ -67,38 +67,36 @@ export default function Analytics() {
   }));
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-8 md:space-y-12">
-      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-psi-primary">Advanced Analytics</h2>
-          <p className="text-psi-secondary mt-1 text-sm">Granular ROI tracking and P&amp;L scenarios.</p>
-        </div>
-        <div className="flex gap-3 flex-shrink-0">
-          <div className="flex items-center gap-2 px-3 py-2 badge-success rounded-xl text-xs font-bold uppercase tracking-widest select-none">
-            <Users size={14} />
-            <span>{eventData?.attendee_count || 0} Agents</span>
-          </div>
-          <button className="btn-accent flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
-            <Download size={16} />
-            <span className="hidden sm:inline">Export Report</span>
-            <span className="sm:hidden">Export</span>
-          </button>
-        </div>
-      </header>
+    <PageShell className="space-y-8">
+      <PageHeader
+        title="Advanced Analytics"
+        subtitle="Granular ROI tracking and P&L scenarios."
+        actions={
+          <>
+            <StatusBadge variant="success">
+              <Users size={12} />
+              <span>{eventData?.attendee_count || 0} Agents</span>
+            </StatusBadge>
+            <Btn icon={<Download size={15} />}>
+              <span className="hidden sm:inline">Export Report</span>
+              <span className="sm:hidden">Export</span>
+            </Btn>
+          </>
+        }
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Lead Funnel Target vs Actual */}
-        <div className="lg:col-span-2 psi-card p-8 shadow-sm">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-psi-info text-blue-600 dark:text-blue-400 rounded-lg">
-                <Target size={20} />
-              </div>
-              <h3 className="text-lg font-bold text-psi-primary">Lead Funnel: Dynamic Per-Agent Targets</h3>
+        <SectionCard
+          title="Lead Funnel: Dynamic Per-Agent Targets"
+          className="lg:col-span-2"
+          headerRight={
+            <div className="text-xs font-bold text-psi-muted uppercase">
+              Target: {Math.round(eventData?.per_agent_target || 0)} leads/agent
             </div>
-            <div className="text-xs font-bold text-psi-muted uppercase">Target: {Math.round(eventData?.per_agent_target || 0)} leads/agent</div>
-          </div>
-          <div className="h-80">
+          }
+        >
+          <div className="h-72 mt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dynamicFunnel} layout="vertical" margin={{ left: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--psi-chart-grid)" />
@@ -114,56 +112,42 @@ export default function Analytics() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </SectionCard>
 
         {/* P&L Scenario Card */}
-        <div className="bg-psi-raised border border-psi p-5 md:p-8 rounded-3xl shadow-xl select-none">
-          <h3 className="text-lg font-bold text-psi-primary mb-5 flex items-center gap-2">
-            <Zap size={20} className="text-amber-400" />
-            P&amp;L: {eventData?.is_sponsored ? 'Sponsored' : 'Branch Funded'}
-          </h3>
-
-          <div className="space-y-4 md:space-y-6">
-            <div className="p-4 bg-psi-subtle rounded-2xl border border-psi min-w-0">
+        <SectionCard title={`P&L: ${eventData?.is_sponsored ? 'Sponsored' : 'Branch Funded'}`}>
+          <div className="space-y-4">
+            <div className="p-3.5 bg-psi-subtle rounded-xl border border-psi">
               <div className="text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Branch Net Profit</div>
-              <div className="text-xl md:text-2xl font-bold text-emerald-500 dark:text-emerald-400 truncate">AED {eventData?.branch_net_profit?.toLocaleString() || '0'}</div>
+              <div className="text-xl font-bold text-emerald-500 dark:text-emerald-400 truncate">AED {eventData?.branch_net_profit?.toLocaleString() || '0'}</div>
             </div>
-
-            <div className="p-4 bg-psi-subtle rounded-2xl border border-psi min-w-0">
+            <div className="p-3.5 bg-psi-subtle rounded-xl border border-psi">
               <div className="text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Gross Profit</div>
-              <div className="text-xl md:text-2xl font-bold text-psi-primary truncate">AED {eventData?.gross_profit?.toLocaleString() || '0'}</div>
+              <div className="text-xl font-bold text-psi-primary truncate">AED {eventData?.gross_profit?.toLocaleString() || '0'}</div>
             </div>
-
-            <div className="pt-3 md:pt-4 border-t border-psi space-y-2 md:space-y-3">
+            <div className="pt-3 border-t border-psi space-y-2">
               <div className="flex justify-between text-sm gap-2">
                 <span className="text-psi-secondary flex-shrink-0">Organizer Comm. (10%)</span>
-                <span className="font-bold text-rose-500 dark:text-rose-400 truncate">-AED {eventData?.organizer_commission?.toLocaleString() || '0'}</span>
+                <span className="font-bold text-rose-500 dark:text-rose-400">-AED {eventData?.organizer_commission?.toLocaleString() || '0'}</span>
               </div>
               {eventData?.is_sponsored && (
                 <div className="flex justify-between text-sm gap-2">
                   <span className="text-psi-secondary flex-shrink-0">Sponsorship Profit</span>
-                  <span className="font-bold text-emerald-500 dark:text-emerald-400 truncate">+AED {eventData?.sponsorship_profit?.toLocaleString() || '0'}</span>
+                  <span className="font-bold text-emerald-500 dark:text-emerald-400">+AED {eventData?.sponsorship_profit?.toLocaleString() || '0'}</span>
                 </div>
               )}
               <div className="flex justify-between text-sm gap-2">
                 <span className="text-psi-secondary flex-shrink-0">Total Expenses</span>
-                <span className="font-bold text-psi-primary truncate">AED {eventData?.total_expenses?.toLocaleString() || '0'}</span>
+                <span className="font-bold text-psi-primary">AED {eventData?.total_expenses?.toLocaleString() || '0'}</span>
               </div>
             </div>
           </div>
-        </div>
+        </SectionCard>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Time-Lapse ROI */}
-        <div className="psi-card p-8 shadow-sm">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-psi-accent-subtle text-emerald-600 dark:text-emerald-400 rounded-lg">
-              <TrendingUp size={20} />
-            </div>
-            <h3 className="text-lg font-bold text-psi-primary">Time-Lapse ROI Tracking</h3>
-          </div>
-          <div className="h-80">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SectionCard title="Time-Lapse ROI Tracking">
+          <div className="h-72 mt-2">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={timeLapseData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--psi-chart-grid)" />
@@ -178,52 +162,21 @@ export default function Analytics() {
               </ComposedChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </SectionCard>
 
-        {/* Branch Metrics */}
-        <div className="psi-card p-8 shadow-sm">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 bg-psi-warning text-amber-600 dark:text-amber-400 rounded-lg">
-              <PieChartIcon size={20} />
-            </div>
-            <h3 className="text-lg font-bold text-psi-primary">Branch Opportunity Targets</h3>
+        <SectionCard title="Branch Opportunity Targets">
+          <div className="space-y-5 mt-1">
+            <ProgressBar label="Dubai Marina" sublabel="42 / 50 Agents" value={84} colorClass="bg-blue-500" />
+            <ProgressBar label="Downtown" sublabel="38 / 40 Agents" value={95} colorClass="bg-emerald-500" />
+            <ProgressBar label="Business Bay" sublabel="15 / 30 Agents" value={50} colorClass="bg-amber-500" />
+            <ProgressBar label="Palm Jumeirah" sublabel="18 / 20 Agents" value={90} colorClass="bg-violet-500" />
           </div>
-          <div className="space-y-6">
-            <BranchProgress name="Dubai Marina" target={50} actual={42} color="bg-blue-500" />
-            <BranchProgress name="Downtown" target={40} actual={38} color="bg-emerald-500" />
-            <BranchProgress name="Business Bay" target={30} actual={15} color="bg-amber-500" />
-            <BranchProgress name="Palm Jumeirah" target={20} actual={18} color="bg-violet-500" />
-          </div>
-        </div>
+        </SectionCard>
       </div>
 
-      {/* ── Predictive Analytics & Sponsorship Engine ────────────── */}
-      <div className="border-t border-psi pt-8 md:pt-12">
+      <div className="border-t border-psi pt-8">
         <PredictiveAnalyticsDashboard defaultCity="London" targetMargin={40} />
       </div>
-    </div>
-  );
-}
-
-function BranchProgress({ name, target, actual, color }: { name: string; target: number; actual: number; color: string }) {
-  const pct = Math.min(100, (actual / target) * 100);
-  return (
-    <div>
-      <div className="flex justify-between items-end mb-2">
-        <div>
-          <div className="text-sm font-bold text-psi-primary">{name}</div>
-          <div className="text-xs text-psi-muted uppercase tracking-widest">{actual} / {target} Agents</div>
-        </div>
-        <div className="text-sm font-black text-psi-primary tabular-nums">{Math.round(pct)}%</div>
-      </div>
-      <div className="w-full bg-psi-subtle h-2 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className={`h-full ${color}`}
-        />
-      </div>
-    </div>
+    </PageShell>
   );
 }

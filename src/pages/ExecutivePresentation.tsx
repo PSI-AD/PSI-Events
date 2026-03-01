@@ -31,8 +31,23 @@ import {
   Calculator
 } from 'lucide-react';
 
-const Section = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-  <section className={`py-24 px-6 md:px-12 lg:px-24 overflow-hidden ${className}`}>
+/**
+ * ExecutivePresentation — THEME IMMUNE
+ * This page is a standalone marketing asset. It hardcodes its own
+ * colours and explicitly resets the browser color-scheme to 'light'
+ * so the global ThemeProvider (.dark on <html>) has zero effect here.
+ */
+
+const Section = ({
+  children,
+  className = "",
+  textClass = "text-slate-900",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  textClass?: string;
+}) => (
+  <section className={`py-24 px-6 md:px-12 lg:px-24 overflow-hidden ${className} ${textClass}`}>
     <div className="max-w-7xl mx-auto">
       {children}
     </div>
@@ -41,7 +56,13 @@ const Section = ({ children, className = "" }: { children: React.ReactNode, clas
 
 export default function ExecutivePresentation() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-emerald-500/30">
+    /*
+     * [color-scheme:light] forces the browser to treat this entire subtree
+     * as light mode — meaning the CSS variables from .dark on <html> do NOT
+     * cascade into any element inside this div. All colours are explicitly
+     * hardcoded, so this page looks identical in light AND dark theme.
+     */
+    <div className="min-h-screen bg-white font-sans selection:bg-emerald-500/30 [color-scheme:light]" style={{ colorScheme: 'light' }}>
       <main id="main-content">
         {/* Section 1: Hero */}
         <section className="relative min-h-screen bg-slate-950 flex flex-col justify-center items-center text-center px-6 pt-20 overflow-hidden">
@@ -148,7 +169,7 @@ export default function ExecutivePresentation() {
         </section>
 
         {/* Section 2: Old Way vs New Way */}
-        <Section className="bg-white">
+        <Section className="bg-white" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">The Evolution of ROI.</h2>
             <p className="text-xl text-slate-600 font-medium">Why spreadsheets are the enemy of enterprise growth.</p>
@@ -214,7 +235,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section 3: The 5-Step Journey */}
-        <Section className="bg-slate-50">
+        <Section className="bg-slate-50" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">The Accountability Journey.</h2>
             <p className="text-xl text-slate-600 font-medium">A deterministic workflow where no agent sells without clearance.</p>
@@ -308,7 +329,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section 4: Cross-Departmental Impact */}
-        <Section className="bg-white">
+        <Section className="bg-white" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">Who Wins?</h2>
             <p className="text-xl text-slate-600 font-medium">Empowering every layer of PSI with automation and security.</p>
@@ -376,7 +397,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section 5: Live Sample P&L Report */}
-        <Section className="bg-slate-50">
+        <Section className="bg-slate-50" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">The "Wow" Dashboard.</h2>
             <p className="text-xl text-slate-600 font-medium">See the math engine in action. No manual calculations required.</p>
@@ -480,7 +501,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section: The Financial Risk Matrix */}
-        <Section className="bg-white">
+        <Section className="bg-white" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">The Financial Risk Matrix.</h2>
             <p className="text-xl text-slate-600 font-medium">Aligning agent incentives with branch profitability.</p>
@@ -557,7 +578,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section: The Serverless Target Engine */}
-        <Section className="bg-slate-900 text-white border-y border-white/5">
+        <Section className="bg-slate-900 border-y border-white/5" textClass="text-white">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-white">The Serverless Target Engine.</h2>
             <p className="text-xl text-slate-300 font-medium">Dynamic dilution logic. Absolute mathematical fairness.</p>
@@ -614,7 +635,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section: The Enterprise Security Vault */}
-        <Section className="bg-slate-50">
+        <Section className="bg-slate-50" textClass="text-slate-900">
           <div className="text-center mb-20 space-y-4">
             <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-slate-900">The Enterprise Security Vault.</h2>
             <p className="text-xl text-slate-600 font-medium">Row-Level Security (RLS) via Firestore Rules.</p>
@@ -688,7 +709,7 @@ export default function ExecutivePresentation() {
         </Section>
 
         {/* Section: The Command Center */}
-        <Section className="bg-[#050505] text-white border-t border-white/5">
+        <Section className="bg-[#050505] border-t border-white/5" textClass="text-white">
           <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
             <div className="space-y-10">
               <div className="space-y-4">

@@ -18,7 +18,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 export type AccentColor = 'blue' | 'green' | 'purple' | 'rose';
-export type UITheme = 'default' | 'modern';
+export type UITheme = 'default' | 'modern' | 'glass' | 'corporate' | 'minimal';
 
 export interface AccentOption {
     id: AccentColor;
@@ -76,6 +76,42 @@ export const UI_THEME_OPTIONS: UIThemeOption[] = [
             border: '#dadce0',
         },
     },
+    {
+        id: 'glass',
+        label: 'Glass',
+        description: 'Frosted-glass surfaces, vivid gradients, depth through blur and translucency',
+        preview: {
+            bg: '#0f0c29',
+            surface: 'rgba(255,255,255,0.12)',
+            accent: '#a78bfa',
+            text: '#f8fafc',
+            border: 'rgba(255,255,255,0.18)',
+        },
+    },
+    {
+        id: 'corporate',
+        label: 'Corporate',
+        description: 'Navy-and-gold enterprise palette, structured grid, high-contrast readability',
+        preview: {
+            bg: '#f0f4f8',
+            surface: '#ffffff',
+            accent: '#b8860b',
+            text: '#1a2332',
+            border: '#c8d4e0',
+        },
+    },
+    {
+        id: 'minimal',
+        label: 'Minimal',
+        description: 'Pure white canvas, hairline borders, understated typography, maximum focus',
+        preview: {
+            bg: '#ffffff',
+            surface: '#fafafa',
+            accent: '#111827',
+            text: '#111827',
+            border: '#e5e7eb',
+        },
+    },
 ];
 
 interface ThemeContextValue {
@@ -114,9 +150,11 @@ function getInitialAccent(): AccentColor {
     return 'blue';
 }
 
+const VALID_UI_THEMES: UITheme[] = ['default', 'modern', 'glass', 'corporate', 'minimal'];
+
 function getInitialUITheme(): UITheme {
     const saved = localStorage.getItem(UI_THEME_KEY) as UITheme | null;
-    if (saved === 'default' || saved === 'modern') return saved;
+    if (saved && VALID_UI_THEMES.includes(saved)) return saved;
     return 'default';
 }
 
@@ -134,13 +172,23 @@ function applyAccent(accent: AccentColor) {
     localStorage.setItem(ACCENT_KEY, accent);
 }
 
+const UI_THEME_CLASSES: Record<UITheme, string> = {
+    default: '',
+    modern: 'theme-modern',
+    glass: 'theme-glass',
+    corporate: 'theme-corporate',
+    minimal: 'theme-minimal',
+};
+
 function applyUITheme(uiTheme: UITheme) {
     const root = document.documentElement;
-    if (uiTheme === 'modern') {
-        root.classList.add('theme-modern');
-    } else {
-        root.classList.remove('theme-modern');
-    }
+    // Remove all theme classes first
+    Object.values(UI_THEME_CLASSES).forEach(cls => {
+        if (cls) root.classList.remove(cls);
+    });
+    // Apply the new one (if any)
+    const cls = UI_THEME_CLASSES[uiTheme];
+    if (cls) root.classList.add(cls);
     localStorage.setItem(UI_THEME_KEY, uiTheme);
 }
 

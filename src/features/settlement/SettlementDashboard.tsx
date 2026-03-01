@@ -196,12 +196,12 @@ export default function SettlementDashboard() {
                             <div>
                                 <label className="block text-xs font-semibold text-psi-muted mb-1.5 uppercase tracking-widest">Active Rate (used in settlement)</label>
                                 <div className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border ${fxOverride ? 'bg-amber-500/10 border-amber-500/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}>
-                                    <DollarSign size={16} className={fxOverride ? 'text-amber-400' : 'text-emerald-400'} />
+                                    <DollarSign size={16} className={fxOverride ? 'text-amber-500' : 'text-emerald-600 dark:text-emerald-400'} />
                                     <div>
-                                        <p className={`text-sm font-extrabold font-mono ${fxOverride ? 'text-amber-300' : 'text-emerald-300'}`}>
+                                        <p className={`text-sm font-extrabold font-mono ${fxOverride ? 'text-amber-600 dark:text-amber-300' : 'text-emerald-700 dark:text-emerald-300'}`}>
                                             1 {localCurrency} = {effectiveRate.toFixed(4)} AED
                                         </p>
-                                        <p className="text-[10px] text-slate-500 mt-0.5">
+                                        <p className="text-[10px] text-psi-muted mt-0.5">
                                             {fxOverride ? 'Organizer Override' : (localCurrency === 'AED' ? 'No conversion' : 'PSI Reference Rate')}
                                         </p>
                                     </div>
@@ -344,9 +344,9 @@ export default function SettlementDashboard() {
                             ))}
                         </div>
                         {localCurrency !== 'AED' && (
-                            <div className="flex items-center gap-2 px-3 py-2 bg-violet-500/10 border border-violet-500/20 rounded-xl text-[11px] text-violet-300">
-                                <Globe size={12} className="flex-shrink-0 text-violet-400" />
-                                Travel + stand costs entered in <strong className="text-white">{localCurrency}</strong> are auto-converted to AED at <strong className="text-white">1 {localCurrency} = {effectiveRate.toFixed(4)} AED</strong> before the tier split is applied.
+                            <div className="flex items-center gap-2 px-3 py-2 bg-violet-500/10 border border-violet-500/20 rounded-xl text-[11px] text-violet-700 dark:text-violet-300">
+                                <Globe size={12} className="flex-shrink-0 text-violet-500 dark:text-violet-400" />
+                                Travel + stand costs entered in <strong className="text-violet-900 dark:text-white">{localCurrency}</strong> are auto-converted to AED at <strong className="text-violet-900 dark:text-white">1 {localCurrency} = {effectiveRate.toFixed(4)} AED</strong> before the tier split is applied.
                             </div>
                         )}
                     </div>
@@ -396,12 +396,12 @@ export default function SettlementDashboard() {
                                         <Award size={20} className="text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-amber-400 text-xs font-bold uppercase tracking-widest mb-0.5">Top Performer This Roadshow</p>
-                                        <p className="text-white font-bold">
+                                        <p className="text-amber-700 dark:text-amber-400 text-xs font-bold uppercase tracking-widest mb-0.5">Top Performer This Roadshow</p>
+                                        <p className="text-slate-900 dark:text-white font-bold">
                                             {report.summary.highestEarner.agent.name}
-                                            <span className="text-amber-400 ml-2">→ {formatAED(report.summary.highestEarner.agentCommission)} commission earned</span>
+                                            <span className="text-amber-600 dark:text-amber-400 ml-2">→ {formatAED(report.summary.highestEarner.agentCommission)} commission earned</span>
                                         </p>
-                                        <p className="text-slate-400 text-xs">
+                                        <p className="text-slate-500 dark:text-slate-400 text-xs">
                                             {report.summary.highestEarner.agent.branch} · {report.summary.highestEarner.tier.label} tier ·{' '}
                                             Net {formatAED(report.summary.highestEarner.netRevenue)} (gross {formatAED(report.summary.highestEarner.agent.closedRevenue)} − {formatAED(report.summary.highestEarner.totalDeductionsAed)} deductions)
                                         </p>

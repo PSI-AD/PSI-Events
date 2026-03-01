@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard, Calendar, FileText, BarChart3,
     Settings, Users, Briefcase, Sparkles, Calculator,
-    QrCode, Menu, X, TrendingUp, BookOpen, Sun, Moon,
+    QrCode, Menu, X, TrendingUp, BookOpen,
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
     ChevronRight, Search,
@@ -12,7 +12,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
 import {
     GlobalFeaturesProvider,
     GlobalActionButtons,
@@ -99,7 +98,7 @@ const BOTTOM_NAV_ITEMS = [
 function SidebarLink({
     to, icon: Icon, label, onClick,
 }: {
-    to: string; icon: React.ElementType; label: string; onClick?: () => void;
+    key?: React.Key; to: string; icon: React.ElementType; label: string; onClick?: () => void;
 }) {
     const location = useLocation();
     const isActive = location.pathname === to;
@@ -111,13 +110,13 @@ function SidebarLink({
             className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group min-h-[40px] relative',
                 isActive
-                    ? 'bg-slate-800 text-white shadow-md shadow-black/15'
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
+                    ? 'bg-slate-100 text-emerald-600 dark:bg-slate-800 dark:text-white shadow-none dark:shadow-lg dark:shadow-black/20'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200'
             )}
         >
             <span className={cn(
                 'transition-transform duration-150 flex-shrink-0',
-                isActive ? 'text-emerald-400' : 'group-hover:scale-105'
+                isActive ? 'text-emerald-500 dark:text-emerald-400' : 'group-hover:scale-105'
             )}>
                 <Icon size={17} />
             </span>
@@ -125,7 +124,7 @@ function SidebarLink({
             {isActive && (
                 <motion.div
                     layoutId="sidebar-active-dot"
-                    className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400"
+                    className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"
                 />
             )}
         </Link>
@@ -134,7 +133,7 @@ function SidebarLink({
 
 // ── Mobile bottom nav link ────────────────────────────────────────────────────
 
-function BottomNavItem({ to, icon: Icon, label }: { to: string; icon: React.ElementType; label: string }) {
+function BottomNavItem({ to, icon: Icon, label }: { key?: React.Key; to: string; icon: React.ElementType; label: string }) {
     const location = useLocation();
     const isActive = location.pathname === to;
 
@@ -169,31 +168,7 @@ function usePageTitle(): string {
     return EXTRA_TITLE_MAP[location.pathname] ?? 'PSI Portal';
 }
 
-// ── Theme toggle ──────────────────────────────────────────────────────────────
-
-function ThemeToggle() {
-    const { theme, toggleTheme } = useTheme();
-    const isDark = theme === 'dark';
-
-    return (
-        <button
-            id="theme-toggle-btn"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group min-h-[40px] text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 active:scale-[0.97]"
-        >
-            <span className="flex-shrink-0 transition-transform duration-150 group-hover:scale-105">
-                {isDark ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} />}
-            </span>
-            <span className="text-sm font-medium flex-1 text-left">
-                {isDark ? 'Light Mode' : 'Dark Mode'}
-            </span>
-            <div className={`relative flex-shrink-0 w-9 h-5 rounded-full transition-colors duration-300 ${isDark ? 'bg-amber-500' : 'bg-slate-700'}`}>
-                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-300 ${isDark ? 'translate-x-4' : 'translate-x-0.5'}`} />
-            </div>
-        </button>
-    );
-}
+// (Theme toggle removed — theme is controlled exclusively from Settings → Appearance)
 
 // ── Main Layout ───────────────────────────────────────────────────────────────
 
@@ -206,16 +181,16 @@ export default function DashboardLayout() {
             <div className="flex h-screen bg-psi-page font-sans overflow-hidden">
 
                 {/* ── Desktop Sidebar ──────────────────────────────────── */}
-                <aside className="hidden md:flex w-60 bg-slate-900 text-white flex-col flex-shrink-0 border-r border-slate-800/60">
+                <aside className="hidden md:flex w-60 bg-white dark:bg-slate-900 text-slate-900 dark:text-white flex-col flex-shrink-0 border-r border-slate-200 dark:border-slate-800/60">
 
                     {/* Logo */}
-                    <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-800/60">
+                    <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 dark:border-slate-800/60">
                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
                             <TrendingUp size={16} className="text-white" />
                         </div>
                         <div>
-                            <p className="text-white font-extrabold text-sm tracking-tight leading-none">ROI Portal</p>
-                            <p className="text-slate-500 text-[9px] uppercase tracking-widest mt-0.5">Real Estate Events</p>
+                            <p className="text-slate-900 dark:text-white font-extrabold text-sm tracking-tight leading-none">ROI Portal</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest mt-0.5">Real Estate Events</p>
                         </div>
                     </div>
 
@@ -236,12 +211,12 @@ export default function DashboardLayout() {
                     </nav>
 
                     {/* Footer */}
-                    <div className="border-t border-slate-800/60 p-2 space-y-0.5">
+                    <div className="border-t border-slate-200 dark:border-slate-800/60 p-2 space-y-0.5">
                         <a
                             href="/executive-presentation"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-400 hover:bg-emerald-500/10 transition-all duration-150 group border border-emerald-500/20 min-h-[40px]"
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all duration-150 group border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]"
                         >
                             <span className="group-hover:scale-105 transition-transform flex-shrink-0">
                                 <Sparkles size={17} />
@@ -249,7 +224,6 @@ export default function DashboardLayout() {
                             <span className="font-bold text-sm">ROI Vision</span>
                         </a>
                         <SidebarLink to="/manual" icon={BookOpen} label="System Manual" />
-                        <ThemeToggle />
                         <SidebarLink to="/settings" icon={Settings} label="Settings" />
                     </div>
                 </aside>
@@ -322,23 +296,23 @@ export default function DashboardLayout() {
                                 animate={{ x: 0 }}
                                 exit={{ x: '100%' }}
                                 transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-                                className="fixed top-0 right-0 bottom-0 w-72 bg-slate-900 z-50 md:hidden flex flex-col shadow-2xl border-l border-slate-800/60"
+                                className="fixed top-0 right-0 bottom-0 w-72 bg-white dark:bg-slate-900 z-50 md:hidden flex flex-col shadow-2xl border-l border-slate-200 dark:border-slate-800/60"
                             >
                                 {/* Drawer header */}
-                                <div className="flex items-center justify-between px-4 py-4 border-b border-slate-800/60">
+                                <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200 dark:border-slate-800/60">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center">
                                             <TrendingUp size={14} className="text-white" />
                                         </div>
                                         <div>
-                                            <p className="text-white font-extrabold text-sm">PSI Event Portal</p>
-                                            <p className="text-slate-500 text-[9px]">All Modules</p>
+                                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">PSI Event Portal</p>
+                                            <p className="text-slate-500 dark:text-slate-400 text-[9px]">All Modules</p>
                                         </div>
                                     </div>
                                     <button
                                         id="close-menu-btn"
                                         onClick={() => setDrawerOpen(false)}
-                                        className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                        className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                                     >
                                         <X size={20} />
                                     </button>
@@ -361,18 +335,17 @@ export default function DashboardLayout() {
                                 </nav>
 
                                 {/* Drawer footer */}
-                                <div className="border-t border-slate-800/60 p-2 space-y-0.5">
+                                <div className="border-t border-slate-200 dark:border-slate-800/60 p-2 space-y-0.5">
                                     <a
                                         href="/executive-presentation"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-400 hover:bg-emerald-500/10 transition-all group border border-emerald-500/20 min-h-[40px]"
+                                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all group border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]"
                                     >
                                         <Sparkles size={17} />
                                         <span className="font-bold text-sm">ROI Vision</span>
                                     </a>
                                     <SidebarLink to="/manual" icon={BookOpen} label="System Manual" onClick={() => setDrawerOpen(false)} />
-                                    <ThemeToggle />
                                     <SidebarLink to="/settings" icon={Settings} label="Settings" onClick={() => setDrawerOpen(false)} />
                                 </div>
                             </motion.div>

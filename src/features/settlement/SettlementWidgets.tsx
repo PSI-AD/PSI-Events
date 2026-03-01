@@ -129,6 +129,7 @@ export function CurrencySelector({
 export function AgentRow({
     agent, onChange, onRemove, localCurrency,
 }: {
+    key?: React.Key;
     agent: AgentEntry;
     onChange: (updated: AgentEntry) => void;
     onRemove: () => void;
@@ -141,7 +142,7 @@ export function AgentRow({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: -24 }}
-            className="bg-slate-800/40 rounded-xl p-3 border border-slate-700/50"
+            className="psi-card rounded-xl p-3"
         >
             {/* Row 1: Name, Branch, Tier */}
             <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_140px_36px] gap-2 md:gap-3 mb-2">
