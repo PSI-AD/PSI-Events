@@ -45,6 +45,7 @@ const FloorplanHeatmap = lazy(() => import('./features/analytics/FloorplanHeatma
 const TravelDesk = lazy(() => import('./features/logistics/TravelDesk'));
 const BusinessCardScanner = lazy(() => import('./features/leads/BusinessCardScanner'));
 const LocalizedPitch = lazy(() => import('./features/events/LocalizedPitch'));
+const AIPitchSimulator = lazy(() => import('./features/training/AIPitchSimulator'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -337,6 +338,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <LocalizedPitch />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/pitch-simulator"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <AIPitchSimulator eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
               </Suspense>
             }
           />
