@@ -1,0 +1,45 @@
+{
+    "name": "PSI Event Portal",
+    "short_name": "PSI Portal",
+    "description": "Enterprise event management & roadshow engine for Property Shop Investment LLC",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "orientation": "any",
+    "categories": [
+        "business",
+        "productivity"
+    ],
+    "lang": "en-AE",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "url": "/",
+            "description": "Performance overview"
+        },
+        {
+            "name": "Events",
+            "url": "/events",
+            "description": "Manage roadshows"
+        },
+        {
+            "name": "Check-In",
+            "url": "/check-in",
+            "description": "QR agent check-in"
+        },
+        {
+            "name": "Settlement",
+            "url": "/settlement",
+            "description": "Commission engine"
+        }
+    ]
+}

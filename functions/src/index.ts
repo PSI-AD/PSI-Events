@@ -4,6 +4,7 @@ import { syncProjects } from './api/syncProjects';
 import { distributeLeads } from './api/leadDistribution';
 import { logisticsNudger } from './scheduledJobs/logisticsNudger';
 import { processReceiptOCR } from './processReceiptOCR';
+import { onLeadQualified } from './leadNurture';
 
 /**
  * index.ts
@@ -18,4 +19,6 @@ export {
   distributeLeads,
   logisticsNudger,
   processReceiptOCR,
+  onLeadQualified,
 };
+
