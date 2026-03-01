@@ -27,6 +27,7 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import { signInWithGoogle, AccessDeniedError } from '../services/auth/googleAuth';
+import { injectSeedData, injectPresentationData } from '../utils/firebaseSeeder';
 
 // ── Google "G" SVG icon ───────────────────────────────────────────────────────
 // Inlined so we don't need an external image asset.
@@ -251,6 +252,42 @@ export default function Login() {
                 <p className="text-center text-slate-700 text-[11px] mt-6">
                     PSI Event Portal · © {new Date().getFullYear()} Property Shop Investment LLC
                 </p>
+
+                {/* ── DEV: Seeder buttons (low-opacity, out of the way) ─────── */}
+                <div className="flex items-center justify-center gap-3 mt-8 opacity-20 hover:opacity-60 transition-opacity duration-300">
+                    <button
+                        id="dev-seed-full-btn"
+                        onClick={async () => {
+                            try {
+                                const result = await injectSeedData();
+                                if (result.success) {
+                                    alert(`DEV: Full seed complete (${result.durationMs}ms) — ${Object.values(result.written).reduce((s, n) => s + n, 0)} docs written.`);
+                                } else {
+                                    alert(`DEV: Seed finished with errors:\n${result.errors.join('\n')}`);
+                                }
+                            } catch (e) {
+                                alert('DEV: Seeder threw — ' + (e instanceof Error ? e.message : String(e)));
+                            }
+                        }}
+                        className="text-[10px] text-slate-600 hover:text-slate-400 border border-slate-800 rounded px-2 py-1 transition-colors select-none"
+                    >
+                        DEV: Full Seeder
+                    </button>
+
+                    <button
+                        id="dev-seed-presentation-btn"
+                        onClick={async () => {
+                            try {
+                                await injectPresentationData();
+                            } catch (e) {
+                                alert('DEV: Presentation seeder threw — ' + (e instanceof Error ? e.message : String(e)));
+                            }
+                        }}
+                        className="text-[10px] text-slate-600 hover:text-slate-400 border border-slate-800 rounded px-2 py-1 transition-colors select-none"
+                    >
+                        DEV: Run Seeder
+                    </button>
+                </div>
             </div>
         </div>
     );

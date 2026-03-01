@@ -991,3 +991,130 @@ export async function injectSeedData(): Promise<{
         durationMs,
     };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PRESENTATION-READY SEEDER  (exact IDs & schema from the brief)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * injectPresentationData
+ * ──────────────────────
+ * Writes the exact payload specified for the executive boardroom demo.
+ * Uses the canonical document IDs from the brief so cross-references work
+ * in every UI component that reads from Firebase.
+ *
+ * Collections written:
+ *   • crm_projects                       — 3 premium developments
+ *   • users                              — 1 manager + 2 agents
+ *   • events                             — 1 roadshow event (evt_moscow_26)
+ *   • events/evt_moscow_26/roster        — 2 agent roster entries
+ *   • events/evt_moscow_26/expenses      — 2 itemised expense lines
+ *   • crm_leads                          — 10 leads (6 Sara, 4 Khalid)
+ *
+ * Fires browser alert() on success so the presenter gets instant confirmation.
+ */
+export async function injectPresentationData(): Promise<void> {
+    console.group('🎯 PSI Presentation Seeder — Injecting demo data');
+
+    // ── Batch 1: crm_projects, users, events ──────────────────────────────────
+    const batch1 = writeBatch(db);
+
+    // 1a. Projects
+    const PRES_PROJECTS = [
+        { id: 'p_vida', projectName: 'Vida Residence', developer: 'Emaar', startingPriceAed: 2_200_000, location: 'Dubai Marina', status: 'active', commissionPercentage: 5, createdAt: ts('2026-01-01T00:00:00Z') },
+        { id: 'p_mamsha', projectName: 'Mamsha Gardens', developer: 'Aldar', startingPriceAed: 3_500_000, location: 'Saadiyat Island', status: 'active', commissionPercentage: 4, createdAt: ts('2026-01-01T00:00:00Z') },
+        { id: 'p_louvre', projectName: 'Louvre Abu Dhabi Residences', developer: 'Aldar', startingPriceAed: 4_100_000, location: 'Saadiyat Island', status: 'active', commissionPercentage: 4, createdAt: ts('2026-01-01T00:00:00Z') },
+    ] as const;
+    PRES_PROJECTS.forEach(({ id: projId, ...data }) => {
+        batch1.set(doc(db, 'crm_projects', projId), data);
+    });
+
+    // 1b. Users
+    const PRES_USERS = [
+        { id: 'u_mgr_amr', name: 'Amr ElFangary', role: 'branch_manager', branch: 'Abu Dhabi HQ', email: 'propertyshopinvest@gmail.com', status: 'active', joinedAt: ts('2020-01-01T00:00:00Z') },
+        { id: 'u_agt_sara', name: 'Sara Almarzouqi', role: 'agent', branch: 'Abu Dhabi HQ', status: 'active', closeRate: 12.4, joinedAt: ts('2021-03-01T00:00:00Z') },
+        { id: 'u_agt_khalid', name: 'Khalid Al-Mansouri', role: 'agent', branch: 'Dubai Marina', status: 'active', closeRate: 15.1, joinedAt: ts('2019-06-01T00:00:00Z') },
+    ] as const;
+    PRES_USERS.forEach(({ id: userId, ...data }) => {
+        batch1.set(doc(db, 'users', userId), data);
+    });
+
+    // 1c. Event
+    batch1.set(doc(db, 'events', 'evt_moscow_26'), {
+        name: 'Moscow Luxury Property Expo 2026',
+        status: 'active',
+        startDate: '2026-03-15',
+        endDate: '2026-03-18',
+        budget: 150_000,
+        sponsorship: 150_000,
+        targetLeads: 300,
+        location: 'Moscow, Russia',
+        createdAt: ts('2026-01-10T09:00:00Z'),
+        updatedAt: ts('2026-03-01T08:00:00Z'),
+    });
+
+    await batch1.commit();
+    console.log(`  ✔ Batch 1 committed — ${PRES_PROJECTS.length} projects, ${PRES_USERS.length} users, 1 event`);
+
+    // ── Sub-collections (sequential — parent docs must exist first) ───────────
+
+    // events/evt_moscow_26/roster
+    const PRES_ROSTER = [
+        { id: 'roster_sara', userId: 'u_agt_sara', status: 'approved', financialTier: 'Gold', commissionSplit: 50, logisticsComplete: true, joinedAt: ts('2026-01-15T09:00:00Z') },
+        { id: 'roster_khalid', userId: 'u_agt_khalid', status: 'pending_logistics', financialTier: 'Silver', commissionSplit: 30, logisticsComplete: false, joinedAt: ts('2026-01-20T10:00:00Z') },
+    ] as const;
+    for (const { id: rosterId, ...rosterData } of PRES_ROSTER) {
+        await setDoc(doc(db, 'events', 'evt_moscow_26', 'roster', rosterId), rosterData);
+    }
+    console.log(`  ✔ ${PRES_ROSTER.length} roster entries written (events/evt_moscow_26/roster)`);
+
+    // events/evt_moscow_26/expenses
+    const PRES_EXPENSES = [
+        { id: 'exp_001', category: 'Venue', amount: 65_000, currency: 'AED', description: 'Booth Construction & Space', loggedBy: 'u_mgr_amr', loggedAt: ts('2026-02-10T10:00:00Z') },
+        { id: 'exp_002', category: 'Travel', amount: 18_500, currency: 'AED', description: 'Emirates Business Class Flights', loggedBy: 'u_mgr_amr', loggedAt: ts('2026-02-15T11:00:00Z') },
+    ] as const;
+    for (const { id: expId, ...expData } of PRES_EXPENSES) {
+        await setDoc(doc(db, 'events', 'evt_moscow_26', 'expenses', expId), expData);
+    }
+    console.log(`  ✔ ${PRES_EXPENSES.length} expenses written (events/evt_moscow_26/expenses)`);
+
+    // ── Batch 2: crm_leads (10 leads — 6 Sara, 4 Khalid) ─────────────────────
+    const batch2 = writeBatch(db);
+
+    const PRES_LEADS = [
+        // Sara — 6 leads
+        { id: 'lead_p_001', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'Qualified', projectInterest: 'p_vida', fullName: 'Natalia Petrova', nationality: 'Russian', budget: 2_800_000, source: 'walk_in', createdAt: ts('2026-03-15T10:30:00Z') },
+        { id: 'lead_p_002', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'Proposal Sent', projectInterest: 'p_mamsha', fullName: 'Irina Sorokina', nationality: 'Russian', budget: 4_200_000, source: 'referral', createdAt: ts('2026-03-15T11:00:00Z') },
+        { id: 'lead_p_003', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'New', projectInterest: 'p_vida', fullName: 'Yelena Kuznetsova', nationality: 'Russian', budget: 2_200_000, source: 'event_registration', createdAt: ts('2026-03-16T09:00:00Z') },
+        { id: 'lead_p_004', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'Qualified', projectInterest: 'p_mamsha', fullName: 'Olga Volkova', nationality: 'Kazakhstani', budget: 3_800_000, source: 'walk_in', createdAt: ts('2026-03-16T14:00:00Z') },
+        { id: 'lead_p_005', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'Proposal Sent', projectInterest: 'p_vida', fullName: 'Anastasia Romanova', nationality: 'Russian', budget: 2_600_000, source: 'social_media', createdAt: ts('2026-03-17T10:00:00Z') },
+        { id: 'lead_p_006', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_sara', assignedAgentName: 'Sara Almarzouqi', status: 'New', projectInterest: 'p_mamsha', fullName: 'Maria Belova', nationality: 'Russian', budget: 3_500_000, source: 'partner_agency', createdAt: ts('2026-03-17T15:00:00Z') },
+        // Khalid — 4 leads
+        { id: 'lead_p_007', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_khalid', assignedAgentName: 'Khalid Al-Mansouri', status: 'Proposal Sent', projectInterest: 'p_mamsha', fullName: 'Dmitri Volkov', nationality: 'Russian', budget: 5_500_000, source: 'vip_invitation', createdAt: ts('2026-03-15T12:00:00Z') },
+        { id: 'lead_p_008', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_khalid', assignedAgentName: 'Khalid Al-Mansouri', status: 'Qualified', projectInterest: 'p_mamsha', fullName: 'Viktor Morozov', nationality: 'Russian', budget: 4_800_000, source: 'walk_in', createdAt: ts('2026-03-16T10:30:00Z') },
+        { id: 'lead_p_009', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_khalid', assignedAgentName: 'Khalid Al-Mansouri', status: 'New', projectInterest: 'p_vida', fullName: 'Andrei Orlov', nationality: 'Georgian', budget: 2_400_000, source: 'walk_in', createdAt: ts('2026-03-17T09:00:00Z') },
+        { id: 'lead_p_010', eventId: 'evt_moscow_26', assignedAgentId: 'u_agt_khalid', assignedAgentName: 'Khalid Al-Mansouri', status: 'Proposal Sent', projectInterest: 'p_vida', fullName: 'Sergei Kalinichenko', nationality: 'Russian', budget: 2_900_000, source: 'referral', createdAt: ts('2026-03-17T13:30:00Z') },
+    ];
+
+    PRES_LEADS.forEach(({ id: leadId, ...leadData }) => {
+        batch2.set(doc(db, 'crm_leads', leadId), leadData);
+    });
+    await batch2.commit();
+    console.log(`  ✔ ${PRES_LEADS.length} leads written — 6 Sara, 4 Khalid`);
+
+    // ── Summary ───────────────────────────────────────────────────────────────
+    const totalDocs = PRES_PROJECTS.length + PRES_USERS.length + 1 + PRES_ROSTER.length + PRES_EXPENSES.length + PRES_LEADS.length;
+    console.log(`\n✅ Presentation seeder complete — ${totalDocs} documents written`);
+    console.groupEnd();
+
+    alert(
+        'Enterprise Data Injected Successfully! ✅\n\n' +
+        `• ${PRES_PROJECTS.length} Projects   (crm_projects)\n` +
+        `• ${PRES_USERS.length} Users       (users)\n` +
+        `• 1 Event        (events/evt_moscow_26)\n` +
+        `• ${PRES_ROSTER.length} Roster      (events/evt_moscow_26/roster)\n` +
+        `• ${PRES_EXPENSES.length} Expenses   (events/evt_moscow_26/expenses)\n` +
+        `• ${PRES_LEADS.length} Leads       (crm_leads — 6 Sara · 4 Khalid)\n\n` +
+        `Total: ${totalDocs} documents`
+    );
+}
