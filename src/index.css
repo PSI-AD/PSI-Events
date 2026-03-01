@@ -486,3 +486,664 @@
     border-color: var(--psi-action, #3b82f6);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME-MODERN — Google/Material-style SaaS design system
+   ─────────────────────────────────────────────────────────────────────────
+   Applied when <html class="theme-modern"> is set.
+   Works alongside (not replacing) the existing PSI default theme.
+   All tokens are scoped to .theme-modern so zero bleed to existing UI.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Light mode defaults ─────────────────────────────────────────────────── */
+.theme-modern {
+
+  /* ── Geometry ──────────────────────────────────────────────────────────── */
+  --m-radius-xs: 4px;
+  --m-radius-sm: 8px;
+  --m-radius-md: 12px;
+  --m-radius-lg: 16px;
+  --m-radius-xl: 24px;
+  --m-radius-pill: 9999px;
+
+  /* ── Spacing scale (4-point grid) ──────────────────────────────────────── */
+  --m-space-1: 4px;
+  --m-space-2: 8px;
+  --m-space-3: 12px;
+  --m-space-4: 16px;
+  --m-space-5: 20px;
+  --m-space-6: 24px;
+  --m-space-8: 32px;
+  --m-space-10: 40px;
+  --m-space-12: 48px;
+  --m-space-16: 64px;
+
+  /* ── Elevation / Shadows ──────────────────────────────────────────────── */
+  --m-shadow-0: none;
+  --m-shadow-1: 0 1px 2px rgba(0, 0, 0, .06), 0 1px 3px rgba(0, 0, 0, .1);
+  --m-shadow-2: 0 2px 8px rgba(0, 0, 0, .08), 0 1px 3px rgba(0, 0, 0, .06);
+  --m-shadow-3: 0 4px 16px rgba(0, 0, 0, .1), 0 2px 6px rgba(0, 0, 0, .08);
+  --m-shadow-4: 0 8px 32px rgba(0, 0, 0, .12), 0 4px 12px rgba(0, 0, 0, .08);
+  --m-shadow-dialog: 0 20px 60px rgba(0, 0, 0, .18), 0 8px 24px rgba(0, 0, 0, .12);
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --m-font-sans: "Inter", "Google Sans", ui-sans-serif, system-ui, sans-serif;
+  --m-font-mono: "JetBrains Mono", "Roboto Mono", ui-monospace, monospace;
+  --m-text-xs: 11px;
+  --m-text-sm: 13px;
+  --m-text-base: 14px;
+  --m-text-md: 16px;
+  --m-text-lg: 20px;
+  --m-text-xl: 24px;
+  --m-text-2xl: 30px;
+  --m-leading: 1.5;
+
+  /* ── Color palette — Primary (Google Blue) ─────────────────────────────── */
+  --m-primary-50: #e8f0fe;
+  --m-primary-100: #d2e3fc;
+  --m-primary-200: #aecbfa;
+  --m-primary-300: #74a9f5;
+  --m-primary-400: #4285f4;
+  --m-primary-500: #1a73e8;
+  /* Google Blue */
+  --m-primary-600: #1557b0;
+  --m-primary-700: #0d3b8a;
+  --m-primary: var(--m-primary-500);
+  --m-primary-hover: var(--m-primary-600);
+  --m-primary-text: #ffffff;
+  --m-primary-subtle: var(--m-primary-50);
+
+  /* ── Color palette — Neutral (Google Gray) ─────────────────────────────── */
+  --m-gray-0: #ffffff;
+  --m-gray-25: #f8f9fa;
+  --m-gray-50: #f1f3f4;
+  --m-gray-100: #e8eaed;
+  --m-gray-200: #dadce0;
+  --m-gray-300: #bdc1c6;
+  --m-gray-400: #9aa0a6;
+  --m-gray-500: #80868b;
+  --m-gray-600: #5f6368;
+  --m-gray-700: #3c4043;
+  --m-gray-800: #202124;
+  --m-gray-900: #0d0d0d;
+
+  /* ── Layout surfaces ────────────────────────────────────────────────────── */
+  --m-bg: var(--m-gray-25);
+  /* page background */
+  --m-surface: var(--m-gray-0);
+  /* card / panel */
+  --m-surface-raised: var(--m-gray-0);
+  /* modal / dialog */
+  --m-surface-overlay: rgba(255, 255, 255, .92);
+  --m-sidebar-bg: var(--m-gray-0);
+  /* left sidebar */
+  --m-sidebar-border: var(--m-gray-100);
+  --m-header-bg: var(--m-gray-0);
+  /* top header */
+  --m-header-border: var(--m-gray-200);
+
+  /* ── Borders ────────────────────────────────────────────────────────────── */
+  --m-border: var(--m-gray-200);
+  --m-border-subtle: var(--m-gray-100);
+  --m-border-strong: var(--m-gray-300);
+  --m-border-focus: var(--m-primary);
+
+  /* ── Text hierarchy ─────────────────────────────────────────────────────── */
+  --m-text-primary: var(--m-gray-800);
+  /* headings */
+  --m-text-secondary: var(--m-gray-600);
+  /* body copy */
+  --m-text-muted: var(--m-gray-400);
+  /* labels, placeholders */
+  --m-text-disabled: var(--m-gray-300);
+  --m-text-inverse: var(--m-gray-0);
+  /* on dark bg */
+  --m-text-link: var(--m-primary);
+
+  /* ── Status — Success (Google Green) ───────────────────────────────────── */
+  --m-success: #137333;
+  --m-success-bg: #e6f4ea;
+  --m-success-border: #a8d5b5;
+  --m-success-text: #137333;
+
+  /* ── Status — Warning (Google Yellow) ──────────────────────────────────── */
+  --m-warning: #b06000;
+  --m-warning-bg: #fef7e0;
+  --m-warning-border: #fdd663;
+  --m-warning-text: #7d3d00;
+
+  /* ── Status — Error (Google Red) ───────────────────────────────────────── */
+  --m-error: #c5221f;
+  --m-error-bg: #fce8e6;
+  --m-error-border: #f5c6c5;
+  --m-error-text: #c5221f;
+
+  /* ── Status — Info ──────────────────────────────────────────────────────── */
+  --m-info: var(--m-primary);
+  --m-info-bg: var(--m-primary-50);
+  --m-info-border: var(--m-primary-200);
+  --m-info-text: var(--m-primary-600);
+
+  /* ── Interactive states ────────────────────────────────────────────────── */
+  --m-hover-overlay: rgba(26, 115, 232, .06);
+  --m-active-overlay: rgba(26, 115, 232, .12);
+  --m-focus-ring: rgba(26, 115, 232, .30);
+  --m-disabled-opacity: 0.38;
+
+  /* ── Navigation ────────────────────────────────────────────────────────── */
+  --m-nav-active-bg: var(--m-primary-50);
+  --m-nav-active-text: var(--m-primary);
+  --m-nav-text: var(--m-gray-600);
+
+  /* ── Chart ──────────────────────────────────────────────────────────────── */
+  --m-chart-grid: var(--m-gray-100);
+  --m-chart-tick: var(--m-gray-400);
+}
+
+/* ── Dark mode overrides ─────────────────────────────────────────────────── */
+.dark.theme-modern {
+  --m-bg: #1a1b1e;
+  --m-surface: #25262b;
+  --m-surface-raised: #2c2d33;
+  --m-surface-overlay: rgba(26, 27, 30, .92);
+  --m-sidebar-bg: #1f2023;
+  --m-sidebar-border: rgba(255, 255, 255, .07);
+  --m-header-bg: #1f2023;
+  --m-header-border: rgba(255, 255, 255, .07);
+
+  --m-border: rgba(255, 255, 255, .10);
+  --m-border-subtle: rgba(255, 255, 255, .05);
+  --m-border-strong: rgba(255, 255, 255, .18);
+
+  --m-text-primary: #e8eaed;
+  --m-text-secondary: #9aa0a6;
+  --m-text-muted: #5f6368;
+  --m-text-disabled: #3c4043;
+  --m-text-inverse: #202124;
+
+  --m-primary: #8ab4f8;
+  /* Blue 300 — Google dark-mode primary */
+  --m-primary-hover: #aac7fa;
+  --m-primary-subtle: rgba(138, 180, 248, .12);
+  --m-primary-text: #202124;
+
+  --m-success: #81c995;
+  --m-success-bg: rgba(129, 201, 149, .10);
+  --m-success-border: rgba(129, 201, 149, .25);
+  --m-success-text: #81c995;
+
+  --m-warning: #fdd663;
+  --m-warning-bg: rgba(253, 214, 99, .10);
+  --m-warning-border: rgba(253, 214, 99, .25);
+  --m-warning-text: #fdd663;
+
+  --m-error: #f28b82;
+  --m-error-bg: rgba(242, 139, 130, .10);
+  --m-error-border: rgba(242, 139, 130, .25);
+  --m-error-text: #f28b82;
+
+  --m-info-bg: rgba(138, 180, 248, .10);
+  --m-info-border: rgba(138, 180, 248, .25);
+  --m-info-text: #8ab4f8;
+
+  --m-hover-overlay: rgba(138, 180, 248, .06);
+  --m-active-overlay: rgba(138, 180, 248, .12);
+  --m-focus-ring: rgba(138, 180, 248, .35);
+
+  --m-nav-active-bg: rgba(138, 180, 248, .12);
+  --m-nav-active-text: #8ab4f8;
+  --m-nav-text: #9aa0a6;
+
+  --m-shadow-1: 0 1px 2px rgba(0, 0, 0, .40);
+  --m-shadow-2: 0 2px 8px rgba(0, 0, 0, .45);
+  --m-shadow-3: 0 4px 16px rgba(0, 0, 0, .50);
+  --m-shadow-4: 0 8px 32px rgba(0, 0, 0, .55);
+
+  --m-chart-grid: rgba(255, 255, 255, .06);
+  --m-chart-tick: #5f6368;
+}
+
+/* ── PSI token remaps — when theme-modern is active, remap PSI tokens ─────
+   This means ALL existing components that use psi-card, psi-input, etc.
+   will automatically pick up the modern palette without any JSX edits.
+   ──────────────────────────────────────────────────────────────────────── */
+.theme-modern {
+  --psi-bg: var(--m-bg);
+  --psi-bg-subtle: var(--m-surface);
+  --psi-surface: var(--m-surface);
+  --psi-surface-raised: var(--m-surface-raised);
+  --psi-surface-overlay: var(--m-surface-overlay);
+
+  --psi-border: var(--m-border);
+  --psi-border-subtle: var(--m-border-subtle);
+  --psi-border-strong: var(--m-border-strong);
+
+  --psi-text-primary: var(--m-text-primary);
+  --psi-text-secondary: var(--m-text-secondary);
+  --psi-text-muted: var(--m-text-muted);
+  --psi-text-disabled: var(--m-text-disabled);
+
+  --psi-accent: var(--m-primary);
+  --psi-accent-subtle: var(--m-primary-subtle);
+  --psi-accent-text: var(--m-primary);
+  --psi-accent-border: var(--m-border-focus);
+
+  --psi-success-bg: var(--m-success-bg);
+  --psi-success-text: var(--m-success-text);
+  --psi-warning-bg: var(--m-warning-bg);
+  --psi-warning-text: var(--m-warning-text);
+  --psi-error-bg: var(--m-error-bg);
+  --psi-error-text: var(--m-error-text);
+  --psi-info-bg: var(--m-info-bg);
+  --psi-info-text: var(--m-info-text);
+
+  --psi-chart-grid: var(--m-chart-grid);
+  --psi-chart-tick: var(--m-chart-tick);
+  --psi-tooltip-bg: var(--m-surface-raised);
+  --psi-tooltip-border: var(--m-border);
+  --psi-tooltip-shadow: var(--m-shadow-3);
+
+  --psi-sidebar-bg: var(--m-sidebar-bg);
+  --psi-sidebar-border: var(--m-sidebar-border);
+  --psi-sidebar-text: var(--m-nav-text);
+  --psi-sidebar-active: var(--m-nav-active-bg);
+
+  /* Inherit any currently set accent for button/ring colors */
+  /* --psi-action is still set by ThemeContext to the chosen accent color */
+}
+
+/* ── Modern component utilities ─────────────────────────────────────────── */
+@layer utilities {
+
+  /* Base card — material elevation-1 */
+  .m-card {
+    background-color: var(--m-surface);
+    border: 1px solid var(--m-border);
+    border-radius: var(--m-radius-lg);
+    box-shadow: var(--m-shadow-1);
+  }
+
+  /* Elevated card — dialogs, dropdowns */
+  .m-card-raised {
+    background-color: var(--m-surface-raised);
+    border: 1px solid var(--m-border);
+    border-radius: var(--m-radius-lg);
+    box-shadow: var(--m-shadow-3);
+  }
+
+  /* Button — filled primary */
+  .m-btn-primary {
+    background-color: var(--m-primary);
+    color: var(--m-primary-text);
+    border: 1px solid transparent;
+    border-radius: var(--m-radius-pill);
+    font-size: var(--m-text-sm);
+    font-weight: 600;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background-color .15s ease, box-shadow .15s ease;
+    box-shadow: var(--m-shadow-1);
+  }
+
+  .m-btn-primary:hover {
+    background-color: var(--m-primary-hover);
+    box-shadow: var(--m-shadow-2);
+  }
+
+  .m-btn-primary:active {
+    box-shadow: none;
+  }
+
+  .m-btn-primary:focus-visible {
+    outline: 3px solid var(--m-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .m-btn-primary:disabled {
+    opacity: var(--m-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* Button — outlined */
+  .m-btn-outlined {
+    background-color: transparent;
+    color: var(--m-primary);
+    border: 1px solid var(--m-border-strong);
+    border-radius: var(--m-radius-pill);
+    font-size: var(--m-text-sm);
+    font-weight: 600;
+    padding: 7px 19px;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+
+  .m-btn-outlined:hover {
+    background-color: var(--m-hover-overlay);
+    border-color: var(--m-primary);
+  }
+
+  .m-btn-outlined:focus-visible {
+    outline: 3px solid var(--m-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .m-btn-outlined:disabled {
+    opacity: var(--m-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* Button — text */
+  .m-btn-text {
+    background-color: transparent;
+    color: var(--m-primary);
+    border: none;
+    border-radius: var(--m-radius-md);
+    font-size: var(--m-text-sm);
+    font-weight: 600;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color .15s ease;
+  }
+
+  .m-btn-text:hover {
+    background-color: var(--m-hover-overlay);
+  }
+
+  .m-btn-text:focus-visible {
+    outline: 3px solid var(--m-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Input */
+  .m-input {
+    background-color: var(--m-surface);
+    border: 1px solid var(--m-border-strong);
+    border-radius: var(--m-radius-sm);
+    color: var(--m-text-primary);
+    font-size: var(--m-text-base);
+    padding: 8px 12px;
+    width: 100%;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .m-input::placeholder {
+    color: var(--m-text-muted);
+  }
+
+  .m-input:focus {
+    outline: none;
+    border-color: var(--m-border-focus);
+    box-shadow: 0 0 0 3px var(--m-focus-ring);
+  }
+
+  .m-input:disabled {
+    opacity: var(--m-disabled-opacity);
+    background-color: var(--m-bg);
+    cursor: not-allowed;
+  }
+
+  /* Select / Dropdown */
+  .m-select {
+    appearance: none;
+    background-color: var(--m-surface);
+    border: 1px solid var(--m-border-strong);
+    border-radius: var(--m-radius-sm);
+    color: var(--m-text-primary);
+    font-size: var(--m-text-base);
+    padding: 8px 36px 8px 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%235f6368' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .m-select:focus {
+    outline: none;
+    border-color: var(--m-border-focus);
+    box-shadow: 0 0 0 3px var(--m-focus-ring);
+  }
+
+  /* Badge / Chip */
+  .m-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--m-radius-pill);
+    border: 1px solid var(--m-border);
+    background-color: var(--m-surface);
+    color: var(--m-text-secondary);
+    font-size: var(--m-text-xs);
+    font-weight: 600;
+  }
+
+  .m-chip-primary {
+    background-color: var(--m-primary-subtle);
+    border-color: var(--m-border-focus);
+    color: var(--m-primary);
+  }
+
+  .m-chip-success {
+    background-color: var(--m-success-bg);
+    border-color: var(--m-success-border);
+    color: var(--m-success-text);
+  }
+
+  .m-chip-warning {
+    background-color: var(--m-warning-bg);
+    border-color: var(--m-warning-border);
+    color: var(--m-warning-text);
+  }
+
+  .m-chip-error {
+    background-color: var(--m-error-bg);
+    border-color: var(--m-error-border);
+    color: var(--m-error-text);
+  }
+
+  /* Table */
+  .m-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--m-text-sm);
+  }
+
+  .m-table th {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: var(--m-text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--m-text-muted);
+    border-bottom: 1px solid var(--m-border);
+    background-color: var(--m-bg);
+  }
+
+  .m-table td {
+    padding: 12px 16px;
+    color: var(--m-text-primary);
+    border-bottom: 1px solid var(--m-border-subtle);
+    vertical-align: middle;
+  }
+
+  .m-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .m-table tbody tr:hover td {
+    background-color: var(--m-hover-overlay);
+  }
+
+  /* Sidebar nav link — modern variant */
+  .m-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    border-radius: var(--m-radius-pill);
+    font-size: var(--m-text-sm);
+    font-weight: 500;
+    color: var(--m-nav-text);
+    transition: background-color .15s ease, color .15s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .m-nav-link:hover {
+    background-color: var(--m-hover-overlay);
+    color: var(--m-text-primary);
+  }
+
+  .m-nav-link.active {
+    background-color: var(--m-nav-active-bg);
+    color: var(--m-nav-active-text);
+    font-weight: 700;
+  }
+
+  /* Dividers */
+  .m-divider {
+    height: 1px;
+    background-color: var(--m-border);
+    margin: 16px 0;
+  }
+
+  /* Focus visible universal */
+  .theme-modern :focus-visible {
+    outline: 3px solid var(--m-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--m-radius-sm);
+  }
+
+  .theme-modern button:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Text utilities */
+  .m-text-primary {
+    color: var(--m-text-primary);
+  }
+
+  .m-text-secondary {
+    color: var(--m-text-secondary);
+  }
+
+  .m-text-muted {
+    color: var(--m-text-muted);
+  }
+
+  .m-text-link {
+    color: var(--m-text-link);
+  }
+
+  .m-text-success {
+    color: var(--m-success-text);
+  }
+
+  .m-text-warning {
+    color: var(--m-warning-text);
+  }
+
+  .m-text-error {
+    color: var(--m-error-text);
+  }
+
+  /* Background utilities */
+  .m-bg {
+    background-color: var(--m-bg);
+  }
+
+  .m-bg-surface {
+    background-color: var(--m-surface);
+  }
+
+  .m-bg-surface-raised {
+    background-color: var(--m-surface-raised);
+  }
+
+  .m-bg-primary {
+    background-color: var(--m-primary);
+  }
+
+  .m-bg-primary-subtle {
+    background-color: var(--m-primary-subtle);
+  }
+
+  .m-bg-success {
+    background-color: var(--m-success-bg);
+  }
+
+  .m-bg-warning {
+    background-color: var(--m-warning-bg);
+  }
+
+  .m-bg-error {
+    background-color: var(--m-error-bg);
+  }
+
+  /* Border utilities */
+  .m-border {
+    border-color: var(--m-border);
+  }
+
+  .m-border-strong {
+    border-color: var(--m-border-strong);
+  }
+
+  .m-border-focus {
+    border-color: var(--m-border-focus);
+  }
+
+  /* Shadow utilities */
+  .m-shadow-1 {
+    box-shadow: var(--m-shadow-1);
+  }
+
+  .m-shadow-2 {
+    box-shadow: var(--m-shadow-2);
+  }
+
+  .m-shadow-3 {
+    box-shadow: var(--m-shadow-3);
+  }
+
+  .m-shadow-4 {
+    box-shadow: var(--m-shadow-4);
+  }
+
+  /* Header bar remap for modern theme */
+  .theme-modern .bg-slate-900 {
+    background-color: var(--m-header-bg) !important;
+  }
+
+  .theme-modern .border-slate-800,
+  .theme-modern .border-slate-800\/60 {
+    border-color: var(--m-sidebar-border) !important;
+  }
+
+  .theme-modern aside.bg-slate-900 {
+    background-color: var(--m-sidebar-bg) !important;
+  }
+
+  /* Sidebar text colour remap */
+  .theme-modern .text-slate-400 {
+    color: var(--m-nav-text) !important;
+  }
+
+  .theme-modern .text-slate-500 {
+    color: var(--m-text-muted) !important;
+  }
+
+  .theme-modern .text-white {
+    color: var(--m-text-primary) !important;
+  }
+
+  /* Active nav item remap */
+  .theme-modern .sidebar-link-active,
+  .theme-modern a[aria-current="page"] {
+    background-color: var(--m-nav-active-bg);
+    color: var(--m-nav-active-text);
+  }
+}

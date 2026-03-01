@@ -17,12 +17,13 @@ import {
     Sun, Moon, Monitor,
     Mail, MessageCircle,
     Lock, Smartphone,
-    CheckCircle2, ChevronRight,
-    Building2, BadgeCheck, Globe, Palette,
+    CheckCircle2,
+    BadgeCheck, Globe, Palette,
+    LayoutDashboard, Sparkles,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useTheme, ACCENT_OPTIONS } from '../contexts/ThemeContext';
-import type { AccentColor } from '../contexts/ThemeContext';
+import { useTheme, ACCENT_OPTIONS, UI_THEME_OPTIONS } from '../contexts/ThemeContext';
+import type { AccentColor, UITheme } from '../contexts/ThemeContext';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -201,6 +202,103 @@ const THEME_OPTIONS: { id: ThemeChoice; label: string; icon: React.ElementType; 
     { id: 'system', label: 'System', icon: Monitor, description: 'Follow OS preference' },
 ];
 
+// ── UI Theme Picker ──────────────────────────────────────────────────────────
+
+function UIThemePicker() {
+    const { uiTheme, setUITheme } = useTheme();
+
+    return (
+        <SettingsCard
+            title="UI Style"
+            description="Choose the overall look and feel of the portal. Changes take effect immediately."
+        >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {UI_THEME_OPTIONS.map(opt => {
+                    const isSelected = uiTheme === opt.id;
+                    return (
+                        <button
+                            key={opt.id}
+                            id={`ui-theme-btn-${opt.id}`}
+                            onClick={() => setUITheme(opt.id as UITheme)}
+                            className={`
+                                relative group flex flex-col gap-3 p-4 rounded-2xl border-2
+                                transition-all duration-200 text-left select-none active:scale-[0.98]
+                                ${isSelected
+                                    ? 'border-psi-action bg-psi-action-subtle shadow-md'
+                                    : 'border-psi hover:border-psi-strong bg-psi-subtle'
+                                }
+                            `}
+                        >
+                            {/* Selected ring + check */}
+                            {isSelected && (
+                                <motion.div
+                                    layoutId="ui-theme-selected"
+                                    className="absolute top-3 right-3 w-5 h-5 bg-psi-action rounded-full flex items-center justify-center shadow-sm"
+                                >
+                                    <CheckCircle2 size={12} className="text-white" />
+                                </motion.div>
+                            )}
+
+                            {/* Mini preview mockup */}
+                            <div
+                                className="w-full aspect-[16/7] rounded-xl overflow-hidden border border-psi-border shadow-sm relative flex"
+                                style={{ backgroundColor: opt.preview.bg }}
+                            >
+                                {/* Sidebar strip */}
+                                <div
+                                    className="w-10 h-full flex flex-col items-center pt-2 gap-1.5"
+                                    style={{ backgroundColor: opt.id === 'default' ? '#0f172a' : opt.preview.bg, borderRight: `1px solid ${opt.preview.border}` }}
+                                >
+                                    <div className="w-5 h-1.5 rounded-full" style={{ backgroundColor: opt.preview.accent, opacity: 0.9 }} />
+                                    {[1, 2, 3].map(i => (
+                                        <div key={i} className="w-6 h-1 rounded-full" style={{ backgroundColor: opt.id === 'default' ? 'rgba(255,255,255,.2)' : opt.preview.border }} />
+                                    ))}
+                                </div>
+                                {/* Content area */}
+                                <div className="flex-1 p-2 flex flex-col gap-1.5">
+                                    {/* Header bar */}
+                                    <div className="w-full h-3 rounded flex items-center justify-between px-1.5"
+                                        style={{ backgroundColor: opt.id === 'default' ? '#0f172a' : opt.preview.surface, border: `1px solid ${opt.preview.border}` }}>
+                                        <div className="w-6 h-1 rounded-full" style={{ backgroundColor: opt.id === 'default' ? 'rgba(255,255,255,.4)' : opt.preview.text, opacity: 0.5 }} />
+                                        <div className="w-3 h-1.5 rounded-full" style={{ backgroundColor: opt.preview.accent }} />
+                                    </div>
+                                    {/* Cards row */}
+                                    <div className="flex gap-1.5 flex-1">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="flex-1 rounded"
+                                                style={{ backgroundColor: opt.preview.surface, border: `1px solid ${opt.preview.border}` }}>
+                                                <div className="w-full h-1.5 rounded-t" style={{ backgroundColor: opt.preview.accent, opacity: i === 1 ? 1 : 0.3 }} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Label */}
+                            <div>
+                                <p className={`text-sm font-bold ${isSelected ? 'text-psi-action' : 'text-psi-primary'}`}>
+                                    {opt.id === 'default' ? <span className="flex items-center gap-1.5"><LayoutDashboard size={13} />{opt.label}</span> : <span className="flex items-center gap-1.5"><Sparkles size={13} />{opt.label}</span>}
+                                </p>
+                                <p className="text-[11px] text-psi-muted mt-0.5 leading-snug">{opt.description}</p>
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Live indicator */}
+            <div className="mt-4 px-3 py-2 rounded-xl bg-psi-subtle border border-psi flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+                <p className="text-xs text-psi-secondary">
+                    Currently using: <span className="font-bold text-psi-primary">{UI_THEME_OPTIONS.find(o => o.id === uiTheme)?.label}</span> · Changes apply instantly.
+                </p>
+            </div>
+        </SettingsCard>
+    );
+}
+
+// ── Section: Preferences ──────────────────────────────────────────────────────
+
 function PreferencesSection() {
     const { theme, toggleTheme, accent, setAccent } = useTheme();
 
@@ -240,6 +338,9 @@ function PreferencesSection() {
 
     return (
         <div className="space-y-5">
+
+            {/* UI Theme switcher — shown before appearance */}
+            <UIThemePicker />
 
             {/* Theme selector */}
             <SettingsCard

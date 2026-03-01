@@ -1,11 +1,15 @@
 /**
  * ThemeContext.tsx
  * ─────────────────────────────────────────────────────────────────────────────
- * Global light/dark theme management + accent colour system for PSI Event Portal.
+ * Global theme management for PSI Event Portal.
  *
- * Accent colours are stored as a CSS custom property --psi-action on <html>,
- * allowing .btn-accent and .ring-accent utilities (defined in index.css) to
- * automatically inherit the chosen brand colour everywhere.
+ * Controls three independent axes:
+ *   1. light / dark           — Tailwind dark class on <html>
+ *   2. accent colour          — --psi-action CSS variable on <html>
+ *   3. UI theme variant       — 'default' (PSI dark-slate) | 'modern' (Google/Material)
+ *                               Applied as class "theme-modern" on <html>
+ *
+ * All three axes are persisted to localStorage and restored on boot.
  */
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
@@ -14,16 +18,30 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 export type AccentColor = 'blue' | 'green' | 'purple' | 'rose';
+export type UITheme = 'default' | 'modern';
 
 export interface AccentOption {
     id: AccentColor;
     label: string;
-    /** hex used as CSS variable value  */
+    /** Hex used as CSS variable value */
     hex: string;
     /** Tailwind ring/border sample class for the picker swatch */
     ring: string;
     /** bg-* for active swatch */
     bg: string;
+}
+
+export interface UIThemeOption {
+    id: UITheme;
+    label: string;
+    description: string;
+    preview: {
+        bg: string;
+        surface: string;
+        accent: string;
+        text: string;
+        border: string;
+    };
 }
 
 export const ACCENT_OPTIONS: AccentOption[] = [
@@ -33,6 +51,33 @@ export const ACCENT_OPTIONS: AccentOption[] = [
     { id: 'rose', label: 'Rose', hex: '#f43f5e', ring: 'ring-rose-500', bg: 'bg-rose-500' },
 ];
 
+export const UI_THEME_OPTIONS: UIThemeOption[] = [
+    {
+        id: 'default',
+        label: 'PSI Default',
+        description: 'Dark slate sidebar, high-contrast cards, emerald brand',
+        preview: {
+            bg: '#f8fafc',
+            surface: '#ffffff',
+            accent: '#10b981',
+            text: '#0f172a',
+            border: '#e2e8f0',
+        },
+    },
+    {
+        id: 'modern',
+        label: 'Modern (Google-style)',
+        description: 'Clean white surfaces, Google Blue accent, Material Design language',
+        preview: {
+            bg: '#f8f9fa',
+            surface: '#ffffff',
+            accent: '#1a73e8',
+            text: '#202124',
+            border: '#dadce0',
+        },
+    },
+];
+
 interface ThemeContextValue {
     theme: Theme;
     toggleTheme: () => void;
@@ -40,16 +85,21 @@ interface ThemeContextValue {
     accent: AccentColor;
     setAccent: (a: AccentColor) => void;
     accentHex: string;
+    uiTheme: UITheme;
+    setUITheme: (t: UITheme) => void;
 }
 
 // ── Context ───────────────────────────────────────────────────────────────────
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-// ── Storage / DOM helpers ─────────────────────────────────────────────────────
+// ── Storage keys ──────────────────────────────────────────────────────────────
 
 const THEME_KEY = 'psi-theme';
 const ACCENT_KEY = 'psi-accent';
+const UI_THEME_KEY = 'psi-ui-theme';
+
+// ── DOM helpers ───────────────────────────────────────────────────────────────
 
 function getInitialTheme(): Theme {
     const saved = localStorage.getItem(THEME_KEY) as Theme | null;
@@ -64,6 +114,12 @@ function getInitialAccent(): AccentColor {
     return 'blue';
 }
 
+function getInitialUITheme(): UITheme {
+    const saved = localStorage.getItem(UI_THEME_KEY) as UITheme | null;
+    if (saved === 'default' || saved === 'modern') return saved;
+    return 'default';
+}
+
 function applyTheme(theme: Theme) {
     const root = document.documentElement;
     if (theme === 'dark') root.classList.add('dark');
@@ -74,9 +130,18 @@ function applyTheme(theme: Theme) {
 function applyAccent(accent: AccentColor) {
     const opt = ACCENT_OPTIONS.find(a => a.id === accent)!;
     document.documentElement.style.setProperty('--psi-action', opt.hex);
-    // also store a subtle (10 % opacity) version for soft backgrounds
     document.documentElement.style.setProperty('--psi-action-subtle', opt.hex + '1a');
     localStorage.setItem(ACCENT_KEY, accent);
+}
+
+function applyUITheme(uiTheme: UITheme) {
+    const root = document.documentElement;
+    if (uiTheme === 'modern') {
+        root.classList.add('theme-modern');
+    } else {
+        root.classList.remove('theme-modern');
+    }
+    localStorage.setItem(UI_THEME_KEY, uiTheme);
 }
 
 // ── Provider ──────────────────────────────────────────────────────────────────
@@ -94,6 +159,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return initial;
     });
 
+    const [uiTheme, setUIThemeState] = useState<UITheme>(() => {
+        const initial = getInitialUITheme();
+        applyUITheme(initial);
+        return initial;
+    });
+
     useEffect(() => { applyTheme(theme); }, [theme]);
 
     const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
@@ -103,10 +174,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setAccentState(a);
     };
 
+    const setUITheme = (t: UITheme) => {
+        applyUITheme(t);
+        setUIThemeState(t);
+    };
+
     const accentHex = ACCENT_OPTIONS.find(a => a.id === accent)!.hex;
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, isDark: theme === 'dark', accent, setAccent, accentHex }}>
+        <ThemeContext.Provider value={{
+            theme, toggleTheme, isDark: theme === 'dark',
+            accent, setAccent, accentHex,
+            uiTheme, setUITheme,
+        }}>
             {children}
         </ThemeContext.Provider>
     );
