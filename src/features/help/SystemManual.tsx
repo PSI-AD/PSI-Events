@@ -315,6 +315,15 @@ function ScreenshotPlaceholder({
     // Just drop the file into public/manual/ with the exact filename used here.
     const src = `/manual/${filename}`;
 
+    // Derive a clean, clickable href from the descriptive url string
+    // e.g. "localhost:5173/check-in  →  My QR Pass tab"  →  "http://localhost:5173/check-in"
+    const clickHref = url
+        ? (() => {
+            const cleanPath = url.split(/\s*[→>]\s*|\s{2,}/)[0].trim();
+            return cleanPath.startsWith('http') ? cleanPath : `http://${cleanPath}`;
+        })()
+        : null;
+
     return (
         <figure className="my-6">
             <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl shadow-slate-900/10 overflow-hidden bg-slate-900 p-2">
@@ -326,10 +335,22 @@ function ScreenshotPlaceholder({
                         className="w-full h-auto rounded-xl border border-white/10 block"
                     />
                 ) : (
-                    /* ── Fallback placeholder ── */
-                    <div className="rounded-xl border border-white/10 bg-slate-800/60 min-h-[220px] md:min-h-[280px] flex flex-col items-center justify-center gap-4 px-6 py-10">
+                    /* ── Fallback placeholder — ENTIRE AREA is clickable ── */
+                    <a
+                        href={clickHref ?? '#'}
+                        target={clickHref ? '_blank' : undefined}
+                        rel="noopener noreferrer"
+                        onClick={!clickHref ? (e) => e.preventDefault() : undefined}
+                        className={[
+                            'block rounded-xl border border-white/10 bg-slate-800/60',
+                            'min-h-[220px] md:min-h-[280px] flex flex-col items-center justify-center gap-4 px-6 py-10',
+                            clickHref
+                                ? 'cursor-pointer hover:bg-slate-700/60 hover:border-blue-500/50 hover:ring-2 hover:ring-blue-500/30 transition-all duration-200 group'
+                                : 'cursor-default',
+                        ].join(' ')}
+                    >
                         {/* Decorative fake UI chrome */}
-                        <div className="w-full max-w-xs flex flex-col gap-2 opacity-40 pointer-events-none select-none">
+                        <div className="w-full max-w-xs flex flex-col gap-2 opacity-30 pointer-events-none select-none group-hover:opacity-50 transition-opacity duration-200">
                             <div className="flex items-center gap-1.5 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-red-400" />
                                 <div className="w-2 h-2 rounded-full bg-amber-400" />
@@ -343,23 +364,33 @@ function ScreenshotPlaceholder({
                                 <div className="h-8 bg-slate-600/60 rounded-lg flex-1" />
                             </div>
                         </div>
-                        {/* Text */}
-                        <div className="text-center space-y-2">
-                            <p className="text-slate-300 font-bold text-sm">Screenshot coming soon</p>
-                            {url && (
-                                <div className="inline-flex items-center gap-1.5 bg-blue-500/15 border border-blue-500/30 rounded-lg px-3 py-1.5">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">📸 Navigate to:</span>
-                                    <span className="text-blue-300 font-mono text-xs font-semibold">{url}</span>
-                                </div>
+
+                        {/* CTA — prominent blue button + instructions */}
+                        <div className="text-center space-y-3">
+                            {clickHref ? (
+                                <>
+                                    <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105 group-hover:shadow-blue-500/40">
+                                        <span>📸 Click to open this screen</span>
+                                        {/* External link icon */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                            <polyline points="15 3 21 3 21 9" />
+                                            <line x1="10" y1="14" x2="21" y2="3" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-slate-400 text-[10px] font-mono break-all">{clickHref}</p>
+                                </>
+                            ) : (
+                                <p className="text-slate-300 font-bold text-sm">Screenshot coming soon</p>
                             )}
                             <p className="text-slate-500 text-xs font-mono">
-                                Then save as{' '}
+                                Save screenshot as{' '}
                                 <span className="text-emerald-400 font-semibold">{filename}</span>
                                 {' '}→{' '}
                                 <span className="text-blue-400">public/manual/</span>
                             </p>
                         </div>
-                    </div>
+                    </a>
                 )}
             </div>
             {caption && (
