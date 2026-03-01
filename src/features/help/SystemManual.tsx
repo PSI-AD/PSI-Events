@@ -1081,6 +1081,235 @@ const TIER_TABLE = [
     { tier: '🥉 Bronze', share: '20%', example: 'AED 1,000,000 × 20% = AED 200,000', who: 'New or unproven agents' },
 ];
 
+// ─── Financial Risk Matrix — three-pillar animated infographic ──────────────────────
+
+const RISK_PILLARS = [
+    {
+        id: 'gold',
+        medal: '🥇',
+        label: 'Gold',
+        share: '50',
+        riskLabel: '100% Agent Risk',
+        riskDesc: 'Agent bears full financial exposure',
+        rewardLabel: '50% Reward',
+        flowLabel: 'High Risk  →  High Reward',
+        barColor: 'bg-amber-400',
+        barGlow: 'shadow-amber-400/40',
+        // Light mode
+        cardBorder: 'border-amber-300',
+        cardBg: 'bg-white',
+        pctColor: 'text-amber-500',
+        badgeBg: 'bg-amber-100 text-amber-700',
+        riskBg: 'bg-amber-50 border-amber-200',
+        riskText: 'text-amber-700',
+        flowText: 'text-amber-600',
+        // Dark mode
+        darkCardBg: 'dark:bg-gradient-to-b dark:from-amber-950/60 dark:to-slate-900',
+        darkBorder: 'dark:border-amber-600/40',
+        darkPct: 'dark:text-amber-400',
+        darkBadge: 'dark:bg-amber-500/20 dark:text-amber-300',
+        darkRiskBg: 'dark:bg-amber-900/20 dark:border-amber-700/40',
+        darkRiskText: 'dark:text-amber-300',
+        darkFlow: 'dark:text-amber-400',
+        barWidth: 'w-full',
+        topAgent: true,
+    },
+    {
+        id: 'silver',
+        medal: '🥈',
+        label: 'Silver',
+        share: '30',
+        riskLabel: 'Shared Risk',
+        riskDesc: 'Risk split between agent & branch',
+        rewardLabel: '30% Reward',
+        flowLabel: 'Balanced Risk  →  Balanced Reward',
+        barColor: 'bg-slate-400',
+        barGlow: 'shadow-slate-400/30',
+        cardBorder: 'border-slate-300',
+        cardBg: 'bg-white',
+        pctColor: 'text-slate-600',
+        badgeBg: 'bg-slate-100 text-slate-600',
+        riskBg: 'bg-slate-50 border-slate-200',
+        riskText: 'text-slate-600',
+        flowText: 'text-slate-500',
+        darkCardBg: 'dark:bg-gradient-to-b dark:from-slate-800/80 dark:to-slate-900',
+        darkBorder: 'dark:border-slate-600/50',
+        darkPct: 'dark:text-slate-300',
+        darkBadge: 'dark:bg-slate-500/20 dark:text-slate-300',
+        darkRiskBg: 'dark:bg-slate-800/60 dark:border-slate-700/50',
+        darkRiskText: 'dark:text-slate-300',
+        darkFlow: 'dark:text-slate-400',
+        barWidth: 'w-[60%]',
+        topAgent: false,
+    },
+    {
+        id: 'bronze',
+        medal: '🥉',
+        label: 'Bronze',
+        share: '20',
+        riskLabel: '100% Branch Risk',
+        riskDesc: 'Branch absorbs all financial exposure',
+        rewardLabel: '20% Reward',
+        flowLabel: 'No Risk  →  Entry-Level Reward',
+        barColor: 'bg-emerald-400',
+        barGlow: 'shadow-emerald-400/30',
+        cardBorder: 'border-emerald-300',
+        cardBg: 'bg-white',
+        pctColor: 'text-emerald-600',
+        badgeBg: 'bg-emerald-100 text-emerald-700',
+        riskBg: 'bg-emerald-50 border-emerald-200',
+        riskText: 'text-emerald-700',
+        flowText: 'text-emerald-600',
+        darkCardBg: 'dark:bg-gradient-to-b dark:from-emerald-950/50 dark:to-slate-900',
+        darkBorder: 'dark:border-emerald-600/40',
+        darkPct: 'dark:text-emerald-400',
+        darkBadge: 'dark:bg-emerald-500/20 dark:text-emerald-300',
+        darkRiskBg: 'dark:bg-emerald-900/20 dark:border-emerald-700/40',
+        darkRiskText: 'dark:text-emerald-300',
+        darkFlow: 'dark:text-emerald-400',
+        barWidth: 'w-[40%]',
+        topAgent: false,
+    },
+];
+
+function RiskMatrixDiagram() {
+    return (
+        <div className="my-10">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 mb-5 text-center">
+                Financial Risk Matrix · Commission Split Model
+            </p>
+
+            {/* Three pillars */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {RISK_PILLARS.map((p, idx) => (
+                    <motion.div
+                        key={p.id}
+                        initial={{ opacity: 0, y: 32 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-40px' }}
+                        transition={{ duration: 0.5, delay: idx * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className={cn(
+                            'rounded-2xl border-2 overflow-hidden flex flex-col',
+                            p.cardBg, p.cardBorder,
+                            p.darkCardBg, p.darkBorder,
+                            // Gold gets a subtle top shadow accent
+                            p.id === 'gold' && 'shadow-lg shadow-amber-200/50 dark:shadow-amber-900/30',
+                        )}
+                    >
+                        {/* ── Header strip ── */}
+                        <div className={cn(
+                            'px-5 pt-5 pb-4 flex items-center gap-3',
+                        )}>
+                            <span className="text-2xl leading-none">{p.medal}</span>
+                            <div>
+                                <p className={cn(
+                                    'text-xs font-black uppercase tracking-[0.18em]',
+                                    p.badgeBg, p.darkBadge,
+                                    'px-2 py-0.5 rounded-full inline-block',
+                                )}>
+                                    {p.label} Tier
+                                </p>
+                                {p.topAgent && (
+                                    <p className="text-[9px] text-amber-500 dark:text-amber-400 font-bold uppercase tracking-widest mt-0.5">
+                                        Top Performers
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* ── Giant percentage ── */}
+                        <div className="px-5 pb-2 flex items-end gap-1">
+                            <motion.span
+                                initial={{ opacity: 0, scale: 0.7 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.45, delay: idx * 0.15 + 0.2, ease: 'backOut' }}
+                                className={cn(
+                                    'text-7xl font-black leading-none tracking-tighter tabular-nums',
+                                    p.pctColor, p.darkPct,
+                                )}
+                            >
+                                {p.share}
+                            </motion.span>
+                            <span className={cn('text-2xl font-black mb-2', p.pctColor, p.darkPct)}>%</span>
+                        </div>
+                        <p className="px-5 text-[11px] text-slate-500 dark:text-slate-400 font-semibold pb-3">
+                            of Agent's Closed Revenue
+                        </p>
+
+                        {/* ── Animated bar ── */}
+                        <div className="px-5 pb-4">
+                            <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                                <motion.div
+                                    initial={{ width: '0%' }}
+                                    whileInView={{ width: p.id === 'gold' ? '100%' : p.id === 'silver' ? '60%' : '40%' }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.7, delay: idx * 0.15 + 0.3, ease: 'easeOut' }}
+                                    className={cn('h-full rounded-full shadow-lg', p.barColor, p.barGlow)}
+                                />
+                            </div>
+                            {/* Bar label */}
+                            <div className="flex justify-between mt-1">
+                                <span className="text-[9px] text-slate-400 font-mono">0%</span>
+                                <span className={cn('text-[9px] font-bold font-mono', p.pctColor, p.darkPct)}>{p.share}%</span>
+                                <span className="text-[9px] text-slate-400 font-mono">100%</span>
+                            </div>
+                        </div>
+
+                        {/* ── Risk → Reward mini-diagram ── */}
+                        <div className={cn(
+                            'mx-4 mb-4 rounded-xl border p-4 flex flex-col gap-2',
+                            p.riskBg, p.riskText,
+                            p.darkRiskBg, p.darkRiskText,
+                        )}>
+                            {/* Risk box */}
+                            <div className="flex items-center justify-between">
+                                <div className="text-left">
+                                    <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Risk</p>
+                                    <p className="text-xs font-bold leading-tight">{p.riskLabel}</p>
+                                </div>
+                                {/* Arrow */}
+                                <svg width="28" height="12" viewBox="0 0 28 12" fill="none" className="flex-shrink-0 mx-1">
+                                    <line x1="2" y1="6" x2="22" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="3 3" className="opacity-50" />
+                                    <polyline points="17,2 24,6 17,10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                                </svg>
+                                {/* Reward */}
+                                <div className="text-right">
+                                    <p className="text-[9px] font-black uppercase tracking-widest opacity-60">Reward</p>
+                                    <p className="text-xs font-extrabold leading-tight">{p.rewardLabel}</p>
+                                </div>
+                            </div>
+                            {/* Flow label */}
+                            <p className={cn(
+                                'text-[10px] font-semibold text-center border-t pt-2 opacity-80',
+                                p.id === 'gold' ? 'border-amber-200 dark:border-amber-800/50' :
+                                    p.id === 'silver' ? 'border-slate-200 dark:border-slate-700/50' :
+                                        'border-emerald-200 dark:border-emerald-800/50',
+                            )}>
+                                {p.flowLabel}
+                            </p>
+                        </div>
+
+                        {/* ── Bottom description ── */}
+                        <p className="px-5 pb-5 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                            {p.riskDesc}
+                        </p>
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* Bottom rule */}
+            <div className="mt-6 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 flex items-start gap-3">
+                <span className="text-base flex-shrink-0">⚖️</span>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <strong className="text-slate-800 dark:text-slate-200">Risk Principle:</strong>{' '}
+                    The higher the financial risk an agent accepts, the greater their share of the upside. Bronze agents are fully protected by the branch — ideal for onboarding new talent without financial friction.
+                </p>
+            </div>
+        </div>
+    );
+}
+
 function SettlementsSection() {
     return (
         <section id="settlements" className="scroll-mt-6 pb-16 border-t border-slate-200 dark:border-slate-800/60 pt-12">
@@ -1141,6 +1370,9 @@ function SettlementsSection() {
                     ))}
                 </div>
             </div>
+
+            {/* ── Financial Risk Matrix infographic ── */}
+            <RiskMatrixDiagram />
 
             {/* Tier table */}
             <div className="mb-8">
