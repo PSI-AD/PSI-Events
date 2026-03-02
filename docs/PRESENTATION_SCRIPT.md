@@ -2,20 +2,6 @@
 ### Property Shop Investment LLC · Management Demo
 **Date:** 2 March 2026 · **Presenter:** ___________________
 
----
-
-## ⚡ Pre-Demo Checklist (Do This Before the Room Fills)
-
-> Complete every step **before** the presentation starts. Do not skip.
-
-- [ ] **1. Run the Database Seeder** — Open the app in your browser, navigate to the Login page, click the low-opacity **"DEV: Run Seeder"** button at the bottom of the screen. Wait for the "Data Injection Successful" alert. This populates all mock events, agents, and financial data.
-- [ ] **2. Clear Browser Cache** — Open DevTools (`Cmd + Shift + I` on Mac / `F12` on Windows), go to the **Application** tab → **Storage** → click **"Clear site data"**. This ensures no stale state shows on screen.
-- [ ] **3. Open the App in Full Screen** — Press **`F11`** (Windows) or **`Ctrl + Cmd + F`** (Mac) to go fullscreen. The dark UI is designed for projector screens — it will look far better full-screen.
-- [ ] **4. Pre-navigate to the Dashboard** — Start the demo on the main Dashboard (`/`), collapsed sidebar, dark mode ON.
-- [ ] **5. Mute Notifications** — Enable Do Not Disturb on your laptop before the demo.
-
----
-
 ## Phase 1 — The Hook (The Problem)
 
 > 🎯 **Goal:** Create urgency. Make management feel the pain of the current process before showing the solution.

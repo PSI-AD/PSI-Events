@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase/firebaseConfig';
+import { toast } from 'sonner';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -117,8 +118,13 @@ export default function EventsList() {
       });
       setShowModal(false);
       setNewEvent({ name: '', city: 'Dubai', country: 'UAE', target_leads: 200, is_sponsored: false });
+      toast.success('Event created successfully!', {
+        description: `"${newEvent.name}" has been saved to Firestore.`,
+      });
     } catch (err) {
       console.error('[EventsList] Create failed:', err);
+      const msg = err instanceof Error ? err.message : 'Unknown error';
+      toast.error('Failed to create event', { description: msg });
     } finally {
       setSaving(false);
     }
@@ -215,9 +221,17 @@ export default function EventsList() {
                 <div className="pt-2">
                   <button
                     type="submit" disabled={saving}
-                    className="btn-accent w-full py-3 rounded-xl font-bold active:scale-[0.98] transition-all disabled:opacity-60 select-none"
+                    className="btn-accent w-full py-3 rounded-xl font-bold active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed select-none flex items-center justify-center gap-2 min-h-[48px]"
                   >
-                    {saving ? 'Creating…' : 'Create Event'}
+                    {saving ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        <span>Creating…</span>
+                      </>
+                    ) : 'Create Event'}
                   </button>
                 </div>
               </form>
@@ -337,14 +351,42 @@ export default function EventsList() {
           ))}
 
           {filtered.length === 0 && !loading && (
-            <div className="col-span-full py-20 text-center bg-psi-subtle border-2 border-dashed border-psi rounded-3xl">
-              <CalendarIcon size={40} className="mx-auto text-psi-muted mb-4" />
-              <h3 className="text-lg font-bold text-psi-primary">
-                {filter ? 'No events match your filter' : 'No events yet'}
-              </h3>
-              <p className="text-psi-secondary text-sm mt-1">
-                {filter ? 'Try a different search term.' : 'Create your first roadshow above.'}
-              </p>
+            <div className="col-span-full">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="flex flex-col items-center justify-center py-24 px-8 bg-psi-subtle border-2 border-dashed border-psi rounded-3xl text-center"
+              >
+                <div className="w-20 h-20 rounded-3xl bg-psi-surface border border-psi flex items-center justify-center mb-6 shadow-inner">
+                  <CalendarIcon size={36} className="text-psi-muted opacity-60" />
+                </div>
+                <h3 className="text-xl font-extrabold text-psi-primary mb-2">
+                  {filter ? 'No Events Match Your Filter' : 'No Events Yet'}
+                </h3>
+                <p className="text-psi-secondary text-sm max-w-sm leading-relaxed mb-8">
+                  {filter
+                    ? `No events found for "${filter}". Try a different city, status, or event name.`
+                    : 'Your roadshow calendar is empty. Create your first international event to get started.'}
+                </p>
+                {!filter && (
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="btn-accent flex items-center gap-2 px-6 py-3 rounded-xl font-bold shadow-md active:scale-[0.98] transition-all select-none"
+                  >
+                    <Plus size={18} />
+                    Create Your First Event
+                  </button>
+                )}
+                {filter && (
+                  <button
+                    onClick={() => setFilter('')}
+                    className="btn-accent-outline px-6 py-3 rounded-xl font-bold transition-all select-none"
+                  >
+                    Clear Filter
+                  </button>
+                )}
+              </motion.div>
             </div>
           )}
         </div>

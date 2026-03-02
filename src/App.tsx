@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 // Layouts (small, load eagerly — they are the shells for every route)
 import DashboardLayout from './layouts/DashboardLayout';
@@ -99,6 +100,16 @@ function DashboardPageLoader() {
 export default function App() {
   return (
     <Router>
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        theme="system"
+        toastOptions={{
+          style: { fontFamily: 'inherit', fontSize: '13px' },
+          duration: 3500,
+        }}
+      />
       <Routes>
         {/* ── PUBLIC ROUTES ─────────────────────────────────────────────────
             Standalone pages. No sidebar, no header.
