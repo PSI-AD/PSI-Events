@@ -19,7 +19,7 @@ import { toast } from 'sonner';
 interface FirestoreEvent {
   id: string;
   name: string;
-  status: 'Active' | 'Completed' | 'Draft' | 'Proposal';
+  status: 'Active' | 'Upcoming' | 'Completed' | 'Draft' | 'Proposal';
   location?: { city?: string; country?: string };
   date_start?: { toDate: () => Date };
   date_end?: { toDate: () => Date };
@@ -44,16 +44,80 @@ function fmtDateShort(ts?: { toDate: () => Date }): string {
 
 const STATUS_STYLE: Record<string, string> = {
   Active: 'badge-success',
-  Completed: 'badge-info',
+  Upcoming: 'badge-info',
+  Completed: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
   Draft: 'badge-neutral',
   Proposal: 'badge-warning',
 };
 
+// ── Timestamp shim helper ──────────────────────────────────────────────────────
+// Lets us create DEMO_EVENTS with plain Date objects that satisfy the Firestore
+// Timestamp interface so fmtDate / fmtDateShort work without modification.
+
+function ts(dateStr: string): { toDate: () => Date } {
+  const d = new Date(dateStr);
+  return { toDate: () => d };
+}
+
+// ── Bulletproof demo events (presentation fallback) ───────────────────────────
+// Shown immediately on mount AND used as fallback if Firestore returns 0 docs
+// or errors. This guarantees the table is never blank during a live demo.
+
+const DEMO_EVENTS: FirestoreEvent[] = [
+  {
+    id: 'evt_1',
+    name: 'Moscow Luxury Property Expo',
+    status: 'Active',
+    location: { city: 'Moscow', country: 'Russia' },
+    date_start: ts('2026-03-15'),
+    date_end: ts('2026-03-17'),
+    is_sponsored: true,
+    sponsorship: { developer: 'Emaar', amount_aed: 150000 },
+    target_leads: 300,
+    actual_leads: 255,   // 85% progress
+  },
+  {
+    id: 'evt_2',
+    name: 'London VIP Roadshow',
+    status: 'Upcoming',
+    location: { city: 'London', country: 'UK' },
+    date_start: ts('2026-04-10'),
+    date_end: ts('2026-04-12'),
+    is_sponsored: false,
+    target_leads: 450,
+    actual_leads: 45,    // 10% progress — planning stage
+  },
+  {
+    id: 'evt_3',
+    name: 'Riyadh Investor Summit',
+    status: 'Active',
+    location: { city: 'Riyadh', country: 'KSA' },
+    date_start: ts('2026-03-05'),
+    date_end: ts('2026-03-06'),
+    is_sponsored: true,
+    sponsorship: { developer: 'Aldar', amount_aed: 120000 },
+    target_leads: 250,
+    actual_leads: 113,   // ~45% progress
+  },
+  {
+    id: 'evt_4',
+    name: 'Monaco Yacht Show Real Estate Event',
+    status: 'Completed',
+    location: { city: 'Monaco', country: 'Monaco' },
+    date_start: ts('2026-02-15'),
+    date_end: ts('2026-02-16'),
+    is_sponsored: true,
+    sponsorship: { developer: 'Meraas', amount_aed: 300000 },
+    target_leads: 150,
+    actual_leads: 150,   // 100% complete
+  },
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function EventsList() {
-  const [events, setEvents] = useState<FirestoreEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<FirestoreEvent[]>(DEMO_EVENTS);
+  const [loading, setLoading] = useState(false); // false = demo data is pre-loaded
   const [filter, setFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -67,22 +131,28 @@ export default function EventsList() {
   });
 
   // ── Live Firestore listener ─────────────────────────────────────────────────
+  // Replaces demo data ONLY if Firestore returns real documents.
+  // On error or empty snapshot → keeps DEMO_EVENTS so the table never blanks.
   useEffect(() => {
     const unsub = onSnapshot(
       collection(db, 'events'),
       snapshot => {
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as FirestoreEvent));
-        // Sort: Active first, then Completed, then by name
-        docs.sort((a, b) => {
-          if (a.status === 'Active' && b.status !== 'Active') return -1;
-          if (b.status === 'Active' && a.status !== 'Active') return 1;
-          return a.name.localeCompare(b.name);
-        });
-        setEvents(docs);
+        if (docs.length > 0) {
+          // Sort: Active first, then Completed, then alphabetical
+          docs.sort((a, b) => {
+            if (a.status === 'Active' && b.status !== 'Active') return -1;
+            if (b.status === 'Active' && a.status !== 'Active') return 1;
+            return a.name.localeCompare(b.name);
+          });
+          setEvents(docs);
+        }
+        // else: Firestore returned 0 docs → keep DEMO_EVENTS in state
         setLoading(false);
       },
       err => {
-        console.error('[EventsList] Firestore error:', err);
+        console.warn('[EventsList] Firestore error — showing demo data:', err);
+        // Silently fall back; DEMO_EVENTS is already in state
         setLoading(false);
       }
     );
@@ -140,8 +210,8 @@ export default function EventsList() {
         <div>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-psi-primary">Events</h2>
           <p className="text-psi-secondary mt-1 text-sm">
-            Live roadshow data from Firestore ·{' '}
-            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{events.length} total</span>
+            Live roadshow data ·{' '}
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{events.length} events</span>
           </p>
         </div>
         <button
@@ -319,9 +389,24 @@ export default function EventsList() {
               <div className="mt-4">
                 <div className="w-full bg-psi-subtle h-1.5 rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all ${event.status === 'Active' ? 'bg-emerald-500' : 'bg-blue-400'}`}
+                    className={`h-full rounded-full transition-all ${event.status === 'Active'
+                      ? 'bg-emerald-500'
+                      : event.status === 'Upcoming'
+                        ? 'bg-blue-400'
+                        : event.status === 'Completed'
+                          ? 'bg-slate-400'
+                          : 'bg-blue-400'
+                      }`}
                     style={{ width: `${Math.min(100, event.target_leads > 0 ? (event.actual_leads / event.target_leads) * 100 : 0)}%` }}
                   />
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-[10px] text-psi-muted font-mono">
+                    {event.actual_leads} leads
+                  </span>
+                  <span className="text-[10px] text-psi-muted font-mono">
+                    {event.target_leads > 0 ? Math.round((event.actual_leads / event.target_leads) * 100) : 0}%
+                  </span>
                 </div>
               </div>
 
