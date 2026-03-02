@@ -27,6 +27,8 @@ import { useTheme, ACCENT_OPTIONS, UI_THEME_OPTIONS } from '../contexts/ThemeCon
 import type { AccentColor, UITheme } from '../contexts/ThemeContext';
 import ChecklistBuilder from '../features/settings/ChecklistBuilder';
 import { injectSeedData } from '../utils/firebaseSeeder';
+import { syncCRMProperties } from '../utils/crmIngestor';
+import { toast } from 'sonner';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -617,6 +619,7 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ElementType; descript
 export default function Settings() {
     const [activeSection, setActiveSection] = useState<Section>('profile');
     const [seeding, setSeeding] = useState(false);
+    const [syncing, setSyncing] = useState(false);
 
     async function handleSeedData() {
         if (!window.confirm('⚠️  This will write seed data to Firestore.\n\nOnly run this ONCE on a fresh database.\n\nProceed?')) return;
@@ -638,6 +641,33 @@ export default function Settings() {
             alert(`❌ Seeder crashed:\n\n${err instanceof Error ? err.message : String(err)}`);
         } finally {
             setSeeding(false);
+        }
+    }
+
+    async function handleSyncCRM() {
+        setSyncing(true);
+        const toastId = toast.loading('Connecting to PSI CRM…');
+        try {
+            const result = await syncCRMProperties(1, 100);
+            if (result.success) {
+                toast.success(
+                    `${result.written} Properties Synced from PSI CRM` +
+                    (result.skipped > 0 ? ` (${result.skipped} skipped)` : ''),
+                    { id: toastId, duration: 6000 }
+                );
+            } else {
+                toast.error(
+                    `CRM Sync failed: ${result.errors[0] ?? 'Unknown error'}`,
+                    { id: toastId, duration: 8000 }
+                );
+            }
+        } catch (err) {
+            toast.error(
+                `CRM Sync crashed: ${err instanceof Error ? err.message : String(err)}`,
+                { id: toastId, duration: 8000 }
+            );
+        } finally {
+            setSyncing(false);
         }
     }
 
@@ -731,6 +761,31 @@ export default function Settings() {
                     </AnimatePresence>
                 </div>
             </div>
+
+            {/* ── CRM Sync button — prominent, fixed bottom-right ── */}
+            <button
+                id="crm-sync-trigger"
+                onClick={handleSyncCRM}
+                disabled={syncing || seeding}
+                title="Fetch live property data from PSI CRM and save to Firestore"
+                className="fixed bottom-4 right-36 z-50 flex items-center gap-2 px-4 py-2 rounded-xl
+                           bg-emerald-600 hover:bg-emerald-500 border border-emerald-500
+                           text-white text-xs font-bold tracking-wide
+                           disabled:opacity-50 disabled:cursor-not-allowed
+                           shadow-lg shadow-emerald-900/40 transition-all"
+            >
+                {syncing ? (
+                    <>
+                        <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        Syncing CRM…
+                    </>
+                ) : (
+                    <>🔄 Sync Live CRM Data</>
+                )}
+            </button>
 
             {/* ── DEV: Seed Trigger — fixed bottom-right, low opacity, hidden in plain sight ── */}
             <button
