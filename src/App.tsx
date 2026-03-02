@@ -57,6 +57,7 @@ const EventAnalyticsDashboard = lazy(() => import('./features/eventAnalytics/Eve
 const SmartAgendaBuilder = lazy(() => import('./features/agenda/SmartAgendaBuilder'));
 const VenueMap = lazy(() => import('./features/venueMap/VenueMap'));
 const SessionEngagement = lazy(() => import('./features/engagement/SessionEngagement'));
+const Marketplace = lazy(() => import('./features/marketplace/Marketplace'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -463,6 +464,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <SessionEngagement />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/marketplace"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <Marketplace />
               </Suspense>
             }
           />
