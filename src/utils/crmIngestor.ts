@@ -167,23 +167,24 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         );
     }
 
-    // API key included in URL as well — some PSI CRM endpoints require it as a
-    // query param rather than (or in addition to) headers.
+    // The server returns 405 on GET — it requires POST.
+    // Params sent in the URL query string AND in the JSON body.
     const url =
         `${CRM_BASE_URL}/GetAllProperties` +
-        `?pageIndex=${pageIndex}&pageSize=${pageSize}&apiKey=${encodeURIComponent(CRM_API_KEY)}`;
+        `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
 
-    // Debug: confirm the exact URL (check browser DevTools → Console tab)
-    console.log('[CRM Ingestor] GET', url);
+    // Debug: log the method + URL so you can verify in DevTools → Console
+    console.log('[CRM Ingestor] POST', url);
 
-    // Pure GET — no body property.
     const res = await fetch(url, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${CRM_API_KEY}`,
             'X-Api-Key': CRM_API_KEY,
         },
+        body: JSON.stringify({ pageIndex, pageSize, apiKey: CRM_API_KEY }),
     });
 
 
