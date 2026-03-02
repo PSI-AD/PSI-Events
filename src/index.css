@@ -252,6 +252,11 @@
     background-color: var(--psi-surface-raised);
   }
 
+  /* Alias: same as bg-psi-surface — used in card/panel contexts */
+  .bg-psi-card {
+    background-color: var(--psi-surface);
+  }
+
   .bg-psi-accent {
     background-color: var(--psi-accent);
   }
@@ -292,6 +297,10 @@
 
   .bg-psi-border {
     background-color: var(--psi-border);
+  }
+
+  .bg-psi-border-subtle {
+    background-color: var(--psi-border-subtle);
   }
 
   .bg-psi-border-strong {

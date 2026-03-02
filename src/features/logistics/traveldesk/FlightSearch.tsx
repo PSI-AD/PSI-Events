@@ -46,7 +46,7 @@ export function FlightCard({
             )}
         >
             {overBudget && (
-                <div className="flex items-center gap-1.5 px-4 py-1.5 bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 px-4 py-1.5 bg-rose-500 text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-widest">
                     <Lock size={9} /> Over Budget — {fmtAed(flight.price - budget.maxPerAgent)} above cap
                 </div>
             )}
@@ -59,7 +59,7 @@ export function FlightCard({
             <div className="p-4 sm:p-5">
                 <div className="flex flex-col sm:flex-row gap-4">
                     <div className="flex items-start gap-3 flex-1 min-w-0">
-                        <div className="w-11 h-11 rounded-xl bg-slate-800 flex items-center justify-center text-xl flex-shrink-0 border border-slate-700">
+                        <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl flex-shrink-0 border border-slate-300 dark:border-slate-700">
                             {flight.logo}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -130,8 +130,8 @@ export function FlightCard({
                                 overBudget
                                     ? 'bg-psi-subtle text-psi-muted border border-psi cursor-not-allowed'
                                     : booking
-                                        ? 'bg-amber-500/50 text-white cursor-wait'
-                                        : 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-amber-500/20'
+                                        ? 'bg-amber-500/50 text-slate-900 dark:text-white cursor-wait'
+                                        : 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-900 dark:text-white shadow-amber-500/20'
                             )}
                         >
                             {booking ? (
@@ -238,7 +238,7 @@ export function AgentFlightSearch({
                 <div className="psi-card rounded-2xl p-4 border border-psi">
                     <p className="text-psi-muted text-[10px] font-black uppercase tracking-widest mb-3">Your Booked Flight</p>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-lg">
                             {booked.logo}
                         </div>
                         <div className="flex-1">
@@ -279,7 +279,7 @@ export function AgentFlightSearch({
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={handleSearch}
-                    className="w-full flex items-center justify-center gap-2.5 py-5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm shadow-lg shadow-blue-500/20 transition-all"
+                    className="w-full flex items-center justify-center gap-2.5 py-5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-blue-500/20 transition-all"
                 >
                     <Search size={18} /> Search Available Flights
                 </motion.button>
@@ -318,7 +318,7 @@ export function AgentFlightSearch({
                                 <button key={s} onClick={() => setSortBy(s)}
                                     className={clsx(
                                         'px-3 py-1.5 rounded-lg text-xs font-bold transition-all capitalize',
-                                        sortBy === s ? 'bg-amber-500 text-white shadow-sm' : 'text-psi-muted hover:text-psi-primary'
+                                        sortBy === s ? 'bg-amber-500 text-slate-900 dark:text-white shadow-sm' : 'text-psi-muted hover:text-psi-primary'
                                     )}>
                                     {s}
                                 </button>

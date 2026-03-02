@@ -62,7 +62,7 @@ export function BountyAlertOverlay({
                             transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1.5 }}
                             className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/40 z-10"
                         >
-                            <Zap size={28} className="text-white fill-white" />
+                            <Zap size={28} className="text-slate-900 dark:text-white fill-white" />
                         </motion.div>
                     </div>
 
@@ -80,7 +80,7 @@ export function BountyAlertOverlay({
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-2xl font-extrabold text-white leading-tight"
+                            className="text-2xl font-extrabold text-slate-900 dark:text-white leading-tight"
                         >
                             {bounty.targetProject}
                         </motion.h2>
@@ -88,7 +88,7 @@ export function BountyAlertOverlay({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.28 }}
-                            className="text-slate-400 text-sm mt-1"
+                            className="text-slate-600 dark:text-slate-400 text-sm mt-1"
                         >
                             First agent to secure a lead wins:
                         </motion.p>
@@ -106,7 +106,7 @@ export function BountyAlertOverlay({
                             <IncentiveIcon type={bounty.incentiveType} size={18} />
                             <span className="text-3xl font-extrabold text-amber-400 tracking-tight">{bounty.incentiveLabel}</span>
                         </div>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
                             Issued by {bounty.issuedBy}
                         </p>
                     </motion.div>
@@ -114,7 +114,7 @@ export function BountyAlertOverlay({
                     {/* Countdown */}
                     <div className="flex items-center justify-center gap-2 mb-5">
                         <Timer size={14} className="text-rose-400" />
-                        <span className="text-xs text-slate-400 font-medium">Window closes in</span>
+                        <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">Window closes in</span>
                         <CountdownTicker expiresAt={bounty.expiresAt} />
                     </div>
 
@@ -123,7 +123,7 @@ export function BountyAlertOverlay({
                         <motion.button
                             whileTap={{ scale: 0.97 }}
                             onClick={onClaim}
-                            className="w-full py-4 rounded-2xl font-extrabold text-base text-white flex items-center justify-center gap-2 shadow-xl"
+                            className="w-full py-4 rounded-2xl font-extrabold text-base text-slate-900 dark:text-white flex items-center justify-center gap-2 shadow-xl"
                             style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #f97316 100%)', boxShadow: '0 8px 32px rgba(245,158,11,0.4)' }}
                         >
                             <Zap size={20} className="fill-current" />
@@ -131,7 +131,7 @@ export function BountyAlertOverlay({
                         </motion.button>
                         <button
                             onClick={onDismiss}
-                            className="w-full py-2.5 text-slate-500 text-sm font-medium hover:text-slate-300 transition-colors"
+                            className="w-full py-2.5 text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
                         >
                             Dismiss (I'll check Bounties tab)
                         </button>

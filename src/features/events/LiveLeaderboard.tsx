@@ -127,7 +127,7 @@ export default function LiveLeaderboard({
     // ── Locked gate ───────────────────────────────────────────────────────────
     if (!isUnlocked) {
         return (
-            <div className="min-h-screen bg-slate-950">
+            <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
                 <LeaderboardHeader eventName={eventName} isConnected={false} lastUpdated={null}
                     totalAgents={0} viewMode={viewMode} onToggleView={setViewMode} />
                 <LockedView status={currentAgentStatus} />
@@ -136,7 +136,7 @@ export default function LiveLeaderboard({
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 select-none overflow-x-hidden">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 select-none overflow-x-hidden">
 
             <LeaderboardHeader eventName={eventName} isConnected={isConnected} lastUpdated={lastUpdated}
                 totalAgents={entries.length} viewMode={viewMode} onToggleView={setViewMode} />
@@ -160,7 +160,7 @@ export default function LiveLeaderboard({
                         <p className={`text-xl font-extrabold ${color} font-mono`}>
                             {isString ? value : <AnimatedNumber value={value as number} />}
                         </p>
-                        <p className="text-[10px] text-white/30 font-bold uppercase tracking-wider mt-0.5">{label}</p>
+                        <p className="text-[10px] text-slate-900 dark:text-white/30 font-bold uppercase tracking-wider mt-0.5">{label}</p>
                     </div>
                 ))}
             </motion.div>
@@ -171,19 +171,19 @@ export default function LiveLeaderboard({
                     className="mx-4 mb-4 bg-gradient-to-br from-blue-900/40 to-blue-900/10 border border-blue-700/30 rounded-2xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-extrabold text-xs">
+                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-slate-900 dark:text-white font-extrabold text-xs">
                                 {getInitials(myEntry.agentName)}
                             </div>
                             <div>
-                                <p className="text-white font-bold text-sm">{myEntry.agentName}</p>
+                                <p className="text-slate-900 dark:text-white font-bold text-sm">{myEntry.agentName}</p>
                                 <p className="text-blue-400 text-[10px] font-bold">#{myRank} of {entries.length} on floor</p>
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-2xl font-extrabold text-white font-mono leading-none">
+                            <p className="text-2xl font-extrabold text-slate-900 dark:text-white font-mono leading-none">
                                 <AnimatedNumber value={myEntry.leadsToday} />
                             </p>
-                            <p className="text-[10px] text-white/40 font-bold">leads today</p>
+                            <p className="text-[10px] text-slate-900 dark:text-white/40 font-bold">leads today</p>
                         </div>
                     </div>
                     <GapToTargetBar leadsToday={myEntry.leadsToday} leadTarget={myEntry.leadTarget} />
@@ -196,7 +196,7 @@ export default function LiveLeaderboard({
                     <motion.div key="individual" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
                         className="px-4 pb-8 space-y-2">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.15em] flex items-center gap-1.5">
+                            <p className="text-[10px] font-bold text-slate-900 dark:text-white/40 uppercase tracking-[0.15em] flex items-center gap-1.5">
                                 <Flame size={11} className="text-amber-400" /> Floor Standings
                             </p>
                             <LivePulse />

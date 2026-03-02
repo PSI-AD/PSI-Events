@@ -106,11 +106,11 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
     }, []);
 
     return (
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
 
             {/* Status bar */}
             <div className="w-full max-w-sm flex items-center justify-between mb-4 px-1">
-                <span className="text-xs text-slate-500 font-mono">{formatTime(new Date())}</span>
+                <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">{formatTime(new Date())}</span>
                 <div className="flex items-center gap-1.5">
                     {isOnline
                         ? <><Wifi size={12} className="text-emerald-400" /><span className="text-xs text-emerald-400">Live</span></>
@@ -128,7 +128,7 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
             >
                 {/* If already checked in — show confirmation state */}
                 {isPresent ? (
-                    <div className="bg-gradient-to-b from-emerald-950 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-emerald-800/50">
+                    <div className="bg-gradient-to-b from-emerald-950 to-white dark:to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-emerald-800/50">
                         {/* Confirmed header */}
                         <div className="bg-emerald-900/60 border-b border-emerald-700/40 px-6 pt-6 pb-5">
                             <p className="text-emerald-300 text-xs font-bold tracking-[0.2em] uppercase mb-2">
@@ -137,7 +137,7 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
                             <div className="flex items-center gap-3">
                                 <CheckCircle2 size={28} className="text-emerald-400" />
                                 <div>
-                                    <h1 className="text-white text-xl font-extrabold tracking-tight">Attendance Confirmed</h1>
+                                    <h1 className="text-slate-900 dark:text-white text-xl font-extrabold tracking-tight">Attendance Confirmed</h1>
                                     <p className="text-emerald-400 text-sm">You're physically verified ✓</p>
                                 </div>
                             </div>
@@ -145,31 +145,31 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
                         <div className="px-6 py-6 space-y-4">
                             <div className="bg-emerald-900/30 border border-emerald-800/50 rounded-2xl p-4">
                                 <p className="text-emerald-500 text-xs font-bold uppercase tracking-widest mb-1">Checked In</p>
-                                <p className="text-white font-bold text-lg">{agent.agentName}</p>
+                                <p className="text-slate-900 dark:text-white font-bold text-lg">{agent.agentName}</p>
                                 <p className="text-emerald-400 text-sm">{event.eventName}</p>
                                 {agent.checkedInAt && (
-                                    <p className="text-slate-400 text-xs mt-2">
+                                    <p className="text-slate-600 dark:text-slate-400 text-xs mt-2">
                                         Verified at {formatTime(agent.checkedInAt)}
                                     </p>
                                 )}
                             </div>
-                            <p className="text-center text-slate-400 text-sm">
+                            <p className="text-center text-slate-600 dark:text-slate-400 text-sm">
                                 Lead distribution is now <strong className="text-emerald-400">unlocked</strong> for you.
                             </p>
                         </div>
                     </div>
                 ) : (
                     /* Main pass card */
-                    <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-800">
+                    <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-slate-200 dark:border-slate-800">
 
                         {/* Header stripe */}
-                        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 pt-6 pb-5 border-b border-slate-700/50">
+                        <div className="bg-gradient-to-r from-white dark:from-slate-900 via-slate-800 to-white dark:to-slate-900 px-6 pt-6 pb-5 border-b border-slate-300 dark:border-slate-700/50">
                             <div className="flex items-start justify-between">
                                 <div>
                                     <p className="text-amber-400 text-[10px] font-bold tracking-[0.25em] uppercase mb-1.5">
                                         PSI Event Portal
                                     </p>
-                                    <h1 className="text-white text-xl font-extrabold tracking-tight leading-tight">
+                                    <h1 className="text-slate-900 dark:text-white text-xl font-extrabold tracking-tight leading-tight">
                                         Event Access Pass
                                     </h1>
                                 </div>
@@ -206,15 +206,15 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
                                     />
                                 </motion.div>
                             ) : (
-                                <div className="w-[216px] h-[216px] bg-slate-800 rounded-2xl flex items-center justify-center">
+                                <div className="w-[216px] h-[216px] bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center">
                                     <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
                                 </div>
                             )}
 
                             {/* Token expiry countdown */}
                             <div className="mt-4 flex items-center gap-2">
-                                <Clock size={12} className="text-slate-500" />
-                                <span className="text-xs text-slate-400">
+                                <Clock size={12} className="text-slate-600 dark:text-slate-400" />
+                                <span className="text-xs text-slate-600 dark:text-slate-400">
                                     QR refreshes in{' '}
                                     <span className={clsx('font-mono font-bold', timeLeft < 300 ? 'text-red-400' : 'text-amber-400')}>
                                         {hms(timeLeft)}
@@ -233,9 +233,9 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
 
                         {/* Divider with perforation effect */}
                         <div className="relative mx-4">
-                            <div className="border-t border-dashed border-slate-700" />
-                            <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-950 rounded-full border border-slate-800" />
-                            <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-950 rounded-full border border-slate-800" />
+                            <div className="border-t border-dashed border-slate-300 dark:border-slate-700" />
+                            <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-50 dark:bg-slate-950 rounded-full border border-slate-200 dark:border-slate-800" />
+                            <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-50 dark:bg-slate-950 rounded-full border border-slate-200 dark:border-slate-800" />
                         </div>
 
                         {/* Agent details */}
@@ -245,22 +245,22 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
                                     <User size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-white font-bold text-base leading-tight">{agent.agentName}</p>
-                                    <p className="text-slate-400 text-xs">{agent.branch}</p>
+                                    <p className="text-slate-900 dark:text-white font-bold text-base leading-tight">{agent.agentName}</p>
+                                    <p className="text-slate-600 dark:text-slate-400 text-xs">{agent.branch}</p>
                                 </div>
                             </div>
 
-                            <div className="bg-slate-800/60 rounded-xl px-4 py-3 space-y-2">
+                            <div className="bg-slate-100 dark:bg-slate-800/60 rounded-xl px-4 py-3 space-y-2">
                                 <div className="flex items-start gap-2">
                                     <MapPin size={13} className="text-amber-400 mt-0.5 flex-shrink-0" />
                                     <div>
-                                        <p className="text-white text-sm font-semibold leading-tight">{event.eventName}</p>
-                                        <p className="text-slate-400 text-xs">{event.venue}</p>
+                                        <p className="text-slate-900 dark:text-white text-sm font-semibold leading-tight">{event.eventName}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs">{event.venue}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Clock size={13} className="text-amber-400 flex-shrink-0" />
-                                    <p className="text-slate-300 text-xs">{formatDate(event.eventDate)}</p>
+                                    <p className="text-slate-700 dark:text-slate-300 text-xs">{formatDate(event.eventDate)}</p>
                                 </div>
                             </div>
 
@@ -287,7 +287,7 @@ export default function AgentPassView({ agent, event }: AgentPassViewProps) {
                         </div>
 
                         {/* Footer bar */}
-                        <div className="bg-slate-800/80 px-6 py-3 flex items-center justify-between border-t border-slate-700/50">
+                        <div className="bg-slate-100 dark:bg-slate-800/80 px-6 py-3 flex items-center justify-between border-t border-slate-300 dark:border-slate-700/50">
                             <div className="flex items-center gap-1.5">
                                 <ShieldCheck size={13} className="text-emerald-400" />
                                 <span className="text-xs text-emerald-400 font-bold">HMAC-SHA256 Signed</span>

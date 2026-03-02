@@ -81,25 +81,25 @@ export function MediaPreviewStrip({
 }) {
     if (!files.length) return null;
     return (
-        <div className="px-4 py-3 border-t border-white/5">
+        <div className="px-4 py-3 border-t border-black/5 dark:border-white/5">
             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
                 {files.map((f, i) => {
                     const isImg = f.type.startsWith('image/');
                     const url = isImg ? URL.createObjectURL(f) : null;
                     return (
-                        <div key={i} className="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-slate-800 border border-white/10">
+                        <div key={i} className="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-black/10 dark:border-white/10">
                             {url ? (
                                 <img src={url} alt="" className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                    <Video size={20} className="text-slate-500" />
+                                    <Video size={20} className="text-slate-600 dark:text-slate-400" />
                                 </div>
                             )}
                             <button
                                 onClick={() => onRemove(i)}
                                 className="absolute top-0.5 right-0.5 w-5 h-5 bg-black/70 rounded-full flex items-center justify-center"
                             >
-                                <X size={10} className="text-white" />
+                                <X size={10} className="text-slate-900 dark:text-white" />
                             </button>
                         </div>
                     );
@@ -107,14 +107,14 @@ export function MediaPreviewStrip({
             </div>
             {uploadProgress !== null && (
                 <div className="mt-2">
-                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-1 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-gradient-to-r from-violet-500 to-violet-400 rounded-full"
                             animate={{ width: `${uploadProgress}%` }}
                             transition={{ ease: 'easeOut' }}
                         />
                     </div>
-                    <p className="text-[10px] text-white/30 mt-1">{uploadProgress}% uploaded</p>
+                    <p className="text-[10px] text-slate-900 dark:text-white/30 mt-1">{uploadProgress}% uploaded</p>
                 </div>
             )}
         </div>
@@ -242,7 +242,7 @@ export function Composer({
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         onClick={() => { setOpen(true); setTimeout(() => textareaRef.current?.focus(), 80); }}
-                        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-violet-500 to-violet-700 rounded-2xl shadow-2xl shadow-violet-500/30 flex items-center justify-center text-white hover:scale-105 active:scale-95 transition-transform"
+                        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-violet-500 to-violet-700 rounded-2xl shadow-2xl shadow-violet-500/30 flex items-center justify-center text-slate-900 dark:text-white hover:scale-105 active:scale-95 transition-transform"
                         aria-label="Create journal post"
                     >
                         <Newspaper size={24} />
@@ -263,19 +263,19 @@ export function Composer({
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: '100%', opacity: 0 }}
                             transition={{ type: 'spring', stiffness: 260, damping: 32 }}
-                            className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-white/10 rounded-t-3xl pb-safe"
+                            className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-black/10 dark:border-white/10 rounded-t-3xl pb-safe"
                             onClick={e => e.stopPropagation()}
                         >
                             <div className="flex justify-center pt-3 pb-1">
-                                <div className="w-10 h-1 bg-white/20 rounded-full" />
+                                <div className="w-10 h-1 bg-black/20 dark:bg-white/20 rounded-full" />
                             </div>
                             <div className="px-4 py-3 flex items-center justify-between">
                                 <div>
-                                    <p className="font-extrabold text-white text-sm">New Journal Post</p>
-                                    <p className="text-[11px] text-white/30">{eventName}</p>
+                                    <p className="font-extrabold text-slate-900 dark:text-white text-sm">New Journal Post</p>
+                                    <p className="text-[11px] text-slate-900 dark:text-white/30">{eventName}</p>
                                 </div>
                                 <button onClick={() => setOpen(false)}
-                                    className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-white/10 transition-colors">
+                                    className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white/50 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                                     <X size={16} />
                                 </button>
                             </div>
@@ -292,7 +292,7 @@ export function Composer({
                                             : "What happened at the event? Describe leads, vibes, highlights…"
                                     }
                                     rows={5}
-                                    className="w-full bg-slate-800/60 border border-white/8 rounded-2xl px-4 py-3 text-sm text-white placeholder:text-white/20 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/40 transition-all leading-relaxed"
+                                    className="w-full bg-slate-100 dark:bg-slate-800/60 border border-white/8 rounded-2xl px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-900 dark:placeholder:text-white/20 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/40 transition-all leading-relaxed"
                                 />
                             </div>
 
@@ -328,7 +328,7 @@ export function Composer({
 
                             <div className="px-4 py-3 flex items-center gap-2">
                                 <button id="journal-upload-btn" onClick={() => fileInputRef.current?.click()}
-                                    className="w-12 h-12 rounded-2xl bg-slate-800 border border-white/8 flex items-center justify-center text-white/60 hover:text-white hover:bg-slate-700 transition-all active:scale-95"
+                                    className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-white/8 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-slate-700 transition-all active:scale-95"
                                     aria-label="Attach photo or video">
                                     <Camera size={22} />
                                 </button>
@@ -340,10 +340,10 @@ export function Composer({
                                     disabled={!dictSupported}
                                     className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition-all active:scale-95
                                         ${dictState === 'listening'
-                                            ? 'bg-rose-500 border-rose-500 text-white shadow-lg shadow-rose-500/30 animate-pulse'
+                                            ? 'bg-rose-500 border-rose-500 text-slate-900 dark:text-white shadow-lg shadow-rose-500/30 animate-pulse'
                                             : dictState === 'error'
-                                                ? 'bg-slate-800 border-rose-500/30 text-rose-400'
-                                                : 'bg-slate-800 border-white/8 text-white/60 hover:text-white hover:bg-slate-700'
+                                                ? 'bg-slate-100 dark:bg-slate-800 border-rose-500/30 text-rose-400'
+                                                : 'bg-slate-100 dark:bg-slate-800 border-white/8 text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-slate-700'
                                         }
                                         ${!dictSupported ? 'opacity-30 cursor-not-allowed' : ''}
                                     `}
@@ -358,8 +358,8 @@ export function Composer({
                                         ${polishing
                                             ? 'bg-violet-900/30 border-violet-500/30 text-violet-400'
                                             : text.trim()
-                                                ? 'bg-violet-600 border-violet-500 text-white hover:bg-violet-500 shadow-lg shadow-violet-500/20'
-                                                : 'bg-slate-800 border-white/8 text-white/20 cursor-not-allowed'
+                                                ? 'bg-violet-600 border-violet-500 text-slate-900 dark:text-white hover:bg-violet-500 shadow-lg shadow-violet-500/20'
+                                                : 'bg-slate-100 dark:bg-slate-800 border-white/8 text-slate-900 dark:text-white/20 cursor-not-allowed'
                                         }
                                     `}
                                     aria-label="Polish with Gemini AI">
@@ -372,8 +372,8 @@ export function Composer({
                                 <button id="journal-post-btn" onClick={handlePost} disabled={!canPost}
                                     className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all active:scale-95
                                         ${canPost
-                                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-400'
-                                            : 'bg-slate-800 text-white/20 cursor-not-allowed'
+                                            ? 'bg-emerald-500 text-slate-900 dark:text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-400'
+                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white/20 cursor-not-allowed'
                                         }
                                     `}
                                     aria-label="Publish post">
@@ -391,7 +391,7 @@ export function Composer({
                 {successMsg && (
                     <motion.div
                         initial={{ opacity: 0, y: 48 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 48 }}
-                        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 bg-emerald-500 text-white rounded-2xl shadow-2xl font-bold text-sm">
+                        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-3 bg-emerald-500 text-slate-900 dark:text-white rounded-2xl shadow-2xl font-bold text-sm">
                         <CheckCircle2 size={16} />
                         {successMsg}
                     </motion.div>

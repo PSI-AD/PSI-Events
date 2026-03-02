@@ -249,7 +249,7 @@ export function OrganizerBountyManager({
                 <div>
                     <div className="flex items-center gap-2 mb-1">
                         <div className="w-7 h-7 bg-amber-500 rounded-lg flex items-center justify-center">
-                            <Zap size={15} className="text-white fill-white" />
+                            <Zap size={15} className="text-slate-900 dark:text-white fill-white" />
                         </div>
                         <span className="text-amber-600 dark:text-amber-400 text-xs font-extrabold tracking-[0.2em] uppercase">Live Floor Bounties</span>
                     </div>

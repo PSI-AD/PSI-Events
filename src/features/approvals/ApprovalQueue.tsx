@@ -166,7 +166,7 @@ function AiBadge({
 
             {/* Predicted AED (only show if non-zero) */}
             {recommendation.predictedAed > 0 && (
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
+                <span className="text-[10px] text-slate-600 dark:text-slate-400 dark:text-slate-500 font-mono">
                     Est. {fmtAed(recommendation.predictedAed)}
                 </span>
             )}
@@ -199,7 +199,7 @@ function AgentRow({
 
     const tierColor: Record<string, string> = {
         Gold: 'text-amber-500 bg-amber-50 dark:bg-amber-900/20',
-        Silver: 'text-slate-500 bg-slate-100 dark:bg-slate-700/40',
+        Silver: 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/40',
         Bronze: 'text-amber-800 bg-amber-50/80 dark:bg-amber-900/10',
     };
 
@@ -229,7 +229,7 @@ function AgentRow({
                         </div>
 
                         {/* Avatar */}
-                        <div className="w-11 h-11 flex-shrink-0 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-white font-bold text-sm">
+                        <div className="w-11 h-11 flex-shrink-0 rounded-xl bg-gradient-to-br from-slate-700 to-white dark:to-slate-900 flex items-center justify-center text-slate-900 dark:text-white font-bold text-sm">
                             {agent.name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()}
                         </div>
 
@@ -348,13 +348,13 @@ function AgentRow({
                                     {rec.predictedAed > 0 && (
                                         <div className="mt-2 flex items-center gap-4">
                                             <div>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Predicted Net</p>
+                                                <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Predicted Net</p>
                                                 <p className={`text-sm font-extrabold ${tierBadgeClasses(rec.tier).text}`}>
                                                     {fmtAed(rec.predictedAed)}
                                                 </p>
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Conv. Rate</p>
+                                                <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Conv. Rate</p>
                                                 <p className={`text-sm font-extrabold ${tierBadgeClasses(rec.tier).text}`}>
                                                     {(rec.conversionRate * 100).toFixed(1)}%
                                                 </p>
@@ -450,7 +450,7 @@ export default function ApprovalQueue() {
                                     Approval Queue
                                 </h1>
                             </div>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm">
+                            <p className="text-slate-600 dark:text-slate-400 dark:text-slate-400 text-sm">
                                 AI-powered roster recommendations for Branch Managers.
                             </p>
                         </div>
@@ -484,7 +484,7 @@ export default function ApprovalQueue() {
                                                     }`}
                                             >
                                                 <p className="font-bold">{ev.label}</p>
-                                                <p className="text-[11px] text-slate-400 mt-0.5">
+                                                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
                                                     <MapPin size={10} className="inline mr-0.5" />{ev.city}
                                                 </p>
                                             </button>
@@ -551,7 +551,7 @@ export default function ApprovalQueue() {
                             {Object.keys(actions).length > 0 && (
                                 <button
                                     onClick={resetAll}
-                                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-rose-500 transition-colors select-none"
+                                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-rose-500 transition-colors select-none"
                                 >
                                     <RotateCcw size={12} />
                                     Reset All Actions
@@ -584,7 +584,7 @@ export default function ApprovalQueue() {
                             flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold
                             ${sortMode === 'ai'
                                 ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-700/50'
-                                : 'bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400'
+                                : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 dark:text-slate-400'
                             }
                         `}>
                             {sortMode === 'ai' ? (

@@ -86,7 +86,7 @@ export interface ConciergeAgent {
 const TIER_CONFIG: Record<VIPTier, { label: string; color: string; bg: string; ring: string; icon: React.ReactNode }> = {
     Platinum: { label: 'Platinum', color: 'text-violet-400', bg: 'bg-violet-500/15', ring: 'ring-violet-500/30', icon: <Crown size={11} /> },
     Gold: { label: 'Gold', color: 'text-amber-400', bg: 'bg-amber-500/15', ring: 'ring-amber-500/30', icon: <Star size={11} /> },
-    Silver: { label: 'Silver', color: 'text-slate-300', bg: 'bg-slate-500/15', ring: 'ring-slate-500/30', icon: <Star size={11} /> },
+    Silver: { label: 'Silver', color: 'text-slate-700 dark:text-slate-300', bg: 'bg-slate-500/15', ring: 'ring-slate-500/30', icon: <Star size={11} /> },
 };
 
 const STATUS_COLORS: Record<MsgStatus, string> = {
@@ -163,24 +163,24 @@ function MessageCard({
 
                 <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="font-extrabold text-white text-sm truncate">{msg.clientName}</span>
+                        <span className="font-extrabold text-slate-900 dark:text-white text-sm truncate">{msg.clientName}</span>
                         <TierBadge tier={msg.clientTier} />
                     </div>
                     <div className="flex items-center gap-2 mb-2">
-                        <Languages size={10} className="text-white/30 flex-shrink-0" />
-                        <span className="text-white/40 text-[10px]">{msg.preferredLanguage}</span>
-                        <span className="text-white/20">·</span>
-                        <Clock size={10} className="text-white/30 flex-shrink-0" />
-                        <span className="text-white/40 text-[10px]">{timeAgo(msg.receivedAt)}</span>
+                        <Languages size={10} className="text-slate-900 dark:text-white/30 flex-shrink-0" />
+                        <span className="text-slate-900 dark:text-white/40 text-[10px]">{msg.preferredLanguage}</span>
+                        <span className="text-slate-900 dark:text-white/20">·</span>
+                        <Clock size={10} className="text-slate-900 dark:text-white/30 flex-shrink-0" />
+                        <span className="text-slate-900 dark:text-white/40 text-[10px]">{timeAgo(msg.receivedAt)}</span>
                     </div>
-                    <p className="text-white/60 text-xs leading-relaxed line-clamp-2">{msg.body}</p>
+                    <p className="text-slate-900 dark:text-white/60 text-xs leading-relaxed line-clamp-2">{msg.body}</p>
 
                     {/* Status */}
                     <div className="flex items-center gap-1.5 mt-2">
                         <span className={`w-1.5 h-1.5 rounded-full ${STATUS_COLORS[msg.status]}`} />
-                        <span className="text-[10px] font-bold text-white/30 capitalize">{msg.status}</span>
+                        <span className="text-[10px] font-bold text-slate-900 dark:text-white/30 capitalize">{msg.status}</span>
                         {msg.assignedAgentName && (
-                            <span className="text-[10px] text-white/25">→ {msg.assignedAgentName.split(' ')[0]}</span>
+                            <span className="text-[10px] text-slate-900 dark:text-white/25">→ {msg.assignedAgentName.split(' ')[0]}</span>
                         )}
                     </div>
                 </div>
@@ -193,7 +193,7 @@ function MessageCard({
 function AgentPicker({
     agents, selectedId, onSelect,
 }: { agents: ConciergeAgent[]; selectedId: string | null; onSelect: (a: ConciergeAgent) => void }) {
-    const tierColors = { gold: 'text-amber-400', silver: 'text-slate-300', bronze: 'text-orange-400' };
+    const tierColors = { gold: 'text-amber-400', silver: 'text-slate-700 dark:text-slate-300', bronze: 'text-orange-400' };
     return (
         <div className="space-y-2">
             {agents.map(agent => (
@@ -206,21 +206,21 @@ function AgentPicker({
                             ? 'bg-indigo-500/15 border-indigo-500/40'
                             : agent.isPresent
                                 ? 'bg-white/4 border-white/8 hover:border-white/15'
-                                : 'bg-white/2 border-white/5 opacity-40 cursor-not-allowed'
+                                : 'bg-white/2 border-black/5 dark:border-white/5 opacity-40 cursor-not-allowed'
                         }`}
                 >
                     <div className={`w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center font-black text-xs ${tierColors[agent.tier]}`}>
                         {agent.name.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
-                        <p className="text-white text-xs font-bold truncate">{agent.name}</p>
-                        <p className="text-white/35 text-[10px]">{agent.branch} · {agent.languages.slice(0, 2).join(', ')}</p>
+                        <p className="text-slate-900 dark:text-white text-xs font-bold truncate">{agent.name}</p>
+                        <p className="text-slate-900 dark:text-white/35 text-[10px]">{agent.branch} · {agent.languages.slice(0, 2).join(', ')}</p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                         {agent.activeTasks > 0 && (
                             <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-400 text-[9px] font-black flex items-center justify-center">{agent.activeTasks}</span>
                         )}
-                        <span className={`w-2 h-2 rounded-full ${agent.isPresent ? 'bg-emerald-400' : 'bg-white/20'}`} />
+                        <span className={`w-2 h-2 rounded-full ${agent.isPresent ? 'bg-emerald-400' : 'bg-black/20 dark:bg-white/20'}`} />
                         {selectedId === agent.id && <CheckCircle2 size={14} className="text-indigo-400" />}
                     </div>
                 </motion.button>
@@ -293,21 +293,21 @@ export function AgentInterceptAlert({
             </div>
 
             <p className="text-rose-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Intercept Alert</p>
-            <h2 className="text-white text-2xl font-extrabold mb-1">{task.clientName}</h2>
+            <h2 className="text-slate-900 dark:text-white text-2xl font-extrabold mb-1">{task.clientName}</h2>
             <TierBadge tier={task.clientTier} />
 
-            <div className="mt-6 bg-white/5 border border-white/10 rounded-2xl p-5 max-w-sm w-full text-left space-y-3">
+            <div className="mt-6 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5 max-w-sm w-full text-left space-y-3">
                 <div className="flex items-start gap-2">
-                    <MessageCircle size={14} className="text-white/40 flex-shrink-0 mt-0.5" />
-                    <p className="text-white/70 text-sm italic leading-relaxed">"{task.snippet}"</p>
+                    <MessageCircle size={14} className="text-slate-900 dark:text-white/40 flex-shrink-0 mt-0.5" />
+                    <p className="text-slate-900 dark:text-white/70 text-sm italic leading-relaxed">"{task.snippet}"</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Languages size={13} className="text-white/30" />
-                    <span className="text-white/50 text-xs">Speak in: <strong className="text-white/80">{task.preferredLanguage}</strong></span>
+                    <Languages size={13} className="text-slate-900 dark:text-white/30" />
+                    <span className="text-slate-900 dark:text-white/50 text-xs">Speak in: <strong className="text-slate-900 dark:text-white/80">{task.preferredLanguage}</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Phone size={13} className="text-white/30" />
-                    <span className="text-white/50 text-xs">{task.clientPhone}</span>
+                    <Phone size={13} className="text-slate-900 dark:text-white/30" />
+                    <span className="text-slate-900 dark:text-white/50 text-xs">{task.clientPhone}</span>
                 </div>
             </div>
 
@@ -315,13 +315,13 @@ export function AgentInterceptAlert({
                 whileTap={{ scale: 0.96 }}
                 onClick={acknowledge}
                 disabled={acking}
-                className="mt-8 w-full max-w-sm flex items-center justify-center gap-3 py-5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-base shadow-2xl shadow-rose-600/40 disabled:opacity-60"
+                className="mt-8 w-full max-w-sm flex items-center justify-center gap-3 py-5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-slate-900 dark:text-white font-extrabold text-base shadow-2xl shadow-rose-600/40 disabled:opacity-60"
             >
                 {acking ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle2 size={20} />}
                 {acking ? 'Confirming…' : 'I\'m On My Way — Acknowledge'}
             </motion.button>
 
-            <p className="text-white/20 text-xs mt-4">Go meet the client now. Task will be tracked.</p>
+            <p className="text-slate-900 dark:text-white/20 text-xs mt-4">Go meet the client now. Task will be tracked.</p>
         </motion.div>
     );
 }
@@ -430,21 +430,21 @@ export default function VIPConcierge({
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col">
 
             {/* ── Header ─────────────────────────────────────── */}
             <header className="border-b border-white/8 px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
                 <div>
                     <div className="flex items-center gap-2 mb-0.5">
                         <div className="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center">
-                            <MessageCircle size={13} className="text-white" />
+                            <MessageCircle size={13} className="text-slate-900 dark:text-white" />
                         </div>
                         <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">WhatsApp Concierge</span>
                         <span className="flex items-center gap-1 text-[10px] text-emerald-400">
                             <Wifi size={9} /> Live
                         </span>
                     </div>
-                    <h1 className="text-white text-xl font-extrabold">Concierge Control Center</h1>
+                    <h1 className="text-slate-900 dark:text-white text-xl font-extrabold">Concierge Control Center</h1>
                 </div>
 
                 {/* KPI strip */}
@@ -456,7 +456,7 @@ export default function VIPConcierge({
                     ].map(({ label, value, color, bg, ring }) => (
                         <div key={label} className={`px-3 py-2 rounded-xl ring-1 ${bg} ${ring} text-center min-w-[64px]`}>
                             <p className={`text-lg font-extrabold ${color}`}>{value}</p>
-                            <p className="text-[9px] font-bold uppercase tracking-widest text-white/30">{label}</p>
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/30">{label}</p>
                         </div>
                     ))}
                 </div>
@@ -473,8 +473,8 @@ export default function VIPConcierge({
                             <button key={s} id={`vip-filter-${s}`}
                                 onClick={() => setFilterStatus(s)}
                                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterStatus === s
-                                        ? 'bg-indigo-600 text-white'
-                                        : 'bg-white/5 text-white/40 hover:text-white/70'
+                                        ? 'bg-indigo-600 text-slate-900 dark:text-white'
+                                        : 'bg-black/5 dark:bg-white/5 text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white/70'
                                     }`}
                             >
                                 {s === 'all' ? `All (${kpis.total})` : s}
@@ -495,7 +495,7 @@ export default function VIPConcierge({
                             ))}
                         </AnimatePresence>
                         {filtered.length === 0 && (
-                            <div className="text-center py-16 text-white/20">
+                            <div className="text-center py-16 text-slate-900 dark:text-white/20">
                                 <MessageCircle size={28} className="mx-auto mb-2 opacity-30" />
                                 <p className="text-sm">No messages</p>
                             </div>
@@ -517,12 +517,12 @@ export default function VIPConcierge({
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 flex-wrap">
-                                            <h2 className="text-white font-extrabold">{selectedMsg.clientName}</h2>
+                                            <h2 className="text-slate-900 dark:text-white font-extrabold">{selectedMsg.clientName}</h2>
                                             <TierBadge tier={selectedMsg.clientTier} />
                                         </div>
                                         <div className="flex items-center gap-3 mt-0.5">
-                                            <span className="text-white/40 text-xs flex items-center gap-1"><Phone size={10} />{selectedMsg.clientPhone}</span>
-                                            <span className="text-white/40 text-xs flex items-center gap-1"><Languages size={10} />{selectedMsg.preferredLanguage}</span>
+                                            <span className="text-slate-900 dark:text-white/40 text-xs flex items-center gap-1"><Phone size={10} />{selectedMsg.clientPhone}</span>
+                                            <span className="text-slate-900 dark:text-white/40 text-xs flex items-center gap-1"><Languages size={10} />{selectedMsg.preferredLanguage}</span>
                                         </div>
                                     </div>
                                     <span className={`w-2 h-2 rounded-full ${STATUS_COLORS[selectedMsg.status]} flex-shrink-0`} />
@@ -533,13 +533,13 @@ export default function VIPConcierge({
                                     <div className="max-w-lg">
                                         {/* WhatsApp bubble */}
                                         <div className="bg-[#25D366]/10 border border-[#25D366]/25 rounded-2xl rounded-tl-sm px-4 py-3 mb-2">
-                                            <p className="text-white/90 text-sm leading-relaxed">{selectedMsg.body}</p>
+                                            <p className="text-slate-900 dark:text-white/90 text-sm leading-relaxed">{selectedMsg.body}</p>
                                         </div>
                                         <div className="flex items-center gap-2 px-1">
                                             <div className="w-4 h-4 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0">
-                                                <MessageCircle size={9} className="text-white" />
+                                                <MessageCircle size={9} className="text-slate-900 dark:text-white" />
                                             </div>
-                                            <span className="text-white/30 text-[10px]">via WhatsApp · {timeAgo(selectedMsg.receivedAt)}</span>
+                                            <span className="text-slate-900 dark:text-white/30 text-[10px]">via WhatsApp · {timeAgo(selectedMsg.receivedAt)}</span>
                                         </div>
                                     </div>
 
@@ -563,10 +563,10 @@ export default function VIPConcierge({
 
                                 {/* Dispatcher panel — only for 'new' messages */}
                                 {selectedMsg.status === 'new' && (
-                                    <div className="border-t border-white/8 px-6 py-5 space-y-4 bg-slate-900/60">
+                                    <div className="border-t border-white/8 px-6 py-5 space-y-4 bg-white dark:bg-slate-900/60">
                                         <div className="flex items-center gap-2">
                                             <Zap size={14} className="text-indigo-400" />
-                                            <p className="text-white font-extrabold text-sm">Assign Intercept Task</p>
+                                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">Assign Intercept Task</p>
                                         </div>
 
                                         <AgentPicker agents={agents} selectedId={selectedAgent?.id ?? null} onSelect={setSelectedAgent} />
@@ -586,7 +586,7 @@ export default function VIPConcierge({
                                             whileTap={{ scale: 0.97 }}
                                             onClick={handleDispatch}
                                             disabled={!selectedAgent || dispatching}
-                                            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold text-sm shadow-lg shadow-indigo-600/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-indigo-600/20 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                                         >
                                             {dispatching
                                                 ? <><Loader2 size={15} className="animate-spin" /> Dispatching…</>
@@ -598,7 +598,7 @@ export default function VIPConcierge({
                             </motion.div>
                         ) : (
                             <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                className="flex-1 flex flex-col items-center justify-center text-white/20 gap-3">
+                                className="flex-1 flex flex-col items-center justify-center text-slate-900 dark:text-white/20 gap-3">
                                 <MessageCircle size={40} className="opacity-20" />
                                 <p className="text-sm font-bold">Select a VIP message</p>
                             </motion.div>
@@ -611,9 +611,9 @@ export default function VIPConcierge({
                     <div className="px-5 py-4 border-b border-white/8">
                         <div className="flex items-center gap-2">
                             <Users size={13} className="text-violet-400" />
-                            <p className="text-white font-extrabold text-sm">Live Task Board</p>
+                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">Live Task Board</p>
                         </div>
-                        <p className="text-white/30 text-[10px] mt-0.5">{tasks.length || agents.filter(a => a.activeTasks > 0).length} active assignments</p>
+                        <p className="text-slate-900 dark:text-white/30 text-[10px] mt-0.5">{tasks.length || agents.filter(a => a.activeTasks > 0).length} active assignments</p>
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -634,13 +634,13 @@ export default function VIPConcierge({
                                 <motion.div key={task.id} layout initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }}
                                     className="bg-white/4 border border-white/8 rounded-xl p-3 space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-white text-xs font-bold truncate">{task.clientName}</span>
+                                        <span className="text-slate-900 dark:text-white text-xs font-bold truncate">{task.clientName}</span>
                                         <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${task.status === 'pending' ? 'bg-rose-500 animate-pulse'
                                                 : task.status === 'acknowledged' ? 'bg-amber-500'
                                                     : 'bg-emerald-500'
                                             }`} />
                                     </div>
-                                    <div className="flex items-center gap-1.5 text-[10px] text-white/40">
+                                    <div className="flex items-center gap-1.5 text-[10px] text-slate-900 dark:text-white/40">
                                         <ArrowRight size={9} />
                                         <span className="truncate">{task.assignedAgentName}</span>
                                     </div>
@@ -655,7 +655,7 @@ export default function VIPConcierge({
                         </AnimatePresence>
 
                         {tasks.length === 0 && messages.filter(m => m.status !== 'new').length === 0 && (
-                            <div className="text-center py-10 text-white/15">
+                            <div className="text-center py-10 text-slate-900 dark:text-white/15">
                                 <BellOff size={24} className="mx-auto mb-2" />
                                 <p className="text-xs">No tasks yet</p>
                             </div>

@@ -202,8 +202,8 @@ function TierBadge({ tier, agentTier = false }: { tier: string; agentTier?: bool
         );
     }
     const map: Record<string, string> = {
-        Luxury: 'bg-amber-500 text-white',
-        Medium: 'bg-blue-600 text-white',
+        Luxury: 'bg-amber-500 text-slate-900 dark:text-white',
+        Medium: 'bg-blue-600 text-slate-900 dark:text-white',
         Average: 'bg-psi-subtle text-psi-primary border border-psi',
     };
     return (
@@ -229,7 +229,7 @@ function UrgencyRing() {
                 transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
             />
             <div className="w-14 h-14 rounded-full bg-rose-500 flex items-center justify-center shadow-xl shadow-rose-500/40">
-                <Crown size={28} className="text-white" />
+                <Crown size={28} className="text-slate-900 dark:text-white" />
             </div>
         </div>
     );
@@ -319,7 +319,7 @@ export function FrontDeskIntercept({ event }: FrontDeskInterceptProps) {
             {/* Header */}
             <div className="w-full max-w-lg mb-6 flex flex-col items-center text-center">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20 mb-4">
-                    <Crown size={26} className="text-white" />
+                    <Crown size={26} className="text-slate-900 dark:text-white" />
                 </div>
                 <h1 className="text-2xl font-extrabold text-psi-primary tracking-tight">VIP Intercept</h1>
                 <p className="text-psi-muted text-sm mt-1">Front Desk — {event.eventName}</p>
@@ -429,7 +429,7 @@ export function FrontDeskIntercept({ event }: FrontDeskInterceptProps) {
                             id="vip-intercept-submit"
                             type="submit"
                             disabled={!name.trim() || presentCount === 0}
-                            className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-psi-muted disabled:to-psi-muted text-white font-extrabold text-base rounded-2xl transition-all shadow-lg shadow-amber-500/20 disabled:shadow-none active:scale-[0.98] select-none"
+                            className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-psi-muted disabled:to-psi-muted text-slate-900 dark:text-white font-extrabold text-base rounded-2xl transition-all shadow-lg shadow-amber-500/20 disabled:shadow-none active:scale-[0.98] select-none"
                         >
                             <Zap size={18} />
                             {presentCount === 0 ? 'No Agents on Floor' : 'Match & Dispatch VIP Alert'}
@@ -500,7 +500,7 @@ export function FrontDeskIntercept({ event }: FrontDeskInterceptProps) {
                                 transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                                 className="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30"
                             >
-                                <Check size={28} className="text-white" />
+                                <Check size={28} className="text-slate-900 dark:text-white" />
                             </motion.div>
                             <h2 className="text-xl font-extrabold text-psi-primary">VIP Alert Dispatched!</h2>
                             <p className="text-psi-secondary text-sm">
@@ -679,7 +679,7 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[9999] bg-slate-950 flex flex-col items-center justify-center p-6 overflow-hidden"
+                        className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 overflow-hidden"
                     >
                         {/* Animated background pulse */}
                         <motion.div
@@ -713,7 +713,7 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                                     PRIORITY ALERT
                                     <Bell size={12} className="animate-bounce" />
                                 </p>
-                                <h1 className="text-3xl font-black text-white tracking-tight leading-tight">
+                                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
                                     VIP Client<br />Incoming!
                                 </h1>
                             </motion.div>
@@ -723,32 +723,32 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                                 initial={{ y: 16, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.25 }}
-                                className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 space-y-4"
+                                className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 space-y-4"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
                                         <Crown size={26} className="text-amber-400" />
                                     </div>
                                     <div className="text-left min-w-0">
-                                        <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-0.5">Client Name</p>
-                                        <p className="text-white text-xl font-extrabold truncate">{activeAssignment.clientName}</p>
+                                        <p className="text-slate-900 dark:text-white/60 text-[10px] font-bold uppercase tracking-widest mb-0.5">Client Name</p>
+                                        <p className="text-slate-900 dark:text-white text-xl font-extrabold truncate">{activeAssignment.clientName}</p>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-white/5 rounded-xl p-3 text-left">
-                                        <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mb-1">Language</p>
-                                        <p className="text-white font-bold text-sm flex items-center gap-1.5">
+                                    <div className="bg-black/5 dark:bg-white/5 rounded-xl p-3 text-left">
+                                        <p className="text-slate-900 dark:text-white/40 text-[9px] font-bold uppercase tracking-widest mb-1">Language</p>
+                                        <p className="text-slate-900 dark:text-white font-bold text-sm flex items-center gap-1.5">
                                             <Languages size={13} className="text-blue-400" />
                                             {activeAssignment.language}
                                         </p>
                                     </div>
-                                    <div className="bg-white/5 rounded-xl p-3 text-left">
-                                        <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mb-1">Tier</p>
-                                        <p className="text-white font-bold text-sm flex items-center gap-1.5">
+                                    <div className="bg-black/5 dark:bg-white/5 rounded-xl p-3 text-left">
+                                        <p className="text-slate-900 dark:text-white/40 text-[9px] font-bold uppercase tracking-widest mb-1">Tier</p>
+                                        <p className="text-slate-900 dark:text-white font-bold text-sm flex items-center gap-1.5">
                                             {activeAssignment.tier === 'Luxury' && <Crown size={13} className="text-amber-400" />}
                                             {activeAssignment.tier === 'Medium' && <Star size={13} className="text-blue-400" />}
-                                            {activeAssignment.tier === 'Average' && <User size={13} className="text-slate-400" />}
+                                            {activeAssignment.tier === 'Average' && <User size={13} className="text-slate-600 dark:text-slate-400" />}
                                             {activeAssignment.tier}
                                         </p>
                                     </div>
@@ -764,7 +764,7 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                             >
                                 <MapPin size={16} className="text-amber-400 flex-shrink-0" />
                                 <p className="text-amber-300 text-sm font-bold text-left">
-                                    Please proceed to <span className="text-white">Reception</span> immediately to greet your VIP.
+                                    Please proceed to <span className="text-slate-900 dark:text-white">Reception</span> immediately to greet your VIP.
                                 </p>
                             </motion.div>
 
@@ -777,7 +777,7 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                                 whileTap={{ scale: 0.96 }}
                                 onClick={handleAcknowledge}
                                 disabled={acknowledging}
-                                className="w-full flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-extrabold text-lg rounded-2xl shadow-2xl shadow-amber-500/30 transition-all select-none disabled:opacity-70"
+                                className="w-full flex items-center justify-center gap-3 py-5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-900 dark:text-white font-extrabold text-lg rounded-2xl shadow-2xl shadow-amber-500/30 transition-all select-none disabled:opacity-70"
                             >
                                 {acknowledging
                                     ? <><Loader2 size={20} className="animate-spin" /> Confirming…</>
@@ -785,7 +785,7 @@ export function AgentVIPAlert({ currentAgentId, eventId, children }: AgentVIPAle
                                 }
                             </motion.button>
 
-                            <p className="text-white/30 text-xs">
+                            <p className="text-slate-900 dark:text-white/30 text-xs">
                                 Tap to acknowledge and dismiss this alert.
                             </p>
                         </div>

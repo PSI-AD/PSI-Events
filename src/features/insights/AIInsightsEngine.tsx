@@ -37,8 +37,8 @@ function pct(v: number): string { return `${v}%`; }
 
 // Colour ramp for heatmap: dark → amber → emerald
 function heatColor(v: number): string {
-    if (v < 20) return 'bg-slate-800';
-    if (v < 40) return 'bg-slate-700';
+    if (v < 20) return 'bg-slate-100 dark:bg-slate-800';
+    if (v < 40) return 'bg-slate-200 dark:bg-slate-700';
     if (v < 55) return 'bg-amber-900/70';
     if (v < 70) return 'bg-amber-700/80';
     if (v < 82) return 'bg-amber-500/80';
@@ -79,14 +79,14 @@ function KpiCard({ label, value, sub, icon: Icon, color, delay = 0 }: {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-4"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-4"
         >
             <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0', color)}>
-                <Icon size={18} className="text-white" />
+                <Icon size={18} className="text-slate-900 dark:text-white" />
             </div>
             <div>
-                <p className="text-white font-black text-xl leading-none">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-                <p className="text-slate-400 text-xs mt-0.5">{label}</p>
+                <p className="text-slate-900 dark:text-white font-black text-xl leading-none">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{label}</p>
                 {sub && <p className="text-slate-600 text-[10px] mt-0.5">{sub}</p>}
             </div>
         </motion.div>
@@ -156,13 +156,13 @@ function Heatmap() {
             <div className="flex items-center gap-2 mt-3 ml-24">
                 <span className="text-slate-600 text-[9px]">Low</span>
                 <div className="flex gap-0.5">
-                    {['bg-slate-800', 'bg-slate-700', 'bg-amber-900/70', 'bg-amber-700/80', 'bg-amber-500/80', 'bg-emerald-500/80', 'bg-emerald-400'].map(c => (
+                    {['bg-slate-100 dark:bg-slate-800', 'bg-slate-200 dark:bg-slate-700', 'bg-amber-900/70', 'bg-amber-700/80', 'bg-amber-500/80', 'bg-emerald-500/80', 'bg-emerald-400'].map(c => (
                         <div key={c} className={cn('w-6 h-2 rounded-sm', c)} />
                     ))}
                 </div>
                 <span className="text-slate-600 text-[9px]">High</span>
                 {hovered && (
-                    <span className="ml-4 text-white text-xs font-mono bg-slate-800 px-2 py-0.5 rounded">{hovered.raw}</span>
+                    <span className="ml-4 text-slate-900 dark:text-white text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">{hovered.raw}</span>
                 )}
             </div>
         </div>
@@ -267,7 +267,7 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
             {/* Header */}
             <button onClick={() => setExpanded(e => !e)}
                 className="w-full text-left p-4 flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xl flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-xl flex-shrink-0">
                     {insight.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -279,11 +279,11 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
                             <Icon size={8} /> {insight.category}
                         </span>
                     </div>
-                    <p className="text-white font-bold text-sm leading-snug">{insight.title}</p>
+                    <p className="text-slate-900 dark:text-white font-bold text-sm leading-snug">{insight.title}</p>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                    <p className="text-white font-black text-lg leading-none">{insight.metric}</p>
-                    <p className="text-slate-500 text-[9px]">{insight.metricLabel}</p>
+                    <p className="text-slate-900 dark:text-white font-black text-lg leading-none">{insight.metric}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-[9px]">{insight.metricLabel}</p>
                 </div>
             </button>
 
@@ -297,14 +297,14 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
                         transition={{ type: 'spring', damping: 28, stiffness: 200 }}
                         className="overflow-hidden"
                     >
-                        <div className="px-4 pb-4 space-y-3 border-t border-white/10 pt-3">
+                        <div className="px-4 pb-4 space-y-3 border-t border-black/10 dark:border-white/10 pt-3">
                             {/* AI finding - streaming text */}
                             <div>
                                 <div className="flex items-center gap-1.5 mb-1.5">
                                     <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
                                     <p className="text-violet-400 text-[9px] font-black uppercase tracking-wider">AI Finding</p>
                                 </div>
-                                <p className="text-slate-300 text-xs leading-relaxed">
+                                <p className="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">
                                     {revealed ? insight.finding : (
                                         <>
                                             {displayedText}
@@ -320,7 +320,7 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
                                         <Lightbulb size={9} className="text-amber-400" />
                                         <p className="text-amber-400 text-[9px] font-black uppercase tracking-wider">Recommendation</p>
                                     </div>
-                                    <p className="text-slate-300 text-xs leading-relaxed">{insight.recommendation}</p>
+                                    <p className="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">{insight.recommendation}</p>
                                 </motion.div>
                             )}
                         </div>
@@ -339,23 +339,23 @@ function SpeakerRow({ s, rank }: { s: typeof SPEAKER_METRICS[0]; rank: number })
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: rank * 0.06 }}
-            className="flex items-center gap-4 bg-slate-900 border border-slate-800 rounded-xl p-3 hover:border-slate-700 transition-colors"
+            className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
         >
-            <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center text-xs font-black text-slate-500 flex-shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-black text-slate-600 dark:text-slate-400 flex-shrink-0">
                 #{rank}
             </div>
             <div className="text-2xl flex-shrink-0">{s.avatar}</div>
             <div className="flex-1 min-w-0">
-                <p className="text-white font-bold text-sm">{s.name}</p>
-                <p className="text-slate-500 text-xs truncate">{s.company}</p>
+                <p className="text-slate-900 dark:text-white font-bold text-sm">{s.name}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs truncate">{s.company}</p>
             </div>
             {/* Engagement bar */}
             <div className="w-32 flex-shrink-0">
                 <div className="flex items-center justify-between mb-1">
                     <span className="text-slate-600 text-[9px]">Engagement</span>
-                    <span className="text-white text-xs font-black">{s.avgEngagement}%</span>
+                    <span className="text-slate-900 dark:text-white text-xs font-black">{s.avgEngagement}%</span>
                 </div>
-                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: pct(s.avgEngagement) }}
@@ -366,9 +366,9 @@ function SpeakerRow({ s, rank }: { s: typeof SPEAKER_METRICS[0]; rank: number })
             </div>
             <div className="flex items-center gap-1 flex-shrink-0 text-amber-400">
                 <Star size={10} fill="currentColor" />
-                <span className="text-white text-xs font-bold">{s.feedbackScore}</span>
+                <span className="text-slate-900 dark:text-white text-xs font-bold">{s.feedbackScore}</span>
             </div>
-            <div className="text-slate-500 text-xs flex-shrink-0">{s.totalReach.toLocaleString()} reached</div>
+            <div className="text-slate-600 dark:text-slate-400 text-xs flex-shrink-0">{s.totalReach.toLocaleString()} reached</div>
         </motion.div>
     );
 }
@@ -377,7 +377,7 @@ function SpeakerRow({ s, rank }: { s: typeof SPEAKER_METRICS[0]; rank: number })
 
 function TopicBar({ t, rank }: { t: typeof TOPIC_SCORES[0]; rank: number }) {
     const TrendIcon = t.trend === 'rising' ? TrendingUp : t.trend === 'falling' ? TrendingDown : Minus;
-    const trendColor = t.trend === 'rising' ? 'text-emerald-400' : t.trend === 'falling' ? 'text-red-400' : 'text-slate-500';
+    const trendColor = t.trend === 'rising' ? 'text-emerald-400' : t.trend === 'falling' ? 'text-red-400' : 'text-slate-600 dark:text-slate-400';
 
     return (
         <motion.div
@@ -387,15 +387,15 @@ function TopicBar({ t, rank }: { t: typeof TOPIC_SCORES[0]; rank: number }) {
             className="flex items-center gap-3"
         >
             <span className="text-slate-600 text-[10px] font-mono w-4 flex-shrink-0">#{rank}</span>
-            <span className="text-white text-xs w-52 truncate flex-shrink-0">{t.topic}</span>
-            <div className="flex-1 h-5 bg-slate-800 rounded-full overflow-hidden">
+            <span className="text-slate-900 dark:text-white text-xs w-52 truncate flex-shrink-0">{t.topic}</span>
+            <div className="flex-1 h-5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                 <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: pct(t.score) }}
                     transition={{ delay: rank * 0.05 + 0.2, duration: 0.9, ease: 'easeOut' }}
                     className={cn('h-full rounded-full flex items-center justify-end pr-2', t.color)}
                 >
-                    <span className="text-white text-[9px] font-black">{t.score}</span>
+                    <span className="text-slate-900 dark:text-white text-[9px] font-black">{t.score}</span>
                 </motion.div>
             </div>
             <TrendIcon size={12} className={cn('flex-shrink-0', trendColor)} />
@@ -416,19 +416,19 @@ function ClusterViz() {
                     initial={{ opacity: 0, scale: 0.93 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.07 }}
-                    className="bg-slate-900 border border-slate-800 rounded-2xl p-4 hover:border-slate-700 transition-colors"
+                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                 >
                     <div className="flex items-start justify-between mb-3">
                         <div>
-                            <p className="text-white font-bold text-sm">{c.label}</p>
-                            <p className="text-slate-500 text-xs">{c.connections} connections</p>
+                            <p className="text-slate-900 dark:text-white font-bold text-sm">{c.label}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs">{c.connections} connections</p>
                         </div>
-                        <div className={cn('w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-white flex-shrink-0', c.color)}>
+                        <div className={cn('w-10 h-10 rounded-full flex items-center justify-center text-sm font-black text-slate-900 dark:text-white flex-shrink-0', c.color)}>
                             {c.size}
                         </div>
                     </div>
                     {/* Size bar */}
-                    <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden mb-3">
+                    <div className="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mb-3">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: pct(Math.round((c.size / total) * 100)) }}
@@ -438,7 +438,7 @@ function ClusterViz() {
                     </div>
                     <div className="space-y-1">
                         {c.topPairs.map(p => (
-                            <div key={p} className="flex items-center gap-1.5 text-slate-500 text-[10px]">
+                            <div key={p} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 text-[10px]">
                                 <ArrowUpRight size={8} /> {p}
                             </div>
                         ))}
@@ -474,15 +474,15 @@ export default function AIInsightsEngine() {
     ];
 
     return (
-        <div className="h-screen bg-slate-950 flex flex-col font-sans overflow-hidden">
+        <div className="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans overflow-hidden">
 
             {/* ── Header ──────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-5 py-3.5 flex-shrink-0">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-5 py-3.5 flex-shrink-0">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
                         <div className="flex items-center gap-2">
                             <BrainCircuit size={18} className="text-violet-400" />
-                            <h1 className="text-white font-extrabold text-base">AI Event Insights Engine</h1>
+                            <h1 className="text-slate-900 dark:text-white font-extrabold text-base">AI Event Insights Engine</h1>
                             {/* Scan status */}
                             <div className={cn('flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-black border transition-colors',
                                 scanComplete
@@ -492,11 +492,11 @@ export default function AIInsightsEngine() {
                                 {scanComplete ? 'Analysis Complete' : 'AI Scanning…'}
                             </div>
                         </div>
-                        <p className="text-slate-500 text-xs mt-0.5">
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
                             Moscow Luxury Property Expo 2026 · {EVENT_SUMMARY.totalAttendees} Attendees · {EVENT_SUMMARY.sessionsDelivered} Sessions
                         </p>
                     </div>
-                    <div className="flex items-center gap-3 text-slate-500 text-xs">
+                    <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 text-xs">
                         <span className="flex items-center gap-1"><Eye size={11} /> {EVENT_SUMMARY.contentHubViews.toLocaleString()} content views</span>
                         <span className="flex items-center gap-1"><Radio size={11} className="text-emerald-400 animate-pulse" /> Live</span>
                     </div>
@@ -504,11 +504,11 @@ export default function AIInsightsEngine() {
             </div>
 
             {/* ── Tab bar ──────────────────────────────────────────────── */}
-            <div className="flex border-b border-slate-800 px-5 bg-slate-900/40 flex-shrink-0 overflow-x-auto">
+            <div className="flex border-b border-slate-200 dark:border-slate-800 px-5 bg-white dark:bg-slate-900/40 flex-shrink-0 overflow-x-auto">
                 {tabs.map(t => (
                     <button key={t.id} onClick={() => setTab(t.id)}
                         className={cn('flex items-center gap-1.5 px-4 py-3 text-sm font-semibold border-b-2 transition-colors flex-shrink-0',
-                            tab === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-500 hover:text-slate-300')}>
+                            tab === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300')}>
                         <t.icon size={13} /> {t.label}
                         {t.badge !== undefined && (
                             <span className="text-[9px] px-1.5 py-0.5 rounded-full font-black bg-red-500/20 text-red-400">{t.badge}</span>
@@ -538,11 +538,11 @@ export default function AIInsightsEngine() {
                             </div>
 
                             {/* Heatmap */}
-                            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <p className="text-white font-bold text-sm">Engagement Heatmap</p>
-                                        <p className="text-slate-500 text-xs">5 metrics across 13 hours · hover cells to inspect</p>
+                                        <p className="text-slate-900 dark:text-white font-bold text-sm">Engagement Heatmap</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs">5 metrics across 13 hours · hover cells to inspect</p>
                                     </div>
                                     <div className="flex items-center gap-1.5 text-slate-600 text-xs">
                                         <Sparkles size={11} className="text-violet-400" /> AI analysed
@@ -567,8 +567,8 @@ export default function AIInsightsEngine() {
                                     <button key={m.id} onClick={() => setChartMetric(m.id)}
                                         className={cn('px-3 py-1.5 rounded-xl border text-xs font-bold transition-all',
                                             chartMetric === m.id
-                                                ? 'bg-slate-700 border-slate-600 text-white'
-                                                : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700')}>
+                                                ? 'bg-slate-200 dark:bg-slate-700 border-slate-600 text-slate-900 dark:text-white'
+                                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700')}>
                                         {m.label}
                                     </button>
                                 ))}
@@ -576,7 +576,7 @@ export default function AIInsightsEngine() {
                             </div>
 
                             {/* Chart */}
-                            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
                                 <AnimatePresence mode="wait">
                                     <motion.div key={chartMetric} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                         <AreaChart
@@ -595,11 +595,11 @@ export default function AIInsightsEngine() {
                                     { label: 'Peak Networking', value: '212 pings/hr', time: '12–1 PM', icon: Network, color: 'text-pink-400' },
                                     { label: 'Peak Content', value: '96 score', time: '3 PM', icon: Activity, color: 'text-emerald-400' },
                                 ].map(s => (
-                                    <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center gap-3">
+                                    <div key={s.label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center gap-3">
                                         <s.icon size={16} className={s.color} />
                                         <div>
                                             <p className={cn('font-black text-base', s.color)}>{s.value}</p>
-                                            <p className="text-slate-400 text-xs">{s.label} · {s.time}</p>
+                                            <p className="text-slate-600 dark:text-slate-400 text-xs">{s.label} · {s.time}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -611,7 +611,7 @@ export default function AIInsightsEngine() {
                     {tab === 'speakers' && (
                         <motion.div key="sp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             className="p-5 space-y-3">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-4">
+                            <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-4">
                                 Ranked by audience engagement score
                             </p>
                             {SPEAKER_METRICS.map((s, i) => <SpeakerRow key={s.name} s={s} rank={i + 1} />)}
@@ -622,12 +622,12 @@ export default function AIInsightsEngine() {
                     {tab === 'topics' && (
                         <motion.div key="tp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             className="p-5">
-                            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3">
                                 <div className="flex items-center justify-between mb-2">
-                                    <p className="text-white font-bold text-sm">Topic Popularity Index</p>
+                                    <p className="text-slate-900 dark:text-white font-bold text-sm">Topic Popularity Index</p>
                                     <div className="flex items-center gap-3 text-slate-600 text-[10px]">
                                         <span className="flex items-center gap-1"><TrendingUp size={9} className="text-emerald-400" /> Rising</span>
-                                        <span className="flex items-center gap-1"><Minus size={9} className="text-slate-500" /> Stable</span>
+                                        <span className="flex items-center gap-1"><Minus size={9} className="text-slate-600 dark:text-slate-400" /> Stable</span>
                                         <span className="flex items-center gap-1"><TrendingDown size={9} className="text-red-400" /> Falling</span>
                                     </div>
                                 </div>
@@ -646,9 +646,9 @@ export default function AIInsightsEngine() {
                                     { label: 'Largest Cluster', value: '87', color: 'text-emerald-400' },
                                     { label: 'Cross-Cluster Ratio', value: '12%', color: 'text-amber-400' },
                                 ].map(s => (
-                                    <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                                    <div key={s.label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-center">
                                         <p className={cn('font-black text-xl', s.color)}>{s.value}</p>
-                                        <p className="text-slate-500 text-xs mt-0.5">{s.label}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{s.label}</p>
                                     </div>
                                 ))}
                             </div>
@@ -666,7 +666,7 @@ export default function AIInsightsEngine() {
                                     <BrainCircuit size={18} className="text-violet-400 animate-pulse" />
                                     <div className="flex-1">
                                         <p className="text-violet-300 font-bold text-sm">AI Scanning Event Data…</p>
-                                        <div className="h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                                        <div className="h-1 bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
                                             <motion.div
                                                 className="h-full bg-violet-500 rounded-full"
                                                 initial={{ width: '0%' }}

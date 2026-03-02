@@ -71,7 +71,7 @@ export function OrganizerConfigPanel({
             </div>
 
             <motion.button id="save-travel-config" whileTap={{ scale: 0.97 }} onClick={handleSave}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-extrabold text-sm transition-all shadow-md shadow-amber-500/20">
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white font-extrabold text-sm transition-all shadow-md shadow-amber-500/20">
                 {saved ? <><CheckCircle2 size={14} /> Configuration Saved ✓</> : <><CheckCircle2 size={14} /> Save Configuration</>}
             </motion.button>
         </div>
@@ -104,7 +104,7 @@ export function BookingLedger({ agents }: { agents: ApprovedAgent[] }) {
                 {booked.map(a => (
                     <motion.div key={a.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                         className="flex items-center gap-3 p-3 bg-psi-subtle rounded-xl border border-psi">
-                        <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-sm flex-shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-sm flex-shrink-0">
                             {a.bookedFlight!.logo}
                         </div>
                         <div className="flex-1 min-w-0">

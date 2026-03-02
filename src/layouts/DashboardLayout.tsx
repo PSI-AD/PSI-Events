@@ -138,13 +138,13 @@ function SidebarLink({
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group min-h-[40px] relative',
                 collapsed && 'justify-center px-0',
                 isActive
-                    ? 'bg-slate-100 text-emerald-600 dark:bg-slate-800 dark:text-white shadow-none dark:shadow-lg dark:shadow-black/20'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200'
+                    ? 'bg-psi-accent-subtle text-psi-accent font-semibold'
+                    : 'text-psi-secondary hover:bg-psi-subtle hover:text-psi-primary'
             )}
         >
             <span className={cn(
                 'transition-transform duration-150 flex-shrink-0',
-                isActive ? 'text-emerald-500 dark:text-emerald-400' : 'group-hover:scale-105'
+                isActive ? 'text-psi-accent' : 'group-hover:scale-105'
             )}>
                 <Icon size={17} />
             </span>
@@ -156,7 +156,7 @@ function SidebarLink({
                     {isActive && (
                         <motion.div
                             layoutId="sidebar-active-dot"
-                            className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 flex-shrink-0"
+                            className="ml-auto w-1.5 h-1.5 rounded-full bg-psi-accent flex-shrink-0"
                         />
                     )}
                 </>
@@ -166,7 +166,7 @@ function SidebarLink({
             {collapsed && isActive && (
                 <motion.div
                     layoutId="sidebar-active-dot"
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-500 dark:bg-emerald-400"
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-psi-accent"
                 />
             )}
         </Link>
@@ -184,17 +184,17 @@ function BottomNavItem({ to, icon: Icon, label }: { key?: React.Key; to: string;
             to={to}
             className={cn(
                 'flex flex-col items-center justify-center flex-1 py-2 gap-0.5 min-h-[56px] transition-colors relative',
-                isActive ? 'text-emerald-400' : 'text-slate-500'
+                isActive ? 'text-psi-accent' : 'text-psi-muted'
             )}
         >
             {isActive && (
                 <motion.div
                     layoutId="bottom-nav-indicator"
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-emerald-400 rounded-full"
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-psi-accent rounded-full"
                 />
             )}
             <Icon size={20} className={cn('transition-transform', isActive && 'scale-110')} />
-            <span className={cn('text-[9px] font-bold tracking-wide', isActive ? 'text-emerald-400' : 'text-slate-500')}>
+            <span className={cn('text-[9px] font-bold tracking-wide', isActive ? 'text-psi-accent' : 'text-psi-muted')}>
                 {label}
             </span>
         </Link>
@@ -225,27 +225,27 @@ export default function DashboardLayout() {
                 <aside
                     className={cn(
                         'hidden md:flex flex-col shrink-0',
-                        'bg-white dark:bg-slate-900 text-slate-900 dark:text-white',
-                        'border-r border-slate-200 dark:border-slate-800/60',
+                        'bg-psi-surface text-psi-primary',
+                        'border-r border-psi',
                         'transition-all duration-300 ease-in-out',
                         isCollapsed ? 'w-20' : 'w-64',
                     )}
                 >
                     {/* ── Logo / Branding ── */}
                     <div className={cn(
-                        'flex items-center gap-3 border-b border-slate-200 dark:border-slate-800/60',
+                        'flex items-center gap-3 border-b border-psi',
                         'transition-all duration-300 ease-in-out overflow-hidden',
                         isCollapsed ? 'px-0 py-4 justify-center' : 'px-5 py-4',
                     )}>
                         {/* Icon — always visible */}
                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
-                            <TrendingUp size={16} className="text-white" />
+                            <TrendingUp size={16} className="text-slate-900 dark:text-white" />
                         </div>
                         {/* Text — hidden when collapsed */}
                         {!isCollapsed && (
                             <div className="min-w-0 overflow-hidden">
-                                <p className="text-slate-900 dark:text-white font-extrabold text-sm tracking-tight leading-none whitespace-nowrap">ROI Portal</p>
-                                <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest mt-0.5 whitespace-nowrap">Real Estate Events</p>
+                                <p className="text-psi-primary font-extrabold text-sm tracking-tight leading-none whitespace-nowrap">ROI Portal</p>
+                                <p className="text-psi-muted text-[9px] uppercase tracking-widest mt-0.5 whitespace-nowrap">Real Estate Events</p>
                             </div>
                         )}
                     </div>
@@ -261,12 +261,12 @@ export default function DashboardLayout() {
                                 {/* Group label — hidden when collapsed */}
                                 {!isCollapsed && (
                                     <div className="px-3 mb-1">
-                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">{group.label}</p>
+                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
                                     </div>
                                 )}
                                 {/* Collapsed: thin divider line instead of label */}
                                 {isCollapsed && (
-                                    <div className="mx-3 mb-1 h-px bg-slate-100 dark:bg-slate-800/60" />
+                                    <div className="mx-3 mb-1 h-px bg-psi-border" />
                                 )}
                                 <div className="space-y-0.5">
                                     {group.items.map(({ to, icon, label }) => (
@@ -284,7 +284,7 @@ export default function DashboardLayout() {
                     </nav>
 
                     {/* ── Footer links ── */}
-                    <div className="border-t border-slate-200 dark:border-slate-800/60 p-2 space-y-0.5">
+                    <div className="border-t border-psi p-2 space-y-0.5">
                         {/* ROI Vision special link */}
                         <a
                             href="/executive-presentation"
@@ -293,10 +293,10 @@ export default function DashboardLayout() {
                             title={isCollapsed ? 'ROI Vision' : undefined}
                             className={cn(
                                 'flex items-center gap-3 px-3 py-2.5 rounded-xl',
-                                'text-emerald-600 dark:text-emerald-400',
-                                'hover:bg-emerald-50 dark:hover:bg-emerald-500/10',
+                                'text-psi-accent',
+                                'hover:bg-psi-accent-subtle',
                                 'transition-all duration-150 group',
-                                'border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]',
+                                'border border-psi-accent min-h-[40px]',
                                 isCollapsed && 'justify-center px-0',
                             )}
                         >
@@ -316,15 +316,15 @@ export default function DashboardLayout() {
                         title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                         className={cn(
                             'w-full flex items-center gap-2 px-4 py-3',
-                            'border-t border-slate-200 dark:border-slate-800/60',
-                            'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200',
-                            'hover:bg-slate-50 dark:hover:bg-slate-800',
+                            'border-t border-psi',
+                            'text-psi-muted hover:text-psi-primary',
+                            'hover:bg-psi-subtle',
                             'transition-all duration-150 select-none',
                             isCollapsed ? 'justify-center' : 'justify-between',
                         )}
                     >
                         {!isCollapsed && (
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-psi-muted">
                                 Collapse
                             </span>
                         )}
@@ -339,16 +339,16 @@ export default function DashboardLayout() {
                 <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
                     {/* ── Top header (mobile + desktop) ────────────────── */}
-                    <header className="flex items-center justify-between bg-slate-900 text-white px-4 py-3 border-b border-slate-800/60 flex-shrink-0 z-40">
+                    <header className="flex items-center justify-between bg-psi-surface text-psi-primary px-4 py-3 border-b border-psi flex-shrink-0 z-40 shadow-sm">
                         {/* Left: brand (mobile only) + page title */}
                         <div className="flex items-center gap-3 min-w-0">
                             {/* Mobile brand mark */}
                             <div className="md:hidden w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
-                                <TrendingUp size={13} className="text-white" />
+                                <TrendingUp size={13} className="text-slate-900 dark:text-white" />
                             </div>
                             <div className="min-w-0">
-                                <p className="text-[9px] text-slate-500 uppercase tracking-widest font-bold hidden md:block">PSI Event Portal</p>
-                                <h1 className="text-sm md:text-base font-extrabold tracking-tight leading-tight text-white truncate">{pageTitle}</h1>
+                                <p className="text-[9px] text-psi-muted uppercase tracking-widest font-bold hidden md:block">PSI Event Portal</p>
+                                <h1 className="text-sm md:text-base font-extrabold tracking-tight leading-tight text-psi-primary truncate">{pageTitle}</h1>
                             </div>
                         </div>
 
@@ -359,7 +359,7 @@ export default function DashboardLayout() {
                                 href="/executive-presentation"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/10 transition-all text-xs font-bold"
+                                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-psi-accent border border-psi-accent hover:bg-psi-accent-subtle transition-all text-xs font-bold"
                                 aria-label="ROI Vision"
                             >
                                 <Sparkles size={13} />
@@ -373,7 +373,7 @@ export default function DashboardLayout() {
                             <button
                                 id="mobile-menu-btn"
                                 onClick={() => setDrawerOpen(true)}
-                                className="md:hidden p-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                className="md:hidden p-2 rounded-xl text-psi-muted hover:bg-psi-subtle hover:text-psi-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                                 aria-label="Open menu"
                             >
                                 <Menu size={20} />
@@ -403,23 +403,23 @@ export default function DashboardLayout() {
                                 animate={{ x: 0 }}
                                 exit={{ x: '100%' }}
                                 transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-                                className="fixed top-0 right-0 bottom-0 w-72 bg-white dark:bg-slate-900 z-50 md:hidden flex flex-col shadow-2xl border-l border-slate-200 dark:border-slate-800/60"
+                                className="fixed top-0 right-0 bottom-0 w-72 bg-psi-surface z-50 md:hidden flex flex-col shadow-2xl border-l border-psi"
                             >
                                 {/* Drawer header */}
-                                <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200 dark:border-slate-800/60">
+                                <div className="flex items-center justify-between px-4 py-4 border-b border-psi">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center">
-                                            <TrendingUp size={14} className="text-white" />
+                                            <TrendingUp size={14} className="text-slate-900 dark:text-white" />
                                         </div>
                                         <div>
-                                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">PSI Event Portal</p>
-                                            <p className="text-slate-500 dark:text-slate-400 text-[9px]">All Modules</p>
+                                            <p className="text-psi-primary font-extrabold text-sm">PSI Event Portal</p>
+                                            <p className="text-psi-muted text-[9px]">All Modules</p>
                                         </div>
                                     </div>
                                     <button
                                         id="close-menu-btn"
                                         onClick={() => setDrawerOpen(false)}
-                                        className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                        className="p-2 rounded-xl text-psi-muted hover:text-psi-primary hover:bg-psi-subtle transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                                     >
                                         <X size={20} />
                                     </button>
@@ -430,7 +430,7 @@ export default function DashboardLayout() {
                                     {NAV_GROUPS.map(group => (
                                         <div key={group.label}>
                                             <div className="px-3 mb-1">
-                                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">{group.label}</p>
+                                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
                                             </div>
                                             <div className="space-y-0.5">
                                                 {group.items.map(({ to, icon, label }) => (
@@ -442,12 +442,12 @@ export default function DashboardLayout() {
                                 </nav>
 
                                 {/* Drawer footer */}
-                                <div className="border-t border-slate-200 dark:border-slate-800/60 p-2 space-y-0.5">
+                                <div className="border-t border-psi p-2 space-y-0.5">
                                     <a
                                         href="/executive-presentation"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-all group border border-emerald-200 dark:border-emerald-500/20 min-h-[40px]"
+                                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-psi-accent hover:bg-psi-accent-subtle transition-all group border border-psi-accent min-h-[40px]"
                                     >
                                         <Sparkles size={17} />
                                         <span className="font-bold text-sm">ROI Vision</span>
@@ -461,7 +461,7 @@ export default function DashboardLayout() {
                 </AnimatePresence>
 
                 {/* ── Mobile Bottom Navigation ─────────────────────────── */}
-                <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-slate-900 border-t border-slate-800/60">
+                <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-psi-surface border-t border-psi shadow-[0_-2px_10px_rgba(0,0,0,0.06)]">
                     <div className="flex" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
                         {BOTTOM_NAV_ITEMS.map(({ to, icon, label }) => (
                             <BottomNavItem key={to} to={to} icon={icon} label={label} />

@@ -69,9 +69,9 @@ const ACCENT = {
 };
 
 const TAB_COLOR = {
-    amber: { active: 'bg-amber-500 text-white shadow-amber-500/30', inactive: 'text-slate-400 hover:text-amber-300', dot: 'bg-amber-500', badge: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
-    emerald: { active: 'bg-emerald-500 text-white shadow-emerald-500/30', inactive: 'text-slate-400 hover:text-emerald-300', dot: 'bg-emerald-500', badge: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
-    blue: { active: 'bg-blue-500 text-white shadow-blue-500/30', inactive: 'text-slate-400 hover:text-blue-300', dot: 'bg-blue-500', badge: 'text-blue-400 border-blue-500/30 bg-blue-500/10' },
+    amber: { active: 'bg-amber-500 text-slate-900 dark:text-white shadow-amber-500/30', inactive: 'text-slate-600 dark:text-slate-400 hover:text-amber-300', dot: 'bg-amber-500', badge: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
+    emerald: { active: 'bg-emerald-500 text-slate-900 dark:text-white shadow-emerald-500/30', inactive: 'text-slate-600 dark:text-slate-400 hover:text-emerald-300', dot: 'bg-emerald-500', badge: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
+    blue: { active: 'bg-blue-500 text-slate-900 dark:text-white shadow-blue-500/30', inactive: 'text-slate-600 dark:text-slate-400 hover:text-blue-300', dot: 'bg-blue-500', badge: 'text-blue-400 border-blue-500/30 bg-blue-500/10' },
 };
 
 // ── Content data ──────────────────────────────────────────────────────────────
@@ -91,7 +91,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Set the city, venue, dates, and financial targets before inviting a single agent.',
                 icon: <MapPin size={20} />,
                 screenshotLabel: 'Events → New Roadshow Form',
-                screenshotIcon: <Calendar size={28} className="text-slate-500" />,
+                screenshotIcon: <Calendar size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/events → click "Create New Event" button',
                 filename: 'create-event.png',
                 boxes: [
@@ -128,7 +128,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Assign Gold, Silver, or Bronze risk tier to each agent — this determines their commission split.',
                 icon: <Award size={20} />,
                 screenshotLabel: 'Events → Risk Tier Assignment Panel',
-                screenshotIcon: <Award size={28} className="text-slate-500" />,
+                screenshotIcon: <Award size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/settlement → open the Roster Builder and assign tiers',
                 filename: 'risk-tiers.png',
                 boxes: [
@@ -166,7 +166,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Branch Manager reviews nominations and approves the final travelling team.',
                 icon: <Users size={20} />,
                 screenshotLabel: 'Events → Agent Roster → Approval Queue',
-                screenshotIcon: <Users size={28} className="text-slate-500" />,
+                screenshotIcon: <Users size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/proposals → open a proposal and view the Approval Queue tab',
                 filename: 'agent-approval.png',
                 boxes: [
@@ -204,7 +204,7 @@ const PHASES: Phase[] = [
                 subtitle: 'The system automatically chases agents who have not uploaded flight and visa documents before the deadline.',
                 icon: <Bell size={20} />,
                 screenshotLabel: 'System → Automated Nudger Cloud Function',
-                screenshotIcon: <Upload size={28} className="text-slate-500" />,
+                screenshotIcon: <Upload size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/settings → scroll to Nudger / Notification settings',
                 filename: 'nudger-config.png',
                 boxes: [
@@ -243,7 +243,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Before finalising the budget, the AI engine analyses past roadshows in the same city to recommend a minimum developer sponsorship.',
                 icon: <BarChart3 size={20} />,
                 screenshotLabel: 'Analytics → Predictive Dashboard → City Selector',
-                screenshotIcon: <BarChart3 size={28} className="text-slate-500" />,
+                screenshotIcon: <BarChart3 size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/analytics → select a city in the Predictive Dashboard dropdown',
                 filename: 'predictive-dashboard.png',
                 boxes: [
@@ -290,7 +290,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Every agent shows their digital pass QR code at the door. Organiser scans and locks their status to physically_present.',
                 icon: <QrCode size={20} />,
                 screenshotLabel: 'Check-In → Agent Pass View + Organiser Scanner',
-                screenshotIcon: <QrCode size={28} className="text-slate-500" />,
+                screenshotIcon: <QrCode size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/check-in → show both the "My Pass" tab (agent) and "Scanner" tab (organiser)',
                 filename: 'qr-check-in.png',
                 boxes: [
@@ -329,7 +329,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Leads arriving from the CRM (Odoo/Salesforce) are automatically distributed to checked-in agents using a fair round-robin algorithm.',
                 icon: <Target size={20} />,
                 screenshotLabel: 'System → Lead Distribution Cloud Function (HTTP Webhook)',
-                screenshotIcon: <Users size={28} className="text-slate-500" />,
+                screenshotIcon: <Users size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/analytics → Lead Funnel Chart section',
                 filename: 'lead-distribution.png',
                 boxes: [
@@ -368,7 +368,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Branch Manager and executives monitor real-time cost vs. revenue on the Analytics dashboard throughout the event day.',
                 icon: <TrendingUp size={20} />,
                 screenshotLabel: 'Analytics → P&L Scenario Card + Lead Funnel Chart',
-                screenshotIcon: <BarChart3 size={28} className="text-slate-500" />,
+                screenshotIcon: <BarChart3 size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/analytics → P&L Scenario Card at the top of the page',
                 filename: 'pl-monitoring.png',
                 boxes: [
@@ -415,7 +415,7 @@ const PHASES: Phase[] = [
                 subtitle: 'All assigned leads remain in each agent\'s CRM queue. Managers can see unassigned leads and redistribute as needed.',
                 icon: <FileText size={20} />,
                 screenshotLabel: 'CRM Leads Collection → Firestore Console or Future Leads UI',
-                screenshotIcon: <FileText size={28} className="text-slate-500" />,
+                screenshotIcon: <FileText size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/vip-concierge → leads queue and status columns',
                 filename: 'lead-followup.png',
                 boxes: [
@@ -453,7 +453,7 @@ const PHASES: Phase[] = [
                 subtitle: 'Once deals are closed, generate the locked Final Settlement Report — exact AED payouts per agent, zero disputes.',
                 icon: <Award size={20} />,
                 screenshotLabel: 'Settlement → Commission Engine → Generate Report',
-                screenshotIcon: <Award size={28} className="text-slate-500" />,
+                screenshotIcon: <Award size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/settlement → add agents to roster, click "Generate Final Settlement Report"',
                 filename: 'settlement-report.png',
                 boxes: [
@@ -492,7 +492,7 @@ const PHASES: Phase[] = [
                 subtitle: 'The completed event\'s financial data feeds back into the Predictive Analytics engine, improving future sponsorship recommendations.',
                 icon: <BarChart3 size={20} />,
                 screenshotLabel: 'Analytics → Predictive Dashboard (Post-Event City Update)',
-                screenshotIcon: <Sparkles size={28} className="text-slate-500" />,
+                screenshotIcon: <Sparkles size={28} className="text-slate-600 dark:text-slate-400" />,
                 url: 'localhost:5173/analytics → select city in Predictive dropdown — confirm updated confidence level',
                 filename: 'predictive-update.png',
                 boxes: [
@@ -565,7 +565,7 @@ function ScreenshotPlaceholder({
             href={baseHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="group block w-full aspect-video bg-slate-900 border-2 border-dashed border-slate-700 hover:border-blue-500/60 hover:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-4 my-6 transition-all duration-200 hover:ring-2 hover:ring-blue-500/20 cursor-pointer px-6"
+            className="group block w-full aspect-video bg-white dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500/60 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl flex flex-col items-center justify-center gap-4 my-6 transition-all duration-200 hover:ring-2 hover:ring-blue-500/20 cursor-pointer px-6"
         >
             {/* Decorative chrome */}
             <div className="w-full max-w-xs flex flex-col gap-1.5 opacity-20 group-hover:opacity-35 transition-opacity pointer-events-none select-none">
@@ -575,14 +575,14 @@ function ScreenshotPlaceholder({
                     <div className="w-2 h-2 rounded-full bg-emerald-400" />
                 </div>
                 <div className="h-2.5 bg-slate-600 rounded w-3/4" />
-                <div className="h-2.5 bg-slate-700 rounded w-1/2" />
-                <div className="h-14 bg-slate-700/60 rounded-xl mt-1" />
+                <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-1/2" />
+                <div className="h-14 bg-slate-200 dark:bg-slate-700/60 rounded-xl mt-1" />
             </div>
 
             {/* CTA */}
             <div className="text-center space-y-2.5 w-full max-w-sm">
                 {/* Open button */}
-                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
+                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-slate-900 dark:text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
                     <span>📸 Click to open this screen</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -601,24 +601,24 @@ function ScreenshotPlaceholder({
 
                 {/* Click-to-copy filename */}
                 <div className="flex items-center justify-center gap-1.5 text-xs font-mono">
-                    <span className="text-slate-500">Save as</span>
+                    <span className="text-slate-600 dark:text-slate-400">Save as</span>
                     <button
                         type="button"
                         onClick={copyFilename}
                         title="Click to copy filename"
-                        className="relative inline-flex items-center gap-1 bg-slate-700/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer"
+                        className="relative inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-700/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer"
                     >
                         {filename}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600 dark:text-slate-400">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
                         {copied && (
-                            <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
+                            <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-slate-900 dark:text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
                                 ✓ Copied!
                             </span>
                         )}
                     </button>
-                    <span className="text-slate-500">→</span>
+                    <span className="text-slate-600 dark:text-slate-400">→</span>
                     <span className="text-blue-400">public/manual/</span>
                 </div>
             </div>
@@ -674,10 +674,10 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
                             Step {step.number}
                         </span>
                     </div>
-                    <h2 className="text-white text-xl md:text-2xl font-extrabold tracking-tight leading-tight">
+                    <h2 className="text-slate-900 dark:text-white text-xl md:text-2xl font-extrabold tracking-tight leading-tight">
                         {step.title}
                     </h2>
-                    <p className="text-slate-400 text-sm md:text-base mt-1.5 leading-relaxed">{step.subtitle}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base mt-1.5 leading-relaxed">{step.subtitle}</p>
                     {/* URL breadcrumb — shows where to go for screenshot */}
                     {(() => {
                         const raw = step.url.split(/→/)[0].trim();
@@ -688,9 +688,9 @@ function StepSection({ step, phase, isLast }: { step: Step; phase: Phase; isLast
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={e => e.stopPropagation()}
-                                className="mt-2 inline-flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 hover:border-blue-500/40 rounded-lg px-2.5 py-1 group transition-all duration-150"
+                                className="mt-2 inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/70 border border-slate-300 dark:border-slate-700/60 hover:border-blue-500/40 rounded-lg px-2.5 py-1 group transition-all duration-150"
                             >
-                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">📸 screen</span>
+                                <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">📸 screen</span>
                                 <span className="text-[11px] font-mono font-semibold text-blue-400 group-hover:text-blue-300 truncate max-w-[280px]">{step.url}</span>
                             </a>
                         );
@@ -809,7 +809,7 @@ function LifecycleGuide() {
                                     <span>{p.label}</span>
                                     <span className={cn(
                                         'text-[10px] font-bold px-1.5 py-0.5 rounded-full',
-                                        isActive ? 'bg-white/20' : 'bg-psi-subtle text-psi-muted'
+                                        isActive ? 'bg-black/20 dark:bg-white/20' : 'bg-psi-subtle text-psi-muted'
                                     )}>
                                         {p.steps.length}
                                     </span>
@@ -977,7 +977,7 @@ function LifecycleGuide() {
                                     )}>
                                         {phase.label}
                                     </h2>
-                                    <p className="text-slate-400 text-sm">{phase.tagline} · {phase.steps.length} steps</p>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm">{phase.tagline} · {phase.steps.length} steps</p>
                                 </div>
                             </div>
 
@@ -1011,8 +1011,8 @@ function LifecycleGuide() {
                                         className={cn(
                                             'mt-4 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all mx-auto select-none active:scale-[0.98]',
                                             phase.color === 'amber'
-                                                ? 'bg-amber-500 hover:bg-amber-400 text-white'
-                                                : 'bg-emerald-500 hover:bg-emerald-400 text-white'
+                                                ? 'bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white'
+                                                : 'bg-emerald-500 hover:bg-emerald-400 text-slate-900 dark:text-white'
                                         )}
                                     >
                                         Next Phase
@@ -1040,8 +1040,8 @@ export default function ProductManual() {
             {/* ── Top tab switcher ── */}
             <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/60 px-4 py-2 flex items-center gap-1 flex-shrink-0 z-20">
                 {([
-                    { id: 'visual' as ManualTab, label: '📘 Visual System Manual', active: 'bg-emerald-500 text-white shadow-emerald-500/20', inactive: 'text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400' },
-                    { id: 'lifecycle' as ManualTab, label: '📋 Lifecycle Guide', active: 'bg-blue-500 text-white shadow-blue-500/20', inactive: 'text-slate-500 hover:text-blue-600 dark:hover:text-blue-400' },
+                    { id: 'visual' as ManualTab, label: '📘 Visual System Manual', active: 'bg-emerald-500 text-slate-900 dark:text-white shadow-emerald-500/20', inactive: 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400' },
+                    { id: 'lifecycle' as ManualTab, label: '📋 Lifecycle Guide', active: 'bg-blue-500 text-slate-900 dark:text-white shadow-blue-500/20', inactive: 'text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400' },
                 ] as { id: ManualTab; label: string; active: string; inactive: string }[]).map((t) => (
                     <button
                         key={t.id}

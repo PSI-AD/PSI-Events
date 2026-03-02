@@ -445,7 +445,7 @@ export function TabBar<T extends string = string>({
                                 className={cx(
                                     'px-1.5 py-0.5 rounded-full text-[10px] font-bold tabular-nums',
                                     isActive
-                                        ? 'bg-white/20 text-white'
+                                        ? 'bg-black/20 dark:bg-white/20 text-slate-900 dark:text-white'
                                         : 'bg-psi-border-subtle text-psi-muted',
                                 )}
                             >
@@ -506,11 +506,11 @@ type BtnVariant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger';
 type BtnSize = 'sm' | 'md' | 'lg';
 
 const BTN_VARIANTS: Record<BtnVariant, string> = {
-    primary: 'btn-accent text-white shadow-sm',
+    primary: 'btn-accent text-slate-900 dark:text-white shadow-sm',
     secondary: 'bg-psi-subtle text-psi-primary border border-psi hover:bg-psi-surface shadow-sm',
     ghost: 'text-psi-secondary hover:text-psi-primary hover:bg-psi-subtle',
     outline: 'btn-accent-outline',
-    danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm',
+    danger: 'bg-rose-600 hover:bg-rose-700 text-slate-900 dark:text-white shadow-sm',
 };
 
 const BTN_SIZES: Record<BtnSize, string> = {

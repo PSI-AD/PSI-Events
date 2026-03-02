@@ -263,7 +263,7 @@ function ReportSection({
         >
             <div className={`flex items-center gap-2.5 pb-2 border-b-2 ${accent}`}>
                 <span className="opacity-70">{icon}</span>
-                <h3 className="font-black text-sm uppercase tracking-[0.15em] text-slate-800 dark:text-slate-200">{title}</h3>
+                <h3 className="font-black text-sm uppercase tracking-[0.15em] text-psi-primary">{title}</h3>
             </div>
             {children}
         </motion.section>
@@ -285,7 +285,7 @@ function BulletList({ items, variant = 'default' }: { items: string[]; variant?:
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }}
-                    className="flex items-start gap-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300"
+                    className="flex items-start gap-3 text-sm leading-relaxed text-psi-secondary"
                 >
                     <span className={`flex-shrink-0 w-1.5 h-1.5 rounded-full mt-[7px] ${dotColors[variant]}`} />
                     <span>{item}</span>
@@ -333,7 +333,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
     return (
         <div ref={printRef} id="debrief-document" className="print:bg-white print:p-8">
             {/* Document header */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 mb-8 print:from-slate-100 print:via-white print:to-slate-50 print:border print:border-slate-200">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-900 p-8 mb-8 print:from-slate-100 print:via-white print:to-slate-50 print:border print:border-slate-200">
                 {/* Decorative lines */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600" />
                 <div className="absolute top-1 left-0 w-1/3 h-px bg-gradient-to-r from-blue-400 to-transparent" />
@@ -342,16 +342,16 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                     <div>
                         <div className="flex items-center gap-2 mb-3">
                             <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-                                <FileText size={13} className="text-white" />
+                                <FileText size={13} className="text-slate-900 dark:text-white" />
                             </div>
                             <span className="text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] print:text-blue-700">
                                 PSI Properties · Executive Post-Mortem
                             </span>
                         </div>
-                        <h1 className="text-white text-2xl font-black tracking-tight leading-tight mb-1 print:text-slate-900">
+                        <h1 className="text-slate-900 dark:text-white text-2xl font-black tracking-tight leading-tight mb-1 print:text-slate-900">
                             {input.event.name}
                         </h1>
-                        <p className="text-slate-400 text-sm print:text-slate-600">
+                        <p className="text-slate-600 dark:text-slate-400 text-sm print:text-slate-600">
                             {input.event.city}, {input.event.country} &nbsp;·&nbsp; {input.event.start_date} — {input.event.end_date}
                         </p>
                     </div>
@@ -364,7 +364,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                             { label: 'Spend', value: `AED ${formatAED(input.totalExpenses)}`, icon: <DollarSign size={12} />, color: 'text-amber-400' },
                             { label: 'Net ROI', value: `${input.netROI.toFixed(0)}%`, icon: <TrendingUp size={12} />, color: input.netROI >= 0 ? 'text-emerald-400' : 'text-rose-400' },
                         ].map(({ label, value, icon, color }) => (
-                            <div key={label} className="bg-white/6 border border-white/10 rounded-xl px-4 py-3 min-w-[90px] text-center print:border-slate-200 print:bg-slate-50">
+                            <div key={label} className="bg-white/6 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 min-w-[90px] text-center print:border-slate-200 print:bg-slate-50">
                                 <div className={`flex items-center justify-center gap-1 ${color} print:text-slate-600 mb-1`}>{icon}<span className="text-[9px] font-black uppercase tracking-widest">{label}</span></div>
                                 <p className={`text-base font-extrabold ${color} print:text-slate-900`}>{value}</p>
                             </div>
@@ -374,7 +374,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
 
                 {/* Expense breakdown mini bar */}
                 <div className="mt-6 space-y-1">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Expense Breakdown</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 mb-2">Expense Breakdown</p>
                     <div className="flex gap-1 h-2 rounded-full overflow-hidden">
                         {Object.entries(input.expenseBreakdown).map(([cat, val], i) => {
                             const pct = input.totalExpenses > 0 ? (val / input.totalExpenses) * 100 : 0;
@@ -388,7 +388,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                             return (
                                 <div key={cat} className="flex items-center gap-1">
                                     <span className={`w-1.5 h-1.5 rounded-full ${colors[i % colors.length]} opacity-80 flex-shrink-0`} style={{ backgroundColor: 'currentColor' }} />
-                                    <span className="text-[9px] text-slate-400 print:text-slate-600">{cat} <strong className="text-slate-300 print:text-slate-800">AED {formatAED(val)}</strong></span>
+                                    <span className="text-[9px] text-slate-600 dark:text-slate-400 print:text-slate-600">{cat} <strong className="text-slate-700 dark:text-slate-300 print:text-slate-800">AED {formatAED(val)}</strong></span>
                                 </div>
                             );
                         })}
@@ -398,13 +398,13 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                 {/* Action buttons */}
                 <div className="absolute top-4 right-4 flex gap-2 print:hidden">
                     <button id="debrief-print-btn" onClick={handlePrint}
-                        className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/15 transition-all"
+                        className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 border border-white/15 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-white/15 transition-all"
                         title="Print report"
                     >
                         <Printer size={14} />
                     </button>
                     <button id="debrief-download-btn" onClick={handleDownload}
-                        className="w-8 h-8 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/15 transition-all"
+                        className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 border border-white/15 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-white/15 transition-all"
                         title="Download as text"
                     >
                         <Download size={14} />
@@ -440,8 +440,8 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
 
                 {/* ROI Analysis */}
                 <ReportSection icon={<BarChart2 size={16} />} title="ROI & Financial Analysis" accent="border-indigo-500">
-                    <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-2xl p-5">
-                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-7">
+                    <div className="bg-psi-subtle border border-psi rounded-2xl p-5">
+                        <p className="text-psi-secondary text-sm leading-7">
                             {debrief.roiAnalysis}
                         </p>
                     </div>
@@ -458,10 +458,10 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                                 transition={{ delay: i * 0.08 }}
                                 className="flex items-start gap-3.5"
                             >
-                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-600 dark:text-violet-400 font-extrabold text-[10px]">
+                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-700 font-extrabold text-[10px]">
                                     {i + 1}
                                 </div>
-                                <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 pt-0.5">{rec}</p>
+                                <p className="text-sm leading-relaxed text-psi-secondary pt-0.5">{rec}</p>
                             </motion.li>
                         ))}
                     </ol>
@@ -478,15 +478,15 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                         <div className={clsx(
                             'absolute top-4 right-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg',
                             debrief.outlook.includes('RECOMMENDED')
-                                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-                                : 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
+                                ? 'bg-emerald-500/15 text-emerald-700'
+                                : 'bg-amber-500/15 text-amber-700'
                         )}>
                             {debrief.outlook.includes('RECOMMENDED')
                                 ? <><CheckCircle2 size={11} /> Recommended</>
                                 : <><AlertTriangle size={11} /> Conditional</>
                             }
                         </div>
-                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-7 pr-24">
+                        <p className="text-psi-secondary text-sm leading-7 pr-24">
                             {debrief.outlook}
                         </p>
                     </div>
@@ -497,7 +497,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                     <ReportSection icon={<BookOpen size={16} />} title="Field Journal Excerpts" accent="border-slate-400">
                         <div className="space-y-2">
                             {input.journalExcerpts.slice(0, 5).map((excerpt, i) => (
-                                <p key={i} className="text-xs text-slate-500 dark:text-slate-400 italic border-l-2 border-slate-300 dark:border-slate-600 pl-3 leading-relaxed">
+                                <p key={i} className="text-xs text-psi-secondary italic border-l-2 border-psi-border pl-3 leading-relaxed">
                                     {excerpt}
                                 </p>
                             ))}
@@ -506,12 +506,12 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                 )}
 
                 {/* Document footer */}
-                <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400">
+                <div className="flex items-center justify-between pt-6 border-t border-psi text-[10px] text-psi-muted">
                     <div className="flex items-center gap-2">
                         <Clock size={10} />
                         <span>Generated {new Date(debrief.metadata.generatedAt).toLocaleString()} · {debrief.metadata.model}</span>
                     </div>
-                    <span className="font-black uppercase tracking-widest text-slate-300 dark:text-slate-600">PSI PROPERTIES · CONFIDENTIAL</span>
+                    <span className="font-black uppercase tracking-widest text-psi-muted">PSI PROPERTIES · CONFIDENTIAL</span>
                 </div>
             </div>
         </div>
@@ -574,8 +574,8 @@ export function GenerateDebriefButton({ event, eventId, isCompleted }: GenerateD
                 className={clsx(
                     'flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all select-none shadow-lg',
                     isLoading
-                        ? 'bg-indigo-400 cursor-not-allowed text-white shadow-indigo-400/20'
-                        : 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500',
+                        ? 'bg-indigo-400 cursor-not-allowed text-slate-900 dark:text-white shadow-indigo-400/20'
+                        : 'bg-gradient-to-r from-indigo-600 to-violet-600 text-slate-900 dark:text-white shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500',
                 )}
             >
                 {isLoading ? (
@@ -611,23 +611,23 @@ export function GenerateDebriefButton({ event, eventId, isCompleted }: GenerateD
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 20, scale: 0.97 }}
                             transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-                            className="w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none print:max-w-none"
+                            className="w-full max-w-3xl bg-psi-surface rounded-3xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none print:max-w-none"
                         >
                             {/* Modal toolbar */}
-                            <div className="flex items-center justify-between px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 print:hidden">
+                            <div className="flex items-center justify-between px-6 py-4 bg-psi-subtle border-b border-psi print:hidden">
                                 <div className="flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
-                                        <Sparkles size={14} className="text-white" />
+                                        <Sparkles size={14} className="text-slate-900 dark:text-white" />
                                     </div>
                                     <div>
-                                        <p className="font-extrabold text-slate-900 dark:text-white text-sm">AI Executive Debrief</p>
-                                        <p className="text-slate-400 text-[10px]">Generated by Gemini · Board-ready</p>
+                                        <p className="font-extrabold text-psi-primary text-sm">AI Executive Debrief</p>
+                                        <p className="text-psi-muted text-[10px]">Generated by Gemini · Board-ready</p>
                                     </div>
                                 </div>
                                 <button
                                     id="debrief-modal-close"
                                     onClick={() => setOpen(false)}
-                                    className="w-8 h-8 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all"
+                                    className="w-8 h-8 rounded-xl bg-psi-subtle border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary hover:bg-psi-border transition-all"
                                 >
                                     <X size={15} />
                                 </button>

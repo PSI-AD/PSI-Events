@@ -155,7 +155,7 @@ export default function Projects() {
                   key={tier}
                   onClick={() => setActiveTier(tier)}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all select-none ${activeTier === tier
-                    ? 'bg-emerald-600 text-white shadow-sm'
+                    ? 'bg-emerald-600 text-slate-900 dark:text-white shadow-sm'
                     : 'text-psi-secondary hover:bg-psi-subtle'
                     }`}
                 >
@@ -229,7 +229,7 @@ export default function Projects() {
                   {/* Card header */}
                   <div className="p-6 pb-4">
                     <div className="flex justify-between items-start mb-4">
-                      <div className="p-3 bg-psi-subtle rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200">
+                      <div className="p-3 bg-psi-subtle rounded-2xl group-hover:bg-emerald-600 group-hover:text-slate-900 dark:group-hover:text-white transition-all duration-200">
                         <Building size={22} />
                       </div>
                       <div className="flex items-center gap-2">
@@ -328,7 +328,7 @@ export default function Projects() {
 
                   {/* Action buttons */}
                   <div className="px-6 py-4 border-t border-psi flex gap-2">
-                    <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 active:scale-[0.98] transition-all select-none">
+                    <button className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-slate-900 dark:text-white rounded-xl text-sm font-bold hover:bg-emerald-700 active:scale-[0.98] transition-all select-none">
                       <BookOpen size={14} />
                       <span>L&amp;D Portal</span>
                     </button>

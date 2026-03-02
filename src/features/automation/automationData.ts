@@ -58,7 +58,7 @@ export const TRIGGER_DEFS: Record<TriggerType, TriggerDef> = {
     SESSION_ENDS: {
         label: 'Session Ends',
         description: 'Fire when a session concludes',
-        emoji: '🏁', color: 'text-slate-400 bg-slate-500/10 border-slate-500/20',
+        emoji: '🏁', color: 'text-slate-600 dark:text-slate-400 bg-slate-500/10 border-slate-500/20',
         hasDelay: false,
     },
     EVENT_STARTS: {
@@ -94,7 +94,7 @@ export const TRIGGER_DEFS: Record<TriggerType, TriggerDef> = {
     MANUAL: {
         label: 'Manual Trigger',
         description: 'Admin manually fires this automation',
-        emoji: '🖱', color: 'text-slate-300 bg-slate-700/40 border-slate-600/30',
+        emoji: '🖱', color: 'text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-700/40 border-slate-600/30',
         hasDelay: false,
     },
 };
@@ -415,13 +415,13 @@ export function getLogStats(log: LogEntry[]) {
 export const STATUS_STYLES: Record<RuleStatus, { bg: string; text: string; border: string; dot: string }> = {
     active: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', dot: 'bg-emerald-400' },
     paused: { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20', dot: 'bg-amber-400' },
-    draft: { bg: 'bg-slate-700/40', text: 'text-slate-400', border: 'border-slate-600/30', dot: 'bg-slate-400' },
+    draft: { bg: 'bg-slate-200 dark:bg-slate-700/40', text: 'text-slate-600 dark:text-slate-400', border: 'border-slate-600/30', dot: 'bg-slate-400' },
     archived: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/20', dot: 'bg-red-400' },
 };
 
 export const LOG_STATUS_STYLES: Record<LogStatus, { text: string; bg: string }> = {
     sent: { text: 'text-emerald-400', bg: 'bg-emerald-500/10' },
     failed: { text: 'text-red-400', bg: 'bg-red-500/10' },
-    skipped: { text: 'text-slate-400', bg: 'bg-slate-700/40' },
+    skipped: { text: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-200 dark:bg-slate-700/40' },
     pending: { text: 'text-amber-400', bg: 'bg-amber-500/10' },
 };

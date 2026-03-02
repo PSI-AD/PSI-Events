@@ -50,7 +50,7 @@ function ScoreBadge({ score }: { score: number }) {
     const color =
         score >= 80 ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
             score >= 55 ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-                'bg-slate-700 text-slate-400 border-slate-600';
+                'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 border-slate-600';
     const label =
         score >= 80 ? 'Top Pick' :
             score >= 55 ? 'Recommended' : 'Discover';
@@ -83,8 +83,8 @@ function SessionCard({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             className={cn(
-                'bg-slate-900 border rounded-2xl overflow-hidden transition-colors',
-                inAgenda ? 'border-emerald-700/50' : hasConflict ? 'border-amber-700/40' : 'border-slate-800 hover:border-slate-700'
+                'bg-white dark:bg-slate-900 border rounded-2xl overflow-hidden transition-colors',
+                inAgenda ? 'border-emerald-700/50' : hasConflict ? 'border-amber-700/40' : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
             )}
         >
             {/* Top colour bar */}
@@ -100,26 +100,26 @@ function SessionCard({
                             </span>
                             {interests.length > 0 && <ScoreBadge score={session.relevanceScore} />}
                             {session.level !== 'All' && (
-                                <span className="text-[10px] font-medium text-slate-500 border border-slate-700 px-2 py-0.5 rounded-full">{session.level}</span>
+                                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 px-2 py-0.5 rounded-full">{session.level}</span>
                             )}
                         </div>
-                        <h3 className="text-white font-bold text-sm leading-snug">{session.name}</h3>
-                        <p className="text-slate-400 text-xs mt-0.5">{session.speaker} · {session.organization}</p>
+                        <h3 className="text-slate-900 dark:text-white font-bold text-sm leading-snug">{session.name}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{session.speaker} · {session.organization}</p>
                     </div>
                 </div>
 
                 {/* Meta row */}
                 <div className="flex flex-wrap gap-3 mb-3">
-                    <span className="flex items-center gap-1 text-slate-400 text-xs"><Clock size={11} />{session.startTime}–{session.endTime} ({durationMins(session)} min)</span>
-                    <span className="flex items-center gap-1 text-slate-400 text-xs"><MapPin size={11} />{session.room}</span>
+                    <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs"><Clock size={11} />{session.startTime}–{session.endTime} ({durationMins(session)} min)</span>
+                    <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs"><MapPin size={11} />{session.room}</span>
                     <span className="flex items-center gap-1 text-xs">
-                        <Users size={11} className={fill >= 95 ? 'text-red-400' : 'text-slate-400'} />
-                        <span className={fill >= 95 ? 'text-red-400 font-bold' : 'text-slate-400'}>{session.registered}/{session.capacity}</span>
+                        <Users size={11} className={fill >= 95 ? 'text-red-400' : 'text-slate-600 dark:text-slate-400'} />
+                        <span className={fill >= 95 ? 'text-red-400 font-bold' : 'text-slate-600 dark:text-slate-400'}>{session.registered}/{session.capacity}</span>
                     </span>
                 </div>
 
                 {/* Capacity bar */}
-                <div className="w-full bg-slate-800 rounded-full h-1.5 mb-3">
+                <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 mb-3">
                     <div
                         className={cn('h-1.5 rounded-full transition-all', fill >= 95 ? 'bg-red-500' : fill >= 80 ? 'bg-amber-500' : 'bg-emerald-500')}
                         style={{ width: `${fill}%` }}
@@ -153,7 +153,7 @@ function SessionCard({
                     <motion.p
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        className="text-slate-300 text-xs leading-relaxed mb-3 bg-slate-800/60 rounded-xl p-3"
+                        className="text-slate-700 dark:text-slate-300 text-xs leading-relaxed mb-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl p-3"
                     >
                         {session.description}
                     </motion.p>
@@ -178,7 +178,7 @@ function SessionCard({
                                 'flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-semibold transition-colors',
                                 hasConflict
                                     ? 'bg-amber-500/10 border border-amber-500/20 text-amber-500/60 cursor-not-allowed'
-                                    : 'bg-slate-800 border border-slate-700 text-slate-300 hover:bg-emerald-600 hover:border-emerald-600 hover:text-white'
+                                    : 'bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-emerald-600 hover:border-emerald-600 hover:text-slate-900 dark:hover:text-white'
                             )}
                         >
                             <Plus size={14} /> Add to Agenda
@@ -186,7 +186,7 @@ function SessionCard({
                     )}
                     <button
                         onClick={() => setExpanded(e => !e)}
-                        className="px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors"
+                        className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                         title="View description"
                     >
                         <Info size={14} />
@@ -208,7 +208,7 @@ function AgendaTimelineCard({ session, onRemove }: { session: AgendaSession; onR
             'relative border-l-4 pl-5 py-1',
             session.color.replace('bg-', 'border-')
         )}>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition-colors">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                 <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap gap-1.5 mb-1.5">
@@ -216,20 +216,20 @@ function AgendaTimelineCard({ session, onRemove }: { session: AgendaSession; onR
                                 {session.type}
                             </span>
                         </div>
-                        <h3 className="text-white font-bold text-sm">{session.name}</h3>
-                        <p className="text-slate-400 text-xs mt-0.5">{session.speaker}</p>
+                        <h3 className="text-slate-900 dark:text-white font-bold text-sm">{session.name}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{session.speaker}</p>
                         <div className="flex flex-wrap gap-3 mt-2">
-                            <span className="flex items-center gap-1 text-slate-400 text-xs"><MapPin size={10} />{session.room}</span>
-                            <span className="flex items-center gap-1 text-slate-400 text-xs"><Clock size={10} />{durationMins(session)} min</span>
+                            <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs"><MapPin size={10} />{session.room}</span>
+                            <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs"><Clock size={10} />{durationMins(session)} min</span>
                             <span className="flex items-center gap-1 text-xs">
-                                <Users size={10} className={fill >= 95 ? 'text-red-400' : 'text-slate-500'} />
-                                <span className={fill >= 95 ? 'text-red-400 text-xs' : 'text-slate-500 text-xs'}>{fill}% full</span>
+                                <Users size={10} className={fill >= 95 ? 'text-red-400' : 'text-slate-600 dark:text-slate-400'} />
+                                <span className={fill >= 95 ? 'text-red-400 text-xs' : 'text-slate-600 dark:text-slate-400 text-xs'}>{fill}% full</span>
                             </span>
                         </div>
                     </div>
                     <button
                         onClick={() => onRemove(session.id)}
-                        className="p-2 rounded-xl bg-slate-800 text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors flex-shrink-0"
+                        className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors flex-shrink-0"
                         title="Remove from agenda"
                     >
                         <X size={13} />
@@ -257,8 +257,8 @@ function InterestPicker({
                 <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
                     <Tag size={28} className="text-emerald-400" />
                 </div>
-                <h2 className="text-white font-black text-2xl mb-2">What are you here for?</h2>
-                <p className="text-slate-400 text-sm">
+                <h2 className="text-slate-900 dark:text-white font-black text-2xl mb-2">What are you here for?</h2>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">
                     Pick the topics that matter most to you — we'll build a personalized schedule optimized around your goals.
                 </p>
                 <p className="text-slate-600 text-xs mt-1">Select 1–8 interests · {selected.length} selected</p>
@@ -275,8 +275,8 @@ function InterestPicker({
                             className={cn(
                                 'flex flex-col items-center gap-2 p-4 rounded-2xl border text-sm font-semibold transition-all',
                                 active
-                                    ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-900/40'
-                                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed'
+                                    ? 'bg-emerald-600 border-emerald-500 text-slate-900 dark:text-white shadow-lg shadow-emerald-900/40'
+                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-600 hover:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed'
                             )}
                         >
                             <span className="text-2xl">{topic.emoji}</span>
@@ -291,13 +291,13 @@ function InterestPicker({
                 <button
                     onClick={onBuild}
                     disabled={selected.length === 0}
-                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base transition-colors shadow-lg shadow-emerald-900/40"
+                    className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-slate-900 dark:text-white font-bold text-base transition-colors shadow-lg shadow-emerald-900/40"
                 >
                     <Sparkles size={18} /> Build My Agenda
                 </button>
                 <button
                     onClick={onBuild}
-                    className="px-6 py-3.5 rounded-2xl bg-slate-800 border border-slate-700 text-slate-300 font-semibold hover:bg-slate-700 transition-colors text-sm"
+                    className="px-6 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm"
                 >
                     Skip → Browse All Sessions
                 </button>
@@ -393,18 +393,18 @@ export default function SmartAgendaBuilder() {
     const SESSION_TYPES: (SessionType | 'All')[] = ['All', 'Keynote', 'Panel', 'Workshop', 'Briefing', 'Showcase', 'Clinic', 'Networking'];
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
 
             {/* ── Header ──────────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-6 py-5 sticky top-0 z-20">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-5 sticky top-0 z-20">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
                         <div>
                             <div className="flex items-center gap-2 mb-0.5">
                                 <Layout size={20} className="text-emerald-400" />
-                                <h1 className="text-white font-extrabold text-xl">Smart Agenda Builder</h1>
+                                <h1 className="text-slate-900 dark:text-white font-extrabold text-xl">Smart Agenda Builder</h1>
                             </div>
-                            <p className="text-slate-500 text-xs">
+                            <p className="text-slate-600 dark:text-slate-400 text-xs">
                                 AI-personalized schedule · {myAgenda.length} sessions selected · {interests.length} interests
                             </p>
                         </div>
@@ -412,14 +412,14 @@ export default function SmartAgendaBuilder() {
                             {myAgenda.length > 0 && (
                                 <button
                                     onClick={exportAgenda}
-                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors"
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                                 >
                                     <Download size={13} /> Export
                                 </button>
                             )}
                             <button
                                 onClick={() => { setView('pick'); setInterests([]); setMyAgenda([]); }}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-xs font-medium hover:text-white transition-colors"
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-xs font-medium hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
                                 <RefreshCw size={12} /> Start Over
                             </button>
@@ -427,7 +427,7 @@ export default function SmartAgendaBuilder() {
                     </div>
 
                     {/* Tab bar */}
-                    <div className="flex gap-1 bg-slate-800/60 p-1 rounded-xl w-fit">
+                    <div className="flex gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-fit">
                         {([
                             { id: 'pick', label: 'Interests', icon: Tag },
                             { id: 'recommended', label: 'Recommended', icon: Sparkles },
@@ -440,8 +440,8 @@ export default function SmartAgendaBuilder() {
                                 className={cn(
                                     'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all',
                                     view === tab.id
-                                        ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/40'
-                                        : 'text-slate-400 hover:text-slate-200'
+                                        ? 'bg-emerald-600 text-slate-900 dark:text-white shadow-lg shadow-emerald-900/40'
+                                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-200'
                                 )}
                             >
                                 <tab.icon size={13} />
@@ -464,8 +464,8 @@ export default function SmartAgendaBuilder() {
                                     <div className="w-20 h-20 rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mb-6">
                                         <Sparkles size={36} className="text-emerald-400 animate-pulse" />
                                     </div>
-                                    <h2 className="text-white font-black text-xl mb-2">Building your agenda…</h2>
-                                    <p className="text-slate-400 text-sm">Scoring {ALL_SESSIONS.length} sessions against your {interests.length} interests</p>
+                                    <h2 className="text-slate-900 dark:text-white font-black text-xl mb-2">Building your agenda…</h2>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm">Scoring {ALL_SESSIONS.length} sessions against your {interests.length} interests</p>
                                     <div className="flex gap-1 mt-6">
                                         {[0, 1, 2].map(i => (
                                             <div key={i} className="w-2 h-2 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: `${i * 150}ms` }} />
@@ -487,19 +487,19 @@ export default function SmartAgendaBuilder() {
                                     <Sparkles size={22} className="text-emerald-400" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h2 className="text-white font-bold text-base">Your Recommended Sessions</h2>
-                                    <p className="text-slate-400 text-xs mt-0.5">
+                                    <h2 className="text-slate-900 dark:text-white font-bold text-base">Your Recommended Sessions</h2>
+                                    <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
                                         {allScored.filter(s => s.relevanceScore >= 75).length} Top Picks · {allScored.filter(s => s.relevanceScore >= 50 && s.relevanceScore < 75).length} Recommended · based on: {interests.map(id => ALL_TOPICS.find(t => t.id === id)?.label).filter(Boolean).join(', ')}
                                     </p>
                                 </div>
                                 <div className="flex gap-4 flex-shrink-0">
                                     <div className="text-center">
                                         <p className="text-emerald-400 font-black text-xl">{myAgenda.length}</p>
-                                        <p className="text-slate-500 text-[10px] uppercase">In Agenda</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] uppercase">In Agenda</p>
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-white font-black text-xl">{allScored.filter(s => s.relevanceScore >= 50).length}</p>
-                                        <p className="text-slate-500 text-[10px] uppercase">Matched</p>
+                                        <p className="text-slate-900 dark:text-white font-black text-xl">{allScored.filter(s => s.relevanceScore >= 50).length}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] uppercase">Matched</p>
                                     </div>
                                 </div>
                             </div>
@@ -509,11 +509,11 @@ export default function SmartAgendaBuilder() {
                                 {[
                                     { label: 'Top Pick (80%+)', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
                                     { label: 'Recommended (55–79%)', color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
-                                    { label: 'Discover (<55%)', color: 'text-slate-400 bg-slate-700 border-slate-600' },
+                                    { label: 'Discover (<55%)', color: 'text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 border-slate-600' },
                                 ].map(l => (
                                     <span key={l.label} className={cn('text-[10px] font-bold px-2.5 py-1 rounded-full border', l.color)}>{l.label}</span>
                                 ))}
-                                <span className="text-[10px] text-slate-500 flex items-center gap-1"><AlertTriangle size={10} className="text-amber-500" /> Conflict warning shown when added to agenda</span>
+                                <span className="text-[10px] text-slate-600 dark:text-slate-400 flex items-center gap-1"><AlertTriangle size={10} className="text-amber-500" /> Conflict warning shown when added to agenda</span>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -538,12 +538,12 @@ export default function SmartAgendaBuilder() {
                             {/* Search + filter */}
                             <div className="flex flex-col sm:flex-row gap-3 mb-6">
                                 <div className="relative flex-1 max-w-sm">
-                                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400" />
                                     <input
                                         value={search}
                                         onChange={e => setSearch(e.target.value)}
                                         placeholder="Search sessions, speakers, rooms…"
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
                                     />
                                 </div>
                                 <div className="flex flex-wrap gap-1.5">
@@ -554,8 +554,8 @@ export default function SmartAgendaBuilder() {
                                             className={cn(
                                                 'px-3 py-2 rounded-lg text-xs font-semibold border transition-all',
                                                 typeFilter === type
-                                                    ? 'bg-emerald-600 border-emerald-500 text-white'
-                                                    : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-600'
+                                                    ? 'bg-emerald-600 border-emerald-500 text-slate-900 dark:text-white'
+                                                    : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-600'
                                             )}
                                         >
                                             {type}
@@ -564,7 +564,7 @@ export default function SmartAgendaBuilder() {
                                 </div>
                             </div>
 
-                            <p className="text-slate-500 text-xs mb-4">{filteredCatalog.length} sessions</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">{filteredCatalog.length} sessions</p>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                                 {filteredCatalog.map(session => (
@@ -586,17 +586,17 @@ export default function SmartAgendaBuilder() {
                     {view === 'agenda' && (
                         <motion.div key="agenda" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
                             {myAgenda.length === 0 ? (
-                                <div className="flex flex-col items-center py-28 bg-slate-900/60 border-2 border-dashed border-slate-800 rounded-3xl text-center">
+                                <div className="flex flex-col items-center py-28 bg-white dark:bg-slate-900/60 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl text-center">
                                     <Calendar size={44} className="text-slate-700 mb-4" />
-                                    <h3 className="text-white font-bold text-lg mb-2">Your agenda is empty</h3>
-                                    <p className="text-slate-500 text-sm mb-6 max-w-xs">
-                                        Go to the <strong className="text-slate-300">Interests</strong> tab and build your personalized schedule, or browse <strong className="text-slate-300">All Sessions</strong> to add manually.
+                                    <h3 className="text-slate-900 dark:text-white font-bold text-lg mb-2">Your agenda is empty</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-xs">
+                                        Go to the <strong className="text-slate-700 dark:text-slate-300">Interests</strong> tab and build your personalized schedule, or browse <strong className="text-slate-700 dark:text-slate-300">All Sessions</strong> to add manually.
                                     </p>
                                     <div className="flex gap-3">
-                                        <button onClick={() => setView('pick')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-500 transition-colors">
+                                        <button onClick={() => setView('pick')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-slate-900 dark:text-white text-sm font-bold hover:bg-emerald-500 transition-colors">
                                             <Sparkles size={14} /> Build Agenda
                                         </button>
-                                        <button onClick={() => setView('catalog')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-sm font-medium hover:bg-slate-700 transition-colors">
+                                        <button onClick={() => setView('catalog')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                             <BookOpen size={14} /> Browse Sessions
                                         </button>
                                     </div>
@@ -606,11 +606,11 @@ export default function SmartAgendaBuilder() {
                                     {/* Timeline */}
                                     <div className="xl:col-span-2">
                                         <div className="flex items-center justify-between mb-6">
-                                            <h2 className="text-white font-bold text-base flex items-center gap-2">
+                                            <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2">
                                                 <Calendar size={16} className="text-emerald-400" />
                                                 My Schedule — {myAgenda.length} sessions
                                             </h2>
-                                            <button onClick={exportAgenda} className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors">
+                                            <button onClick={exportAgenda} className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                                 <Download size={12} /> Export
                                             </button>
                                         </div>
@@ -620,11 +620,11 @@ export default function SmartAgendaBuilder() {
                                                 <div key={group.slotKey}>
                                                     {/* Time marker */}
                                                     <div className="flex items-center gap-3 mb-3">
-                                                        <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5">
+                                                        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5">
                                                             <Clock size={12} className="text-emerald-400" />
                                                             <span className="text-emerald-400 font-black text-sm">{group.slotKey}</span>
                                                         </div>
-                                                        <div className="flex-1 h-px bg-slate-800" />
+                                                        <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800" />
                                                     </div>
                                                     <div className="space-y-3 pl-2">
                                                         {group.sessions.map(s => (
@@ -639,8 +639,8 @@ export default function SmartAgendaBuilder() {
                                     {/* Sidebar summary */}
                                     <div className="space-y-5">
                                         {/* Stats */}
-                                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                                            <h3 className="text-white font-bold text-sm mb-4">Agenda Summary</h3>
+                                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+                                            <h3 className="text-slate-900 dark:text-white font-bold text-sm mb-4">Agenda Summary</h3>
                                             <div className="grid grid-cols-2 gap-3">
                                                 {[
                                                     { label: 'Sessions', value: myAgenda.length, icon: Calendar },
@@ -648,18 +648,18 @@ export default function SmartAgendaBuilder() {
                                                     { label: 'Rooms', value: new Set(myAgenda.map(s => s.room)).size, icon: MapPin },
                                                     { label: 'Types', value: new Set(myAgenda.map(s => s.type)).size, icon: Tag },
                                                 ].map(s => (
-                                                    <div key={s.label} className="bg-slate-800 rounded-xl p-3 text-center">
+                                                    <div key={s.label} className="bg-slate-100 dark:bg-slate-800 rounded-xl p-3 text-center">
                                                         <s.icon size={16} className="mx-auto mb-1.5 text-emerald-400" />
-                                                        <p className="text-white font-black text-lg">{s.value}</p>
-                                                        <p className="text-slate-500 text-[10px] uppercase tracking-wider">{s.label}</p>
+                                                        <p className="text-slate-900 dark:text-white font-black text-lg">{s.value}</p>
+                                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] uppercase tracking-wider">{s.label}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
 
                                         {/* Type breakdown */}
-                                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                                            <h3 className="text-white font-bold text-sm mb-4">Session Types</h3>
+                                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+                                            <h3 className="text-slate-900 dark:text-white font-bold text-sm mb-4">Session Types</h3>
                                             <div className="space-y-2">
                                                 {Array.from(new Set(myAgenda.map(s => s.type))).map(type => {
                                                     const count = myAgenda.filter(s => s.type === type).length;
@@ -669,7 +669,7 @@ export default function SmartAgendaBuilder() {
                                                             <span className={cn('text-xs font-semibold px-2 py-0.5 rounded-full border', style.bg, style.text, style.border)}>
                                                                 {type}
                                                             </span>
-                                                            <span className="text-white text-sm font-bold">{count}</span>
+                                                            <span className="text-slate-900 dark:text-white text-sm font-bold">{count}</span>
                                                         </div>
                                                     );
                                                 })}
@@ -678,8 +678,8 @@ export default function SmartAgendaBuilder() {
 
                                         {/* Selected interests */}
                                         {interests.length > 0 && (
-                                            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                                                <h3 className="text-white font-bold text-sm mb-3">Your Interests</h3>
+                                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+                                                <h3 className="text-slate-900 dark:text-white font-bold text-sm mb-3">Your Interests</h3>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {interests.map(id => {
                                                         const topic = ALL_TOPICS.find(t => t.id === id);
@@ -692,7 +692,7 @@ export default function SmartAgendaBuilder() {
                                                 </div>
                                                 <button
                                                     onClick={() => setView('pick')}
-                                                    className="mt-3 text-slate-500 text-xs hover:text-slate-300 transition-colors flex items-center gap-1"
+                                                    className="mt-3 text-slate-600 dark:text-slate-400 text-xs hover:text-slate-700 dark:hover:text-slate-300 transition-colors flex items-center gap-1"
                                                 >
                                                     <RefreshCw size={10} /> Change interests & rebuild
                                                 </button>
@@ -700,13 +700,13 @@ export default function SmartAgendaBuilder() {
                                         )}
 
                                         {/* CTA to add more */}
-                                        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 text-center">
+                                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 text-center">
                                             <Zap size={20} className="text-amber-400 mx-auto mb-2" />
-                                            <p className="text-white font-semibold text-sm mb-1">Want more sessions?</p>
-                                            <p className="text-slate-500 text-xs mb-3">Browse the full catalog and add any session manually</p>
+                                            <p className="text-slate-900 dark:text-white font-semibold text-sm mb-1">Want more sessions?</p>
+                                            <p className="text-slate-600 dark:text-slate-400 text-xs mb-3">Browse the full catalog and add any session manually</p>
                                             <button
                                                 onClick={() => setView('catalog')}
-                                                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-sm font-semibold hover:bg-slate-700 transition-colors"
+                                                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                                             >
                                                 <BookOpen size={14} /> Browse All Sessions
                                             </button>

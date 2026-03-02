@@ -104,7 +104,7 @@ export class GlobalErrorBoundary extends React.Component<
         return (
             <div
                 id="global-error-boundary"
-                className="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-4 py-12 font-sans"
+                className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-4 py-12 font-sans"
                 role="alert"
                 aria-live="assertive"
             >
@@ -127,10 +127,10 @@ export class GlobalErrorBoundary extends React.Component<
                         <p className="text-amber-400 text-[11px] font-bold tracking-[0.25em] uppercase">
                             Property Shop Investment — Event Portal
                         </p>
-                        <h1 className="text-white text-2xl md:text-3xl font-extrabold tracking-tight">
+                        <h1 className="text-slate-900 dark:text-white text-2xl md:text-3xl font-extrabold tracking-tight">
                             System Initialization Error
                         </h1>
-                        <p className="text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
+                        <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
                             The portal encountered a configuration error and could not start.{' '}
                             {isFirebaseKeyError
                                 ? 'A Firebase API key is missing or invalid.'
@@ -139,14 +139,14 @@ export class GlobalErrorBoundary extends React.Component<
                     </div>
 
                     {/* ── Admin hint card ─────────────────────────────────────── */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3">
                         <div className="flex items-center gap-2">
                             <Terminal size={14} className="text-amber-400 flex-shrink-0" />
                             <p className="text-amber-400 text-xs font-bold uppercase tracking-widest">
                                 Administrator Notice
                             </p>
                         </div>
-                        <p className="text-slate-300 text-sm leading-relaxed">
+                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                             If you are an administrator, please verify your environment variables.
                         </p>
 
@@ -162,7 +162,7 @@ export class GlobalErrorBoundary extends React.Component<
 
                         {/* Required env vars checklist */}
                         <details className="group">
-                            <summary className="text-xs text-slate-500 cursor-pointer hover:text-slate-300 list-none flex items-center gap-1 transition-colors">
+                            <summary className="text-xs text-slate-600 dark:text-slate-400 cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 list-none flex items-center gap-1 transition-colors">
                                 <ChevronDown size={12} className="group-open:hidden" />
                                 <ChevronUp size={12} className="hidden group-open:block" />
                                 Required environment variables
@@ -185,7 +185,7 @@ export class GlobalErrorBoundary extends React.Component<
                                             <span className={defined ? 'text-emerald-400' : 'text-red-400'}>
                                                 {defined ? '✓' : '✗'}
                                             </span>
-                                            <span className={defined ? 'text-slate-400' : 'text-red-300'}>{key}</span>
+                                            <span className={defined ? 'text-slate-600 dark:text-slate-400' : 'text-red-300'}>{key}</span>
                                         </div>
                                     );
                                 })}
@@ -195,11 +195,11 @@ export class GlobalErrorBoundary extends React.Component<
 
                     {/* ── Error detail collapse ───────────────────────────────── */}
                     {error && (
-                        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
                             <button
                                 id="toggle-error-details"
                                 onClick={this.toggleDetails}
-                                className="w-full flex items-center justify-between px-5 py-3 text-xs text-slate-500 hover:text-slate-300 transition-colors text-left"
+                                className="w-full flex items-center justify-between px-5 py-3 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors text-left"
                             >
                                 <span className="font-bold uppercase tracking-widest">Technical Details</span>
                                 {showDetails ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
@@ -224,7 +224,7 @@ export class GlobalErrorBoundary extends React.Component<
                         <button
                             id="error-reload-btn"
                             onClick={this.handleReload}
-                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-white font-bold text-sm transition-colors shadow-lg shadow-amber-500/20 min-h-[44px]"
+                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white font-bold text-sm transition-colors shadow-lg shadow-amber-500/20 min-h-[44px]"
                         >
                             <RefreshCw size={16} />
                             Reload Portal

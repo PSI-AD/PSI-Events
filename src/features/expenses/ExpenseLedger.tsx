@@ -357,7 +357,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
                   <button
                     id="ocr-approve-btn"
                     onClick={handleApproveOcr}
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all active:scale-[0.97] select-none shadow-sm shadow-emerald-500/20"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-900 dark:text-white rounded-xl font-bold transition-all active:scale-[0.97] select-none shadow-sm shadow-emerald-500/20"
                   >
                     <ShieldCheck size={16} />
                     Approve & Confirm
@@ -449,7 +449,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
             onClick={() => fileInputRef.current?.click()}
             disabled={ocrState === 'uploading' || ocrState === 'scanning'}
             title="Scan a receipt with AI OCR"
-            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 disabled:bg-violet-400 text-white px-4 py-3 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/20 active:scale-[0.97] select-none"
+            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 disabled:bg-violet-400 text-slate-900 dark:text-white px-4 py-3 rounded-xl font-bold transition-all shadow-lg shadow-violet-500/20 active:scale-[0.97] select-none"
           >
             {ocrState === 'uploading' || ocrState === 'scanning'
               ? <Loader2 size={18} className="animate-spin" />
@@ -462,7 +462,7 @@ export const ExpenseLedger: React.FC<ExpenseLedgerProps> = ({
           <button
             id="add-expense-btn"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.97] select-none"
+            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 dark:text-white px-4 py-3 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.97] select-none"
           >
             <Plus size={18} />
             <span className="hidden sm:inline">Add Expense</span>

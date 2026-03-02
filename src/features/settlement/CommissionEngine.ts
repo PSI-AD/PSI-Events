@@ -68,14 +68,14 @@ export const TIER_CONFIG: Record<RiskTier, TierConfig> = {
         tailwindText: 'text-amber-400',
         tailwindBg: 'bg-amber-500/10',
         tailwindBorder: 'border-amber-500/40',
-        tailwindBadge: 'bg-amber-500 text-white',
+        tailwindBadge: 'bg-amber-500 text-slate-900 dark:text-white',
     },
     silver: {
         label: 'Silver',
         agentShare: 0.30,
         branchShare: 0.70,
         hex: '#94a3b8',
-        tailwindText: 'text-slate-300',
+        tailwindText: 'text-slate-700 dark:text-slate-300',
         tailwindBg: 'bg-slate-500/10',
         tailwindBorder: 'border-slate-500/40',
         tailwindBadge: 'bg-slate-400 text-slate-900',
@@ -88,7 +88,7 @@ export const TIER_CONFIG: Record<RiskTier, TierConfig> = {
         tailwindText: 'text-orange-400',
         tailwindBg: 'bg-orange-900/20',
         tailwindBorder: 'border-orange-700/40',
-        tailwindBadge: 'bg-orange-700 text-white',
+        tailwindBadge: 'bg-orange-700 text-slate-900 dark:text-white',
     },
 };
 

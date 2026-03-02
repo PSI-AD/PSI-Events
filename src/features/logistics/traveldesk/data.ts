@@ -118,7 +118,7 @@ export function fmtDuration(mins: number) {
 
 export function tierColour(tier: string) {
     if (tier === 'Gold') return 'text-amber-500 bg-amber-50 dark:bg-amber-900/20';
-    if (tier === 'Silver') return 'text-slate-500 bg-slate-100 dark:bg-slate-700/40';
+    if (tier === 'Silver') return 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-700/40';
     return 'text-amber-800 bg-amber-50  dark:bg-amber-900/10';
 }
 

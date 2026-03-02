@@ -79,13 +79,13 @@ function KpiCard({
         <motion.div
             layout
             className={cn(
-                'bg-slate-900 border rounded-2xl p-5 flex flex-col gap-3 relative overflow-hidden',
+                'bg-white dark:bg-slate-900 border rounded-2xl p-5 flex flex-col gap-3 relative overflow-hidden',
                 color === 'emerald' ? 'border-emerald-800/40' :
                     color === 'violet' ? 'border-violet-800/40' :
                         color === 'amber' ? 'border-amber-800/40' :
                             color === 'cyan' ? 'border-cyan-800/40' :
                                 color === 'rose' ? 'border-rose-800/40' :
-                                    'border-slate-800'
+                                    'border-slate-200 dark:border-slate-800'
             )}
         >
             {/* Gradient blob */}
@@ -105,7 +105,7 @@ function KpiCard({
                             color === 'amber' ? 'bg-amber-500/20 text-amber-400' :
                                 color === 'cyan' ? 'bg-cyan-500/20 text-cyan-400' :
                                     color === 'rose' ? 'bg-rose-500/20 text-rose-400' :
-                                        'bg-slate-800 text-slate-400'
+                                        'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                 )}>
                     <Icon size={18} />
                 </div>
@@ -114,7 +114,7 @@ function KpiCard({
                         'flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full',
                         trend === 'up' ? 'text-emerald-400 bg-emerald-500/10' :
                             trend === 'down' ? 'text-red-400 bg-red-500/10' :
-                                'text-slate-500 bg-slate-800'
+                                'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800'
                     )}>
                         {trend === 'up' ? <ArrowUp size={9} /> : trend === 'down' ? <ArrowDown size={9} /> : <Minus size={9} />}
                         LIVE
@@ -126,11 +126,11 @@ function KpiCard({
                     key={String(value)}
                     initial={{ opacity: 0.6, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-white font-black text-3xl leading-none"
+                    className="text-slate-900 dark:text-white font-black text-3xl leading-none"
                 >
                     {typeof value === 'number' ? fmt(value) : value}
                 </motion.p>
-                <p className="text-slate-400 text-xs font-medium mt-1">{label}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-medium mt-1">{label}</p>
                 {sub && <p className="text-slate-600 text-[10px] mt-0.5">{sub}</p>}
             </div>
         </motion.div>
@@ -142,13 +142,13 @@ function KpiCard({
 function ChartTooltip({ active, payload, label }: any) {
     if (!active || !payload?.length) return null;
     return (
-        <div className="bg-slate-800 border border-slate-700 rounded-xl p-3 shadow-xl text-xs">
-            <p className="text-slate-400 font-bold mb-2">{label}</p>
+        <div className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-3 shadow-xl text-xs">
+            <p className="text-slate-600 dark:text-slate-400 font-bold mb-2">{label}</p>
             {payload.map((entry: any) => (
                 <div key={entry.dataKey} className="flex items-center gap-2 mb-1">
                     <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: entry.color }} />
-                    <span className="text-slate-300">{entry.name}:</span>
-                    <span className="text-white font-bold ml-auto pl-3">{entry.value}</span>
+                    <span className="text-slate-700 dark:text-slate-300">{entry.name}:</span>
+                    <span className="text-slate-900 dark:text-white font-bold ml-auto pl-3">{entry.value}</span>
                 </div>
             ))}
         </div>
@@ -167,7 +167,7 @@ function SessionTable({ sessions }: { sessions: SessionStat[] }) {
         <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[600px]">
                 <thead>
-                    <tr className="border-b border-slate-800">
+                    <tr className="border-b border-slate-200 dark:border-slate-800">
                         {[
                             { key: null, label: 'Session' },
                             { key: null, label: 'Room' },
@@ -179,8 +179,8 @@ function SessionTable({ sessions }: { sessions: SessionStat[] }) {
                             <th
                                 key={col.label}
                                 className={cn(
-                                    'text-left py-3 px-4 text-[10px] font-black uppercase tracking-widest text-slate-500',
-                                    col.key && 'cursor-pointer hover:text-slate-300 transition-colors'
+                                    'text-left py-3 px-4 text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400',
+                                    col.key && 'cursor-pointer hover:text-slate-700 dark:hover:text-slate-300 transition-colors'
                                 )}
                                 onClick={() => col.key && setSortBy(col.key)}
                             >
@@ -202,16 +202,16 @@ function SessionTable({ sessions }: { sessions: SessionStat[] }) {
                                     layout
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="border-b border-slate-800/60 hover:bg-slate-800/30 transition-colors group"
+                                    className="border-b border-slate-200 dark:border-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors group"
                                 >
                                     <td className="py-3 px-4">
-                                        <p className="text-white font-semibold text-sm">{s.name}</p>
-                                        <p className="text-slate-500 text-xs mt-0.5">{s.speaker}</p>
+                                        <p className="text-slate-900 dark:text-white font-semibold text-sm">{s.name}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{s.speaker}</p>
                                     </td>
-                                    <td className="py-3 px-4 text-slate-400 text-xs">{s.room}</td>
+                                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400 text-xs">{s.room}</td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-16 bg-slate-800 rounded-full h-1.5">
+                                            <div className="w-16 bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
                                                 <motion.div
                                                     animate={{ width: `${fillPct}%` }}
                                                     className={cn(
@@ -221,20 +221,20 @@ function SessionTable({ sessions }: { sessions: SessionStat[] }) {
                                                     )}
                                                 />
                                             </div>
-                                            <span className="text-white text-xs font-bold">{s.attendees}</span>
+                                            <span className="text-slate-900 dark:text-white text-xs font-bold">{s.attendees}</span>
                                             <span className="text-slate-600 text-[10px]">/{s.capacity}</span>
                                         </div>
                                     </td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-1 text-amber-400">
                                             <Bookmark size={11} />
-                                            <span className="text-white text-xs font-semibold">{s.bookmarks}</span>
+                                            <span className="text-slate-900 dark:text-white text-xs font-semibold">{s.bookmarks}</span>
                                         </div>
                                     </td>
                                     <td className="py-3 px-4">
                                         <div className="flex items-center gap-1">
                                             <Star size={11} className="text-amber-400" />
-                                            <span className="text-white text-xs font-bold">{s.rating.toFixed(1)}</span>
+                                            <span className="text-slate-900 dark:text-white text-xs font-bold">{s.rating.toFixed(1)}</span>
                                         </div>
                                     </td>
                                     <td className="py-3 px-4">
@@ -287,19 +287,19 @@ export default function EventAnalyticsDashboard() {
     const overallFill = pct(totalAttendees, totalCapacity);
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
 
             {/* ── Header ───────────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-6 py-5 sticky top-0 z-20">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-5 sticky top-0 z-20">
                 <div className="max-w-screen-2xl mx-auto flex flex-col sm:flex-row sm:items-center gap-4">
                     {/* Title */}
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
                             <Activity size={20} className="text-emerald-400" />
-                            <h1 className="text-white font-extrabold text-xl">Real-Time Analytics</h1>
+                            <h1 className="text-slate-900 dark:text-white font-extrabold text-xl">Real-Time Analytics</h1>
                             <PulseDot />
                         </div>
-                        <p className="text-slate-500 text-xs">
+                        <p className="text-slate-600 dark:text-slate-400 text-xs">
                             Auto-refreshes · Last update: {lastTick.toLocaleTimeString()}
                         </p>
                     </div>
@@ -307,7 +307,7 @@ export default function EventAnalyticsDashboard() {
                     {/* Controls */}
                     <div className="flex flex-wrap items-center gap-2">
                         {/* Time range */}
-                        <div className="flex bg-slate-800 rounded-xl p-1 gap-0.5">
+                        <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 gap-0.5">
                             {TIME_RANGE_OPTIONS.map(opt => (
                                 <button
                                     key={opt.value}
@@ -315,8 +315,8 @@ export default function EventAnalyticsDashboard() {
                                     className={cn(
                                         'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all',
                                         timeRange === opt.value
-                                            ? 'bg-emerald-600 text-white shadow'
-                                            : 'text-slate-400 hover:text-slate-200'
+                                            ? 'bg-emerald-600 text-slate-900 dark:text-white shadow'
+                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-200'
                                     )}
                                 >
                                     {opt.label}
@@ -329,7 +329,7 @@ export default function EventAnalyticsDashboard() {
                             <select
                                 value={sessionFilter}
                                 onChange={e => setSessionFilter(e.target.value)}
-                                className="appearance-none bg-slate-800 border border-slate-700 text-slate-300 text-xs font-medium rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
+                                className="appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
                             >
                                 <option value="all">All Sessions</option>
                                 <option value="live">Live Only</option>
@@ -337,13 +337,13 @@ export default function EventAnalyticsDashboard() {
                                     <option key={s.id} value={s.id}>{s.name}</option>
                                 ))}
                             </select>
-                            <Filter size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                            <Filter size={11} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 pointer-events-none" />
                         </div>
 
                         {/* Export */}
                         <button
                             onClick={handleExport}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 hover:text-white transition-colors"
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors"
                         >
                             <Download size={13} /> Export CSV
                         </button>
@@ -409,14 +409,14 @@ export default function EventAnalyticsDashboard() {
                 </section>
 
                 {/* ── 2. Activity Timeline ─────────────────────────────────── */}
-                <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h2 className="text-white font-bold text-base flex items-center gap-2">
+                            <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2">
                                 <TrendingUp size={16} className="text-emerald-400" />
                                 Attendee Activity Timeline
                             </h2>
-                            <p className="text-slate-500 text-xs mt-0.5">Online attendees, networking events, and session check-ins over time</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">Online attendees, networking events, and session check-ins over time</p>
                         </div>
                         <PulseDot color="bg-emerald-400" />
                     </div>
@@ -491,12 +491,12 @@ export default function EventAnalyticsDashboard() {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
                     {/* Session popularity bar chart */}
-                    <div className="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h2 className="text-white font-bold text-base flex items-center gap-2 mb-1">
+                    <div className="xl:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
+                        <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2 mb-1">
                             <BarChart2 size={16} className="text-amber-400" />
                             Session Popularity
                         </h2>
-                        <p className="text-slate-500 text-xs mb-5">Live attendee count vs. bookmarks per session</p>
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mb-5">Live attendee count vs. bookmarks per session</p>
                         <ResponsiveContainer width="100%" height={260}>
                             <BarChart
                                 data={filteredSessions.map(s => ({
@@ -528,20 +528,20 @@ export default function EventAnalyticsDashboard() {
                     </div>
 
                     {/* Engagement breakdown */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h2 className="text-white font-bold text-base flex items-center gap-2 mb-1">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
+                        <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2 mb-1">
                             <Zap size={16} className="text-violet-400" />
                             Engagement Breakdown
                         </h2>
-                        <p className="text-slate-500 text-xs mb-6">Activity type distribution</p>
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mb-6">Activity type distribution</p>
                         <div className="space-y-4">
                             {ENGAGEMENT_BY_TYPE.map(item => (
                                 <div key={item.type}>
                                     <div className="flex items-center justify-between mb-1.5">
-                                        <p className="text-slate-300 text-xs font-medium">{item.type}</p>
-                                        <p className="text-white text-xs font-bold">{item.value}%</p>
+                                        <p className="text-slate-700 dark:text-slate-300 text-xs font-medium">{item.type}</p>
+                                        <p className="text-slate-900 dark:text-white text-xs font-bold">{item.value}%</p>
                                     </div>
-                                    <div className="w-full bg-slate-800 rounded-full h-2">
+                                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${item.value}%` }}
@@ -570,10 +570,10 @@ export default function EventAnalyticsDashboard() {
                                     />
                                 </svg>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span className="text-white font-black text-xl">{counters.avgEngagement}%</span>
+                                    <span className="text-slate-900 dark:text-white font-black text-xl">{counters.avgEngagement}%</span>
                                 </div>
                             </div>
-                            <p className="text-slate-400 text-xs font-medium">Overall Engagement</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs font-medium">Overall Engagement</p>
                         </div>
                     </div>
                 </div>
@@ -582,9 +582,9 @@ export default function EventAnalyticsDashboard() {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
                     {/* Live Activity Feed */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col">
                         <div className="flex items-center justify-between mb-5">
-                            <h2 className="text-white font-bold text-base flex items-center gap-2">
+                            <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2">
                                 <Wifi size={15} className="text-emerald-400" />
                                 Live Activity Feed
                             </h2>
@@ -598,11 +598,11 @@ export default function EventAnalyticsDashboard() {
                                         initial={{ opacity: 0, x: -12 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0 }}
-                                        className="flex items-start gap-3 p-3 bg-slate-800/60 rounded-xl border border-slate-800"
+                                        className="flex items-start gap-3 p-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-800"
                                     >
                                         <span className="text-lg flex-shrink-0 mt-0.5">{item.icon}</span>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-slate-300 text-xs leading-snug">{item.label}</p>
+                                            <p className="text-slate-700 dark:text-slate-300 text-xs leading-snug">{item.label}</p>
                                             <p className="text-slate-600 text-[10px] mt-0.5">
                                                 {Math.round((Date.now() - item.time.getTime()) / 1000)}s ago
                                             </p>
@@ -614,27 +614,27 @@ export default function EventAnalyticsDashboard() {
                     </div>
 
                     {/* Session detail table */}
-                    <div className="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <div className="xl:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
                         <div className="flex items-center justify-between mb-5">
-                            <h2 className="text-white font-bold text-base flex items-center gap-2">
+                            <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2">
                                 <Eye size={15} className="text-cyan-400" />
                                 Session Detail View
                             </h2>
-                            <span className="text-slate-500 text-xs">{filteredSessions.length} sessions · click column headers to sort</span>
+                            <span className="text-slate-600 dark:text-slate-400 text-xs">{filteredSessions.length} sessions · click column headers to sort</span>
                         </div>
                         <SessionTable sessions={filteredSessions} />
                     </div>
                 </div>
 
                 {/* ── 5. Engagement score line chart (full width) ───────────── */}
-                <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-5">
                         <div>
-                            <h2 className="text-white font-bold text-base flex items-center gap-2">
+                            <h2 className="text-slate-900 dark:text-white font-bold text-base flex items-center gap-2">
                                 <Zap size={16} className="text-amber-400" />
                                 Engagement Score Over Time
                             </h2>
-                            <p className="text-slate-500 text-xs mt-0.5">Composite engagement score (0–100) — higher = more active attendees</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">Composite engagement score (0–100) — higher = more active attendees</p>
                         </div>
                     </div>
                     <ResponsiveContainer width="100%" height={160}>

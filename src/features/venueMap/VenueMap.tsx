@@ -48,13 +48,13 @@ function cn(...cs: (string | false | undefined)[]) {
 // ── Category filter config ────────────────────────────────────────────────────
 
 const CATEGORIES: { type: MarkerType | 'all'; label: string; icon: React.ElementType; color: string }[] = [
-    { type: 'all', label: 'All', icon: Grid3X3, color: 'text-slate-300' },
+    { type: 'all', label: 'All', icon: Grid3X3, color: 'text-slate-700 dark:text-slate-300' },
     { type: 'room', label: 'Sessions', icon: Radio, color: 'text-indigo-400' },
     { type: 'booth', label: 'Exhibitors', icon: Briefcase, color: 'text-amber-400' },
     { type: 'sponsor', label: 'Sponsors', icon: Star, color: 'text-emerald-400' },
     { type: 'networking', label: 'Networking', icon: Wifi, color: 'text-violet-400' },
     { type: 'food', label: 'Food', icon: Coffee, color: 'text-teal-400' },
-    { type: 'service', label: 'Services', icon: MapPin, color: 'text-slate-400' },
+    { type: 'service', label: 'Services', icon: MapPin, color: 'text-slate-600 dark:text-slate-400' },
     { type: 'exit', label: 'Exits', icon: LogOut, color: 'text-red-400' },
 ];
 
@@ -72,13 +72,13 @@ function DetailPanel({ marker, onClose }: { marker: VenueMarker; onClose: () => 
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', stiffness: 340, damping: 32 }}
-            className="absolute top-0 right-0 h-full w-80 bg-slate-900 border-l border-slate-800 flex flex-col overflow-hidden z-30 shadow-2xl"
+            className="absolute top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden z-30 shadow-2xl"
         >
             {/* Colour band */}
             <div className="h-1.5" style={{ background: mcolor.bg }} />
 
             {/* Header */}
-            <div className="p-5 border-b border-slate-800">
+            <div className="p-5 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                         <div
@@ -105,13 +105,13 @@ function DetailPanel({ marker, onClose }: { marker: VenueMarker; onClose: () => 
                                     </span>
                                 )}
                             </div>
-                            <h2 className="text-white font-black text-base leading-tight">{detail.title}</h2>
-                            {detail.subtitle && <p className="text-slate-400 text-xs mt-0.5">{detail.subtitle}</p>}
+                            <h2 className="text-slate-900 dark:text-white font-black text-base leading-tight">{detail.title}</h2>
+                            {detail.subtitle && <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{detail.subtitle}</p>}
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 transition-colors flex-shrink-0"
+                        className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0"
                     >
                         <X size={15} />
                     </button>
@@ -120,13 +120,13 @@ function DetailPanel({ marker, onClose }: { marker: VenueMarker; onClose: () => 
 
             {/* Body */}
             <div className="flex-1 overflow-y-auto p-5 space-y-4">
-                <p className="text-slate-300 text-sm leading-relaxed">{detail.description}</p>
+                <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{detail.description}</p>
 
                 {detail.currentSession && (
-                    <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-3">
-                        <p className="text-slate-500 text-[10px] font-black uppercase mb-1.5 tracking-wider">Current / Next Session</p>
-                        <p className="text-white font-bold text-sm">{detail.currentSession}</p>
-                        {detail.speaker && <p className="text-slate-400 text-xs mt-0.5">{detail.speaker}</p>}
+                    <div className="bg-slate-100 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 rounded-xl p-3">
+                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase mb-1.5 tracking-wider">Current / Next Session</p>
+                        <p className="text-slate-900 dark:text-white font-bold text-sm">{detail.currentSession}</p>
+                        {detail.speaker && <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{detail.speaker}</p>}
                         {detail.time && (
                             <div className="flex items-center gap-1 mt-1.5">
                                 <Clock size={10} className="text-emerald-400" />
@@ -137,25 +137,25 @@ function DetailPanel({ marker, onClose }: { marker: VenueMarker; onClose: () => 
                 )}
 
                 {detail.capacity !== undefined && (
-                    <div className="flex items-center gap-2 text-slate-400 text-xs">
+                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
                         <Users size={12} />
-                        <span>Capacity: <strong className="text-white">{detail.capacity} seats</strong></span>
+                        <span>Capacity: <strong className="text-slate-900 dark:text-white">{detail.capacity} seats</strong></span>
                     </div>
                 )}
 
                 {detail.contact && (
-                    <div className="flex items-center gap-2 text-slate-400 text-xs">
+                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
                         <Phone size={12} />
-                        <span className="text-slate-300 break-all">{detail.contact}</span>
+                        <span className="text-slate-700 dark:text-slate-300 break-all">{detail.contact}</span>
                     </div>
                 )}
 
                 {detail.tags.length > 0 && (
                     <div>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-2">Topics</p>
+                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-2">Topics</p>
                         <div className="flex flex-wrap gap-1.5">
                             {detail.tags.map(t => (
-                                <span key={t} className="text-[10px] bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded-full font-medium">
+                                <span key={t} className="text-[10px] bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full font-medium">
                                     {t}
                                 </span>
                             ))}
@@ -165,8 +165,8 @@ function DetailPanel({ marker, onClose }: { marker: VenueMarker; onClose: () => 
             </div>
 
             {/* Navigate CTA */}
-            <div className="p-4 border-t border-slate-800">
-                <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-sm font-semibold hover:bg-slate-700 hover:text-white transition-colors">
+            <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+                <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors">
                     <Navigation size={13} /> Navigate Here
                     <ChevronRight size={13} />
                 </button>
@@ -361,29 +361,29 @@ export default function VenueMap() {
     const transform = `translate(${pan.x}, ${pan.y}) scale(${zoom})`;
 
     return (
-        <div className="h-screen bg-slate-950 flex flex-col font-sans overflow-hidden">
+        <div className="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans overflow-hidden">
 
             {/* ── Top bar ────────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-4 py-3 flex-shrink-0 z-10">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex-shrink-0 z-10">
                 <div className="flex items-center gap-3 flex-wrap">
                     {/* Title */}
                     <div className="flex items-center gap-2 mr-2">
                         <MapPin size={18} className="text-emerald-400" />
-                        <span className="text-white font-extrabold text-base">Venue Map</span>
-                        <span className="text-slate-500 text-xs hidden sm:inline">· PSI Events 2026</span>
+                        <span className="text-slate-900 dark:text-white font-extrabold text-base">Venue Map</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-xs hidden sm:inline">· PSI Events 2026</span>
                     </div>
 
                     {/* Search */}
                     <div className="relative flex-1 max-w-64">
-                        <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400" />
                         <input
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder="Search rooms, booths, services…"
-                            className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                            className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
                         />
                         {query && (
-                            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+                            <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                                 <X size={11} />
                             </button>
                         )}
@@ -398,11 +398,11 @@ export default function VenueMap() {
                                 className={cn(
                                     'flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-bold border whitespace-nowrap transition-all',
                                     catFilter === cat.type
-                                        ? 'bg-emerald-600 border-emerald-500 text-white'
-                                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'
+                                        ? 'bg-emerald-600 border-emerald-500 text-slate-900 dark:text-white'
+                                        : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-600'
                                 )}
                             >
-                                <cat.icon size={10} className={catFilter === cat.type ? 'text-white' : cat.color} />
+                                <cat.icon size={10} className={catFilter === cat.type ? 'text-slate-900 dark:text-white' : cat.color} />
                                 {cat.label}
                             </button>
                         ))}
@@ -413,19 +413,19 @@ export default function VenueMap() {
                         <span className="text-slate-600 text-xs hidden md:inline">
                             {visibleMarkers.length} marker{visibleMarkers.length !== 1 ? 's' : ''}
                         </span>
-                        <button onClick={() => zoomToward(ZOOM_STEP)} className="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors" title="Zoom in (+)">
+                        <button onClick={() => zoomToward(ZOOM_STEP)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Zoom in (+)">
                             <ZoomIn size={14} />
                         </button>
-                        <button onClick={() => zoomToward(-ZOOM_STEP)} className="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors" title="Zoom out (-)">
+                        <button onClick={() => zoomToward(-ZOOM_STEP)} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Zoom out (-)">
                             <ZoomOut size={14} />
                         </button>
-                        <button onClick={fitToScreen} className="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors" title="Fit to screen (0)">
+                        <button onClick={fitToScreen} className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Fit to screen (0)">
                             <Maximize2 size={14} />
                         </button>
                         <button
                             onClick={() => setShowLegend(l => !l)}
-                            className={cn('p-2 rounded-lg border text-slate-400 hover:text-white transition-colors',
-                                showLegend ? 'bg-emerald-600/20 border-emerald-600/40 text-emerald-400' : 'bg-slate-800 border-slate-700'
+                            className={cn('p-2 rounded-lg border text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors',
+                                showLegend ? 'bg-emerald-600/20 border-emerald-600/40 text-emerald-400' : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700'
                             )}
                             title="Toggle legend"
                         >
@@ -582,18 +582,18 @@ export default function VenueMap() {
                 </svg>
 
                 {/* ── Zoom indicator ──────────────────────────────────────── */}
-                <div className="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-xl px-3 py-1.5 text-slate-400 text-xs font-mono">
+                <div className="absolute bottom-4 left-4 bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-1.5 text-slate-600 dark:text-slate-400 text-xs font-mono">
                     {Math.round(zoom * 100)}%
                 </div>
 
                 {/* ── Live count ──────────────────────────────────────────── */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-xl px-4 py-2">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-white dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                     </span>
-                    <span className="text-white text-xs font-bold">4 sessions live now</span>
-                    <span className="text-slate-500 text-xs">· Scroll to zoom · Drag to pan</span>
+                    <span className="text-slate-900 dark:text-white text-xs font-bold">4 sessions live now</span>
+                    <span className="text-slate-600 dark:text-slate-400 text-xs">· Scroll to zoom · Drag to pan</span>
                 </div>
 
                 {/* ── Legend panel ────────────────────────────────────────── */}
@@ -603,9 +603,9 @@ export default function VenueMap() {
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 8 }}
-                            className="absolute bottom-16 left-4 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-2xl w-52"
+                            className="absolute bottom-16 left-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-2xl w-52"
                         >
-                            <p className="text-white font-bold text-xs mb-3 uppercase tracking-widest">Legend</p>
+                            <p className="text-slate-900 dark:text-white font-bold text-xs mb-3 uppercase tracking-widest">Legend</p>
                             <div className="space-y-2">
                                 {CATEGORIES.slice(1).map(cat => {
                                     const mcolor = MARKER_COLORS[cat.type as MarkerType];
@@ -614,23 +614,23 @@ export default function VenueMap() {
                                             <svg width={20} height={20}>
                                                 <circle cx={10} cy={10} r={8} fill={mcolor.bg} stroke={mcolor.ring} strokeWidth={1.5} />
                                             </svg>
-                                            <span className="text-slate-300 text-xs">{cat.label}</span>
+                                            <span className="text-slate-700 dark:text-slate-300 text-xs">{cat.label}</span>
                                         </div>
                                     );
                                 })}
-                                <div className="flex items-center gap-2 mt-1 pt-1 border-t border-slate-800">
+                                <div className="flex items-center gap-2 mt-1 pt-1 border-t border-slate-200 dark:border-slate-800">
                                     <svg width={20} height={20}>
                                         <circle cx={10} cy={10} r={8} fill="#3b82f6" stroke="#93c5fd" strokeWidth={2} />
                                         <circle cx={10} cy={10} r={3} fill="#fff" />
                                     </svg>
-                                    <span className="text-slate-300 text-xs">Your Location</span>
+                                    <span className="text-slate-700 dark:text-slate-300 text-xs">Your Location</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <svg width={20} height={12}>
                                         <circle cx={10} cy={6} r={5} fill="#10b981" opacity={0.6} />
                                         <circle cx={10} cy={6} r={3} fill="#10b981" />
                                     </svg>
-                                    <span className="text-slate-300 text-xs">Live / Active</span>
+                                    <span className="text-slate-700 dark:text-slate-300 text-xs">Live / Active</span>
                                 </div>
                             </div>
                         </motion.div>
@@ -644,17 +644,17 @@ export default function VenueMap() {
                             initial={{ opacity: 0, y: -8 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -8 }}
-                            className="absolute top-2 left-1/2 -translate-x-1/2 w-80 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden max-h-64 overflow-y-auto z-20"
+                            className="absolute top-2 left-1/2 -translate-x-1/2 w-80 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden max-h-64 overflow-y-auto z-20"
                         >
                             {visibleMarkers.length === 0 ? (
-                                <div className="p-4 text-center text-slate-500 text-sm">No results for "{query}"</div>
+                                <div className="p-4 text-center text-slate-600 dark:text-slate-400 text-sm">No results for "{query}"</div>
                             ) : (
                                 visibleMarkers.slice(0, 8).map(m => {
                                     const mcolor = MARKER_COLORS[m.type];
                                     return (
                                         <button
                                             key={m.id}
-                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-800 transition-colors text-left border-b border-slate-800 last:border-0"
+                                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left border-b border-slate-200 dark:border-slate-800 last:border-0"
                                             onClick={() => { setSelectedId(m.id); setQuery(''); }}
                                         >
                                             <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-sm"
@@ -662,8 +662,8 @@ export default function VenueMap() {
                                                 {m.detail.logo}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-white text-sm font-semibold truncate">{m.label}</p>
-                                                <p className="text-slate-500 text-xs truncate">{MARKER_TYPE_LABELS[m.type]}</p>
+                                                <p className="text-slate-900 dark:text-white text-sm font-semibold truncate">{m.label}</p>
+                                                <p className="text-slate-600 dark:text-slate-400 text-xs truncate">{MARKER_TYPE_LABELS[m.type]}</p>
                                             </div>
                                             {m.isLive && (
                                                 <span className="text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded-full font-black flex-shrink-0">LIVE</span>

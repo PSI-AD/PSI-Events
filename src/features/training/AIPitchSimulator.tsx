@@ -385,7 +385,7 @@ function ScoreRing({ score, label, icon, delay = 0 }: {
             <div className="relative w-20 h-20">
                 <svg className="w-20 h-20 -rotate-90" viewBox="0 0 88 88">
                     <circle cx="44" cy="44" r={radius} stroke="currentColor" strokeWidth="6"
-                        className="text-white/10" fill="none" />
+                        className="text-slate-900 dark:text-white/10" fill="none" />
                     <circle cx="44" cy="44" r={radius} stroke={color} strokeWidth="6"
                         fill="none" strokeLinecap="round"
                         strokeDasharray={circ} strokeDashoffset={offset}
@@ -393,10 +393,10 @@ function ScoreRing({ score, label, icon, delay = 0 }: {
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-extrabold text-lg tabular-nums">{displayed}</span>
+                    <span className="text-slate-900 dark:text-white font-extrabold text-lg tabular-nums">{displayed}</span>
                 </div>
             </div>
-            <div className="flex items-center gap-1 text-white/60 text-[10px] font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-1 text-slate-900 dark:text-white/60 text-[10px] font-bold uppercase tracking-widest">
                 {icon}
                 <span>{label}</span>
             </div>
@@ -434,7 +434,7 @@ function MicButton({ isRecording, onClick, disabled }: {
                 disabled={disabled}
                 className={[
                     'relative z-10 w-24 h-24 rounded-full flex items-center justify-center',
-                    'text-white font-bold text-2xl transition-all shadow-2xl',
+                    'text-slate-900 dark:text-white font-bold text-2xl transition-all shadow-2xl',
                     isRecording
                         ? 'bg-rose-600 shadow-rose-600/40 hover:bg-rose-500'
                         : 'bg-gradient-to-br from-amber-500 to-amber-600 shadow-amber-500/30 hover:from-amber-400 hover:to-amber-500',
@@ -475,14 +475,14 @@ function ThinkingView({ label }: { label: string }) {
             </div>
 
             <div className="text-center">
-                <p className="text-white font-extrabold text-lg mb-2">{label}</p>
+                <p className="text-slate-900 dark:text-white font-extrabold text-lg mb-2">{label}</p>
                 <AnimatePresence mode="wait">
                     <motion.p
                         key={idx}
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -4 }}
-                        className="text-white/50 text-sm"
+                        className="text-slate-900 dark:text-white/50 text-sm"
                     >
                         {dots[idx]}
                     </motion.p>
@@ -701,7 +701,7 @@ export default function AIPitchSimulator({
                     id="sim-start-btn"
                     whileTap={{ scale: 0.97 }}
                     onClick={handleStart}
-                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-white font-extrabold text-base shadow-xl shadow-violet-600/25 hover:shadow-violet-600/40 transition-all"
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-violet-600/25 hover:shadow-violet-600/40 transition-all"
                 >
                     <Mic size={20} />
                     Start Simulation
@@ -715,7 +715,7 @@ export default function AIPitchSimulator({
     // RENDER: RECORD
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'record') return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-white">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-slate-900 dark:text-white">
 
             {/* Background glow */}
             <div className="fixed inset-0 pointer-events-none">
@@ -730,26 +730,26 @@ export default function AIPitchSimulator({
                 {/* Round indicator */}
                 <div className="flex items-center gap-2">
                     {Array.from({ length: MAX_ROUNDS }).map((_, i) => (
-                        <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === round ? 'bg-violet-400 w-6' : i < round ? 'bg-violet-600' : 'bg-white/10'}`} />
+                        <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === round ? 'bg-violet-400 w-6' : i < round ? 'bg-violet-600' : 'bg-black/10 dark:bg-white/10'}`} />
                     ))}
-                    <span className="text-white/30 text-xs ml-1 font-mono">
+                    <span className="text-slate-900 dark:text-white/30 text-xs ml-1 font-mono">
                         Attempt {round + 1}/{MAX_ROUNDS}
                     </span>
                 </div>
 
                 {/* Scenario card */}
-                <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 text-center">
+                <div className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 text-center">
                     <div className="inline-flex items-center gap-2 bg-violet-500/15 border border-violet-500/25 rounded-xl px-3 py-1.5 mb-4">
                         <Target size={12} className="text-violet-400" />
                         <span className="text-violet-400 text-[10px] font-black uppercase tracking-widest">Scenario</span>
                     </div>
-                    <h2 className="text-white text-xl font-extrabold leading-tight mb-3">
+                    <h2 className="text-slate-900 dark:text-white text-xl font-extrabold leading-tight mb-3">
                         {scenario.title}
                     </h2>
-                    <p className="text-white/50 text-sm leading-relaxed">
-                        🎭 <span className="text-white/70 font-semibold">Playing as:</span> {scenario.clientProfile}
+                    <p className="text-slate-900 dark:text-white/50 text-sm leading-relaxed">
+                        🎭 <span className="text-slate-900 dark:text-white/70 font-semibold">Playing as:</span> {scenario.clientProfile}
                     </p>
-                    <p className="text-white/50 text-xs leading-relaxed mt-2">
+                    <p className="text-slate-900 dark:text-white/50 text-xs leading-relaxed mt-2">
                         {scenario.brief.slice(0, 140)}…
                     </p>
                 </div>
@@ -775,7 +775,7 @@ export default function AIPitchSimulator({
 
                     {recorder.isRecording && <Timer seconds={recorder.duration} />}
 
-                    <p className="text-white/40 text-sm text-center">
+                    <p className="text-slate-900 dark:text-white/40 text-sm text-center">
                         {recorder.isRecording
                             ? 'Recording your pitch… tap Stop when done'
                             : 'Tap the microphone to begin your pitch'}
@@ -796,7 +796,7 @@ export default function AIPitchSimulator({
                                 <button
                                     id="sim-redo-btn"
                                     onClick={recorder.reset}
-                                    className="flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/70 text-sm font-bold hover:bg-white/10 transition-all"
+                                    className="flex items-center justify-center gap-2 py-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/70 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all"
                                 >
                                     <RotateCcw size={14} /> Re-record
                                 </button>
@@ -804,7 +804,7 @@ export default function AIPitchSimulator({
                                     id="sim-submit-btn"
                                     whileTap={{ scale: 0.97 }}
                                     onClick={handleStopAndAnalyse}
-                                    className="flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-white font-extrabold text-sm shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 transition-all"
+                                    className="flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 transition-all"
                                 >
                                     <Sparkles size={14} /> Analyse
                                 </motion.button>
@@ -820,7 +820,7 @@ export default function AIPitchSimulator({
                             animate={{ opacity: 1 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={handleStopAndAnalyse}
-                            className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm shadow-lg shadow-rose-600/30 transition-all"
+                            className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-rose-600 hover:bg-rose-500 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-rose-600/30 transition-all"
                         >
                             <StopCircle size={16} /> Stop & Analyse
                         </motion.button>
@@ -836,7 +836,7 @@ export default function AIPitchSimulator({
                 <button
                     id="sim-back-lobby-btn"
                     onClick={handleRestart}
-                    className="text-white/20 hover:text-white/50 text-xs transition-colors"
+                    className="text-slate-900 dark:text-white/20 hover:text-slate-900 dark:hover:text-white/50 text-xs transition-colors"
                 >
                     ← Back to scenarios
                 </button>
@@ -848,7 +848,7 @@ export default function AIPitchSimulator({
     // RENDER: THINKING
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'thinking') return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex items-center justify-center px-4">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
             <ThinkingView label="Gemini is listening…" />
         </div>
     );
@@ -857,7 +857,7 @@ export default function AIPitchSimulator({
     // RENDER: OBJECTION (AI buyer fires back)
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'objection') return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-white">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-slate-900 dark:text-white">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -865,10 +865,10 @@ export default function AIPitchSimulator({
             >
                 {/* AI Client avatar */}
                 <div className="text-center">
-                    <div className="w-16 h-16 rounded-3xl bg-slate-800 border-2 border-white/15 flex items-center justify-center mx-auto mb-3 text-3xl">
+                    <div className="w-16 h-16 rounded-3xl bg-slate-100 dark:bg-slate-800 border-2 border-white/15 flex items-center justify-center mx-auto mb-3 text-3xl">
                         🧑‍💼
                     </div>
-                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">AI Buyer — {scenario.clientProfile}</p>
+                    <p className="text-slate-900 dark:text-white/40 text-[10px] font-bold uppercase tracking-widest">AI Buyer — {scenario.clientProfile}</p>
                 </div>
 
                 {/* Objection bubble */}
@@ -876,13 +876,13 @@ export default function AIPitchSimulator({
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white/5 border border-white/10 rounded-3xl rounded-tl-lg p-6"
+                    className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl rounded-tl-lg p-6"
                 >
                     <div className="flex gap-2 mb-3">
                         <MessageSquare size={14} className="text-rose-400 flex-shrink-0 mt-0.5" />
                         <span className="text-rose-400 text-[10px] font-black uppercase tracking-widest">Objection</span>
                     </div>
-                    <p className="text-white text-lg font-bold leading-relaxed italic">
+                    <p className="text-slate-900 dark:text-white text-lg font-bold leading-relaxed italic">
                         "{objectionText}"
                     </p>
                 </motion.div>
@@ -891,7 +891,7 @@ export default function AIPitchSimulator({
                 {scoreData?.transcript && (
                     <div className="bg-violet-500/5 border border-violet-500/15 rounded-2xl p-4">
                         <p className="text-violet-400 text-[10px] font-bold uppercase tracking-widest mb-2">Your Pitch (Transcribed)</p>
-                        <p className="text-white/60 text-xs leading-relaxed italic">{scoreData.transcript}</p>
+                        <p className="text-slate-900 dark:text-white/60 text-xs leading-relaxed italic">{scoreData.transcript}</p>
                     </div>
                 )}
 
@@ -900,7 +900,7 @@ export default function AIPitchSimulator({
                     whileTap={{ scale: 0.97 }}
                     onClick={handleViewScore}
                     disabled={saving}
-                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-extrabold text-base shadow-xl shadow-amber-500/25 disabled:opacity-60 transition-all"
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-amber-500/25 disabled:opacity-60 transition-all"
                 >
                     {saving
                         ? <><Loader2 size={18} className="animate-spin" /> Saving…</>
@@ -915,7 +915,7 @@ export default function AIPitchSimulator({
     // RENDER: SCORING (brief pause state; handles transition)
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'scoring') return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex items-center justify-center px-4">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
             <ThinkingView label="Calculating your score…" />
         </div>
     );
@@ -924,7 +924,7 @@ export default function AIPitchSimulator({
     // RENDER: RESULT — PASS
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'result_pass' && scoreData) return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-white overflow-hidden">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-slate-900 dark:text-white overflow-hidden">
 
             {/* Confetti-like background */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -958,15 +958,15 @@ export default function AIPitchSimulator({
                     >
                         <Trophy size={36} className="text-amber-400" />
                     </motion.div>
-                    <h2 className="text-3xl font-extrabold text-white mb-1">Assessment Passed!</h2>
-                    <p className="text-white/50 text-sm">
+                    <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">Assessment Passed!</h2>
+                    <p className="text-slate-900 dark:text-white/50 text-sm">
                         {agentName} · <span className="text-amber-400 font-bold">{scoreData.overallScore}%</span> overall
                     </p>
                 </div>
 
                 {/* Score rings */}
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 text-center mb-5">Score Breakdown</p>
+                <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/30 text-center mb-5">Score Breakdown</p>
                     <div className="grid grid-cols-3 gap-4">
                         <ScoreRing score={scoreData.confidence} label="Confidence" icon={<Mic size={9} />} delay={0} />
                         <ScoreRing score={scoreData.projectKnowledge} label="Knowledge" icon={<Brain size={9} />} delay={200} />
@@ -980,7 +980,7 @@ export default function AIPitchSimulator({
                         <Sparkles size={12} className="text-violet-400" />
                         <span className="text-violet-400 text-[10px] font-black uppercase tracking-widest">AI Coach Feedback</span>
                     </div>
-                    <p className="text-white/70 text-xs leading-relaxed">{scoreData.feedback}</p>
+                    <p className="text-slate-900 dark:text-white/70 text-xs leading-relaxed">{scoreData.feedback}</p>
                 </div>
 
                 {/* Clearance badge */}
@@ -993,14 +993,14 @@ export default function AIPitchSimulator({
                     <ShieldCheck size={20} className="text-emerald-400 flex-shrink-0" />
                     <div>
                         <p className="text-emerald-400 text-xs font-black uppercase tracking-widest">Event Clearance Granted</p>
-                        <p className="text-white/50 text-xs mt-0.5">`assessment_passed: true` written to your event record.</p>
+                        <p className="text-slate-900 dark:text-white/50 text-xs mt-0.5">`assessment_passed: true` written to your event record.</p>
                     </div>
                 </motion.div>
 
                 <button
                     id="sim-done-btn"
                     onClick={handleRestart}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white/60 text-sm font-bold hover:bg-white/10 transition-all"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/60 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all"
                 >
                     <RotateCcw size={14} /> Retry a harder scenario
                 </button>
@@ -1012,7 +1012,7 @@ export default function AIPitchSimulator({
     // RENDER: RESULT — FAIL
     // ─────────────────────────────────────────────────────────────────────────
     if (phase === 'result_fail' && scoreData) return (
-        <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-white">
+        <div className="min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center px-4 py-8 text-slate-900 dark:text-white">
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1022,13 +1022,13 @@ export default function AIPitchSimulator({
                     <div className="w-16 h-16 rounded-3xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center mx-auto mb-4">
                         <Award size={28} className="text-rose-400" />
                     </div>
-                    <h2 className="text-2xl font-extrabold text-white mb-1">Not Quite There Yet</h2>
-                    <p className="text-white/40 text-sm">Best score: <span className="text-amber-400 font-black">{bestScore}%</span> · Threshold: {PASS_THRESHOLD}%</p>
+                    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-1">Not Quite There Yet</h2>
+                    <p className="text-slate-900 dark:text-white/40 text-sm">Best score: <span className="text-amber-400 font-black">{bestScore}%</span> · Threshold: {PASS_THRESHOLD}%</p>
                 </div>
 
                 {/* Score rings */}
-                <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 text-center mb-5">Latest Attempt</p>
+                <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/30 text-center mb-5">Latest Attempt</p>
                     <div className="grid grid-cols-3 gap-4">
                         <ScoreRing score={scoreData.confidence} label="Confidence" icon={<Mic size={9} />} delay={0} />
                         <ScoreRing score={scoreData.projectKnowledge} label="Knowledge" icon={<Brain size={9} />} delay={200} />
@@ -1042,7 +1042,7 @@ export default function AIPitchSimulator({
                         <Brain size={12} className="text-amber-400" />
                         <span className="text-amber-400 text-[10px] font-black uppercase tracking-widest">Coach Advice</span>
                     </div>
-                    <p className="text-white/60 text-xs leading-relaxed">{scoreData.feedback}</p>
+                    <p className="text-slate-900 dark:text-white/60 text-xs leading-relaxed">{scoreData.feedback}</p>
                 </div>
 
                 {/* Tips from scenario */}
@@ -1050,7 +1050,7 @@ export default function AIPitchSimulator({
                     {scenario.tips.slice(0, 2).map((tip, i) => (
                         <div key={i} className="flex items-start gap-2 px-3 py-2 bg-white/[0.03] rounded-xl border border-white/[0.06]">
                             <Zap size={11} className="text-violet-400 flex-shrink-0 mt-0.5" />
-                            <p className="text-white/50 text-xs">{tip}</p>
+                            <p className="text-slate-900 dark:text-white/50 text-xs">{tip}</p>
                         </div>
                     ))}
                 </div>
@@ -1059,7 +1059,7 @@ export default function AIPitchSimulator({
                     <button
                         id="sim-new-scenario-btn"
                         onClick={handleRestart}
-                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white/60 text-sm font-bold hover:bg-white/10 transition-all"
+                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/60 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all"
                     >
                         <RotateCcw size={14} /> New Scenario
                     </button>
@@ -1067,7 +1067,7 @@ export default function AIPitchSimulator({
                         id="sim-retry-btn"
                         whileTap={{ scale: 0.97 }}
                         onClick={handleRestart}
-                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-white font-extrabold text-sm shadow-lg shadow-violet-600/20 transition-all"
+                        className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-violet-600 to-violet-500 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-violet-600/20 transition-all"
                     >
                         <Mic size={14} /> Try Again
                     </motion.button>

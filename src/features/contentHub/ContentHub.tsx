@@ -148,14 +148,14 @@ function VideoPlayer({
                         <span className={cn('text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border', TRACK_COLORS[session.track])}>
                             {session.track}
                         </span>
-                        <p className="text-white font-semibold text-sm truncate max-w-md">{session.title}</p>
+                        <p className="text-slate-900 dark:text-white font-semibold text-sm truncate max-w-md">{session.title}</p>
                     </div>
                     <div className="flex items-center gap-2">
                         <button onClick={() => onBookmark(session.id)}
-                            className={cn('p-2 rounded-lg transition-colors', isBookmarked ? 'text-amber-400' : 'text-slate-500 hover:text-slate-300')}>
+                            className={cn('p-2 rounded-lg transition-colors', isBookmarked ? 'text-amber-400' : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300')}>
                             {isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
                         </button>
-                        <button onClick={onClose} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <button onClick={onClose} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                             <X size={16} />
                         </button>
                     </div>
@@ -167,8 +167,8 @@ function VideoPlayer({
                         {/* Simulated video slide */}
                         <div className="text-center">
                             <div className="text-8xl mb-4">{session.thumbnail}</div>
-                            <p className="text-white/60 text-sm font-medium">Session Recording</p>
-                            <p className="text-white/40 text-xs mt-1">{session.title}</p>
+                            <p className="text-slate-900 dark:text-white/60 text-sm font-medium">Session Recording</p>
+                            <p className="text-slate-900 dark:text-white/40 text-xs mt-1">{session.title}</p>
                         </div>
 
                         {/* Play overlay when paused */}
@@ -177,8 +177,8 @@ function VideoPlayer({
                                 onClick={() => setPlaying(true)}
                                 className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/10 transition-colors"
                             >
-                                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center hover:scale-105 transition-transform">
-                                    <Play size={32} className="text-white ml-1" />
+                                <div className="w-20 h-20 rounded-full bg-black/20 dark:bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center hover:scale-105 transition-transform">
+                                    <Play size={32} className="text-slate-900 dark:text-white ml-1" />
                                 </div>
                             </button>
                         )}
@@ -188,14 +188,14 @@ function VideoPlayer({
                             <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/40 backdrop-blur px-3 py-1.5 rounded-lg">
                                 <span className="text-lg">{speakers[0].avatar}</span>
                                 <div>
-                                    <p className="text-white text-xs font-semibold">{speakers[0].name}</p>
-                                    <p className="text-white/60 text-[10px]">{speakers[0].company}</p>
+                                    <p className="text-slate-900 dark:text-white text-xs font-semibold">{speakers[0].name}</p>
+                                    <p className="text-slate-900 dark:text-white/60 text-[10px]">{speakers[0].company}</p>
                                 </div>
                             </div>
                         )}
 
                         {/* Duration badge */}
-                        <div className="absolute top-3 right-3 bg-black/50 backdrop-blur px-2 py-0.5 rounded text-white text-xs font-mono">
+                        <div className="absolute top-3 right-3 bg-black/50 backdrop-blur px-2 py-0.5 rounded text-slate-900 dark:text-white text-xs font-mono">
                             {session.duration}
                         </div>
                     </div>
@@ -205,9 +205,9 @@ function VideoPlayer({
                 <div className="px-4 pb-4 flex-shrink-0">
                     {/* Progress bar */}
                     <div className="mb-3 flex items-center gap-3">
-                        <span className="text-slate-500 text-xs font-mono w-10 text-right">{formatTime(currentSec)}</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-xs font-mono w-10 text-right">{formatTime(currentSec)}</span>
                         <div
-                            className="flex-1 h-2 bg-slate-700 rounded-full cursor-pointer relative group"
+                            className="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full cursor-pointer relative group"
                             onClick={handleSeek}
                         >
                             <div className="absolute inset-y-0 left-0 bg-emerald-500 rounded-full" style={{ width: `${progress * 100}%` }} />
@@ -216,43 +216,43 @@ function VideoPlayer({
                                 style={{ left: `calc(${progress * 100}% - 7px)` }}
                             />
                         </div>
-                        <span className="text-slate-500 text-xs font-mono w-10">{session.duration}</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-xs font-mono w-10">{session.duration}</span>
                     </div>
 
                     {/* Buttons row */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <button onClick={() => skip(-15)} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                            <button onClick={() => skip(-15)} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                                 <SkipBack size={16} />
                             </button>
                             <button
                                 onClick={() => setPlaying(p => !p)}
-                                className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center text-white shadow-lg transition-colors"
+                                className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center text-slate-900 dark:text-white shadow-lg transition-colors"
                             >
                                 {playing ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
                             </button>
-                            <button onClick={() => skip(15)} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                            <button onClick={() => skip(15)} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                                 <SkipForward size={16} />
                             </button>
-                            <button onClick={() => setMuted(m => !m)} className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                            <button onClick={() => setMuted(m => !m)} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                                 {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}
                             </button>
                         </div>
-                        <div className="flex items-center gap-1 text-slate-500 text-xs">
+                        <div className="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-xs">
                             <Eye size={11} /> {session.views.toLocaleString()} views
                         </div>
                     </div>
                 </div>
 
                 {/* Key takeaways + docs strip */}
-                <div className="border-t border-white/10 flex-shrink-0 max-h-[28vh] overflow-y-auto">
+                <div className="border-t border-black/10 dark:border-white/10 flex-shrink-0 max-h-[28vh] overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-white/10">
                         {/* Takeaways */}
                         <div className="px-5 py-4">
-                            <p className="text-white/50 text-[10px] font-black uppercase tracking-wider mb-2">Key Takeaways</p>
+                            <p className="text-slate-900 dark:text-white/50 text-[10px] font-black uppercase tracking-wider mb-2">Key Takeaways</p>
                             <ul className="space-y-1.5">
                                 {session.keyTakeaways.map((t, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-xs text-slate-300">
+                                    <li key={i} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
                                         <span className="text-emerald-400 font-bold mt-0.5 flex-shrink-0">✓</span>
                                         {t}
                                     </li>
@@ -261,18 +261,18 @@ function VideoPlayer({
                         </div>
                         {/* Documents */}
                         <div className="px-5 py-4">
-                            <p className="text-white/50 text-[10px] font-black uppercase tracking-wider mb-2">Session Documents</p>
+                            <p className="text-slate-900 dark:text-white/50 text-[10px] font-black uppercase tracking-wider mb-2">Session Documents</p>
                             <div className="space-y-2">
                                 {session.documents.map(d => (
                                     <button key={d.id}
                                         onClick={() => toast.success(`Downloading: ${d.name}`)}
-                                        className="w-full flex items-center gap-2 hover:bg-white/5 rounded-lg px-2 py-1.5 transition-colors text-left">
+                                        className="w-full flex items-center gap-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg px-2 py-1.5 transition-colors text-left">
                                         <span className="text-base">{d.emoji}</span>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-white text-xs truncate">{d.name}</p>
-                                            <p className="text-slate-500 text-[10px]">{d.type} · {d.sizeLabel}</p>
+                                            <p className="text-slate-900 dark:text-white text-xs truncate">{d.name}</p>
+                                            <p className="text-slate-600 dark:text-slate-400 text-[10px]">{d.type} · {d.sizeLabel}</p>
                                         </div>
-                                        <Download size={11} className="text-slate-500 flex-shrink-0" />
+                                        <Download size={11} className="text-slate-600 dark:text-slate-400 flex-shrink-0" />
                                     </button>
                                 ))}
                             </div>
@@ -302,7 +302,7 @@ function SessionCard({
             layout
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="group bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden transition-colors"
+            className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl overflow-hidden transition-colors"
         >
             {/* Thumbnail */}
             <div
@@ -311,11 +311,11 @@ function SessionCard({
             >
                 <span className="text-5xl">{session.thumbnail}</span>
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center">
-                        <Play size={20} className="text-white ml-0.5" />
+                    <div className="w-12 h-12 rounded-full bg-black/20 dark:bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center">
+                        <Play size={20} className="text-slate-900 dark:text-white ml-0.5" />
                     </div>
                 </div>
-                <div className="absolute top-2 right-2 bg-black/60 px-1.5 py-0.5 rounded text-white text-[10px] font-mono">{session.duration}</div>
+                <div className="absolute top-2 right-2 bg-black/60 px-1.5 py-0.5 rounded text-slate-900 dark:text-white text-[10px] font-mono">{session.duration}</div>
                 <div className="absolute bottom-2 left-2">
                     <span className={cn('text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border', TRACK_COLORS[session.track])}>
                         {session.track}
@@ -330,13 +330,13 @@ function SessionCard({
 
             {/* Content */}
             <div className="p-4">
-                <h3 className="text-white font-bold text-sm leading-snug mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors cursor-pointer"
+                <h3 className="text-slate-900 dark:text-white font-bold text-sm leading-snug mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors cursor-pointer"
                     onClick={onPlay}>
                     {session.title}
                 </h3>
 
                 {!compact && (
-                    <p className="text-slate-500 text-xs leading-relaxed mb-3 line-clamp-2">{session.description}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3 line-clamp-2">{session.description}</p>
                 )}
 
                 {/* Speakers */}
@@ -345,7 +345,7 @@ function SessionCard({
                         {speakers.map(sp => (
                             <div key={sp.id} className="flex items-center gap-1.5">
                                 <span className="text-base">{sp.avatar}</span>
-                                <span className="text-slate-400 text-xs">{sp.name}</span>
+                                <span className="text-slate-600 dark:text-slate-400 text-xs">{sp.name}</span>
                             </div>
                         ))}
                     </div>
@@ -358,7 +358,7 @@ function SessionCard({
                     </div>
                     <div className="flex items-center gap-1">
                         <button onClick={() => onBookmark(session.id)}
-                            className={cn('p-1.5 rounded-lg transition-colors', isBookmarked ? 'text-amber-400' : 'text-slate-600 hover:text-slate-300')}>
+                            className={cn('p-1.5 rounded-lg transition-colors', isBookmarked ? 'text-amber-400' : 'text-slate-600 hover:text-slate-700 dark:hover:text-slate-300')}>
                             {isBookmarked ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
                         </button>
                         <button onClick={onPlay}
@@ -388,26 +388,26 @@ function SpeakerCard({
             layout
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 transition-colors group"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-5 transition-colors group"
         >
             <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-3xl flex-shrink-0">{speaker.avatar}</div>
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-3xl flex-shrink-0">{speaker.avatar}</div>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-bold text-sm">{speaker.name}</h3>
-                    <p className="text-slate-400 text-xs mt-0.5">{speaker.title}</p>
-                    <p className="text-slate-500 text-xs">{speaker.company} · {speaker.country}</p>
+                    <h3 className="text-slate-900 dark:text-white font-bold text-sm">{speaker.name}</h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{speaker.title}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-xs">{speaker.company} · {speaker.country}</p>
                 </div>
                 <button onClick={() => onBookmark(speaker.id)}
-                    className={cn('p-1.5 rounded-lg transition-colors flex-shrink-0', isBookmarked ? 'text-amber-400' : 'text-slate-600 hover:text-slate-300')}>
+                    className={cn('p-1.5 rounded-lg transition-colors flex-shrink-0', isBookmarked ? 'text-amber-400' : 'text-slate-600 hover:text-slate-700 dark:hover:text-slate-300')}>
                     {isBookmarked ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
                 </button>
             </div>
 
-            <p className="text-slate-500 text-xs leading-relaxed mb-3 line-clamp-3">{speaker.bio}</p>
+            <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-3 line-clamp-3">{speaker.bio}</p>
 
             <div className="flex flex-wrap gap-1 mb-4">
                 {speaker.topics.map(t => (
-                    <span key={t} className="text-[9px] bg-slate-800 border border-slate-700 text-slate-400 px-2 py-0.5 rounded-full">{t}</span>
+                    <span key={t} className="text-[9px] bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">{t}</span>
                 ))}
             </div>
 
@@ -448,46 +448,46 @@ function SpeakerProfile({
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 28, stiffness: 240 }}
                 onClick={e => e.stopPropagation()}
-                className="w-full max-w-md bg-slate-950 border-l border-slate-800 overflow-y-auto flex flex-col"
+                className="w-full max-w-md bg-slate-50 dark:bg-slate-950 border-l border-slate-200 dark:border-slate-800 overflow-y-auto flex flex-col"
             >
-                <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-3">
+                <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between gap-3">
                     <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-4xl">{speaker.avatar}</div>
+                        <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-4xl">{speaker.avatar}</div>
                         <div>
-                            <h2 className="text-white font-black text-lg">{speaker.name}</h2>
-                            <p className="text-slate-400 text-sm">{speaker.title}</p>
-                            <p className="text-slate-500 text-xs">{speaker.company}</p>
+                            <h2 className="text-slate-900 dark:text-white font-black text-lg">{speaker.name}</h2>
+                            <p className="text-slate-600 dark:text-slate-400 text-sm">{speaker.title}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs">{speaker.company}</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 rounded-lg text-slate-500 hover:text-white hover:bg-slate-800 transition-colors flex-shrink-0">
+                    <button onClick={onClose} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex-shrink-0">
                         <X size={16} />
                     </button>
                 </div>
 
                 <div className="p-6 space-y-6 flex-1">
                     <div>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-2">About</p>
-                        <p className="text-slate-300 text-sm leading-relaxed">{speaker.bio}</p>
+                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-2">About</p>
+                        <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{speaker.bio}</p>
                     </div>
                     <div>
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-2">Topics</p>
+                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-2">Topics</p>
                         <div className="flex flex-wrap gap-1.5">
                             {speaker.topics.map(t => (
-                                <span key={t} className="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">{t}</span>
+                                <span key={t} className="text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-full">{t}</span>
                             ))}
                         </div>
                     </div>
                     {sessions.length > 0 && (
                         <div>
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Sessions ({sessions.length})</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Sessions ({sessions.length})</p>
                             <div className="space-y-2">
                                 {sessions.map(s => (
                                     <button key={s.id} onClick={() => onPlaySession(s)}
-                                        className="w-full text-left flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3 hover:border-slate-700 transition-colors">
+                                        className="w-full text-left flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                                         <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-gradient-to-br', s.thumbnailColor)}>{s.thumbnail}</div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-white text-xs font-semibold truncate">{s.title}</p>
-                                            <p className="text-slate-500 text-[10px]">{s.duration} · {s.views.toLocaleString()} views</p>
+                                            <p className="text-slate-900 dark:text-white text-xs font-semibold truncate">{s.title}</p>
+                                            <p className="text-slate-600 dark:text-slate-400 text-[10px]">{s.duration} · {s.views.toLocaleString()} views</p>
                                         </div>
                                         <Play size={12} className="text-emerald-400 flex-shrink-0" />
                                     </button>
@@ -505,14 +505,14 @@ function SpeakerProfile({
 
 function DocumentRow({ doc }: { doc: ReturnType<typeof getAllDocuments>[0] }) {
     return (
-        <div className="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3 hover:border-slate-700 transition-colors">
+        <div className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
             <span className="text-2xl">{doc.emoji}</span>
             <div className="flex-1 min-w-0">
-                <p className="text-white text-sm font-semibold truncate">{doc.name}</p>
-                <p className="text-slate-500 text-xs">{doc.type} · {doc.sizeLabel} · {doc.downloads.toLocaleString()} downloads</p>
+                <p className="text-slate-900 dark:text-white text-sm font-semibold truncate">{doc.name}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs">{doc.type} · {doc.sizeLabel} · {doc.downloads.toLocaleString()} downloads</p>
             </div>
             <button onClick={() => toast.success(`Downloading: ${doc.name}`)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-emerald-600 hover:border-emerald-600 hover:text-white transition-all flex-shrink-0">
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-emerald-600 hover:border-emerald-600 hover:text-slate-900 dark:hover:text-white transition-all flex-shrink-0">
                 <Download size={11} /> Download
             </button>
         </div>
@@ -580,17 +580,17 @@ export default function ContentHub() {
     const bookmarkedSpeakers = useMemo(() => SPEAKERS.filter(s => bookmarks.has(s.id)), [bookmarks]);
 
     return (
-        <div className="h-screen bg-slate-950 flex flex-col font-sans overflow-hidden">
+        <div className="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans overflow-hidden">
 
             {/* ── Header ────────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-5 py-3.5 flex-shrink-0">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-5 py-3.5 flex-shrink-0">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
                         <div className="flex items-center gap-2">
                             <Video size={18} className="text-violet-400" />
-                            <h1 className="text-white font-extrabold text-base">Post-Event Content Hub</h1>
+                            <h1 className="text-slate-900 dark:text-white font-extrabold text-base">Post-Event Content Hub</h1>
                         </div>
-                        <p className="text-slate-500 text-xs mt-0.5">
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
                             {allSessions.length} sessions · {allDocs.length} documents · {SPEAKERS.length} speakers
                         </p>
                     </div>
@@ -601,14 +601,14 @@ export default function ContentHub() {
                                 <button key={ev.id} onClick={() => { setActiveEvent(ev); setQuery(''); }}
                                     className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all',
                                         activeEvent.id === ev.id
-                                            ? 'bg-violet-600 border-violet-500 text-white'
-                                            : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200')}>
+                                            ? 'bg-violet-600 border-violet-500 text-slate-900 dark:text-white'
+                                            : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-200')}>
                                     <span>{ev.coverEmoji}</span>
                                     <span className="hidden sm:inline">{ev.location}</span>
                                     <span className={cn('text-[8px] px-1 py-0.5 rounded-full font-black',
                                         ev.status === 'Published' ? 'bg-emerald-500/20 text-emerald-400' :
                                             ev.status === 'Processing' ? 'bg-amber-500/20 text-amber-400' :
-                                                'bg-slate-700 text-slate-500')}>
+                                                'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400')}>
                                         {ev.status}
                                     </span>
                                 </button>
@@ -617,20 +617,20 @@ export default function ContentHub() {
 
                         {/* Search */}
                         <div className="relative">
-                            <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                            <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400" />
                             <input value={query} onChange={e => setQuery(e.target.value)}
                                 placeholder="Search content…"
-                                className="bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 w-44 transition-colors" />
+                                className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 w-44 transition-colors" />
                         </div>
 
                         {/* Grid/List toggle */}
-                        <div className="flex bg-slate-800 border border-slate-700 rounded-xl p-0.5 gap-0.5">
+                        <div className="flex bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl p-0.5 gap-0.5">
                             <button onClick={() => setGridMode(true)}
-                                className={cn('p-1.5 rounded-lg transition-colors', gridMode ? 'bg-slate-600 text-white' : 'text-slate-500')}>
+                                className={cn('p-1.5 rounded-lg transition-colors', gridMode ? 'bg-slate-600 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400')}>
                                 <LayoutGrid size={13} />
                             </button>
                             <button onClick={() => setGridMode(false)}
-                                className={cn('p-1.5 rounded-lg transition-colors', !gridMode ? 'bg-slate-600 text-white' : 'text-slate-500')}>
+                                className={cn('p-1.5 rounded-lg transition-colors', !gridMode ? 'bg-slate-600 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400')}>
                                 <List size={13} />
                             </button>
                         </div>
@@ -639,7 +639,7 @@ export default function ContentHub() {
             </div>
 
             {/* ── Tab bar ────────────────────────────────────────────────── */}
-            <div className="flex border-b border-slate-800 px-5 bg-slate-900/40 flex-shrink-0">
+            <div className="flex border-b border-slate-200 dark:border-slate-800 px-5 bg-white dark:bg-slate-900/40 flex-shrink-0">
                 {([
                     { id: 'sessions', label: 'Sessions', icon: Video, count: allSessions.length },
                     { id: 'speakers', label: 'Speakers', icon: Users, count: SPEAKERS.length },
@@ -648,9 +648,9 @@ export default function ContentHub() {
                 ] as { id: ViewTab; label: string; icon: React.ElementType; count: number }[]).map(t => (
                     <button key={t.id} onClick={() => setViewTab(t.id)}
                         className={cn('flex items-center gap-1.5 px-4 py-3 text-sm font-semibold border-b-2 transition-colors',
-                            viewTab === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-500 hover:text-slate-300')}>
+                            viewTab === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300')}>
                         <t.icon size={13} /> {t.label}
-                        <span className={cn('text-[9px] px-1.5 py-0.5 rounded-full font-black', viewTab === t.id ? 'bg-violet-500/20 text-violet-400' : 'bg-slate-700 text-slate-500')}>
+                        <span className={cn('text-[9px] px-1.5 py-0.5 rounded-full font-black', viewTab === t.id ? 'bg-violet-500/20 text-violet-400' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400')}>
                             {t.count}
                         </span>
                     </button>
@@ -662,8 +662,8 @@ export default function ContentHub() {
                 <div className="flex-1 flex items-center justify-center">
                     <div className="text-center">
                         <span className="text-6xl mb-4 block">{activeEvent.coverEmoji}</span>
-                        <h2 className="text-white font-black text-xl mb-2">{activeEvent.name}</h2>
-                        <p className="text-slate-500 text-sm max-w-sm">{activeEvent.description}</p>
+                        <h2 className="text-slate-900 dark:text-white font-black text-xl mb-2">{activeEvent.name}</h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-sm max-w-sm">{activeEvent.description}</p>
                         <div className="mt-4 flex items-center justify-center gap-2 text-amber-400 text-sm font-semibold">
                             <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                             Content processing — check back soon
@@ -748,7 +748,7 @@ export default function ContentHub() {
                                     <div className="space-y-8">
                                         {bookmarkedSessions.length > 0 && (
                                             <div>
-                                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Saved Sessions ({bookmarkedSessions.length})</p>
+                                                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Saved Sessions ({bookmarkedSessions.length})</p>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                                     {bookmarkedSessions.map(s => (
                                                         <SessionCard
@@ -764,7 +764,7 @@ export default function ContentHub() {
                                         )}
                                         {bookmarkedSpeakers.length > 0 && (
                                             <div>
-                                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Saved Speakers ({bookmarkedSpeakers.length})</p>
+                                                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Saved Speakers ({bookmarkedSpeakers.length})</p>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                                     {bookmarkedSpeakers.map(sp => (
                                                         <SpeakerCard

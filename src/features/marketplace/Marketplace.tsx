@@ -49,10 +49,10 @@ function TierBadge({ tier }: { tier: ExhibitorTier }) {
 
 function StatChip({ icon: Icon, value, label }: { icon: React.ElementType; value: number | string; label: string }) {
     return (
-        <div className="flex flex-col items-center p-3 bg-slate-800 rounded-xl">
+        <div className="flex flex-col items-center p-3 bg-slate-100 dark:bg-slate-800 rounded-xl">
             <Icon size={14} className="text-emerald-400 mb-1" />
-            <p className="text-white font-black text-base">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-            <p className="text-slate-500 text-[9px] uppercase tracking-wider">{label}</p>
+            <p className="text-slate-900 dark:text-white font-black text-base">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+            <p className="text-slate-600 dark:text-slate-400 text-[9px] uppercase tracking-wider">{label}</p>
         </div>
     );
 }
@@ -74,7 +74,7 @@ function ExhibitorCard({ exhibitor, onClick }: { exhibitor: Exhibitor; onClick: 
         >
             {/* Header */}
             <div className="flex items-start justify-between gap-3 mb-4">
-                <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0', 'bg-slate-800 border border-slate-700')}>
+                <div className={cn('w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0', 'bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700')}>
                     {exhibitor.logo}
                 </div>
                 <div className="flex flex-col items-end gap-1.5">
@@ -97,7 +97,7 @@ function ExhibitorCard({ exhibitor, onClick }: { exhibitor: Exhibitor; onClick: 
             </div>
 
             <div className="mb-3">
-                <h3 className="text-white font-black text-sm leading-tight mb-0.5">{exhibitor.name}</h3>
+                <h3 className="text-slate-900 dark:text-white font-black text-sm leading-tight mb-0.5">{exhibitor.name}</h3>
                 <p className={cn('text-xs', tier.text)}>{exhibitor.tagline}</p>
             </div>
 
@@ -106,22 +106,22 @@ function ExhibitorCard({ exhibitor, onClick }: { exhibitor: Exhibitor; onClick: 
                 <span className={cn('text-[10px] font-bold px-2 py-0.5 rounded-full border', CAT_COLORS[exhibitor.category])}>
                     {exhibitor.category}
                 </span>
-                <span className="text-[10px] text-slate-500 flex items-center gap-0.5">
+                <span className="text-[10px] text-slate-600 dark:text-slate-400 flex items-center gap-0.5">
                     <MapPin size={9} /> Stand {exhibitor.standNumber}
                 </span>
-                <span className="text-[10px] text-slate-500">{exhibitor.country}</span>
+                <span className="text-[10px] text-slate-600 dark:text-slate-400">{exhibitor.country}</span>
             </div>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-1 mb-4">
                 {exhibitor.tags.slice(0, 3).map(t => (
-                    <span key={t} className="text-[9px] bg-slate-800 border border-slate-700 text-slate-400 px-1.5 py-0.5 rounded-full">{t}</span>
+                    <span key={t} className="text-[9px] bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-full">{t}</span>
                 ))}
             </div>
 
             {/* Footer stats */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800">
-                <div className="flex gap-3 text-slate-500 text-xs">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex gap-3 text-slate-600 dark:text-slate-400 text-xs">
                     <span className="flex items-center gap-0.5"><Package size={9} /> {exhibitor.products.length} products</span>
                     <span className="flex items-center gap-0.5"><FileText size={9} /> {exhibitor.documents.length} docs</span>
                 </div>
@@ -165,21 +165,21 @@ function MeetingModal({ exhibitor, onClose }: { exhibitor: Exhibitor; onClose: (
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95 }}
                 onClick={e => e.stopPropagation()}
-                className="bg-slate-900 border border-slate-700 rounded-3xl p-6 w-full max-w-md shadow-2xl"
+                className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl p-6 w-full max-w-md shadow-2xl"
             >
                 <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-xl">{exhibitor.logo}</div>
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl">{exhibitor.logo}</div>
                     <div>
-                        <h3 className="text-white font-bold">{exhibitor.name}</h3>
-                        <p className="text-slate-400 text-xs">Stand {exhibitor.standNumber}</p>
+                        <h3 className="text-slate-900 dark:text-white font-bold">{exhibitor.name}</h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-xs">Stand {exhibitor.standNumber}</p>
                     </div>
                 </div>
 
                 {/* Type toggle */}
-                <div className="flex bg-slate-800 rounded-xl p-1 mb-4">
+                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-4">
                     {(['Meeting', 'Demo'] as const).map(t => (
                         <button key={t} onClick={() => setType(t)}
-                            className={cn('flex-1 py-2 rounded-lg text-xs font-bold transition-all', type === t ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-slate-200')}>
+                            className={cn('flex-1 py-2 rounded-lg text-xs font-bold transition-all', type === t ? 'bg-emerald-600 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400 hover:text-slate-200')}>
                             {t === 'Meeting' ? '📅 Book Meeting' : '🖥 Request Demo'}
                         </button>
                     ))}
@@ -187,26 +187,26 @@ function MeetingModal({ exhibitor, onClose }: { exhibitor: Exhibitor; onClose: (
 
                 <div className="space-y-3 mb-4">
                     <input value={name} onChange={e => setName(e.target.value)} placeholder="Your name"
-                        className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+                        className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
                     <input value={company} onChange={e => setCompany(e.target.value)} placeholder="Company / Organization"
-                        className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+                        className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
                 </div>
 
-                <p className="text-slate-500 text-xs font-black uppercase tracking-wider mb-2">Select Time Slot</p>
+                <p className="text-slate-600 dark:text-slate-400 text-xs font-black uppercase tracking-wider mb-2">Select Time Slot</p>
                 <div className="grid grid-cols-4 gap-1.5 mb-5">
                     {exhibitor.availableSlots.map(slot => (
                         <button key={slot} onClick={() => setSelectedSlot(slot)}
-                            className={cn('py-2 rounded-lg text-xs font-bold border transition-all', selectedSlot === slot ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-slate-600')}>
+                            className={cn('py-2 rounded-lg text-xs font-bold border transition-all', selectedSlot === slot ? 'bg-emerald-600 border-emerald-500 text-slate-900 dark:text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-600')}>
                             {slot}
                         </button>
                     ))}
                 </div>
 
                 <div className="flex gap-2">
-                    <button onClick={handleBook} className="flex-1 py-3 rounded-2xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-500 transition-colors">
+                    <button onClick={handleBook} className="flex-1 py-3 rounded-2xl bg-emerald-600 text-slate-900 dark:text-white font-bold text-sm hover:bg-emerald-500 transition-colors">
                         Confirm {type}
                     </button>
-                    <button onClick={onClose} className="px-5 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 text-sm hover:text-white transition-colors">
+                    <button onClick={onClose} className="px-5 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-sm hover:text-slate-900 dark:hover:text-white transition-colors">
                         Cancel
                     </button>
                 </div>
@@ -230,11 +230,11 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
             <div className="flex-1 overflow-y-auto">
                 {/* Hero banner */}
                 <div className={cn('bg-gradient-to-r p-6 pb-0 relative', exhibitor.color)}>
-                    <button onClick={onBack} className="flex items-center gap-1.5 text-slate-400 hover:text-white text-xs font-semibold mb-4 transition-colors">
+                    <button onClick={onBack} className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-semibold mb-4 transition-colors">
                         <ChevronLeft size={14} /> Back to Directory
                     </button>
                     <div className="flex items-start gap-5 mb-5 flex-wrap">
-                        <div className="w-20 h-20 rounded-3xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-4xl flex-shrink-0 shadow-2xl">
+                        <div className="w-20 h-20 rounded-3xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/60 flex items-center justify-center text-4xl flex-shrink-0 shadow-2xl">
                             {exhibitor.logo}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -253,16 +253,16 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                     </span>
                                 )}
                             </div>
-                            <h1 className="text-white font-black text-2xl leading-tight">{exhibitor.name}</h1>
+                            <h1 className="text-slate-900 dark:text-white font-black text-2xl leading-tight">{exhibitor.name}</h1>
                             <p className={cn('text-sm mt-1', tier.text)}>{exhibitor.tagline}</p>
                         </div>
                         <div className="flex gap-2 flex-shrink-0">
                             <button onClick={() => setShowModal(true)}
-                                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold transition-colors shadow-lg">
+                                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white text-sm font-bold transition-colors shadow-lg">
                                 <Calendar size={13} /> Book Meeting
                             </button>
                             <button onClick={() => { setModalProduct(null); setShowModal(true); }}
-                                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-colors border border-white/20 backdrop-blur">
+                                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-slate-900 dark:text-white text-sm font-bold transition-colors border border-black/20 dark:border-white/20 backdrop-blur">
                                 <MessageSquare size={13} /> Contact
                             </button>
                         </div>
@@ -278,7 +278,7 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                         ] as { id: ProfileTab; label: string; icon: React.ElementType }[]).map(t => (
                             <button key={t.id} onClick={() => setTab(t.id)}
                                 className={cn('flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all',
-                                    tab === t.id ? 'bg-white/20 text-white backdrop-blur' : 'text-white/60 hover:text-white/90')}>
+                                    tab === t.id ? 'bg-black/20 dark:bg-white/20 text-slate-900 dark:text-white backdrop-blur' : 'text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white/90')}>
                                 <t.icon size={11} /> {t.label}
                             </button>
                         ))}
@@ -294,14 +294,14 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                             <motion.div key="overview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                                 className="space-y-6">
                                 {/* About */}
-                                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-2">About</p>
-                                    <p className="text-slate-300 text-sm leading-relaxed">{exhibitor.description}</p>
+                                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+                                    <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-2">About</p>
+                                    <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">{exhibitor.description}</p>
                                 </div>
 
                                 {/* Key stats */}
                                 <div>
-                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Engagement Stats</p>
+                                    <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Engagement Stats</p>
                                     <div className="grid grid-cols-5 gap-2">
                                         <StatChip icon={Eye} value={exhibitor.analytics.profileViews} label="Views" />
                                         <StatChip icon={MessageSquare} value={exhibitor.analytics.contactRequests} label="Contacts" />
@@ -312,17 +312,17 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                 </div>
 
                                 {/* Key contact card */}
-                                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-3xl flex-shrink-0">
+                                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex items-center gap-4">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-3xl flex-shrink-0">
                                         {exhibitor.keyContact.avatar}
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-white font-bold">{exhibitor.keyContact.name}</p>
-                                        <p className="text-slate-400 text-sm">{exhibitor.keyContact.title}</p>
-                                        <p className="text-slate-500 text-xs mt-0.5">{exhibitor.name}</p>
+                                        <p className="text-slate-900 dark:text-white font-bold">{exhibitor.keyContact.name}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-sm">{exhibitor.keyContact.title}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{exhibitor.name}</p>
                                     </div>
                                     <button onClick={() => setShowModal(true)}
-                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors">
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                         <Calendar size={12} /> Schedule
                                     </button>
                                 </div>
@@ -330,15 +330,15 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                 {/* Sessions */}
                                 {exhibitor.sessions.length > 0 && (
                                     <div>
-                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Sessions & Presentations</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Sessions & Presentations</p>
                                         {exhibitor.sessions.map((s, i) => (
-                                            <div key={i} className="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3 mb-2">
+                                            <div key={i} className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 mb-2">
                                                 <div className="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
                                                     <Layers size={14} className="text-indigo-400" />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-white text-sm font-semibold truncate">{s.sessionName}</p>
-                                                    <p className="text-slate-400 text-xs">{s.room} · {s.time}</p>
+                                                    <p className="text-slate-900 dark:text-white text-sm font-semibold truncate">{s.sessionName}</p>
+                                                    <p className="text-slate-600 dark:text-slate-400 text-xs">{s.room} · {s.time}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -348,7 +348,7 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                 {/* Tags */}
                                 <div className="flex flex-wrap gap-1.5">
                                     {exhibitor.tags.map(t => (
-                                        <span key={t} className="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">{t}</span>
+                                        <span key={t} className="text-xs bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-full">{t}</span>
                                     ))}
                                 </div>
                             </motion.div>
@@ -359,19 +359,19 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                             <motion.div key="products" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                                 className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 {exhibitor.products.map(prod => (
-                                    <div key={prod.id} className="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-5 transition-colors">
+                                    <div key={prod.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-2xl p-5 transition-colors">
                                         <div className="flex items-start gap-3 mb-3">
-                                            <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl flex-shrink-0">{prod.imageEmoji}</div>
+                                            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl flex-shrink-0">{prod.imageEmoji}</div>
                                             <div className="flex-1 min-w-0">
-                                                <span className="text-[9px] font-black uppercase tracking-wider text-slate-500">{prod.type}</span>
-                                                <h3 className="text-white font-bold text-sm leading-tight">{prod.name}</h3>
+                                                <span className="text-[9px] font-black uppercase tracking-wider text-slate-600 dark:text-slate-400">{prod.type}</span>
+                                                <h3 className="text-slate-900 dark:text-white font-bold text-sm leading-tight">{prod.name}</h3>
                                                 {prod.priceNote && <p className="text-emerald-400 text-xs font-bold mt-0.5">{prod.priceNote}</p>}
                                             </div>
                                         </div>
-                                        <p className="text-slate-400 text-sm leading-relaxed mb-3">{prod.description}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-3">{prod.description}</p>
                                         <div className="flex flex-wrap gap-1 mb-4">
                                             {prod.highlights.map(h => (
-                                                <span key={h} className="flex items-center gap-0.5 text-[10px] text-slate-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-full">
+                                                <span key={h} className="flex items-center gap-0.5 text-[10px] text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 px-2 py-0.5 rounded-full">
                                                     <CheckCircle2 size={8} className="text-emerald-400" /> {h}
                                                 </span>
                                             ))}
@@ -384,7 +384,7 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                                 </button>
                                             )}
                                             <button onClick={() => setShowModal(true)}
-                                                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-colors">
+                                                className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                                                 <Calendar size={11} /> Book Meeting
                                             </button>
                                         </div>
@@ -403,18 +403,18 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                         <p>No documents available</p>
                                     </div>
                                 ) : exhibitor.documents.map(doc => (
-                                    <div key={doc.id} className="flex items-center gap-4 bg-slate-900 border border-slate-800 rounded-xl p-4 hover:border-slate-700 transition-colors">
-                                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl flex-shrink-0">{doc.emoji}</div>
+                                    <div key={doc.id} className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
+                                        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl flex-shrink-0">{doc.emoji}</div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-white font-semibold text-sm truncate">{doc.name}</p>
+                                            <p className="text-slate-900 dark:text-white font-semibold text-sm truncate">{doc.name}</p>
                                             <div className="flex items-center gap-3 mt-0.5">
-                                                <span className="text-slate-500 text-xs">{doc.type}</span>
+                                                <span className="text-slate-600 dark:text-slate-400 text-xs">{doc.type}</span>
                                                 <span className="text-slate-600 text-xs">{doc.sizeLabel}</span>
                                                 <span className="text-slate-600 text-xs flex items-center gap-0.5"><Download size={9} /> {doc.downloads.toLocaleString()} downloads</span>
                                             </div>
                                         </div>
                                         <button onClick={() => handleDownload(doc.name)}
-                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-emerald-600 hover:border-emerald-600 hover:text-white transition-all flex-shrink-0">
+                                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-emerald-600 hover:border-emerald-600 hover:text-slate-900 dark:hover:text-white transition-all flex-shrink-0">
                                             <Download size={12} /> Download
                                         </button>
                                     </div>
@@ -428,8 +428,8 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                 className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Contact details */}
                                 <div className="space-y-4">
-                                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
-                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider">Contact Details</p>
+                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3">
+                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider">Contact Details</p>
                                         {[
                                             { icon: Mail, label: exhibitor.email },
                                             { icon: Phone, label: exhibitor.phone },
@@ -437,18 +437,18 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                             { icon: MapPin, label: `Stand ${exhibitor.standNumber} · ${exhibitor.country}` },
                                         ].map(({ icon: Icon, label }) => (
                                             <div key={label} className="flex items-center gap-3 text-sm">
-                                                <Icon size={14} className="text-slate-500 flex-shrink-0" />
-                                                <span className="text-slate-300">{label}</span>
+                                                <Icon size={14} className="text-slate-600 dark:text-slate-400 flex-shrink-0" />
+                                                <span className="text-slate-700 dark:text-slate-300">{label}</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-                                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Key Contact</p>
+                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
+                                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Key Contact</p>
                                         <div className="flex items-center gap-3">
                                             <span className="text-3xl">{exhibitor.keyContact.avatar}</span>
                                             <div>
-                                                <p className="text-white font-bold text-sm">{exhibitor.keyContact.name}</p>
-                                                <p className="text-slate-400 text-xs">{exhibitor.keyContact.title}</p>
+                                                <p className="text-slate-900 dark:text-white font-bold text-sm">{exhibitor.keyContact.name}</p>
+                                                <p className="text-slate-600 dark:text-slate-400 text-xs">{exhibitor.keyContact.title}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -457,20 +457,20 @@ function ExhibitorProfile({ exhibitor, onBack }: { exhibitor: Exhibitor; onBack:
                                 {/* Book meeting CTA */}
                                 <div className="space-y-3">
                                     <button onClick={() => setShowModal(true)}
-                                        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base transition-colors shadow-lg shadow-emerald-900/30">
+                                        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white font-bold text-base transition-colors shadow-lg shadow-emerald-900/30">
                                         <Calendar size={18} /> Schedule Meeting
                                     </button>
                                     <button onClick={() => { setShowModal(true); }}
-                                        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-slate-900 border border-slate-700 text-slate-300 font-semibold text-sm transition-colors hover:bg-slate-800">
+                                        className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
                                         <Zap size={14} /> Request Product Demo
                                     </button>
                                     <button onClick={() => toast.success('Contact request sent!')}
-                                        className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-400 pointer text-sm transition-colors hover:bg-slate-800">
+                                        className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 pointer text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
                                         <MessageSquare size={14} /> Send Message
                                     </button>
-                                    <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-center">
                                         <Clock size={16} className="text-slate-600 mx-auto mb-1" />
-                                        <p className="text-slate-500 text-xs">
+                                        <p className="text-slate-600 dark:text-slate-400 text-xs">
                                             {exhibitor.availableSlots.length} time slots available today
                                         </p>
                                     </div>
@@ -510,7 +510,7 @@ function AdminPanel() {
         <div className="flex-1 overflow-y-auto p-6 space-y-8">
             {/* Global KPIs */}
             <div>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Platform-Wide Engagement</p>
+                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Platform-Wide Engagement</p>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                     {[
                         { icon: Eye, value: totals.views, label: 'Profile Views', color: 'text-sky-400' },
@@ -519,10 +519,10 @@ function AdminPanel() {
                         { icon: Download, value: totals.downloads, label: 'Downloads', color: 'text-emerald-400' },
                         { icon: Calendar, value: totals.meetings, label: 'Meetings', color: 'text-pink-400' },
                     ].map(s => (
-                        <div key={s.label} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-center">
+                        <div key={s.label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center">
                             <s.icon size={18} className={cn('mx-auto mb-2', s.color)} />
-                            <p className="text-white font-black text-2xl">{s.value.toLocaleString()}</p>
-                            <p className="text-slate-500 text-[9px] uppercase tracking-wider">{s.label}</p>
+                            <p className="text-slate-900 dark:text-white font-black text-2xl">{s.value.toLocaleString()}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-[9px] uppercase tracking-wider">{s.label}</p>
                         </div>
                     ))}
                 </div>
@@ -530,22 +530,22 @@ function AdminPanel() {
 
             {/* Leaderboard */}
             <div>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Exhibitor Leaderboard — By Profile Views</p>
+                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Exhibitor Leaderboard — By Profile Views</p>
                 <div className="space-y-2">
                     {sorted.map((e, i) => {
                         const maxViews = sorted[0].analytics.profileViews;
                         const pct = Math.round((e.analytics.profileViews / maxViews) * 100);
                         return (
-                            <div key={e.id} className="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl p-3">
-                                <span className={cn('font-black text-sm w-5 text-center', i === 0 ? 'text-amber-400' : i === 1 ? 'text-slate-300' : i === 2 ? 'text-orange-600' : 'text-slate-600')}>{i + 1}</span>
+                            <div key={e.id} className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3">
+                                <span className={cn('font-black text-sm w-5 text-center', i === 0 ? 'text-amber-400' : i === 1 ? 'text-slate-700 dark:text-slate-300' : i === 2 ? 'text-orange-600' : 'text-slate-600')}>{i + 1}</span>
                                 <span className="text-xl w-7">{e.logo}</span>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-white text-xs font-semibold truncate">{e.name}</p>
+                                    <p className="text-slate-900 dark:text-white text-xs font-semibold truncate">{e.name}</p>
                                     <div className="flex items-center gap-2 mt-0.5">
-                                        <div className="flex-1 bg-slate-800 rounded-full h-1.5">
+                                        <div className="flex-1 bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
                                             <motion.div animate={{ width: `${pct}%` }} className="h-1.5 rounded-full bg-emerald-500" />
                                         </div>
-                                        <span className="text-slate-400 text-[10px] font-bold">{e.analytics.profileViews.toLocaleString()} views</span>
+                                        <span className="text-slate-600 dark:text-slate-400 text-[10px] font-bold">{e.analytics.profileViews.toLocaleString()} views</span>
                                     </div>
                                 </div>
                                 <TierBadge tier={e.tier} />
@@ -557,29 +557,29 @@ function AdminPanel() {
 
             {/* Management table */}
             <div>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">Exhibitor Management</p>
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Exhibitor Management</p>
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b border-slate-800">
+                            <tr className="border-b border-slate-200 dark:border-slate-800">
                                 {['Exhibitor', 'Tier', 'Stand', 'Contacts', 'Demos', 'Visible', 'Featured'].map(h => (
-                                    <th key={h} className="text-left text-slate-500 text-[10px] font-black uppercase tracking-wider px-4 py-3">{h}</th>
+                                    <th key={h} className="text-left text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider px-4 py-3">{h}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {exhibitors.map(e => (
-                                <tr key={e.id} className={cn('border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors', !e.isVisible && 'opacity-40')}>
+                                <tr key={e.id} className={cn('border-b border-slate-200 dark:border-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800/30 transition-colors', !e.isVisible && 'opacity-40')}>
                                     <td className="px-4 py-3">
                                         <div className="flex items-center gap-2">
                                             <span className="text-lg">{e.logo}</span>
-                                            <span className="text-white text-xs font-semibold truncate max-w-36">{e.name}</span>
+                                            <span className="text-slate-900 dark:text-white text-xs font-semibold truncate max-w-36">{e.name}</span>
                                         </div>
                                     </td>
                                     <td className="px-4 py-3"><TierBadge tier={e.tier} /></td>
-                                    <td className="px-4 py-3 text-slate-400 text-xs">{e.standNumber}</td>
-                                    <td className="px-4 py-3 text-slate-300 text-xs font-bold">{e.analytics.contactRequests}</td>
-                                    <td className="px-4 py-3 text-slate-300 text-xs font-bold">{e.analytics.demoBookings}</td>
+                                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400 text-xs">{e.standNumber}</td>
+                                    <td className="px-4 py-3 text-slate-700 dark:text-slate-300 text-xs font-bold">{e.analytics.contactRequests}</td>
+                                    <td className="px-4 py-3 text-slate-700 dark:text-slate-300 text-xs font-bold">{e.analytics.demoBookings}</td>
                                     <td className="px-4 py-3">
                                         <button onClick={() => toggleVisibility(e.id)}
                                             className={cn('flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all',
@@ -590,7 +590,7 @@ function AdminPanel() {
                                     <td className="px-4 py-3">
                                         <button onClick={() => toggleFeatured(e.id)}
                                             className={cn('flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all',
-                                                e.isFeatured ? 'bg-amber-500/15 text-amber-400 border-amber-500/20' : 'bg-slate-700 text-slate-500 border-slate-600')}>
+                                                e.isFeatured ? 'bg-amber-500/15 text-amber-400 border-amber-500/20' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 border-slate-600')}>
                                             <Star size={9} /> {e.isFeatured ? 'Featured' : 'Normal'}
                                         </button>
                                     </td>
@@ -644,17 +644,17 @@ export default function Marketplace() {
     }
 
     return (
-        <div className="h-screen bg-slate-950 flex flex-col font-sans overflow-hidden">
+        <div className="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans overflow-hidden">
 
             {/* ── Header ────────────────────────────────────────────────── */}
-            <div className="bg-slate-900 border-b border-slate-800 px-5 py-3.5 flex-shrink-0">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-5 py-3.5 flex-shrink-0">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
                         <div className="flex items-center gap-2">
                             <Building2 size={18} className="text-amber-400" />
-                            <h1 className="text-white font-extrabold text-base">Sponsor & Exhibitor Marketplace</h1>
+                            <h1 className="text-slate-900 dark:text-white font-extrabold text-base">Sponsor & Exhibitor Marketplace</h1>
                         </div>
-                        <p className="text-slate-500 text-xs mt-0.5">
+                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
                             {EXHIBITORS.length} exhibitors · PSI Events 2026
                         </p>
                     </div>
@@ -662,7 +662,7 @@ export default function Marketplace() {
                         {(['directory', 'admin'] as const).map(v => (
                             <button key={v} onClick={() => { setView(v); setSelectedExhibitor(null); }}
                                 className={cn('flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all',
-                                    view === v ? (v === 'admin' ? 'bg-violet-600 border-violet-500 text-white' : 'bg-amber-600 border-amber-500 text-white') : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200')}>
+                                    view === v ? (v === 'admin' ? 'bg-violet-600 border-violet-500 text-slate-900 dark:text-white' : 'bg-amber-600 border-amber-500 text-slate-900 dark:text-white') : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-200')}>
                                 {v === 'directory' ? <><Grid3X3 size={12} /> Directory</> : <><BarChart2 size={12} /> Admin</>}
                             </button>
                         ))}
@@ -672,19 +672,19 @@ export default function Marketplace() {
 
             {/* ── Directory filters ──────────────────────────────────────── */}
             {view === 'directory' && (
-                <div className="border-b border-slate-800 px-5 py-3 bg-slate-900/40 flex-shrink-0">
+                <div className="border-b border-slate-200 dark:border-slate-800 px-5 py-3 bg-white dark:bg-slate-900/40 flex-shrink-0">
                     <div className="flex items-center gap-3 flex-wrap">
                         <div className="relative">
-                            <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                            <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 dark:text-slate-400" />
                             <input value={query} onChange={e => setQuery(e.target.value)}
                                 placeholder="Search exhibitors…"
-                                className="bg-slate-800 border border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-52 transition-colors" />
+                                className="bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-52 transition-colors" />
                         </div>
                         <div className="flex gap-1">
                             {(['All', ...TIERS] as const).map(t => (
                                 <button key={t} onClick={() => setTierFilter(t)}
                                     className={cn('px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all',
-                                        tierFilter === t ? 'bg-amber-600 border-amber-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600')}>
+                                        tierFilter === t ? 'bg-amber-600 border-amber-500 text-slate-900 dark:text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-600')}>
                                     {t}
                                 </button>
                             ))}
@@ -693,7 +693,7 @@ export default function Marketplace() {
                             {(['All', ...CATEGORIES] as const).map(c => (
                                 <button key={c} onClick={() => setCatFilter(c)}
                                     className={cn('px-2.5 py-1.5 rounded-lg text-[10px] font-bold border transition-all',
-                                        catFilter === c ? 'bg-emerald-600 border-emerald-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600')}>
+                                        catFilter === c ? 'bg-emerald-600 border-emerald-500 text-slate-900 dark:text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-600')}>
                                     {c}
                                 </button>
                             ))}
@@ -726,7 +726,7 @@ export default function Marketplace() {
                             )}
                             {/* All exhibitors */}
                             <div>
-                                <p className="text-slate-500 text-[10px] font-black uppercase tracking-wider mb-3">All Exhibitors</p>
+                                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">All Exhibitors</p>
                                 {sorted.length === 0 ? (
                                     <div className="text-center py-20 text-slate-600">
                                         <Building2 size={40} className="mx-auto mb-3" />

@@ -177,7 +177,7 @@ export default function ChecklistSummaryWidget({ className }: { className?: stri
                     onClick={() => navigate('/checklist')}
                     className="w-full flex items-center justify-between gap-3 px-4 py-3
                                rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600
-                               text-white text-sm font-bold shadow-lg shadow-emerald-500/25
+                               text-slate-900 dark:text-white text-sm font-bold shadow-lg shadow-emerald-500/25
                                transition-all duration-150 select-none"
                 >
                     <span>View Full Checklist</span>

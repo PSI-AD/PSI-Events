@@ -13,6 +13,9 @@
  *
  * No global auth guard is applied — the / dashboard remains publicly
  * accessible for executive presentations. Auth is opt-in via /login only.
+ *
+ * Theme: light-mode-aware. Uses a clean white card on a subtle slate gradient
+ * so it looks professional in both light and dark contexts.
  */
 
 import React, { useState } from 'react';
@@ -25,6 +28,7 @@ import {
     Building2,
     CheckCircle2,
     ChevronRight,
+    Shield,
 } from 'lucide-react';
 import { signInWithGoogle, AccessDeniedError } from '../services/auth/googleAuth';
 import { injectSeedData, injectPresentationData } from '../utils/firebaseSeeder';
@@ -86,13 +90,13 @@ export default function Login() {
     const hasAlert = isDenied || isError;
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 relative overflow-hidden">
+        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 relative overflow-hidden">
 
-            {/* ── Ambient glows ── */}
+            {/* ── Subtle ambient backgrounds ── */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-emerald-500/8 rounded-full blur-[120px]" />
-                <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-emerald-600/8 rounded-full blur-[120px]" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-amber-500/4 rounded-full blur-[100px]" />
+                <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-emerald-500/6 rounded-full blur-[120px]" />
+                <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-amber-400/4 rounded-full blur-[100px]" />
             </div>
 
             <div className="relative w-full max-w-md mx-4">
@@ -102,26 +106,26 @@ export default function Login() {
                     initial={{ opacity: 0, y: 24, scale: 0.97 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-slate-900/80 backdrop-blur-2xl border border-slate-700/60 rounded-3xl shadow-2xl shadow-black/40 overflow-hidden"
+                    className="bg-white border border-slate-200 rounded-3xl shadow-xl shadow-slate-200/60 overflow-hidden"
                 >
 
                     {/* ── Header band ── */}
-                    <div className="px-8 pt-8 pb-6 border-b border-slate-800/60">
+                    <div className="px-8 pt-8 pb-6 border-b border-slate-100">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500/30 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center shadow-inner">
-                                <Sparkles size={18} className="text-emerald-400" />
+                            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-md shadow-emerald-500/25">
+                                <Sparkles size={18} className="text-slate-900 dark:text-white" />
                             </div>
                             <div>
-                                <h1 className="text-white font-extrabold text-base tracking-tight">PSI Event Portal</h1>
-                                <p className="text-slate-500 text-[11px] uppercase tracking-[0.15em]">Property Shop Investment LLC</p>
+                                <h1 className="text-slate-900 font-extrabold text-base tracking-tight">PSI Event Portal</h1>
+                                <p className="text-slate-600 dark:text-slate-400 text-[11px] uppercase tracking-[0.15em]">Property Shop Investment LLC</p>
                             </div>
                         </div>
 
                         <div>
-                            <h2 className="text-white text-2xl font-extrabold tracking-tight mb-1">
+                            <h2 className="text-slate-900 text-2xl font-extrabold tracking-tight mb-1">
                                 Welcome back
                             </h2>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-600 dark:text-slate-400 text-sm">
                                 Sign in with your authorised Google workspace account.
                             </p>
                         </div>
@@ -140,20 +144,20 @@ export default function Login() {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: -8, scale: 0.97 }}
                                     transition={{ duration: 0.25 }}
-                                    className="flex items-start gap-3 p-4 rounded-2xl bg-red-950/70 border-2 border-red-500/50 shadow-lg shadow-red-500/10"
+                                    className="flex items-start gap-3 p-4 rounded-2xl bg-red-50 border-2 border-red-200 shadow-sm"
                                     role="alert"
                                     aria-live="assertive"
                                 >
-                                    <ShieldX size={20} className="text-red-400 flex-shrink-0 mt-0.5" />
+                                    <ShieldX size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
                                     <div className="min-w-0">
-                                        <p className="text-red-300 font-bold text-sm leading-tight">
+                                        <p className="text-red-700 font-bold text-sm leading-tight">
                                             {isDenied ? 'Access Denied: Unauthorized Email.' : 'Sign-In Failed'}
                                         </p>
                                         {isError && (
-                                            <p className="text-red-400/70 text-xs mt-1 break-all">{errorMsg}</p>
+                                            <p className="text-red-500 text-xs mt-1 break-all">{errorMsg}</p>
                                         )}
                                         {isDenied && (
-                                            <p className="text-red-400/70 text-xs mt-1">
+                                            <p className="text-red-500 text-xs mt-1">
                                                 This portal is restricted to authorised Property Shop Investment accounts only.
                                                 Contact your system administrator.
                                             </p>
@@ -170,12 +174,12 @@ export default function Login() {
                                     key="success"
                                     initial={{ opacity: 0, y: -8 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-950/70 border border-emerald-500/30"
+                                    className="flex items-center gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200"
                                 >
-                                    <CheckCircle2 size={20} className="text-emerald-400 flex-shrink-0" />
+                                    <CheckCircle2 size={20} className="text-emerald-600 flex-shrink-0" />
                                     <div>
-                                        <p className="text-emerald-300 font-bold text-sm">Authentication Successful</p>
-                                        <p className="text-emerald-500/70 text-xs mt-0.5">Redirecting to dashboard…</p>
+                                        <p className="text-emerald-700 font-bold text-sm">Authentication Successful</p>
+                                        <p className="text-emerald-600 text-xs mt-0.5">Redirecting to dashboard…</p>
                                     </div>
                                 </motion.div>
                             )}
@@ -188,31 +192,32 @@ export default function Login() {
                             disabled={isLoading || isSuccess}
                             className="
                 w-full flex items-center justify-center gap-3
-                bg-white hover:bg-slate-100 active:bg-slate-200
+                bg-white hover:bg-slate-50 active:bg-slate-100
+                border border-slate-200 hover:border-slate-300
                 disabled:opacity-60 disabled:cursor-not-allowed
                 text-slate-800 font-bold text-sm
                 py-3.5 px-5 rounded-2xl
                 transition-all duration-200
                 active:scale-[0.98] select-none
-                shadow-md shadow-black/20
+                shadow-sm hover:shadow-md
                 min-h-[52px]
               "
                         >
                             {isLoading ? (
                                 <>
-                                    <Loader2 size={18} className="animate-spin text-slate-500" />
+                                    <Loader2 size={18} className="animate-spin text-slate-600 dark:text-slate-400" />
                                     <span>Signing in…</span>
                                 </>
                             ) : isSuccess ? (
                                 <>
-                                    <CheckCircle2 size={18} className="text-emerald-500" />
-                                    <span className="text-emerald-600">Authenticated</span>
+                                    <CheckCircle2 size={18} className="text-emerald-600" />
+                                    <span className="text-emerald-700">Authenticated</span>
                                 </>
                             ) : (
                                 <>
                                     <GoogleIcon size={20} />
                                     <span>Sign in with Google</span>
-                                    <ChevronRight size={15} className="ml-auto text-slate-400" />
+                                    <ChevronRight size={15} className="ml-auto text-slate-600 dark:text-slate-400" />
                                 </>
                             )}
                         </button>
@@ -226,7 +231,7 @@ export default function Login() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     onClick={() => { setState('idle'); setErrorMsg(''); }}
-                                    className="w-full text-center text-xs text-slate-500 hover:text-slate-300 transition-colors py-1 select-none"
+                                    className="w-full text-center text-xs text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors py-1 select-none"
                                 >
                                     Try a different account →
                                 </motion.button>
@@ -237,10 +242,10 @@ export default function Login() {
 
                     {/* ── Footer ── */}
                     <div className="px-8 pb-6 pt-2">
-                        <div className="rounded-2xl bg-slate-800/50 border border-slate-700/40 p-4 flex items-center gap-3">
-                            <Building2 size={15} className="text-amber-400 flex-shrink-0" />
-                            <p className="text-slate-500 text-[11px] leading-relaxed">
-                                <span className="text-amber-400 font-bold">Restricted access.</span>{' '}
+                        <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 flex items-center gap-3">
+                            <Shield size={15} className="text-amber-500 flex-shrink-0" />
+                            <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
+                                <span className="text-amber-600 font-bold">Restricted access.</span>{' '}
                                 Authentication is enforced at the account level.
                                 Only PSI-authorised Google accounts may sign in.
                             </p>
@@ -249,7 +254,7 @@ export default function Login() {
                 </motion.div>
 
                 {/* ── Below-card footnote ── */}
-                <p className="text-center text-slate-700 text-[11px] mt-6">
+                <p className="text-center text-slate-600 dark:text-slate-400 text-[11px] mt-6">
                     PSI Event Portal · © {new Date().getFullYear()} Property Shop Investment LLC
                 </p>
 
@@ -269,7 +274,7 @@ export default function Login() {
                                 alert('DEV: Seeder threw — ' + (e instanceof Error ? e.message : String(e)));
                             }
                         }}
-                        className="text-[10px] text-slate-600 hover:text-slate-400 border border-slate-800 rounded px-2 py-1 transition-colors select-none"
+                        className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
                     >
                         DEV: Full Seeder
                     </button>
@@ -283,7 +288,7 @@ export default function Login() {
                                 alert('DEV: Presentation seeder threw — ' + (e instanceof Error ? e.message : String(e)));
                             }
                         }}
-                        className="text-[10px] text-slate-600 hover:text-slate-400 border border-slate-800 rounded px-2 py-1 transition-colors select-none"
+                        className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
                     >
                         DEV: Run Seeder
                     </button>

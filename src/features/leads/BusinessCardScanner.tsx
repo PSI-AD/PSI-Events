@@ -367,7 +367,7 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
     };
 
     return (
-        <div className="relative w-full h-full flex flex-col bg-slate-950 overflow-hidden">
+        <div className="relative w-full h-full flex flex-col bg-slate-50 dark:bg-slate-950 overflow-hidden">
 
             {/* ── Live camera feed ──────────────────────────────────────────── */}
             <video
@@ -416,7 +416,7 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                         <Sparkles size={15} className="text-amber-400" />
                     </div>
                     <div>
-                        <p className="text-white font-extrabold text-sm leading-none">AI Card Scanner</p>
+                        <p className="text-slate-900 dark:text-white font-extrabold text-sm leading-none">AI Card Scanner</p>
                         <p className="text-amber-400/70 text-[10px] font-bold uppercase tracking-widest leading-none mt-0.5">
                             Powered by Gemini
                         </p>
@@ -426,7 +426,7 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                     <button
                         id="scanner-close-btn"
                         onClick={onClose}
-                        className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white transition-all"
+                        className="w-9 h-9 rounded-xl bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white transition-all"
                     >
                         <X size={16} />
                     </button>
@@ -455,12 +455,12 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                         className="flex flex-col items-center gap-6 w-full text-center"
                     >
                         <div className="space-y-1">
-                            <p className="text-white/50 text-xs font-semibold uppercase tracking-widest">
+                            <p className="text-slate-900 dark:text-white/50 text-xs font-semibold uppercase tracking-widest">
                                 Position the card inside the frame
                             </p>
                         </div>
                         <Viewfinder scanning={cameraReady} />
-                        <p className="text-white/30 text-[11px]">
+                        <p className="text-slate-900 dark:text-white/30 text-[11px]">
                             Ensure the card is well-lit and flat
                         </p>
                     </motion.div>
@@ -487,8 +487,8 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                             <Sparkles size={28} className="text-amber-400 relative z-10" />
                         </div>
                         <div>
-                            <p className="text-white font-extrabold text-lg">Analyzing…</p>
-                            <p className="text-white/50 text-xs mt-1">Gemini is extracting contact details</p>
+                            <p className="text-slate-900 dark:text-white font-extrabold text-lg">Analyzing…</p>
+                            <p className="text-slate-900 dark:text-white/50 text-xs mt-1">Gemini is extracting contact details</p>
                         </div>
                         <div className="flex gap-1.5">
                             {[0, 0.2, 0.4].map((d, i) => (
@@ -513,13 +513,13 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                             <AlertCircle size={28} className="text-rose-400" />
                         </div>
                         <div>
-                            <p className="text-white font-bold text-base">Analysis Failed</p>
-                            <p className="text-white/50 text-xs mt-1">Check your network and try again</p>
+                            <p className="text-slate-900 dark:text-white font-bold text-base">Analysis Failed</p>
+                            <p className="text-slate-900 dark:text-white/50 text-xs mt-1">Check your network and try again</p>
                         </div>
                         <button
                             id="scanner-retry-btn"
                             onClick={handleRetry}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/10 transition-all"
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-slate-900 dark:text-white text-sm font-bold border border-black/10 dark:border-white/10 transition-all"
                         >
                             <RefreshCw size={14} /> Try Again
                         </button>
@@ -540,7 +540,7 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                         >
                             <CheckCircle2 size={30} className="text-emerald-400" />
                         </motion.div>
-                        <p className="text-white font-extrabold text-lg">Contact Extracted!</p>
+                        <p className="text-slate-900 dark:text-white font-extrabold text-lg">Contact Extracted!</p>
                     </motion.div>
                 )}
             </div>
@@ -550,7 +550,7 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
 
                 {/* Instruction strip */}
                 {phase === 'idle' && (
-                    <div className="flex items-center justify-center gap-2 text-white/30 text-xs">
+                    <div className="flex items-center justify-center gap-2 text-slate-900 dark:text-white/30 text-xs">
                         <Camera size={12} />
                         <span>Point at the business card — front side up</span>
                     </div>
@@ -573,8 +573,8 @@ function ScannerView({ onLeadExtracted, onClose }: ScannerViewProps) {
                                 'flex items-center justify-center gap-3 transition-all',
                                 'shadow-2xl active:scale-[0.98]',
                                 cameraReady
-                                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-orange-400 text-white shadow-amber-500/30 hover:shadow-amber-500/50'
-                                    : 'bg-slate-700 text-slate-500 cursor-not-allowed',
+                                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-orange-400 text-slate-900 dark:text-white shadow-amber-500/30 hover:shadow-amber-500/50'
+                                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 cursor-not-allowed',
                             )}
                         >
                             {cameraReady ? (
@@ -815,7 +815,7 @@ function LeadFormView({ lead, onBack, onSaved, eventId = 'event_demo', agentId =
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             whileTap={{ scale: 0.97 }}
-                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-base shadow-2xl shadow-emerald-600/25 transition-all"
+                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-slate-900 dark:text-white font-extrabold text-base shadow-2xl shadow-emerald-600/25 transition-all"
                         >
                             <Save size={18} />
                             Save Lead
@@ -827,7 +827,7 @@ function LeadFormView({ lead, onBack, onSaved, eventId = 'event_demo', agentId =
                             key="saving-btn"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-emerald-600/60 text-white font-extrabold text-base"
+                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-emerald-600/60 text-slate-900 dark:text-white font-extrabold text-base"
                         >
                             <Loader2 size={18} className="animate-spin" />
                             Saving to CRM…
@@ -838,7 +838,7 @@ function LeadFormView({ lead, onBack, onSaved, eventId = 'event_demo', agentId =
                             key="saved-btn"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-emerald-600 text-white font-extrabold text-base shadow-lg shadow-emerald-600/30"
+                            className="w-full flex items-center justify-center gap-3 py-4 rounded-3xl bg-emerald-600 text-slate-900 dark:text-white font-extrabold text-base shadow-lg shadow-emerald-600/30"
                         >
                             <CheckCircle2 size={18} />
                             Lead Saved!
@@ -885,7 +885,7 @@ export default function BusinessCardScanner({
 
     return (
         <motion.div
-            className="fixed inset-0 z-[9998] flex flex-col bg-slate-950"
+            className="fixed inset-0 z-[9998] flex flex-col bg-slate-50 dark:bg-slate-950"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}

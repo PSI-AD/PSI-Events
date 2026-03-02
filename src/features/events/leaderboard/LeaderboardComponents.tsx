@@ -30,8 +30,8 @@ import { clsx, getInitials, getTierGradient } from './utils';
 
 export const RANK_CONFIG = [
     { rank: 1, label: '1st', icon: <Trophy size={16} />, border: 'border-amber-400', badge: 'bg-amber-400 text-amber-900', glow: 'shadow-amber-500/20', ring: 'ring-2 ring-amber-400/40', gradient: 'from-amber-500/20 via-amber-400/10 to-transparent', textRank: 'text-amber-400' },
-    { rank: 2, label: '2nd', icon: <Medal size={16} />, border: 'border-slate-300', badge: 'bg-slate-300 text-slate-900', glow: 'shadow-slate-300/20', ring: 'ring-2 ring-slate-300/30', gradient: 'from-slate-300/15 via-slate-400/5 to-transparent', textRank: 'text-slate-300' },
-    { rank: 3, label: '3rd', icon: <Medal size={16} />, border: 'border-orange-500', badge: 'bg-orange-600 text-white', glow: 'shadow-orange-500/20', ring: 'ring-2 ring-orange-500/30', gradient: 'from-orange-600/15 via-orange-500/5 to-transparent', textRank: 'text-orange-400' },
+    { rank: 2, label: '2nd', icon: <Medal size={16} />, border: 'border-slate-300', badge: 'bg-slate-300 text-slate-900', glow: 'shadow-slate-300/20', ring: 'ring-2 ring-slate-300/30', gradient: 'from-slate-300/15 via-slate-400/5 to-transparent', textRank: 'text-slate-700 dark:text-slate-300' },
+    { rank: 3, label: '3rd', icon: <Medal size={16} />, border: 'border-orange-500', badge: 'bg-orange-600 text-slate-900 dark:text-white', glow: 'shadow-orange-500/20', ring: 'ring-2 ring-orange-500/30', gradient: 'from-orange-600/15 via-orange-500/5 to-transparent', textRank: 'text-orange-400' },
 ];
 
 export const ranks_icons = ['👑', '🥈', '🥉'];
@@ -85,18 +85,18 @@ export function GapToTargetBar({ leadsToday, leadTarget }: { leadsToday: number;
     return (
         <div className="space-y-2">
             <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white/70 flex items-center gap-1.5"><Target size={11} />Your Lead Target</span>
+                <span className="text-xs font-bold text-slate-900 dark:text-white/70 flex items-center gap-1.5"><Target size={11} />Your Lead Target</span>
                 <span className={`text-xs font-extrabold ${textColor}`}>
                     {isDone ? '🎯 Target Hit!' : `${gap} away from ${leadTarget}`}
                 </span>
             </div>
-            <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
+            <div className="relative h-3 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                 <motion.div className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${barColor} shadow-lg`}
                     initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.2, ease: 'easeOut' }} />
-                <motion.div className="absolute inset-y-0 w-8 bg-white/20 skew-x-12 rounded-full"
+                <motion.div className="absolute inset-y-0 w-8 bg-black/20 dark:bg-white/20 skew-x-12 rounded-full"
                     animate={{ x: ['-200%', '600%'] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut' }} />
             </div>
-            <div className="flex justify-between text-[10px] text-white/40 font-bold">
+            <div className="flex justify-between text-[10px] text-slate-900 dark:text-white/40 font-bold">
                 <span>0</span>
                 <span className="flex items-center gap-1"><AnimatedNumber value={leadsToday} /> / {leadTarget} leads</span>
                 <span>{leadTarget}</span>
@@ -155,35 +155,35 @@ export function LeaderRow({ entry, rank, isCurrentAgent, isFirst, flash }: {
                             {ranks_icons[rank - 1]}
                         </div>
                     ) : (
-                        <span className="text-lg font-extrabold text-white/30">#{rank}</span>
+                        <span className="text-lg font-extrabold text-slate-900 dark:text-white/30">#{rank}</span>
                     )}
                     <AnimatePresence><RankDelta current={rank} prev={entry.prevRank} /></AnimatePresence>
                 </div>
 
-                <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${getTierGradient(entry.tier)} flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0 relative`}>
+                <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${getTierGradient(entry.tier)} flex items-center justify-center text-slate-900 dark:text-white font-extrabold text-sm flex-shrink-0 relative`}>
                     {getInitials(entry.agentName)}
                     {isFirst && <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center text-[10px]">👑</div>}
                 </div>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <p className={`font-extrabold text-sm truncate ${isCurrentAgent ? 'text-blue-300' : 'text-white'}`}>
+                        <p className={`font-extrabold text-sm truncate ${isCurrentAgent ? 'text-blue-300' : 'text-slate-900 dark:text-white'}`}>
                             {entry.agentName}
                             {isCurrentAgent && <span className="ml-1.5 text-[10px] font-bold text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded-full">YOU</span>}
                         </p>
                     </div>
-                    <p className="text-[10px] text-white/40 truncate mb-2">{entry.branch}</p>
-                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <p className="text-[10px] text-slate-900 dark:text-white/40 truncate mb-2">{entry.branch}</p>
+                    <div className="h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
                         <motion.div className={`h-full rounded-full bg-gradient-to-r ${pct >= 80 ? 'from-emerald-400 to-emerald-500' : pct >= 50 ? 'from-blue-400 to-blue-500' : 'from-rose-400 to-rose-500'}`}
                             initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1, ease: 'easeOut', delay: 0.1 }} />
                     </div>
                 </div>
 
                 <div className="flex-shrink-0 text-right">
-                    <p className={`text-2xl font-extrabold leading-none font-mono ${rankCfg ? rankCfg.textRank : isCurrentAgent ? 'text-blue-300' : 'text-white'}`}>
+                    <p className={`text-2xl font-extrabold leading-none font-mono ${rankCfg ? rankCfg.textRank : isCurrentAgent ? 'text-blue-300' : 'text-slate-900 dark:text-white'}`}>
                         <AnimatedNumber value={entry.leadsToday} />
                     </p>
-                    <p className="text-[10px] text-white/30 font-bold mt-0.5">leads</p>
+                    <p className="text-[10px] text-slate-900 dark:text-white/30 font-bold mt-0.5">leads</p>
                 </div>
             </div>
         </motion.div>
@@ -203,17 +203,17 @@ export function LeaderboardHeader({
     onToggleView: (m: ViewMode) => void;
 }) {
     return (
-        <div className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-white/5 px-4 py-4">
+        <div className="sticky top-0 z-30 bg-slate-50 dark:bg-slate-950/90 backdrop-blur-md border-b border-black/5 dark:border-white/5 px-4 py-4">
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
-                        {viewMode === 'branches' ? <Swords size={16} className="text-white" /> : <Trophy size={16} className="text-white" />}
+                        {viewMode === 'branches' ? <Swords size={16} className="text-slate-900 dark:text-white" /> : <Trophy size={16} className="text-slate-900 dark:text-white" />}
                     </div>
                     <div>
-                        <p className="text-white font-extrabold text-sm leading-tight">
+                        <p className="text-slate-900 dark:text-white font-extrabold text-sm leading-tight">
                             {viewMode === 'branches' ? 'Branch War Room' : 'Live Floor Leaderboard'}
                         </p>
-                        <p className="text-white/40 text-[10px] truncate max-w-[180px]">{eventName}</p>
+                        <p className="text-slate-900 dark:text-white/40 text-[10px] truncate max-w-[180px]">{eventName}</p>
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
@@ -224,7 +224,7 @@ export function LeaderboardHeader({
                         </span>
                     </div>
                     {lastUpdated && (
-                        <span className="text-[9px] text-white/20 flex items-center gap-0.5">
+                        <span className="text-[9px] text-slate-900 dark:text-white/20 flex items-center gap-0.5">
                             <Clock size={9} />
                             {lastUpdated.toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                         </span>
@@ -233,7 +233,7 @@ export function LeaderboardHeader({
             </div>
 
             {/* Mode toggle */}
-            <div className="flex gap-1 bg-slate-800/80 p-1 rounded-xl">
+            <div className="flex gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
                 {([
                     { id: 'individual', label: 'Individual Agents', icon: <Users size={12} /> },
                     { id: 'branches', label: 'Branch Wars 🔥', icon: <Swords size={12} /> },
@@ -243,9 +243,9 @@ export function LeaderboardHeader({
                             'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-black transition-all',
                             viewMode === m.id
                                 ? m.id === 'branches'
-                                    ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-md shadow-amber-500/30'
-                                    : 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
-                                : 'text-white/40 hover:text-white/70'
+                                    ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/30'
+                                    : 'bg-amber-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/20'
+                                : 'text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white/70'
                         )}>
                         {m.icon} {m.label}
                     </button>
@@ -275,7 +275,7 @@ export function MotivationalFooter({ entry, rank, total }: { entry: LeaderboardE
             <div className="mx-4 mb-4 bg-gradient-to-r from-amber-500/90 to-amber-600/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-2xl shadow-amber-500/20">
                 <AnimatePresence mode="wait">
                     <motion.p key={msgIdx} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                        className="text-white text-[13px] font-extrabold text-center">
+                        className="text-slate-900 dark:text-white text-[13px] font-extrabold text-center">
                         {messages[msgIdx]}
                     </motion.p>
                 </AnimatePresence>
@@ -291,11 +291,11 @@ export function LockedView({ status }: { status: AgentStatus }) {
         <div className="min-h-[60vh] flex flex-col items-center justify-center px-8 py-16 text-center">
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="w-20 h-20 bg-slate-800 border border-slate-700 rounded-3xl flex items-center justify-center mb-6">
-                <Lock size={32} className="text-slate-500" />
+                className="w-20 h-20 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-3xl flex items-center justify-center mb-6">
+                <Lock size={32} className="text-slate-600 dark:text-slate-400" />
             </motion.div>
-            <h3 className="text-xl font-extrabold text-white mb-2">Floor Leaderboard Locked</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-xs">
+            <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2">Floor Leaderboard Locked</h3>
+            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 max-w-xs">
                 {status === 'approved'
                     ? 'You have not been checked in yet. Ask an Organizer to scan your QR pass at the event entrance to unlock the live leaderboard.'
                     : status === 'pending'

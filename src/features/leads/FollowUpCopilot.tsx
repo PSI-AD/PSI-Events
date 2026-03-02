@@ -242,9 +242,9 @@ function SourceBadge({ source }: { source?: string }) {
     const map: Record<string, { label: string; color: string }> = {
         CardScan: { label: 'Card Scan', color: 'bg-amber-500/15 text-amber-500' },
         VIPIntercept: { label: 'VIP', color: 'bg-violet-500/15 text-violet-400' },
-        Manual: { label: 'Manual', color: 'bg-slate-500/15 text-slate-400' },
+        Manual: { label: 'Manual', color: 'bg-slate-500/15 text-slate-600 dark:text-slate-400' },
     };
-    const s = map[source ?? ''] ?? { label: source ?? 'Lead', color: 'bg-slate-500/15 text-slate-400' };
+    const s = map[source ?? ''] ?? { label: source ?? 'Lead', color: 'bg-slate-500/15 text-slate-600 dark:text-slate-400' };
     return (
         <span className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${s.color}`}>
             {s.label}
@@ -271,37 +271,37 @@ function LeadRow({ lead, selected, onSelect }: {
             id={`lead-row-${lead.id}`}
             className={`cursor-pointer rounded-2xl p-3.5 border transition-all ${selected
                     ? 'bg-emerald-500/8 border-emerald-500/30 ring-1 ring-emerald-500/20'
-                    : 'bg-white/3 border-white/8 hover:border-white/15 hover:bg-white/5'
+                    : 'bg-white/3 border-white/8 hover:border-white/15 hover:bg-black/5 dark:hover:bg-white/5'
                 }`}
         >
             <div className="flex items-center gap-3">
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white font-black text-sm flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-slate-900 dark:text-white font-black text-sm flex-shrink-0">
                     {lead.firstName.charAt(0)}{lead.lastName.charAt(0)}
                 </div>
 
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-white font-extrabold text-sm truncate">
+                        <span className="text-slate-900 dark:text-white font-extrabold text-sm truncate">
                             {lead.firstName} {lead.lastName}
                         </span>
                         {lead.followUpSent && (
                             <CheckCircle2 size={12} className="text-emerald-400 flex-shrink-0" />
                         )}
                     </div>
-                    <p className="text-white/40 text-[10px] truncate">{lead.jobTitle} · {lead.company}</p>
+                    <p className="text-slate-900 dark:text-white/40 text-[10px] truncate">{lead.jobTitle} · {lead.company}</p>
                     <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                         <Tag size={9} className="text-emerald-500/70" />
                         <span className="text-emerald-400 text-[10px] font-bold truncate">{lead.projectInterest}</span>
-                        <span className="text-white/15">·</span>
+                        <span className="text-slate-900 dark:text-white/15">·</span>
                         <SourceBadge source={lead.source} />
-                        <span className="text-white/15">·</span>
-                        <Clock size={9} className="text-white/20" />
-                        <span className="text-white/25 text-[9px]">{timeAgo(lead.scannedAt)}</span>
+                        <span className="text-slate-900 dark:text-white/15">·</span>
+                        <Clock size={9} className="text-slate-900 dark:text-white/20" />
+                        <span className="text-slate-900 dark:text-white/25 text-[9px]">{timeAgo(lead.scannedAt)}</span>
                     </div>
                 </div>
 
-                <ChevronRight size={14} className={`flex-shrink-0 transition-colors ${selected ? 'text-emerald-400' : 'text-white/20'}`} />
+                <ChevronRight size={14} className={`flex-shrink-0 transition-colors ${selected ? 'text-emerald-400' : 'text-slate-900 dark:text-white/20'}`} />
             </div>
         </motion.div>
     );
@@ -355,26 +355,26 @@ function DraftPanel({ lead, agentName, onBack }: {
             {/* Header */}
             <div className="px-5 py-4 border-b border-white/8 flex items-center gap-3">
                 <button id="draft-back-btn" onClick={onBack}
-                    className="w-8 h-8 rounded-xl bg-white/6 border border-white/10 flex items-center justify-center text-white/50 hover:text-white transition-all flex-shrink-0 md:hidden">
+                    className="w-8 h-8 rounded-xl bg-white/6 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white/50 hover:text-slate-900 dark:hover:text-white transition-all flex-shrink-0 md:hidden">
                     <ArrowLeft size={14} />
                 </button>
 
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white font-black text-sm flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-slate-900 dark:text-white font-black text-sm flex-shrink-0">
                     {lead.firstName.charAt(0)}{lead.lastName.charAt(0)}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                    <p className="text-white font-extrabold text-sm leading-none truncate">
+                    <p className="text-slate-900 dark:text-white font-extrabold text-sm leading-none truncate">
                         {lead.firstName} {lead.lastName}
                     </p>
-                    <p className="text-white/40 text-[10px] truncate mt-0.5">
+                    <p className="text-slate-900 dark:text-white/40 text-[10px] truncate mt-0.5">
                         {lead.jobTitle} · {lead.company}
                     </p>
                 </div>
 
                 <button id="draft-regenerate-btn" onClick={generate} disabled={phase === 'generating'}
                     title="Regenerate draft"
-                    className="w-8 h-8 rounded-xl bg-white/6 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30">
+                    className="w-8 h-8 rounded-xl bg-white/6 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-all disabled:opacity-30">
                     <RefreshCcw size={13} className={phase === 'generating' ? 'animate-spin' : ''} />
                 </button>
             </div>
@@ -385,9 +385,9 @@ function DraftPanel({ lead, agentName, onBack }: {
                     <Tag size={11} className="text-emerald-400" />
                     <span className="text-emerald-400 text-[10px] font-extrabold">{lead.projectInterest}</span>
                 </div>
-                <span className="text-white/15 text-xs">·</span>
-                <span className="text-white/30 text-[10px]">from {proj.startingPrice}</span>
-                <span className="text-white/15 text-xs">·</span>
+                <span className="text-slate-900 dark:text-white/15 text-xs">·</span>
+                <span className="text-slate-900 dark:text-white/30 text-[10px]">from {proj.startingPrice}</span>
+                <span className="text-slate-900 dark:text-white/15 text-xs">·</span>
                 <span className="text-amber-400/70 text-[10px] font-bold">{proj.highlight}</span>
             </div>
 
@@ -425,8 +425,8 @@ function DraftPanel({ lead, agentName, onBack }: {
                                 </div>
                             </div>
                             <div className="text-center">
-                                <p className="text-white font-bold text-sm">Crafting your message…</p>
-                                <p className="text-white/30 text-xs mt-1">Personalising for {lead.firstName}'s profile</p>
+                                <p className="text-slate-900 dark:text-white font-bold text-sm">Crafting your message…</p>
+                                <p className="text-slate-900 dark:text-white/30 text-xs mt-1">Personalising for {lead.firstName}'s profile</p>
                             </div>
                         </motion.div>
                     ) : (
@@ -434,19 +434,19 @@ function DraftPanel({ lead, agentName, onBack }: {
                             {/* Editable draft */}
                             <div className="relative">
                                 <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
-                                    <Edit3 size={11} className="text-white/20" />
-                                    <span className="text-white/20 text-[9px]">editable</span>
+                                    <Edit3 size={11} className="text-slate-900 dark:text-white/20" />
+                                    <span className="text-slate-900 dark:text-white/20 text-[9px]">editable</span>
                                 </div>
                                 <textarea
                                     id="draft-textarea"
                                     value={draft}
                                     onChange={e => handleDraftChange(e.target.value)}
                                     rows={12}
-                                    className="w-full bg-white/4 border border-white/10 rounded-2xl px-4 py-4 text-white/85 text-sm leading-relaxed resize-none focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 font-[inherit] transition-all pr-20"
+                                    className="w-full bg-white/4 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-4 text-slate-900 dark:text-white/85 text-sm leading-relaxed resize-none focus:outline-none focus:border-emerald-500/40 focus:ring-1 focus:ring-emerald-500/20 font-[inherit] transition-all pr-20"
                                     placeholder="AI draft will appear here…"
                                 />
                                 <div className="flex items-center justify-between px-1 mt-1">
-                                    <span className="text-white/20 text-[10px]">{charCount} chars</span>
+                                    <span className="text-slate-900 dark:text-white/20 text-[10px]">{charCount} chars</span>
                                     {charCount > 900 && (
                                         <span className="text-amber-400 text-[10px] flex items-center gap-1">
                                             <AlertCircle size={9} /> Long for WhatsApp
@@ -461,7 +461,7 @@ function DraftPanel({ lead, agentName, onBack }: {
                                     { icon: <Phone size={10} />, label: lead.phone },
                                     { icon: <Mail size={10} />, label: lead.email },
                                 ].map(({ icon, label }) => (
-                                    <div key={label} className="flex items-center gap-1.5 text-[10px] text-white/30">
+                                    <div key={label} className="flex items-center gap-1.5 text-[10px] text-slate-900 dark:text-white/30">
                                         {icon}<span className="font-mono">{label}</span>
                                     </div>
                                 ))}
@@ -482,7 +482,7 @@ function DraftPanel({ lead, agentName, onBack }: {
                         href={waLink(lead.phone, draft)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-[#25D366] hover:bg-[#20c05a] text-white font-extrabold text-base shadow-xl shadow-[#25D366]/20 transition-all active:scale-[0.98]"
+                        className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-[#25D366] hover:bg-[#20c05a] text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-[#25D366]/20 transition-all active:scale-[0.98]"
                     >
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -494,7 +494,7 @@ function DraftPanel({ lead, agentName, onBack }: {
                     {/* Secondary actions */}
                     <div className="grid grid-cols-2 gap-2">
                         <button id="copy-draft-btn" onClick={handleCopy}
-                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/6 border border-white/10 text-white/70 text-sm font-bold hover:bg-white/10 transition-all">
+                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/6 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/70 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all">
                             {copied
                                 ? <><CheckCircle2 size={14} className="text-emerald-400" /> Copied!</>
                                 : <><Copy size={14} /> Copy Text</>
@@ -502,7 +502,7 @@ function DraftPanel({ lead, agentName, onBack }: {
                         </button>
                         <a href={`mailto:${lead.email}?subject=Following up — ${lead.projectInterest}&body=${encodeURIComponent(draft)}`}
                             id="send-email-btn"
-                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/6 border border-white/10 text-white/70 text-sm font-bold hover:bg-white/10 transition-all">
+                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/6 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/70 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all">
                             <Mail size={14} /> Send Email
                         </a>
                     </div>
@@ -574,19 +574,19 @@ export default function FollowUpCopilot({
     const sent = filtered.filter(l => l.followUpSent).length;
 
     return (
-        <div className="min-h-screen bg-slate-950 flex flex-col">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
 
             {/* ── Top header ───────────────────────────────────── */}
             <header className="border-b border-white/8 px-5 py-4 flex items-center justify-between gap-4 flex-wrap">
                 <div>
                     <div className="flex items-center gap-2 mb-0.5">
                         <div className="w-6 h-6 rounded-lg bg-emerald-600 flex items-center justify-center">
-                            <Zap size={13} className="text-white" />
+                            <Zap size={13} className="text-slate-900 dark:text-white" />
                         </div>
                         <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">Follow-Up Copilot</span>
                     </div>
-                    <h1 className="text-white text-xl font-extrabold leading-tight">AI Message Drafts</h1>
-                    <p className="text-white/30 text-xs mt-0.5">Logged in as <strong className="text-white/60">{agentName}</strong></p>
+                    <h1 className="text-slate-900 dark:text-white text-xl font-extrabold leading-tight">AI Message Drafts</h1>
+                    <p className="text-slate-900 dark:text-white/30 text-xs mt-0.5">Logged in as <strong className="text-slate-900 dark:text-white/60">{agentName}</strong></p>
                 </div>
 
                 {/* KPIs */}
@@ -594,11 +594,11 @@ export default function FollowUpCopilot({
                     {[
                         { label: 'Pending', value: pending, color: 'text-amber-400', bg: 'bg-amber-500/10', ring: 'ring-amber-500/20' },
                         { label: 'Sent', value: sent, color: 'text-emerald-400', bg: 'bg-emerald-500/10', ring: 'ring-emerald-500/20' },
-                        { label: 'Total', value: leads.length, color: 'text-white/80', bg: 'bg-white/5', ring: 'ring-white/10' },
+                        { label: 'Total', value: leads.length, color: 'text-slate-900 dark:text-white/80', bg: 'bg-black/5 dark:bg-white/5', ring: 'ring-white/10' },
                     ].map(({ label, value, color, bg, ring }) => (
                         <div key={label} className={`px-3 py-2 rounded-xl ring-1 ${bg} ${ring} text-center min-w-[56px]`}>
                             <p className={`text-lg font-extrabold ${color}`}>{value}</p>
-                            <p className="text-[9px] font-bold uppercase tracking-widest text-white/25">{label}</p>
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/25">{label}</p>
                         </div>
                     ))}
                 </div>
@@ -613,14 +613,14 @@ export default function FollowUpCopilot({
                     {/* Search + filter */}
                     <div className="px-4 py-3 border-b border-white/6 space-y-2">
                         <div className="relative">
-                            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25" />
+                            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-900 dark:text-white/25" />
                             <input
                                 id="copilot-search"
                                 type="text"
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 placeholder="Search leads…"
-                                className="w-full bg-white/5 border border-white/8 rounded-xl pl-8 pr-4 py-2 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-white/20"
+                                className="w-full bg-black/5 dark:bg-white/5 border border-white/8 rounded-xl pl-8 pr-4 py-2 text-slate-900 dark:text-white text-xs placeholder:text-slate-900 dark:placeholder:text-white/20 focus:outline-none focus:border-black/20 dark:focus:border-white/20"
                             />
                         </div>
                         <div className="flex gap-1.5 overflow-x-auto pb-0.5">
@@ -628,8 +628,8 @@ export default function FollowUpCopilot({
                                 <button key={s} id={`filter-${s}`}
                                     onClick={() => setFilterSource(s)}
                                     className={`flex-shrink-0 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${filterSource === s
-                                            ? 'bg-emerald-600 text-white'
-                                            : 'bg-white/5 text-white/35 hover:text-white/60'
+                                            ? 'bg-emerald-600 text-slate-900 dark:text-white'
+                                            : 'bg-black/5 dark:bg-white/5 text-slate-900 dark:text-white/35 hover:text-slate-900 dark:hover:text-white/60'
                                         }`}
                                 >
                                     {s === 'all' ? `All (${leads.length})` : s}
@@ -642,10 +642,10 @@ export default function FollowUpCopilot({
                     <div className="flex-1 overflow-y-auto p-3 space-y-2">
                         {loading ? (
                             <div className="flex items-center justify-center py-16">
-                                <Loader2 size={22} className="animate-spin text-white/20" />
+                                <Loader2 size={22} className="animate-spin text-slate-900 dark:text-white/20" />
                             </div>
                         ) : filtered.length === 0 ? (
-                            <div className="text-center py-16 text-white/15">
+                            <div className="text-center py-16 text-slate-900 dark:text-white/15">
                                 <User size={28} className="mx-auto mb-2 opacity-30" />
                                 <p className="text-sm">No leads found</p>
                             </div>
@@ -678,16 +678,16 @@ export default function FollowUpCopilot({
                             </motion.div>
                         ) : (
                             <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                className="flex-1 flex flex-col items-center justify-center gap-4 text-white/15 px-8 text-center">
+                                className="flex-1 flex flex-col items-center justify-center gap-4 text-slate-900 dark:text-white/15 px-8 text-center">
                                 <div className="w-16 h-16 rounded-3xl bg-white/4 border border-white/8 flex items-center justify-center">
                                     <MessageCircle size={28} className="opacity-30" />
                                 </div>
                                 <div>
-                                    <p className="font-extrabold text-sm text-white/25">Select a lead to draft</p>
-                                    <p className="text-xs text-white/15 mt-1">Gemini will craft a personalised WhatsApp message instantly</p>
+                                    <p className="font-extrabold text-sm text-slate-900 dark:text-white/25">Select a lead to draft</p>
+                                    <p className="text-xs text-slate-900 dark:text-white/15 mt-1">Gemini will craft a personalised WhatsApp message instantly</p>
                                 </div>
                                 {leads.length > 0 && (
-                                    <div className="flex items-center gap-2 text-xs text-white/15">
+                                    <div className="flex items-center gap-2 text-xs text-slate-900 dark:text-white/15">
                                         <Star size={11} />
                                         <span>{pending} follow-up{pending !== 1 ? 's' : ''} pending</span>
                                     </div>

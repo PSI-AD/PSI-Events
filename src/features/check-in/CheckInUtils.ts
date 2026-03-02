@@ -320,7 +320,7 @@ export const DEMO_AGENTS: CheckInAgent[] = [
 // ── Tier display config ───────────────────────────────────────────────────────
 
 export const TIER_STYLES = {
-    gold: { badge: 'bg-amber-500 text-white', ring: 'ring-amber-500/50', text: 'text-amber-400' },
-    silver: { badge: 'bg-slate-400 text-slate-900', ring: 'ring-slate-400/50', text: 'text-slate-300' },
-    bronze: { badge: 'bg-orange-700 text-white', ring: 'ring-orange-700/50', text: 'text-orange-400' },
+    gold: { badge: 'bg-amber-500 text-slate-900 dark:text-white', ring: 'ring-amber-500/50', text: 'text-amber-400' },
+    silver: { badge: 'bg-slate-400 text-slate-900', ring: 'ring-slate-400/50', text: 'text-slate-700 dark:text-slate-300' },
+    bronze: { badge: 'bg-orange-700 text-slate-900 dark:text-white', ring: 'ring-orange-700/50', text: 'text-orange-400' },
 };

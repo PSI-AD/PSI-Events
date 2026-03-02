@@ -78,23 +78,23 @@ export const TIER_STYLES: Record<ExhibitorTier, {
 }> = {
     Platinum: {
         bg: 'bg-violet-900/30', text: 'text-violet-300', border: 'border-violet-600/50',
-        badge: 'bg-violet-700 text-white', glow: 'shadow-violet-900/30',
+        badge: 'bg-violet-700 text-slate-900 dark:text-white', glow: 'shadow-violet-900/30',
     },
     Gold: {
         bg: 'bg-amber-900/20', text: 'text-amber-300', border: 'border-amber-600/40',
-        badge: 'bg-amber-600 text-white', glow: 'shadow-amber-900/30',
+        badge: 'bg-amber-600 text-slate-900 dark:text-white', glow: 'shadow-amber-900/30',
     },
     Silver: {
-        bg: 'bg-slate-800/60', text: 'text-slate-300', border: 'border-slate-600/50',
-        badge: 'bg-slate-500 text-white', glow: 'shadow-slate-900/40',
+        bg: 'bg-slate-100 dark:bg-slate-800/60', text: 'text-slate-700 dark:text-slate-300', border: 'border-slate-600/50',
+        badge: 'bg-slate-500 text-slate-900 dark:text-white', glow: 'shadow-slate-900/40',
     },
     Bronze: {
         bg: 'bg-orange-900/20', text: 'text-orange-300', border: 'border-orange-700/30',
-        badge: 'bg-orange-700 text-white', glow: 'shadow-orange-900/30',
+        badge: 'bg-orange-700 text-slate-900 dark:text-white', glow: 'shadow-orange-900/30',
     },
     Exhibitor: {
-        bg: 'bg-slate-900/40', text: 'text-slate-400', border: 'border-slate-700/40',
-        badge: 'bg-slate-700 text-slate-300', glow: '',
+        bg: 'bg-white dark:bg-slate-900/40', text: 'text-slate-600 dark:text-slate-400', border: 'border-slate-300 dark:border-slate-700/40',
+        badge: 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300', glow: '',
     },
 };
 
@@ -123,7 +123,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'invest@psi.ae', phone: '+971 4 800 4000',
         country: 'UAE', isFeatured: true, isVisible: true, isLive: true,
         tags: ['Off-Plan', 'Luxury', 'UHNW', 'Investment'],
-        color: 'from-violet-900 to-slate-900',
+        color: 'from-violet-900 to-white dark:to-slate-900',
         products: [
             { id: 'pp1', name: 'PSI Broker Consultation', type: 'Service', description: 'One-on-one session with a senior broker to align your portfolio ambitions with the best UAE opportunities.', highlights: ['Portfolio analysis', 'Shortlisted properties', 'ROI projections', 'Golden Visa assessment'], demoAvailable: true, imageEmoji: '👔' },
             { id: 'pp2', name: 'PSI Off-Plan Catalogue 2026', type: 'Portfolio', description: 'Curated selection of the top 30 off-plan launches tracked by PSI for 2026, with independent yield analysis.', highlights: ['30 vetted projects', 'Yield data', 'Payment plan comparison', 'Developer ratings'], demoAvailable: false, imageEmoji: '📋' },
@@ -151,7 +151,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'emaar-agents@emaar.ae', phone: '+971 4 888 8888',
         country: 'UAE', isFeatured: true, isVisible: true, isLive: true,
         tags: ['Dubai Marina', 'Downtown', 'Beachfront', 'Premium'],
-        color: 'from-amber-900 to-slate-900',
+        color: 'from-amber-900 to-white dark:to-slate-900',
         products: [
             { id: 'em1', name: 'Vida Residences Dubai Marina', type: 'Off-Plan Development', description: 'Boutique branded residences in the heart of Dubai Marina. Studio to 3BR with full marina view and hotel-service amenities.', highlights: ['Marina views', 'Hotel services', 'Q3 2027 completion', 'Starting AED 1.8M'], priceNote: 'From AED 1,800,000', demoAvailable: true, imageEmoji: '🌊' },
             { id: 'em2', name: 'Address Downtown Residences', type: 'Off-Plan Development', description: 'Super-luxury furnished apartments steps from Burj Khalifa. Fully managed hotel serviced units with guaranteed occupancy.', highlights: ['Burj Khalifa view', 'Furnished', 'Managed returns', 'Starting AED 3.2M'], priceNote: 'From AED 3,200,000', demoAvailable: true, imageEmoji: '🏙' },
@@ -178,7 +178,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'partners@aldar.com', phone: '+971 2 810 5555',
         country: 'UAE', isFeatured: true, isVisible: true, isLive: false,
         tags: ['Saadiyat', 'Yas Island', 'Abu Dhabi', 'Sustainable'],
-        color: 'from-emerald-900 to-slate-900',
+        color: 'from-emerald-900 to-white dark:to-slate-900',
         products: [
             { id: 'al1', name: 'Mamsha Gardens — Saadiyat', type: 'Off-Plan Development', description: 'Curated beachfront living on Saadiyat Island, Abu Dhabi. Close to the Louvre Abu Dhabi and Guggenheim.', highlights: ['Beachfront', 'Cultural district', 'Smart home tech', 'From AED 1.5M'], priceNote: 'From AED 1,500,000', demoAvailable: true, imageEmoji: '🌴' },
             { id: 'al2', name: 'Yas Beach Residences', type: 'Off-Plan Development', description: 'Resort-style living on Yas Island with access to Ferrari World, Warner Bros, and the F1 Circuit.', highlights: ['Yas Island', 'Resort amenities', 'F1 Circuit views', 'from AED 1.1M'], priceNote: 'From AED 1,100,000', demoAvailable: true, imageEmoji: '🏎' },
@@ -203,7 +203,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'privatebanking@emiratesnbd.com', phone: '+971 4 316 0316',
         country: 'UAE', isFeatured: false, isVisible: true, isLive: true,
         tags: ['Mortgage', 'NRI', 'Private Banking', 'Pre-Approval'],
-        color: 'from-sky-900 to-slate-900',
+        color: 'from-sky-900 to-white dark:to-slate-900',
         products: [
             { id: 'nb1', name: 'Non-Resident Mortgage', type: 'Financial Product', description: 'Up to 75% LTV financing for non-resident property buyers. Approval in 24hrs with digital documentation.', highlights: ['75% LTV', 'Multi-currency', '24h approval', 'Fixed/Variable rates'], priceNote: 'From 4.49% p.a.', demoAvailable: true, imageEmoji: '🏠' },
             { id: 'nb2', name: 'NRI Investment Structure', type: 'Financial Product', description: 'FEMA-compliant investment routing for Indian residents. Repatriation-ready structure with tax optimisation.', highlights: ['FEMA compliant', 'Repatriation ready', 'NRI-dedicated desk', 'Legal support'], demoAvailable: true, imageEmoji: '🇮🇳' },
@@ -228,7 +228,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'gulfinvestments@cbre.com', phone: '+971 4 371 4600',
         country: 'UAE', isFeatured: false, isVisible: true, isLive: true,
         tags: ['Advisory', 'Research', 'Valuation', 'Institutional'],
-        color: 'from-blue-900 to-slate-900',
+        color: 'from-blue-900 to-white dark:to-slate-900',
         products: [
             { id: 'cb1', name: 'GCC Market Intelligence Report', type: 'Research', description: 'Bi-annual comprehensive analysis of GCC residential and commercial markets with 5-year forecasts.', highlights: ['5-year forecast', 'Yield matrices', 'Cross-border flows', '200+ pages'], demoAvailable: false, imageEmoji: '📑' },
             { id: 'cb2', name: 'Investment Advisory Services', type: 'Service', description: 'Bespoke advisory for institutional investors entering the GCC market. DCF modelling, stress-testing and regulatory mapping.', highlights: ['DCF modelling', 'Stress testing', 'Regulatory guide', 'On-desk support'], demoAvailable: true, imageEmoji: '🔍' },
@@ -252,7 +252,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'me.capital@jll.com', phone: '+971 4 426 6999',
         country: 'UAE', isFeatured: false, isVisible: true, isLive: false,
         tags: ['Transactions', 'Asset Management', 'Capital Markets'],
-        color: 'from-rose-900 to-slate-900',
+        color: 'from-rose-900 to-white dark:to-slate-900',
         products: [
             { id: 'jl1', name: 'Capital Markets Desk', type: 'Service', description: 'End-to-end transaction advisory for large-ticket commercial and residential portfolio deals in the GCC.', highlights: ['$1B+ track record', 'Cross-border', 'Full legal support', 'Investor matching'], demoAvailable: true, imageEmoji: '💰' },
             { id: 'jl2', name: 'Active Asset Management', type: 'Service', description: 'Performance management for institutional real estate portfolios. Targeting 200bps+ above benchmark.', highlights: ['200bps above benchmark', 'Quarterly reporting', 'ESG integration', 'Tenant management'], demoAvailable: false, imageEmoji: '📈' },
@@ -275,7 +275,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'hello@proptech.ae', phone: '+971 50 123 4567',
         country: 'UAE', isFeatured: false, isVisible: true, isLive: true,
         tags: ['AI', 'Tokenisation', 'CRM', 'Virtual Tours', 'Startups'],
-        color: 'from-violet-900 to-slate-900',
+        color: 'from-violet-900 to-white dark:to-slate-900',
         products: [
             { id: 'pt1', name: 'AI Property Valuation Engine', type: 'Technology', description: 'Real-time automated valuation model (AVM) trained on 10 years of DLD transaction data. ±3% accuracy.', highlights: ['±3% accuracy', 'Live DLD data', 'API access', 'White-label'], demoAvailable: true, imageEmoji: '🤖' },
             { id: 'pt2', name: 'Virtual Property Tour Studio', type: 'Technology', description: '360° immersive property tours with AI avatar guide and live agent call overlay.', highlights: ['360° rooms', 'AI guide', 'Live agent overlay', 'Mobile-first'], demoAvailable: true, imageEmoji: '🥽' },
@@ -299,7 +299,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'invest@lisboncapital.eu', phone: '+351 21 123 4567',
         country: 'Portugal', isFeatured: false, isVisible: true, isLive: false,
         tags: ['Family Office', 'Co-Investment', 'Golden Visa', 'Europe'],
-        color: 'from-amber-900 to-slate-900',
+        color: 'from-amber-900 to-white dark:to-slate-900',
         products: [
             { id: 'lc1', name: 'Co-Investment Mandate', type: 'Investment Product', description: 'We provide equity co-investment alongside UAE developers on projects from AED 50M upwards. Targeting 12-18% IRR.', highlights: ['AED 50M+ tickets', '12-18% IRR target', '5-7 year horizon', 'Board seats'], demoAvailable: true, imageEmoji: '🤝' },
             { id: 'lc2', name: 'UAE Golden Visa Fund', type: 'Investment Product', description: 'Structured fund enabling European investors to qualify for the UAE 10-year Gold Visa through property acquisition.', highlights: ['AED 2M threshold', 'Full legal support', 'Golden Visa guaranteed', 'Exit in 10 years'], demoAvailable: false, imageEmoji: '🛂' },
@@ -322,7 +322,7 @@ export const EXHIBITORS: Exhibitor[] = [
         email: 'advertising@gulfretimes.com', phone: '+971 4 555 1234',
         country: 'UAE', isFeatured: false, isVisible: true, isLive: false,
         tags: ['Media', 'Publishing', 'PR', 'Advertising'],
-        color: 'from-pink-900 to-slate-900',
+        color: 'from-pink-900 to-white dark:to-slate-900',
         products: [
             { id: 'gr1', name: 'Full-Page Developer Feature', type: 'Media', description: 'Premium full-page editorial feature in Gulf Real Estate Times quarterly magazine. Reach 140,000 print subscribers.', highlights: ['140K print reach', 'Editorial team', 'Photography included', '4-week production'], demoAvailable: false, imageEmoji: '🗞' },
             { id: 'gr2', name: 'Digital Sponsored Research', type: 'Media', description: 'Branded market research report distributed to our 200,000 digital subscribers and syndicated to Reuters Middle East.', highlights: ['200K digital reach', 'Reuters syndication', 'PDF + interactive', 'Leads from downloads'], demoAvailable: true, imageEmoji: '💻' },
