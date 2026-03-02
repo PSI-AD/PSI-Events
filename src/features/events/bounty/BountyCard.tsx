@@ -201,7 +201,7 @@ export function BountyCard({
                     <motion.button
                         whileTap={{ scale: 0.97 }}
                         onClick={() => onVerify(bounty.id)}
-                        className="w-full py-3 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-slate-900 dark:text-white transition-all"
+                        className="w-full py-3 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-psi-primary transition-all"
                     >
                         <ShieldCheck size={16} />
                         Verify in CRM &amp; Approve

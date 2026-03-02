@@ -417,7 +417,7 @@ function PitchPreview({
                     <a
                         id="pitch-email-btn"
                         href={mailtoUrl}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-slate-900 dark:text-white text-sm font-bold transition-all shadow-lg shadow-blue-600/20"
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-psi-primary text-sm font-bold transition-all shadow-lg shadow-blue-600/20"
                     >
                         <Mail size={14} /> Email
                     </a>
@@ -426,7 +426,7 @@ function PitchPreview({
                         href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white text-sm font-bold transition-all shadow-lg shadow-emerald-600/20"
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-psi-primary text-sm font-bold transition-all shadow-lg shadow-emerald-600/20"
                     >
                         <MessageCircle size={14} /> WhatsApp
                     </a>
@@ -442,7 +442,7 @@ function PitchPreview({
                 className={clsx(
                     'rounded-3xl border overflow-hidden',
                     'bg-gradient-to-br from-white dark:from-slate-900 via-white dark:via-slate-900 to-slate-50 dark:to-slate-950',
-                    'border-black/10 dark:border-white/10 text-slate-900 dark:text-white shadow-2xl',
+                    'border-psi text-psi-primary shadow-2xl',
                 )}
             >
                 {/* Hero image */}
@@ -460,9 +460,9 @@ function PitchPreview({
                         {/* Language badge */}
                         <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-black/20 dark:border-white/20 rounded-xl px-3 py-1.5">
                             <span className="text-lg">{content.language.flag}</span>
-                            <span className="text-slate-900 dark:text-white text-xs font-bold">{content.language.nativeLabel}</span>
+                            <span className="text-psi-primary text-xs font-bold">{content.language.nativeLabel}</span>
                             {isRTL && (
-                                <span className="text-slate-900 dark:text-white/50 text-[9px] font-bold uppercase tracking-widest border border-black/20 dark:border-white/20 rounded px-1">RTL</span>
+                                <span className="text-psi-secondary text-[9px] font-bold uppercase tracking-widest border border-black/20 dark:border-white/20 rounded px-1">RTL</span>
                             )}
                         </div>
 
@@ -473,10 +473,10 @@ function PitchPreview({
 
                         {/* Property name overlay */}
                         <div className="absolute bottom-4 left-5 right-5">
-                            <p className="text-slate-900 dark:text-white/60 text-[10px] font-bold uppercase tracking-widest mb-0.5">
+                            <p className="text-psi-secondary text-[10px] font-bold uppercase tracking-widest mb-0.5">
                                 {project.developer_name}
                             </p>
-                            <h2 className="text-slate-900 dark:text-white text-2xl font-extrabold leading-tight">{content.projectName}</h2>
+                            <h2 className="text-psi-primary text-2xl font-extrabold leading-tight">{content.projectName}</h2>
                         </div>
                     </div>
                 )}
@@ -500,16 +500,16 @@ function PitchPreview({
                             { icon: <DollarSign size={13} />, label: content.priceLabel, value: project.priceRange ?? fmtAED(project.expected_avg_deal) },
                             { icon: <Bed size={13} />, label: content.bedroomsLabel, value: project.bedrooms ?? '—' },
                         ].map(({ icon, label, value }) => (
-                            <div key={label} className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-3 text-center">
+                            <div key={label} className="bg-psi-subtle border border-psi rounded-2xl p-3 text-center">
                                 <div className="flex items-center justify-center text-amber-400 mb-1">{icon}</div>
-                                <p className="text-[9px] text-slate-900 dark:text-white/40 font-bold uppercase tracking-widest mb-0.5">{label}</p>
-                                <p className="text-slate-900 dark:text-white text-xs font-extrabold leading-tight">{value}</p>
+                                <p className="text-[9px] text-psi-muted font-bold uppercase tracking-widest mb-0.5">{label}</p>
+                                <p className="text-psi-primary text-xs font-extrabold leading-tight">{value}</p>
                             </div>
                         ))}
                     </div>
 
                     {/* Description */}
-                    <div className={clsx('text-slate-900 dark:text-white/70 text-sm leading-relaxed', isRTL && 'text-right')}>
+                    <div className={clsx('text-psi-primary/70 text-sm leading-relaxed', isRTL && 'text-right')}>
                         {content.description}
                     </div>
 
@@ -529,45 +529,45 @@ function PitchPreview({
                                 <span className="text-amber-400 flex-shrink-0 mt-0.5">
                                     <Star size={11} fill="currentColor" />
                                 </span>
-                                <span className="text-slate-900 dark:text-white/80 text-sm">{h.replace(/^[◆✦•◈▸] /, '')}</span>
+                                <span className="text-psi-primary text-sm">{h.replace(/^[◆✦•◈▸] /, '')}</span>
                             </motion.div>
                         ))}
                     </div>
 
                     {/* Divider */}
-                    <div className="border-t border-black/10 dark:border-white/10" />
+                    <div className="border-t border-psi" />
 
                     {/* Agent bio */}
                     <div className={clsx('flex items-start gap-4', isRTL && 'flex-row-reverse')}>
                         <img
                             src={DEMO_AGENT.avatar}
                             alt={DEMO_AGENT.name}
-                            className="w-14 h-14 rounded-2xl object-cover border border-black/20 dark:border-white/20 flex-shrink-0 bg-slate-200 dark:bg-slate-700"
+                            className="w-14 h-14 rounded-2xl object-cover border border-black/20 dark:border-white/20 flex-shrink-0 bg-psi-border"
                         />
                         <div className={clsx('flex-1 min-w-0', isRTL && 'text-right')}>
-                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">{DEMO_AGENT.name}</p>
+                            <p className="text-psi-primary font-extrabold text-sm">{DEMO_AGENT.name}</p>
                             <p className="text-amber-400 text-[10px] font-bold uppercase tracking-widest mb-2">{DEMO_AGENT.branch}</p>
-                            <p className="text-slate-900 dark:text-white/60 text-xs leading-relaxed">{content.agentBio}</p>
+                            <p className="text-psi-secondary text-xs leading-relaxed">{content.agentBio}</p>
                         </div>
                     </div>
 
                     {/* Closing / CTA */}
                     <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 text-center space-y-3">
-                        <p className={clsx('text-slate-900 dark:text-white/70 text-xs leading-relaxed', isRTL && 'text-right')}>
+                        <p className={clsx('text-psi-primary/70 text-xs leading-relaxed', isRTL && 'text-right')}>
                             {content.closingNote}
                         </p>
-                        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-amber-500/25">
+                        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-psi-primary font-extrabold text-sm shadow-lg shadow-amber-500/25">
                             <Send size={13} />
                             {content.ctaButtonText}
                         </div>
-                        <div className="flex items-center justify-center gap-4 text-xs text-slate-900 dark:text-white/40 flex-wrap">
+                        <div className="flex items-center justify-center gap-4 text-xs text-psi-muted flex-wrap">
                             <span>📞 {DEMO_AGENT.phone}</span>
                             <span>✉️ {DEMO_AGENT.email}</span>
                         </div>
                     </div>
 
                     {/* AI badge footer */}
-                    <div className="flex items-center justify-center gap-2 text-slate-900 dark:text-white/20 text-[10px]">
+                    <div className="flex items-center justify-center gap-2 text-psi-muted text-[10px]">
                         <Sparkles size={10} />
                         <span>Translated by Gemini AI · PSI Event Portal</span>
                     </div>
@@ -726,7 +726,7 @@ function PitchForm({ projects, onGenerate }: PitchFormProps) {
                 id="generate-pitch-btn"
                 type="submit"
                 whileTap={{ scale: 0.97 }}
-                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-orange-400 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 transition-all"
+                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-orange-400 text-psi-primary font-extrabold text-base shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 transition-all"
             >
                 <Sparkles size={18} />
                 Generate Localized Pitch
@@ -829,8 +829,8 @@ export default function LocalizedPitch() {
                             )}>
                                 <div className={clsx(
                                     'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black border',
-                                    step === s ? 'bg-amber-500 border-amber-500 text-slate-900 dark:text-white' :
-                                        i < ['form', 'generating', 'preview'].indexOf(step) ? 'bg-emerald-500 border-emerald-500 text-slate-900 dark:text-white' :
+                                    step === s ? 'bg-amber-500 border-amber-500 text-psi-primary' :
+                                        i < ['form', 'generating', 'preview'].indexOf(step) ? 'bg-emerald-500 border-emerald-500 text-psi-primary' :
                                             'border-psi text-psi-muted',
                                 )}>
                                     {i < ['form', 'generating', 'preview'].indexOf(step) ? <Check size={10} /> : i + 1}

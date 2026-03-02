@@ -57,11 +57,11 @@ export function ProjectPickerCard({
                     ? 'bg-amber-500 border-amber-500'
                     : 'bg-black/30 border-white/60'
                     }`}>
-                    {selected && <CheckCircle2 size={14} className="text-slate-900 dark:text-white" />}
+                    {selected && <CheckCircle2 size={14} className="text-psi-primary" />}
                 </div>
                 <div className="absolute bottom-2 left-2 right-2">
-                    <p className="text-slate-900 dark:text-white font-bold text-sm leading-tight drop-shadow">{project.name}</p>
-                    <p className="text-slate-900 dark:text-white/80 text-[10px] mt-0.5 drop-shadow">{project.developer_name}</p>
+                    <p className="text-psi-primary font-bold text-sm leading-tight drop-shadow">{project.name}</p>
+                    <p className="text-psi-primary text-[10px] mt-0.5 drop-shadow">{project.developer_name}</p>
                 </div>
             </div>
             {/* Bottom strip */}
@@ -123,7 +123,7 @@ export function SentBrochureRow({ brochure, onCopy }: { brochure: BrochureToken;
                     href={url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white text-xs font-bold transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold transition-colors"
                 >
                     <ExternalLink size={12} /> Open
                 </a>
@@ -142,14 +142,14 @@ export function NotificationToast({
             initial={{ x: 120, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 120, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50 max-w-sm bg-emerald-600 text-slate-900 dark:text-white rounded-2xl shadow-xl shadow-emerald-600/30 p-4 flex items-start gap-3"
+            className="fixed bottom-6 right-6 z-50 max-w-sm bg-emerald-600 text-white rounded-2xl shadow-xl shadow-emerald-600/30 p-4 flex items-start gap-3"
         >
             <BellRing size={18} className="flex-shrink-0 mt-0.5 animate-pulse" />
             <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm">Push Notification</p>
                 <p className="text-xs text-emerald-100 mt-0.5 leading-relaxed">{message}</p>
             </div>
-            <button onClick={onDismiss} className="flex-shrink-0 text-emerald-200 hover:text-slate-900 dark:hover:text-white">
+            <button onClick={onDismiss} className="flex-shrink-0 text-emerald-200 hover:text-psi-primary">
                 <X size={16} />
             </button>
         </motion.div>

@@ -1,7 +1,7 @@
 /**
  * Proposals.tsx
  * Fully theme-aware: all colors use PSI token utilities + dark: variants.
- * No hardcoded bg-white, bg-white dark:bg-slate-900, or bg-slate-100 dark:bg-slate-800 outside dark: variants.
+ * No hardcoded bg-white, bg-psi-surface, or bg-psi-subtle outside dark: variants.
  */
 
 import React, { useState } from 'react';
@@ -123,7 +123,7 @@ export default function Proposals() {
               <h3 className="font-bold text-psi-primary mb-4">Tiered Cost Logic</h3>
               <div className="space-y-4">
                 <TierInfo tier="Gold" comm="50%" cost="Agent Pays" color="text-amber-500" />
-                <TierInfo tier="Silver" comm="30%" cost="Agent Pays" color="text-slate-600 dark:text-slate-400 dark:text-slate-400" />
+                <TierInfo tier="Silver" comm="30%" cost="Agent Pays" color="text-psi-secondary" />
                 <TierInfo tier="Bronze" comm="20%" cost="Branch Pays" color="text-amber-700 dark:text-amber-600" />
               </div>
             </div>

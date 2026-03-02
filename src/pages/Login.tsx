@@ -113,11 +113,11 @@ export default function Login() {
                     <div className="px-8 pt-8 pb-6 border-b border-slate-100">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-md shadow-emerald-500/25">
-                                <Sparkles size={18} className="text-slate-900 dark:text-white" />
+                                <Sparkles size={18} className="text-psi-primary" />
                             </div>
                             <div>
                                 <h1 className="text-slate-900 font-extrabold text-base tracking-tight">PSI Event Portal</h1>
-                                <p className="text-slate-600 dark:text-slate-400 text-[11px] uppercase tracking-[0.15em]">Property Shop Investment LLC</p>
+                                <p className="text-psi-secondary text-[11px] uppercase tracking-[0.15em]">Property Shop Investment LLC</p>
                             </div>
                         </div>
 
@@ -125,7 +125,7 @@ export default function Login() {
                             <h2 className="text-slate-900 text-2xl font-extrabold tracking-tight mb-1">
                                 Welcome back
                             </h2>
-                            <p className="text-slate-600 dark:text-slate-400 text-sm">
+                            <p className="text-psi-secondary text-sm">
                                 Sign in with your authorised Google workspace account.
                             </p>
                         </div>
@@ -205,7 +205,7 @@ export default function Login() {
                         >
                             {isLoading ? (
                                 <>
-                                    <Loader2 size={18} className="animate-spin text-slate-600 dark:text-slate-400" />
+                                    <Loader2 size={18} className="animate-spin text-psi-secondary" />
                                     <span>Signing in…</span>
                                 </>
                             ) : isSuccess ? (
@@ -217,7 +217,7 @@ export default function Login() {
                                 <>
                                     <GoogleIcon size={20} />
                                     <span>Sign in with Google</span>
-                                    <ChevronRight size={15} className="ml-auto text-slate-600 dark:text-slate-400" />
+                                    <ChevronRight size={15} className="ml-auto text-psi-secondary" />
                                 </>
                             )}
                         </button>
@@ -231,7 +231,7 @@ export default function Login() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     onClick={() => { setState('idle'); setErrorMsg(''); }}
-                                    className="w-full text-center text-xs text-slate-600 dark:text-slate-400 hover:text-slate-600 transition-colors py-1 select-none"
+                                    className="w-full text-center text-xs text-psi-secondary hover:text-slate-600 transition-colors py-1 select-none"
                                 >
                                     Try a different account →
                                 </motion.button>
@@ -244,7 +244,7 @@ export default function Login() {
                     <div className="px-8 pb-6 pt-2">
                         <div className="rounded-2xl bg-slate-50 border border-slate-200 p-4 flex items-center gap-3">
                             <Shield size={15} className="text-amber-500 flex-shrink-0" />
-                            <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
+                            <p className="text-psi-secondary text-[11px] leading-relaxed">
                                 <span className="text-amber-600 font-bold">Restricted access.</span>{' '}
                                 Authentication is enforced at the account level.
                                 Only PSI-authorised Google accounts may sign in.
@@ -254,7 +254,7 @@ export default function Login() {
                 </motion.div>
 
                 {/* ── Below-card footnote ── */}
-                <p className="text-center text-slate-600 dark:text-slate-400 text-[11px] mt-6">
+                <p className="text-center text-psi-secondary text-[11px] mt-6">
                     PSI Event Portal · © {new Date().getFullYear()} Property Shop Investment LLC
                 </p>
 
@@ -274,7 +274,7 @@ export default function Login() {
                                 alert('DEV: Seeder threw — ' + (e instanceof Error ? e.message : String(e)));
                             }
                         }}
-                        className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
+                        className="text-[10px] text-psi-secondary hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
                     >
                         DEV: Full Seeder
                     </button>
@@ -288,7 +288,7 @@ export default function Login() {
                                 alert('DEV: Presentation seeder threw — ' + (e instanceof Error ? e.message : String(e)));
                             }
                         }}
-                        className="text-[10px] text-slate-600 dark:text-slate-400 hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
+                        className="text-[10px] text-psi-secondary hover:text-slate-700 border border-slate-200 rounded px-2 py-1 transition-colors select-none"
                     >
                         DEV: Run Seeder
                     </button>

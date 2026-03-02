@@ -69,9 +69,9 @@ function ScannerFrame({ active }: { active: boolean }) {
             )}
 
             {/* Background grid */}
-            <div className="absolute inset-3 bg-white dark:bg-slate-900/80 rounded-sm grid grid-cols-6 grid-rows-6 gap-px opacity-30">
+            <div className="absolute inset-3 bg-psi-surface rounded-sm grid grid-cols-6 grid-rows-6 gap-px opacity-30">
                 {Array.from({ length: 36 }).map((_, i) => (
-                    <div key={i} className="bg-slate-200 dark:bg-slate-700 rounded-sm" />
+                    <div key={i} className="bg-psi-border rounded-sm" />
                 ))}
             </div>
 
@@ -88,7 +88,7 @@ function ScannerFrame({ active }: { active: boolean }) {
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className={clsx(
                     'w-12 h-12 rounded-full border-2 flex items-center justify-center transition-colors',
-                    active ? 'border-amber-400/60' : 'border-slate-300 dark:border-slate-700'
+                    active ? 'border-amber-400/60' : 'border-psi-strong'
                 )}>
                     <ScanLine size={20} className={active ? 'text-amber-400' : 'text-slate-600'} />
                 </div>
@@ -120,7 +120,7 @@ function AgentRosterCard({
                 'rounded-2xl border p-4 transition-all',
                 isPresent
                     ? 'bg-emerald-950/40 border-emerald-800/50'
-                    : 'bg-slate-100 dark:bg-slate-800/60 border-slate-300 dark:border-slate-700/50 hover:border-slate-600'
+                    : 'bg-psi-subtle/60 border-psi-strong/50 hover:border-slate-600'
             )}
         >
             <div className="flex items-center gap-3">
@@ -135,13 +135,13 @@ function AgentRosterCard({
                 {/* Details */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <p className="text-slate-900 dark:text-white font-bold text-sm truncate">{agent.agentName}</p>
+                        <p className="text-psi-primary font-bold text-sm truncate">{agent.agentName}</p>
                         <span className={clsx('text-[10px] font-bold px-1.5 py-0.5 rounded-full', tierStyle.badge)}>
                             <Star size={8} className="inline mr-0.5" />
                             {agent.tier}
                         </span>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-400 text-xs truncate">{agent.branch}</p>
+                    <p className="text-psi-secondary text-xs truncate">{agent.branch}</p>
 
                     {/* Compliance mini-badges */}
                     <div className="flex gap-1.5 mt-1.5">
@@ -178,8 +178,8 @@ function AgentRosterCard({
                         className={clsx(
                             'flex-shrink-0 px-3 py-2 rounded-xl text-xs font-bold transition-all',
                             verifying
-                                ? 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400 cursor-not-allowed'
-                                : 'bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white shadow-lg shadow-amber-500/20'
+                                ? 'bg-psi-border text-psi-secondary cursor-not-allowed'
+                                : 'bg-amber-500 hover:bg-amber-400 text-white shadow-lg shadow-amber-500/20'
                         )}
                     >
                         {verifying ? <Loader2 size={14} className="animate-spin" /> : 'Verify'}
@@ -206,10 +206,10 @@ function VerifySuccessToast({ agent, onDismiss }: { agent: CheckInAgent; onDismi
         >
             <div className="bg-emerald-950 border border-emerald-700 rounded-2xl px-5 py-4 shadow-2xl shadow-emerald-900/50 flex items-center gap-4 max-w-sm w-full">
                 <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <BadgeCheck size={20} className="text-slate-900 dark:text-white" />
+                    <BadgeCheck size={20} className="text-psi-primary" />
                 </div>
                 <div className="flex-1">
-                    <p className="text-slate-900 dark:text-white font-bold text-sm">{agent.agentName}</p>
+                    <p className="text-psi-primary font-bold text-sm">{agent.agentName}</p>
                     <p className="text-emerald-400 text-xs">Marked as physically present ✓</p>
                     <p className="text-emerald-600 text-[10px]">Lead distribution unlocked</p>
                 </div>
@@ -327,15 +327,15 @@ export default function OrganizerScannerView({
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col max-w-lg mx-auto">
+        <div className="min-h-screen bg-psi-page flex flex-col max-w-lg mx-auto">
 
             {/* Header */}
-            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-6 pb-4">
+            <div className="bg-psi-surface border-b border-psi px-4 pt-6 pb-4">
                 <div className="flex items-start justify-between mb-4">
                     <div>
                         <p className="text-amber-400 text-[10px] font-bold tracking-[0.2em] uppercase">Organizer Console</p>
-                        <h1 className="text-slate-900 dark:text-white text-xl font-extrabold tracking-tight mt-1">Venue Check-In</h1>
-                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5 truncate max-w-[240px]">{event.eventName}</p>
+                        <h1 className="text-psi-primary text-xl font-extrabold tracking-tight mt-1">Venue Check-In</h1>
+                        <p className="text-psi-secondary text-xs mt-0.5 truncate max-w-[240px]">{event.eventName}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1">
                         <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default function OrganizerScannerView({
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
+                <div className="flex gap-1 bg-psi-subtle rounded-xl p-1">
                     {([
                         { id: 'scanner', label: 'QR Scanner', icon: <ScanLine size={14} /> },
                         { id: 'roster', label: 'Agent Roster', icon: <Users size={14} /> },
@@ -365,8 +365,8 @@ export default function OrganizerScannerView({
                             className={clsx(
                                 'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all',
                                 activeTab === tab.id
-                                    ? 'bg-amber-500 text-slate-900 dark:text-white shadow'
-                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                    ? 'bg-amber-500 text-white shadow'
+                                    : 'text-psi-secondary hover:text-psi-primary'
                             )}
                         >
                             {tab.icon}
@@ -390,9 +390,9 @@ export default function OrganizerScannerView({
                             className="p-4 space-y-5"
                         >
                             {/* Viewfinder */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+                            <div className="bg-psi-surface rounded-2xl p-5 border border-psi">
                                 <div className="flex items-center justify-between mb-4">
-                                    <p className="text-slate-700 dark:text-slate-300 text-sm font-bold flex items-center gap-2">
+                                    <p className="text-psi-secondary text-sm font-bold flex items-center gap-2">
                                         <ScanLine size={15} className="text-amber-400" />
                                         Point camera at agent's QR
                                     </p>
@@ -403,7 +403,7 @@ export default function OrganizerScannerView({
                                             'text-xs px-3 py-1 rounded-lg font-bold transition-colors',
                                             scannerActive
                                                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                                : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                                                : 'bg-psi-border text-psi-secondary'
                                         )}
                                     >
                                         {scannerActive ? 'Active' : 'Paused'}
@@ -416,12 +416,12 @@ export default function OrganizerScannerView({
                             </div>
 
                             {/* Manual token paste */}
-                            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
-                                <p className="text-slate-700 dark:text-slate-300 text-sm font-bold mb-3 flex items-center gap-2">
+                            <div className="bg-psi-surface rounded-2xl p-4 border border-psi">
+                                <p className="text-psi-secondary text-sm font-bold mb-3 flex items-center gap-2">
                                     <ShieldCheck size={15} className="text-amber-400" />
                                     Manual Token Verification
                                 </p>
-                                <p className="text-slate-600 dark:text-slate-400 text-xs mb-3">
+                                <p className="text-psi-secondary text-xs mb-3">
                                     Paste the agent's QR token (JWT) to verify without camera:
                                 </p>
                                 <textarea
@@ -430,14 +430,14 @@ export default function OrganizerScannerView({
                                     onChange={e => { setPastedToken(e.target.value); setTokenResult(null); }}
                                     placeholder="Paste JWT token here..."
                                     rows={3}
-                                    className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
+                                    className="w-full bg-psi-subtle border border-psi-strong rounded-xl px-3 py-2.5 text-xs text-psi-primary font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 resize-none"
                                 />
 
                                 <button
                                     id="verify-token-btn"
                                     onClick={handleTokenVerify}
                                     disabled={!pastedToken.trim() || verifyingToken}
-                                    className="mt-3 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 dark:text-white font-bold text-sm transition-colors flex items-center justify-center gap-2"
+                                    className="mt-3 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-psi-primary font-bold text-sm transition-colors flex items-center justify-center gap-2"
                                 >
                                     {verifyingToken ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />}
                                     {verifyingToken ? 'Verifying...' : 'Verify Token & Mark Present'}
@@ -462,8 +462,8 @@ export default function OrganizerScannerView({
                                                     <p className="font-bold flex items-center gap-1.5 mb-1">
                                                         <CheckCircle2 size={13} /> Valid Token ✓
                                                     </p>
-                                                    <p><span className="text-slate-600 dark:text-slate-400">Agent:</span> {tokenResult.payload?.name}</p>
-                                                    <p><span className="text-slate-600 dark:text-slate-400">Tier:</span> {tokenResult.payload?.tier}</p>
+                                                    <p><span className="text-psi-secondary">Agent:</span> {tokenResult.payload?.name}</p>
+                                                    <p><span className="text-psi-secondary">Tier:</span> {tokenResult.payload?.tier}</p>
                                                     <p className="text-emerald-500 mt-1 font-bold">Lead access unlocked.</p>
                                                 </div>
                                             ) : (
@@ -491,19 +491,19 @@ export default function OrganizerScannerView({
                             {/* Search + filter */}
                             <div className="space-y-3">
                                 <div className="relative">
-                                    <Search size={14} className="absolute left-3 top-3 text-slate-600 dark:text-slate-400" />
+                                    <Search size={14} className="absolute left-3 top-3 text-psi-secondary" />
                                     <input
                                         id="agent-search-input"
                                         type="text"
                                         value={search}
                                         onChange={e => setSearch(e.target.value)}
                                         placeholder="Search agents or branches..."
-                                        className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                                        className="w-full bg-psi-subtle border border-psi-strong rounded-xl pl-9 pr-4 py-2.5 text-sm text-psi-primary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
                                     />
                                 </div>
 
                                 <div className="flex gap-2">
-                                    <ListFilter size={14} className="text-slate-600 dark:text-slate-400 self-center" />
+                                    <ListFilter size={14} className="text-psi-secondary self-center" />
                                     {([
                                         { id: 'pending', label: `Pending (${pendingCount})` },
                                         { id: 'present', label: `Present (${presentCount})` },
@@ -516,8 +516,8 @@ export default function OrganizerScannerView({
                                             className={clsx(
                                                 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all',
                                                 filter === f.id
-                                                    ? 'bg-amber-500 text-slate-900 dark:text-white'
-                                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-300 dark:border-slate-700'
+                                                    ? 'bg-amber-500 text-white'
+                                                    : 'bg-psi-subtle text-psi-secondary hover:text-psi-primary border border-psi-strong'
                                             )}
                                         >
                                             {f.label}
@@ -528,14 +528,14 @@ export default function OrganizerScannerView({
 
                             {/* Progress bar */}
                             {agents.length > 0 && (
-                                <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+                                <div className="bg-psi-surface rounded-2xl p-4 border border-psi">
                                     <div className="flex justify-between text-xs mb-2">
-                                        <span className="text-slate-600 dark:text-slate-400 font-bold">Check-in Progress</span>
-                                        <span className="text-slate-900 dark:text-white font-bold">
+                                        <span className="text-psi-secondary font-bold">Check-in Progress</span>
+                                        <span className="text-psi-primary font-bold">
                                             {presentCount} / {agents.filter(a => a.managerApproved).length}
                                         </span>
                                     </div>
-                                    <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div className="h-2.5 bg-psi-border rounded-full overflow-hidden">
                                         <motion.div
                                             className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full"
                                             initial={{ width: 0 }}
@@ -566,7 +566,7 @@ export default function OrganizerScannerView({
                                 {filteredAgents.length === 0 && (
                                     <div className="text-center py-10">
                                         <Clock size={28} className="mx-auto text-slate-700 mb-3" />
-                                        <p className="text-slate-600 dark:text-slate-400 text-sm">
+                                        <p className="text-psi-secondary text-sm">
                                             {filter === 'pending' ? 'All agents checked in!' : 'No agents to show'}
                                         </p>
                                     </div>

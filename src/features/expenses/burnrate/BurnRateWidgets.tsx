@@ -29,7 +29,7 @@ export function BurnBar({ ratio, barClass }: { ratio: number; barClass: string }
     return (
         <div className="relative w-full h-3 bg-psi-subtle rounded-full overflow-hidden">
             {/* Expected budget line */}
-            <div className="absolute top-0 left-0 h-full bg-slate-300 dark:bg-slate-700 rounded-full" style={{ width: '100%' }} />
+            <div className="absolute top-0 left-0 h-full bg-slate-300 rounded-full" style={{ width: '100%' }} />
             {/* Actual spend bar */}
             <motion.div
                 className={`absolute top-0 left-0 h-full rounded-full ${barClass}`}

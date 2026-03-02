@@ -132,7 +132,7 @@ const ZONES: FloorZone[] = [
     {
         id: 'unassigned', label: 'Unassigned', shortLabel: 'Unassigned',
         capacity: 999,
-        color: 'bg-white/3', border: 'border-black/10 dark:border-white/10', accent: 'bg-slate-600', textAccent: 'text-slate-900 dark:text-white/40',
+        color: 'bg-white/3', border: 'border-psi', accent: 'bg-psi-border', textAccent: 'text-psi-muted',
         icon: <Users size={14} />,
         gridArea: 'unassigned',
         description: 'Agents not yet assigned to a zone',
@@ -249,8 +249,8 @@ function AgentBadge({
                 flex items-center gap-2 px-2.5 py-1.5 rounded-xl cursor-grab active:cursor-grabbing
                 border transition-all select-none
                 ${isDragging
-                    ? 'opacity-40 border-white/30 bg-black/10 dark:bg-white/10'
-                    : 'border-black/10 dark:border-white/10 bg-white/6 hover:bg-white/12 hover:border-black/20 dark:hover:border-white/20'
+                    ? 'opacity-40 border-white/30 bg-psi-border-subtle'
+                    : 'border-psi bg-white/6 hover:bg-white/12 hover:border-black/20 dark:hover:border-white/20'
                 }
                 ${compact ? 'py-1 px-2' : ''}
             `}
@@ -262,10 +262,10 @@ function AgentBadge({
             </div>
             {!compact && (
                 <div className="min-w-0">
-                    <p className="text-slate-900 dark:text-white text-[11px] font-bold truncate max-w-[90px]">
+                    <p className="text-psi-primary text-[11px] font-bold truncate max-w-[90px]">
                         {agent.agentName.split(' ')[0]}
                     </p>
-                    <p className="text-slate-900 dark:text-white/30 text-[8px] truncate">{agent.branch}</p>
+                    <p className="text-psi-muted text-[8px] truncate">{agent.branch}</p>
                 </div>
             )}
         </motion.div>
@@ -325,7 +325,7 @@ function ZoneTile({
                     </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                    <span className={`text-[10px] font-black ${isFull ? 'text-rose-400' : 'text-slate-900 dark:text-white/30'}`}>
+                    <span className={`text-[10px] font-black ${isFull ? 'text-rose-400' : 'text-psi-muted'}`}>
                         {agents.length}/{zone.capacity}
                     </span>
                     {isFull && <AlertTriangle size={10} className="text-rose-400" />}
@@ -374,7 +374,7 @@ function ZoneTile({
                     ))}
                 </AnimatePresence>
                 {agents.length === 0 && (
-                    <div className="flex items-center gap-1.5 text-slate-900 dark:text-white/15 text-[10px]">
+                    <div className="flex items-center gap-1.5 text-psi-primary/15 text-[10px]">
                         <MapPin size={10} />
                         <span>Drop agent here</span>
                     </div>
@@ -385,9 +385,9 @@ function ZoneTile({
             {isDragOver && (
                 <motion.div
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    className="absolute inset-0 rounded-2xl border-2 border-dashed border-white/40 bg-black/5 dark:bg-white/5 flex items-center justify-center pointer-events-none"
+                    className="absolute inset-0 rounded-2xl border-2 border-dashed border-white/40 bg-psi-subtle flex items-center justify-center pointer-events-none"
                 >
-                    <span className="text-slate-900 dark:text-white/50 text-xs font-bold">Drop here</span>
+                    <span className="text-psi-secondary text-xs font-bold">Drop here</span>
                 </motion.div>
             )}
         </div>
@@ -408,11 +408,11 @@ function AlertLogEntry({ alert }: { alert: TrafficAlert }) {
         >
             <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                 <span className={`text-[9px] font-black uppercase tracking-widest ${from.textAccent}`}>{from.shortLabel}</span>
-                <ArrowRight size={9} className="text-slate-900 dark:text-white/20" />
+                <ArrowRight size={9} className="text-psi-muted" />
                 <span className={`text-[9px] font-black uppercase tracking-widest ${to.textAccent}`}>{to.shortLabel}</span>
             </div>
-            <p className="text-slate-900 dark:text-white/70 text-xs font-bold truncate">{alert.agentName}</p>
-            <p className="text-slate-900 dark:text-white/30 text-[10px] mt-0.5 leading-relaxed line-clamp-2">{alert.message}</p>
+            <p className="text-psi-primary/70 text-xs font-bold truncate">{alert.agentName}</p>
+            <p className="text-psi-muted text-[10px] mt-0.5 leading-relaxed line-clamp-2">{alert.message}</p>
         </motion.div>
     );
 }
@@ -473,24 +473,24 @@ export function AgentTrafficAlert({
                 <p className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">
                     Floor Traffic Alert
                 </p>
-                <h2 className="text-slate-900 dark:text-white text-2xl font-extrabold mb-2">Zone Reassignment</h2>
+                <h2 className="text-psi-primary text-2xl font-extrabold mb-2">Zone Reassignment</h2>
                 <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl ${toZone.color} border ${toZone.border} mb-6`}>
                     <span className={toZone.textAccent}>{toZone.icon}</span>
                     <span className={`text-sm font-extrabold ${toZone.textAccent}`}>{toZone.label}</span>
                 </div>
 
-                <div className="bg-white/6 border border-black/10 dark:border-white/10 rounded-2xl p-5 max-w-sm w-full text-left mb-6">
-                    <p className="text-slate-900 dark:text-white/80 text-sm leading-relaxed">{alert.message}</p>
+                <div className="bg-white/6 border border-psi rounded-2xl p-5 max-w-sm w-full text-left mb-6">
+                    <p className="text-psi-primary text-sm leading-relaxed">{alert.message}</p>
                 </div>
 
                 <motion.button
                     whileTap={{ scale: 0.96 }}
                     onClick={() => setAlert(null)}
-                    className="w-full max-w-sm flex items-center justify-center gap-3 py-5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-slate-900 dark:text-white font-extrabold text-base shadow-2xl shadow-indigo-600/40"
+                    className="w-full max-w-sm flex items-center justify-center gap-3 py-5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold text-base shadow-2xl shadow-indigo-600/40"
                 >
                     <CheckCircle2 size={20} /> Acknowledged — Moving Now
                 </motion.button>
-                <p className="text-slate-900 dark:text-white/20 text-xs mt-4">Please make your way to the {toZone.shortLabel} immediately.</p>
+                <p className="text-psi-muted text-xs mt-4">Please make your way to the {toZone.shortLabel} immediately.</p>
             </motion.div>
         </AnimatePresence>
     );
@@ -621,14 +621,14 @@ export default function TrafficController({
     const unassignedZone = ZONES.find(z => z.id === 'unassigned')!;
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col">
+        <div className="min-h-screen bg-psi-page text-psi-primary flex flex-col">
 
             {/* ── Header ─────────────────────────────────────── */}
             <header className="border-b border-white/8 px-5 py-4 flex items-center justify-between gap-4 flex-wrap">
                 <div>
                     <div className="flex items-center gap-2 mb-0.5">
                         <div className="w-6 h-6 rounded-lg bg-indigo-600 flex items-center justify-center">
-                            <Radio size={13} className="text-slate-900 dark:text-white" />
+                            <Radio size={13} className="text-psi-primary" />
                         </div>
                         <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.25em]">Floor Control</span>
                         {dispatching && (
@@ -637,8 +637,8 @@ export default function TrafficController({
                             </span>
                         )}
                     </div>
-                    <h1 className="text-slate-900 dark:text-white text-xl font-extrabold">Traffic Controller</h1>
-                    <p className="text-slate-900 dark:text-white/30 text-xs mt-0.5">{eventName}</p>
+                    <h1 className="text-psi-primary text-xl font-extrabold">Traffic Controller</h1>
+                    <p className="text-psi-muted text-xs mt-0.5">{eventName}</p>
                 </div>
 
                 {/* KPI strip */}
@@ -650,7 +650,7 @@ export default function TrafficController({
                     ].map(({ label, value, color, bg, ring }) => (
                         <div key={label} className={`px-3 py-2 rounded-xl ring-1 ${bg} ${ring} text-center min-w-[64px]`}>
                             <p className={`text-xl font-extrabold ${color}`}>{value}</p>
-                            <p className="text-[9px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/25">{label}</p>
+                            <p className="text-[9px] font-bold uppercase tracking-widest text-psi-muted">{label}</p>
                         </div>
                     ))}
                 </div>
@@ -663,7 +663,7 @@ export default function TrafficController({
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 bg-indigo-600 text-slate-900 dark:text-white text-xs font-extrabold px-4 py-2.5 rounded-2xl shadow-2xl shadow-indigo-600/30"
+                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 bg-indigo-600 text-psi-primary text-xs font-extrabold px-4 py-2.5 rounded-2xl shadow-2xl shadow-indigo-600/30"
                     >
                         <Bell size={13} />{lastAction} — Push notification sent ✓
                     </motion.div>
@@ -676,9 +676,9 @@ export default function TrafficController({
                 {/* LEFT — Floor map */}
                 <div className="flex-1 overflow-y-auto p-4 md:p-6">
                     <div className="flex items-center gap-2 mb-4">
-                        <Maximize2 size={13} className="text-slate-900 dark:text-white/30" />
-                        <p className="text-slate-900 dark:text-white/30 text-xs font-bold uppercase tracking-widest">Event Floor Plan</p>
-                        <span className="text-slate-900 dark:text-white/15 text-[10px]">— drag agent badges between zones to redeploy</span>
+                        <Maximize2 size={13} className="text-psi-muted" />
+                        <p className="text-psi-muted text-xs font-bold uppercase tracking-widest">Event Floor Plan</p>
+                        <span className="text-psi-primary/15 text-[10px]">— drag agent badges between zones to redeploy</span>
                     </div>
 
                     {/* Floor grid */}
@@ -712,8 +712,8 @@ export default function TrafficController({
                     {/* Unassigned bench */}
                     <div className="mt-4">
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="text-slate-900 dark:text-white/20 text-[10px] font-bold uppercase tracking-widest">Holding Area</span>
-                            <span className="text-slate-900 dark:text-white/15 text-[9px]">← agents here are not yet deployed</span>
+                            <span className="text-psi-muted text-[10px] font-bold uppercase tracking-widest">Holding Area</span>
+                            <span className="text-psi-primary/15 text-[9px]">← agents here are not yet deployed</span>
                         </div>
                         <ZoneTile
                             zone={unassignedZone}
@@ -735,12 +735,12 @@ export default function TrafficController({
                             { label: '100% / full', color: 'bg-rose-500' },
                             { label: 'Normal', color: 'bg-emerald-500' },
                         ].map(({ label, color }) => (
-                            <div key={label} className="flex items-center gap-1.5 text-[10px] text-slate-900 dark:text-white/30">
+                            <div key={label} className="flex items-center gap-1.5 text-[10px] text-psi-muted">
                                 <span className={`w-2 h-2 rounded-sm ${color}`} />
                                 {label}
                             </div>
                         ))}
-                        <div className="flex items-center gap-1.5 text-[10px] text-slate-900 dark:text-white/20 ml-auto">
+                        <div className="flex items-center gap-1.5 text-[10px] text-psi-muted ml-auto">
                             <Zap size={10} /> Drag agent → zone to redeploy &amp; send push alert
                         </div>
                     </div>
@@ -751,9 +751,9 @@ export default function TrafficController({
                     <div className="px-4 py-4 border-b border-white/8">
                         <div className="flex items-center gap-2">
                             <Bell size={13} className="text-indigo-400" />
-                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">Alert Log</p>
+                            <p className="text-psi-primary font-extrabold text-sm">Alert Log</p>
                         </div>
-                        <p className="text-slate-900 dark:text-white/25 text-[10px] mt-0.5">{alerts.length} notifications sent</p>
+                        <p className="text-psi-muted text-[10px] mt-0.5">{alerts.length} notifications sent</p>
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -763,7 +763,7 @@ export default function TrafficController({
                             ))}
                         </AnimatePresence>
                         {alerts.length === 0 && (
-                            <div className="text-center py-12 text-slate-900 dark:text-white/15">
+                            <div className="text-center py-12 text-psi-primary/15">
                                 <Bell size={24} className="mx-auto mb-2 opacity-30" />
                                 <p className="text-xs">No alerts yet</p>
                                 <p className="text-[10px] mt-1">Drag an agent to trigger one</p>

@@ -98,7 +98,7 @@ export default function TravelDesk({
                 <div>
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20">
-                            <Plane size={18} className="text-slate-900 dark:text-white" />
+                            <Plane size={18} className="text-psi-primary" />
                         </div>
                         <span className="text-blue-400 text-xs font-black tracking-[0.2em] uppercase">Corporate Travel Desk</span>
                     </div>
@@ -125,7 +125,7 @@ export default function TravelDesk({
             <div>
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20">
-                        <Plane size={18} className="text-slate-900 dark:text-white" />
+                        <Plane size={18} className="text-psi-primary" />
                     </div>
                     <span className="text-blue-400 text-xs font-black tracking-[0.2em] uppercase">Integrated Travel Desk</span>
                 </div>
@@ -169,7 +169,7 @@ export default function TravelDesk({
                         className={clsx(
                             'flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all',
                             tab === t.id
-                                ? 'bg-blue-600 text-slate-900 dark:text-white shadow-md shadow-blue-500/20'
+                                ? 'bg-blue-600 text-psi-primary shadow-md shadow-blue-500/20'
                                 : 'text-psi-muted hover:text-psi-primary'
                         )}>
                         {t.icon} {t.label}
@@ -191,7 +191,7 @@ export default function TravelDesk({
                                     <motion.div key={agent.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
                                         className="psi-card rounded-2xl overflow-hidden border border-psi">
                                         <div className="p-4 flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-white dark:to-slate-900 flex items-center justify-center text-slate-900 dark:text-white font-bold text-sm flex-shrink-0">
+                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-white dark:to-slate-900 flex items-center justify-center text-psi-primary font-bold text-sm flex-shrink-0">
                                                 {agent.name.split(' ').map(p => p[0]).join('').slice(0, 2)}
                                             </div>
                                             <div className="flex-1 min-w-0">
@@ -210,7 +210,7 @@ export default function TravelDesk({
                                             {agent.status === 'approved' && (
                                                 <button id={`expand-agent-${agent.id}`}
                                                     onClick={() => setExpanded(isOpen ? null : agent.id)}
-                                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-slate-900 dark:text-white text-xs font-extrabold flex-shrink-0 shadow-md shadow-blue-500/20 transition-all">
+                                                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-psi-primary text-xs font-extrabold flex-shrink-0 shadow-md shadow-blue-500/20 transition-all">
                                                     <Plane size={12} />
                                                     {isOpen ? 'Close' : 'Search Flights'}
                                                     {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}

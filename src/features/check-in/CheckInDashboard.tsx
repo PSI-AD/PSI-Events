@@ -77,7 +77,7 @@ export default function CheckInDashboard() {
                             className={clsx(
                                 'flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all',
                                 role === r.id
-                                    ? 'bg-amber-500 text-slate-900 dark:text-white shadow'
+                                    ? 'bg-amber-500 text-white shadow'
                                     : 'text-psi-muted hover:text-psi-primary'
                             )}
                         >
@@ -89,7 +89,7 @@ export default function CheckInDashboard() {
 
                 {/* Event selector */}
                 <div className="relative">
-                    <Calendar size={13} className="absolute left-3 top-3 text-slate-600 dark:text-slate-400" />
+                    <Calendar size={13} className="absolute left-3 top-3 text-psi-secondary" />
                     {loadingEvents ? (
                         <div className="flex items-center gap-2 bg-psi-subtle rounded-xl pl-9 pr-4 py-2.5">
                             <Loader2 size={14} className="animate-spin text-psi-muted" />
@@ -110,7 +110,7 @@ export default function CheckInDashboard() {
                             ))}
                         </select>
                     )}
-                    <ChevronDown size={12} className="absolute right-3 top-3 text-slate-600 dark:text-slate-400 pointer-events-none" />
+                    <ChevronDown size={12} className="absolute right-3 top-3 text-psi-secondary pointer-events-none" />
                 </div>
 
                 {/* Demo data notice */}

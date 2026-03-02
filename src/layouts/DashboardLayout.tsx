@@ -239,7 +239,7 @@ export default function DashboardLayout() {
                     )}>
                         {/* Icon — always visible */}
                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
-                            <TrendingUp size={16} className="text-slate-900 dark:text-white" />
+                            <TrendingUp size={16} className="text-white" />
                         </div>
                         {/* Text — hidden when collapsed */}
                         {!isCollapsed && (
@@ -344,7 +344,7 @@ export default function DashboardLayout() {
                         <div className="flex items-center gap-3 min-w-0">
                             {/* Mobile brand mark */}
                             <div className="md:hidden w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
-                                <TrendingUp size={13} className="text-slate-900 dark:text-white" />
+                                <TrendingUp size={13} className="text-white" />
                             </div>
                             <div className="min-w-0">
                                 <p className="text-[9px] text-psi-muted uppercase tracking-widest font-bold hidden md:block">PSI Event Portal</p>
@@ -409,7 +409,7 @@ export default function DashboardLayout() {
                                 <div className="flex items-center justify-between px-4 py-4 border-b border-psi">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center">
-                                            <TrendingUp size={14} className="text-slate-900 dark:text-white" />
+                                            <TrendingUp size={14} className="text-white" />
                                         </div>
                                         <div>
                                             <p className="text-psi-primary font-extrabold text-sm">PSI Event Portal</p>

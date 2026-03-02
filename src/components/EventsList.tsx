@@ -47,7 +47,7 @@ function fmtDateShort(ts?: { toDate: () => Date }): string {
 const STATUS_STYLE: Record<string, string> = {
   Active: 'badge-success',
   Upcoming: 'badge-info',
-  Completed: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
+  Completed: 'bg-psi-subtle text-psi-secondary',
   Draft: 'badge-neutral',
   Proposal: 'badge-warning',
 };
@@ -352,7 +352,7 @@ export default function EventsList() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.06 }}
-              className="group psi-card p-6 hover:shadow-xl dark:hover:shadow-black/40 hover:shadow-slate-200/60 transition-all duration-300 cursor-pointer select-none"
+              className="group psi-card p-6 hover:shadow-xl hover:shadow-black/5 transition-all duration-300 cursor-pointer select-none"
             >
               {/* Top row */}
               <div className="flex justify-between items-start mb-4">

@@ -120,10 +120,10 @@ const DEMO_CONTACTS: CRMContact[] = [
 const TIER_CFG: Record<VIPTier, { bg: string; text: string; border: string; badge: string; accent: string; qrFg: string; qrBg: string }> = {
     Platinum: {
         bg: 'bg-gradient-to-br from-slate-800 to-white dark:to-slate-900',
-        text: 'text-slate-700 dark:text-slate-200',
+        text: 'text-psi-secondary',
         border: 'border-slate-500',
-        badge: 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200',
-        accent: 'text-slate-700 dark:text-slate-300',
+        badge: 'bg-psi-border text-psi-secondary',
+        accent: 'text-psi-secondary',
         qrFg: '#f1f5f9',
         qrBg: '#0f172a',
     },
@@ -138,10 +138,10 @@ const TIER_CFG: Record<VIPTier, { bg: string; text: string; border: string; badg
     },
     Silver: {
         bg: 'bg-gradient-to-br from-slate-700 to-white dark:to-slate-900',
-        text: 'text-slate-700 dark:text-slate-300',
+        text: 'text-psi-secondary',
         border: 'border-slate-400',
-        badge: 'bg-slate-600 text-slate-700 dark:text-slate-300',
-        accent: 'text-slate-600 dark:text-slate-400',
+        badge: 'bg-slate-600 text-psi-secondary',
+        accent: 'text-psi-secondary',
         qrFg: '#cbd5e1',
         qrBg: '#0f172a',
     },
@@ -223,7 +223,7 @@ function ScannerFrame({ active }: { active: boolean }) {
                     <div className="absolute top-0 left-0 h-full w-0.5 bg-amber-400" />
                 </div>
             ))}
-            <div className="absolute inset-3 bg-white dark:bg-slate-900/80 rounded-sm grid grid-cols-6 grid-rows-6 gap-px opacity-20">
+            <div className="absolute inset-3 bg-psi-surface rounded-sm grid grid-cols-6 grid-rows-6 gap-px opacity-20">
                 {Array.from({ length: 36 }).map((_, i) => <div key={i} className="bg-slate-600 rounded-sm" />)}
             </div>
             {active && (
@@ -234,7 +234,7 @@ function ScannerFrame({ active }: { active: boolean }) {
                 />
             )}
             <div className="absolute inset-0 flex items-center justify-center">
-                <div className={clsx('w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors', active ? 'border-amber-400/60' : 'border-slate-300 dark:border-slate-700')}>
+                <div className={clsx('w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors', active ? 'border-amber-400/60' : 'border-psi-strong')}>
                     <Crown size={18} className={active ? 'text-amber-400' : 'text-slate-600'} />
                 </div>
             </div>
@@ -319,7 +319,7 @@ function InviteSenderTab() {
                 {(['email', 'sms'] as const).map(ch => (
                     <button key={ch} id={`channel-${ch}`}
                         onClick={() => setChannel(ch)}
-                        className={clsx('flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize', channel === ch ? 'bg-amber-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/20' : 'psi-card border border-psi text-psi-secondary hover:text-psi-primary')}>
+                        className={clsx('flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all capitalize', channel === ch ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'psi-card border border-psi text-psi-secondary hover:text-psi-primary')}>
                         {ch === 'email' ? <Mail size={13} /> : <PhoneIcon size={13} />} {ch === 'email' ? 'Email' : 'SMS'}
                     </button>
                 ))}
@@ -340,8 +340,8 @@ function InviteSenderTab() {
                             className={clsx('w-full text-left flex items-center gap-3 p-3 rounded-xl border-2 transition-all',
                                 selected.has(c.leadId) ? 'border-amber-500 bg-amber-500/5' : 'border-psi hover:border-amber-300 dark:hover:border-amber-700')}>
                             <div className={clsx('w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all',
-                                selected.has(c.leadId) ? 'bg-amber-500 border-amber-500' : 'border-slate-400 dark:border-slate-600')}>
-                                {selected.has(c.leadId) && <CheckCircle2 size={13} className="text-slate-900 dark:text-white" />}
+                                selected.has(c.leadId) ? 'bg-amber-500 border-amber-500' : 'border-psi-strong')}>
+                                {selected.has(c.leadId) && <CheckCircle2 size={13} className="text-psi-primary" />}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
@@ -361,7 +361,7 @@ function InviteSenderTab() {
             <motion.button id="send-invites-btn" whileTap={{ scale: 0.97 }}
                 onClick={handleSend}
                 disabled={sending || !selected.size}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-900 dark:text-white font-extrabold text-sm tracking-tight transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20">
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-extrabold text-sm tracking-tight transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20">
                 {sending ? <><Loader2 size={16} className="animate-spin" /> Generating &amp; Sending…</> : <><Send size={16} /> Send {selected.size || ''} VIP Invite{selected.size !== 1 ? 's' : ''}</>}
             </motion.button>
 
@@ -389,7 +389,7 @@ function InviteSenderTab() {
             <AnimatePresence>
                 {toast && (
                     <motion.div initial={{ x: 120, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 120, opacity: 0 }}
-                        className="fixed bottom-6 right-6 z-50 max-w-sm bg-emerald-600 text-slate-900 dark:text-white rounded-2xl shadow-xl p-4 flex items-center gap-3">
+                        className="fixed bottom-6 right-6 z-50 max-w-sm bg-emerald-600 text-white rounded-2xl shadow-xl p-4 flex items-center gap-3">
                         <BellRing size={18} className="animate-pulse flex-shrink-0" />
                         <p className="text-sm font-semibold">{toast}</p>
                         <button onClick={() => setToast(null)}><X size={16} /></button>
@@ -478,32 +478,32 @@ function VIPPassTab() {
                 </div>
 
                 {/* Ticket perforation */}
-                <div className="relative bg-white dark:bg-slate-900 h-6 flex items-center">
+                <div className="relative bg-psi-surface h-6 flex items-center">
                     <div className="absolute -left-3 w-6 h-6 bg-psi-page rounded-full" />
-                    <div className="flex-1 border-t-2 border-dashed border-slate-300 dark:border-slate-700 mx-3" />
+                    <div className="flex-1 border-t-2 border-dashed border-psi-strong mx-3" />
                     <div className="absolute -right-3 w-6 h-6 bg-psi-page rounded-full" />
                 </div>
 
                 {/* Details strip */}
-                <div className={clsx('px-6 pt-4 pb-5 space-y-3 bg-white dark:bg-slate-900')}>
+                <div className={clsx('px-6 pt-4 pb-5 space-y-3 bg-psi-surface')}>
                     <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0">
                             <User size={16} className="text-amber-400" />
                         </div>
                         <div>
-                            <p className="text-slate-900 dark:text-white font-extrabold text-base leading-tight">{contact.name}</p>
-                            <p className="text-slate-600 dark:text-slate-400 text-xs">Invited by {contact.assignedAgentName}</p>
+                            <p className="text-psi-primary font-extrabold text-base leading-tight">{contact.name}</p>
+                            <p className="text-psi-secondary text-xs">Invited by {contact.assignedAgentName}</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-slate-100 dark:bg-slate-800/60 rounded-xl px-3 py-2.5">
-                            <p className="text-slate-600 dark:text-slate-400 text-[9px] font-bold uppercase tracking-widest">Event</p>
-                            <p className="text-slate-900 dark:text-white text-xs font-bold leading-tight mt-0.5 truncate">{DEMO_EVENT.eventName}</p>
+                        <div className="bg-psi-subtle/60 rounded-xl px-3 py-2.5">
+                            <p className="text-psi-secondary text-[9px] font-bold uppercase tracking-widest">Event</p>
+                            <p className="text-psi-primary text-xs font-bold leading-tight mt-0.5 truncate">{DEMO_EVENT.eventName}</p>
                         </div>
-                        <div className="bg-slate-100 dark:bg-slate-800/60 rounded-xl px-3 py-2.5">
-                            <p className="text-slate-600 dark:text-slate-400 text-[9px] font-bold uppercase tracking-widest">Interest</p>
-                            <p className="text-slate-900 dark:text-white text-xs font-bold leading-tight mt-0.5 truncate">{contact.projectInterest}</p>
+                        <div className="bg-psi-subtle/60 rounded-xl px-3 py-2.5">
+                            <p className="text-psi-secondary text-[9px] font-bold uppercase tracking-widest">Interest</p>
+                            <p className="text-psi-primary text-xs font-bold leading-tight mt-0.5 truncate">{contact.projectInterest}</p>
                         </div>
                     </div>
 
@@ -512,14 +512,14 @@ function VIPPassTab() {
                         <motion.button id="download-apple-wallet" whileTap={{ scale: 0.96 }}
                             onClick={() => handleDownload('apple')}
                             disabled={downloading}
-                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-black/80 hover:bg-black text-slate-900 dark:text-white font-bold text-xs transition-all border border-slate-300 dark:border-slate-700">
+                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-black/80 hover:bg-black text-white font-bold text-xs transition-all border border-psi-strong">
                             {downloading ? <Loader2 size={14} className="animate-spin" /> : <Wallet size={14} />}
                             Add to Apple Wallet
                         </motion.button>
                         <motion.button id="download-google-pay" whileTap={{ scale: 0.96 }}
                             onClick={() => handleDownload('google')}
                             disabled={downloading}
-                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-blue-700/80 hover:bg-blue-700 text-slate-900 dark:text-white font-bold text-xs transition-all border border-blue-600">
+                            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-blue-700/80 hover:bg-blue-700 text-white font-bold text-xs transition-all border border-blue-600">
                             <Download size={14} /> Google Wallet
                         </motion.button>
                     </div>
@@ -594,39 +594,39 @@ function VIPScannerTab() {
     return (
         <div className="space-y-5">
             {/* Scanner frame */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800">
+            <div className="bg-psi-surface rounded-2xl p-5 border border-psi">
                 <div className="flex items-center justify-between mb-4">
-                    <p className="text-slate-900 dark:text-white text-sm font-bold flex items-center gap-2">
+                    <p className="text-psi-primary text-sm font-bold flex items-center gap-2">
                         <Crown size={15} className="text-amber-400" /> VIP Client QR Scanner
                     </p>
                     <button id="toggle-vip-scanner"
                         onClick={() => setScannerActive(p => !p)}
                         className={clsx('text-xs px-3 py-1.5 rounded-lg font-bold transition-colors',
-                            scannerActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400')}>
+                            scannerActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-psi-border text-psi-secondary')}>
                         {scannerActive ? 'Active' : 'Paused'}
                     </button>
                 </div>
                 <ScannerFrame active={scannerActive} />
                 <p className="text-center text-slate-600 text-xs mt-3">Camera integration requires HTTPS + device permission</p>
                 <button id="simulate-vip-scan" onClick={simulateScan}
-                    className="mt-3 w-full py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-amber-400 hover:border-amber-500/40 text-xs font-bold transition-colors flex items-center justify-center gap-2">
+                    className="mt-3 w-full py-2.5 rounded-xl border border-psi-strong text-psi-secondary hover:text-amber-400 hover:border-amber-500/40 text-xs font-bold transition-colors flex items-center justify-center gap-2">
                     <Zap size={12} /> Simulate Demo Scan (lead_001)
                 </button>
             </div>
 
             {/* Manual paste */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
-                <p className="text-slate-900 dark:text-white text-sm font-bold mb-2 flex items-center gap-2">
+            <div className="bg-psi-surface rounded-2xl p-4 border border-psi">
+                <p className="text-psi-primary text-sm font-bold mb-2 flex items-center gap-2">
                     <ShieldCheck size={14} className="text-amber-400" /> Manual Lead ID Entry
                 </p>
                 <input id="vip-scan-input" type="text" value={pastedId}
                     onChange={e => { setPastedId(e.target.value); setResult(null); }}
                     onKeyDown={e => e.key === 'Enter' && handleScan()}
                     placeholder="Paste Lead ID or full QR value (PSI_VIP::lead_001::…)"
-                    className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500" />
+                    className="w-full bg-psi-subtle border border-psi-strong rounded-xl px-3 py-2.5 text-xs text-psi-primary font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500" />
                 <button id="process-vip-scan" onClick={() => handleScan()}
                     disabled={!pastedId.trim() || scanning}
-                    className="mt-3 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 dark:text-white font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                    className="mt-3 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-psi-primary font-bold text-sm transition-colors flex items-center justify-center gap-2">
                     {scanning ? <><Loader2 size={15} className="animate-spin" /> Processing…</> : <><Crown size={15} /> Log VIP Arrival</>}
                 </button>
 
@@ -638,9 +638,9 @@ function VIPScannerTab() {
                             {result.ok ? (
                                 <div className="space-y-1.5">
                                     <p className="font-bold flex items-center gap-1.5"><CheckCircle2 size={13} /> VIP Arrival Logged ✓</p>
-                                    <p><span className="text-slate-600 dark:text-slate-400">Guest:</span> {result.contact?.name}</p>
-                                    <p><span className="text-slate-600 dark:text-slate-400">Tier:</span> <TierBadge tier={result.contact!.tier} /></p>
-                                    <p><span className="text-slate-600 dark:text-slate-400">Agent Alerted:</span> {result.contact?.assignedAgentName}</p>
+                                    <p><span className="text-psi-secondary">Guest:</span> {result.contact?.name}</p>
+                                    <p><span className="text-psi-secondary">Tier:</span> <TierBadge tier={result.contact!.tier} /></p>
+                                    <p><span className="text-psi-secondary">Agent Alerted:</span> {result.contact?.assignedAgentName}</p>
                                     <p className="text-emerald-500 font-bold mt-1">Timestamp logged. Agent push notification sent.</p>
                                 </div>
                             ) : (
@@ -653,19 +653,19 @@ function VIPScannerTab() {
 
             {/* Arrivals log */}
             {arrivals.length > 0 && (
-                <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
-                    <p className="text-slate-900 dark:text-white text-sm font-bold mb-3 flex items-center gap-2">
+                <div className="bg-psi-surface rounded-2xl p-4 border border-psi">
+                    <p className="text-psi-primary text-sm font-bold mb-3 flex items-center gap-2">
                         <Star size={14} className="text-amber-400" /> Today's VIP Arrivals ({arrivals.length})
                     </p>
                     <div className="space-y-2">
                         {arrivals.map((a, i) => (
-                            <div key={i} className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800/60 rounded-xl px-3 py-2.5">
+                            <div key={i} className="flex items-center gap-3 bg-psi-subtle/60 rounded-xl px-3 py-2.5">
                                 <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
                                     <Crown size={14} className="text-amber-400" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-slate-900 dark:text-white font-bold text-sm truncate">{a.leadName}</p>
-                                    <p className="text-slate-600 dark:text-slate-400 text-[10px]">
+                                    <p className="text-psi-primary font-bold text-sm truncate">{a.leadName}</p>
+                                    <p className="text-psi-secondary text-[10px]">
                                         {new Date(a.arrivedAt).toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit' })} · Agent: {DEMO_CONTACTS.find(c => c.leadId === a.leadId)?.assignedAgentName}
                                     </p>
                                 </div>
@@ -682,12 +682,12 @@ function VIPScannerTab() {
                     <motion.div initial={{ x: 120, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 120, opacity: 0 }}
                         className="fixed bottom-6 right-6 z-50 max-w-sm rounded-2xl shadow-2xl shadow-amber-600/30 overflow-hidden">
                         <div className="bg-gradient-to-r from-amber-600 to-rose-600 p-4 flex items-start gap-3">
-                            <Crown size={18} className="text-slate-900 dark:text-white flex-shrink-0 mt-0.5 animate-bounce" />
+                            <Crown size={18} className="text-psi-primary flex-shrink-0 mt-0.5 animate-bounce" />
                             <div className="flex-1">
-                                <p className="text-slate-900 dark:text-white font-extrabold text-sm">Agent Push Notification</p>
+                                <p className="text-psi-primary font-extrabold text-sm">Agent Push Notification</p>
                                 <p className="text-amber-100 text-xs mt-0.5 leading-relaxed">{agentAlert}</p>
                             </div>
-                            <button onClick={() => setAgentAlert(null)} className="text-amber-200 hover:text-slate-900 dark:hover:text-white flex-shrink-0">
+                            <button onClick={() => setAgentAlert(null)} className="text-amber-200 hover:text-psi-primary flex-shrink-0">
                                 <X size={16} />
                             </button>
                         </div>
@@ -722,7 +722,7 @@ export default function FastPassPage() {
             <div>
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-9 h-9 bg-gradient-to-br from-amber-500 to-rose-500 rounded-xl flex items-center justify-center shadow-md shadow-amber-500/20">
-                        <Crown size={18} className="text-slate-900 dark:text-white" />
+                        <Crown size={18} className="text-psi-primary" />
                     </div>
                     <span className="text-amber-500 text-xs font-black tracking-[0.2em] uppercase">VIP Fast-Pass Wallet · System</span>
                 </div>
@@ -735,7 +735,7 @@ export default function FastPassPage() {
                 {tabs.map(t => (
                     <button key={t.id} id={`fp-tab-${t.id}`} onClick={() => setTab(t.id)}
                         className={clsx('flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all',
-                            tab === t.id ? 'bg-amber-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/20' : 'text-psi-muted hover:text-psi-primary')}>
+                            tab === t.id ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'text-psi-muted hover:text-psi-primary')}>
                         {t.icon} {t.label}
                     </button>
                 ))}

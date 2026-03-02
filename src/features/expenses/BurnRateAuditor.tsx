@@ -115,7 +115,7 @@ const SEVERITY_CONFIG: Record<BurnSeverity, SeverityConfig> = {
         border: 'border-emerald-300 dark:border-emerald-700/50',
         text: 'text-emerald-700 dark:text-emerald-400',
         accent: 'text-emerald-600 dark:text-emerald-300',
-        badge: 'bg-emerald-500 text-slate-900 dark:text-white',
+        badge: 'bg-emerald-500 text-psi-primary',
         bar: 'bg-emerald-500',
         glow: 'shadow-emerald-500/10',
         headline: (_, proj, budget) =>
@@ -130,7 +130,7 @@ const SEVERITY_CONFIG: Record<BurnSeverity, SeverityConfig> = {
         border: 'border-emerald-400 dark:border-emerald-600/50',
         text: 'text-emerald-700 dark:text-emerald-400',
         accent: 'text-emerald-600 dark:text-emerald-300',
-        badge: 'bg-emerald-600 text-slate-900 dark:text-white',
+        badge: 'bg-emerald-600 text-white',
         bar: 'bg-emerald-500',
         glow: 'shadow-emerald-500/10',
         headline: (_, proj, budget) =>
@@ -145,7 +145,7 @@ const SEVERITY_CONFIG: Record<BurnSeverity, SeverityConfig> = {
         border: 'border-amber-400 dark:border-amber-600/50',
         text: 'text-amber-700 dark:text-amber-400',
         accent: 'text-amber-600 dark:text-amber-300',
-        badge: 'bg-amber-500 text-slate-900 dark:text-white',
+        badge: 'bg-amber-500 text-white',
         bar: 'bg-amber-400',
         glow: 'shadow-amber-500/10',
         headline: (over, proj) =>
@@ -160,7 +160,7 @@ const SEVERITY_CONFIG: Record<BurnSeverity, SeverityConfig> = {
         border: 'border-orange-500 dark:border-orange-600/50',
         text: 'text-orange-700 dark:text-orange-400',
         accent: 'text-orange-600 dark:text-orange-300',
-        badge: 'bg-orange-500 text-slate-900 dark:text-white',
+        badge: 'bg-orange-500 text-psi-primary',
         bar: 'bg-orange-500',
         glow: 'shadow-orange-500/20',
         headline: (over) =>
@@ -175,7 +175,7 @@ const SEVERITY_CONFIG: Record<BurnSeverity, SeverityConfig> = {
         border: 'border-rose-500 dark:border-rose-600/50',
         text: 'text-rose-700 dark:text-rose-400',
         accent: 'text-rose-600 dark:text-rose-300',
-        badge: 'bg-rose-600 text-slate-900 dark:text-white',
+        badge: 'bg-rose-600 text-psi-primary',
         bar: 'bg-rose-500',
         glow: 'shadow-rose-500/30',
         headline: (over) =>
@@ -351,7 +351,7 @@ export function BurnRateAuditor({
                             <div className={`rounded-2xl border p-4 ${isFrozen ? 'bg-rose-50 dark:bg-rose-950/20 border-rose-300 dark:border-rose-700/50' : 'bg-psi-subtle border-psi'}`}>
                                 <div className="flex items-center justify-between gap-4 flex-wrap">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isFrozen ? 'bg-rose-500 text-slate-900 dark:text-white' : 'bg-psi-card text-psi-muted'}`}>
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isFrozen ? 'bg-rose-500 text-psi-primary' : 'bg-psi-card text-psi-muted'}`}>
                                             {isFrozen ? <Lock size={18} /> : <Unlock size={18} />}
                                         </div>
                                         <div>
@@ -370,7 +370,7 @@ export function BurnRateAuditor({
                                             id="freeze-toggle-btn"
                                             whileTap={{ scale: 0.96 }}
                                             onClick={() => onFreezeToggle?.(!isFrozen)}
-                                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all select-none ${isFrozen ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-900 dark:text-white shadow shadow-emerald-500/20' : 'bg-rose-500 hover:bg-rose-400 text-slate-900 dark:text-white shadow shadow-rose-500/20'}`}
+                                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all select-none ${isFrozen ? 'bg-emerald-500 hover:bg-emerald-400 text-psi-primary shadow shadow-emerald-500/20' : 'bg-rose-500 hover:bg-rose-400 text-psi-primary shadow shadow-rose-500/20'}`}
                                         >
                                             {isFrozen ? <><Unlock size={15} /> Lift Freeze</> : <><Lock size={15} /> Freeze Now</>}
                                         </motion.button>
@@ -410,7 +410,7 @@ export function BurnRateAuditor({
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="flex items-start gap-3 p-4 bg-rose-500 rounded-2xl text-slate-900 dark:text-white"
+                                    className="flex items-start gap-3 p-4 bg-rose-500 rounded-2xl text-psi-primary"
                                 >
                                     <Zap size={18} className="flex-shrink-0 mt-0.5 animate-pulse" />
                                     <div>
@@ -511,7 +511,7 @@ export default function BurnRateAuditorPage() {
             <div>
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-9 h-9 bg-gradient-to-br from-rose-500 to-orange-500 rounded-xl flex items-center justify-center shadow-md shadow-rose-500/20">
-                        <Activity size={18} className="text-slate-900 dark:text-white" />
+                        <Activity size={18} className="text-psi-primary" />
                     </div>
                     <span className="text-rose-500 text-xs font-black tracking-[0.2em] uppercase">Burn Rate Engine · v1</span>
                 </div>

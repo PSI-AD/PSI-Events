@@ -62,14 +62,14 @@ function KpiCard({ label, value, sub, icon: Icon, color }: {
     icon: React.ElementType; color: string;
 }) {
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex items-center gap-4">
+        <div className="bg-psi-surface border border-psi rounded-2xl p-5 flex items-center gap-4">
             <div className={cn('w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0', color)}>
-                <Icon size={20} className="text-slate-900 dark:text-white" />
+                <Icon size={20} className="text-psi-primary" />
             </div>
             <div>
-                <p className="text-slate-900 dark:text-white font-black text-2xl leading-none">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-                <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{label}</p>
-                {sub && <p className="text-slate-600 text-[10px] mt-0.5">{sub}</p>}
+                <p className="text-psi-primary font-black text-2xl leading-none">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+                <p className="text-psi-secondary text-xs mt-0.5">{label}</p>
+                {sub && <p className="text-psi-muted text-[10px] mt-0.5">{sub}</p>}
             </div>
         </div>
     );
@@ -109,8 +109,8 @@ function RuleCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97 }}
             className={cn(
-                'bg-white dark:bg-slate-900 border rounded-2xl p-4 transition-colors',
-                isActive ? 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700' : 'border-slate-200 dark:border-slate-800/50 opacity-70 hover:opacity-90',
+                'bg-psi-surface border rounded-2xl p-4 transition-colors',
+                isActive ? 'border-psi hover:border-psi-strong' : 'border-psi/50 opacity-70 hover:opacity-90',
             )}
         >
             <div className="flex items-start gap-3">
@@ -122,24 +122,24 @@ function RuleCard({
                 {/* Main info */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                        <h3 className="text-slate-900 dark:text-white font-bold text-sm">{rule.name}</h3>
+                        <h3 className="text-psi-primary font-bold text-sm">{rule.name}</h3>
                         <StatusBadge status={rule.status} />
                     </div>
-                    <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mb-2">{rule.description}</p>
+                    <p className="text-psi-secondary text-xs leading-relaxed mb-2">{rule.description}</p>
 
                     {/* Trigger → Actions chain */}
                     <div className="flex items-center gap-1.5 flex-wrap">
                         <span className={cn('text-[9px] font-black px-2 py-0.5 rounded-full border', tDef.color)}>
                             {tDef.label}{rule.triggerOffset ? ` (${rule.triggerOffset}${['CAPACITY_THRESHOLD'].includes(rule.trigger) ? '%' : ' min'})` : ''}
                         </span>
-                        <ChevronRight size={10} className="text-slate-600" />
+                        <ChevronRight size={10} className="text-psi-muted" />
                         {rule.actions.map((a, i) => {
                             const Icon = ACTION_ICONS[a.type] ?? Bell;
                             const adef = ACTION_DEFS[a.type];
                             return (
                                 <React.Fragment key={i}>
-                                    {i > 0 && <span className="text-slate-700 text-[9px]">+</span>}
-                                    <span className={cn('inline-flex items-center gap-1 text-[9px] bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-full px-2 py-0.5', adef.color)}>
+                                    {i > 0 && <span className="text-psi-muted text-[9px]">+</span>}
+                                    <span className={cn('inline-flex items-center gap-1 text-[9px] bg-psi-subtle border border-psi-strong rounded-full px-2 py-0.5', adef.color)}>
                                         <Icon size={8} /> {adef.label}
                                     </span>
                                 </React.Fragment>
@@ -150,17 +150,17 @@ function RuleCard({
 
                 {/* Toggle */}
                 <button onClick={() => onToggle(rule.id)}
-                    className={cn('mt-0.5 transition-colors flex-shrink-0', isActive ? 'text-emerald-400 hover:text-emerald-300' : 'text-slate-600 hover:text-slate-600 dark:hover:text-slate-400')}>
+                    className={cn('mt-0.5 transition-colors flex-shrink-0', isActive ? 'text-emerald-400 hover:text-emerald-300' : 'text-psi-muted hover:text-psi-secondary')}>
                     {isActive ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
                 </button>
             </div>
 
             {/* Footer row */}
-            <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-3 text-slate-600 text-xs">
+            <div className="mt-3 pt-3 border-t border-psi flex items-center justify-between gap-2">
+                <div className="flex items-center gap-3 text-psi-muted text-xs">
                     <span className="flex items-center gap-1"><Play size={9} /> {rule.runCount} runs</span>
                     {rule.lastTriggered && <span className="flex items-center gap-1"><Clock size={9} /> {relativeTime(rule.lastTriggered)}</span>}
-                    {rule.sessionFilter && <span className="text-slate-700">{rule.sessionFilter}</span>}
+                    {rule.sessionFilter && <span className="text-psi-muted">{rule.sessionFilter}</span>}
                 </div>
                 <div className="flex items-center gap-1">
                     {rule.trigger === 'MANUAL' && (
@@ -170,15 +170,15 @@ function RuleCard({
                         </button>
                     )}
                     <button onClick={() => onDuplicate(rule)} title="Duplicate"
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        className="p-1.5 rounded-lg text-psi-muted hover:text-psi-primary hover:bg-psi-subtle transition-colors">
                         <Copy size={12} />
                     </button>
                     <button onClick={() => onEdit(rule)} title="Edit"
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        className="p-1.5 rounded-lg text-psi-muted hover:text-psi-primary hover:bg-psi-subtle transition-colors">
                         <Edit2 size={12} />
                     </button>
                     <button onClick={() => onDelete(rule.id)} title="Delete"
-                        className="p-1.5 rounded-lg text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-colors">
+                        className="p-1.5 rounded-lg text-psi-muted hover:text-red-400 hover:bg-red-500/10 transition-colors">
                         <Trash2 size={12} />
                     </button>
                 </div>
@@ -199,7 +199,7 @@ function LogRow({ entry, isNew }: { entry: LogEntry; isNew?: boolean }) {
             initial={isNew ? { opacity: 0, x: -8, backgroundColor: 'rgba(16,185,129,0.1)' } : { opacity: 1 }}
             animate={{ opacity: 1, x: 0, backgroundColor: 'transparent' }}
             transition={{ duration: 0.4 }}
-            className="flex items-start gap-3 py-3 border-b border-slate-200 dark:border-slate-800/60 last:border-0"
+            className="flex items-start gap-3 py-3 border-b border-psi last:border-0"
         >
             {/* Icon */}
             <div className={cn('w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 border text-sm', tDef.color.split(' ').slice(1).join(' '))}>
@@ -209,22 +209,22 @@ function LogRow({ entry, isNew }: { entry: LogEntry; isNew?: boolean }) {
             {/* Body */}
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-slate-900 dark:text-white text-xs font-semibold">{entry.actionTitle}</p>
+                    <p className="text-psi-primary text-xs font-semibold">{entry.actionTitle}</p>
                     <span className={cn('text-[9px] font-black px-1.5 py-0.5 rounded-full', s.bg, s.text)}>
                         {entry.status}
                     </span>
                     {isNew && <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">NEW</span>}
                 </div>
-                <div className="flex items-center gap-3 mt-0.5 text-slate-600 dark:text-slate-400 text-[10px]">
+                <div className="flex items-center gap-3 mt-0.5 text-psi-secondary text-[10px]">
                     <span>{entry.ruleName}</span>
                     <span className="flex items-center gap-0.5"><Icon size={8} /> {ACTION_DEFS[entry.actionType].label}</span>
                     <span className="flex items-center gap-0.5"><Users size={8} /> {entry.recipients.toLocaleString()} recipients</span>
-                    {entry.note && <span className="text-slate-600 italic">"{entry.note}"</span>}
+                    {entry.note && <span className="text-psi-muted italic">"{entry.note}"</span>}
                 </div>
             </div>
 
             {/* Timestamp */}
-            <span className="text-slate-600 text-[10px] flex-shrink-0 font-mono">{relativeTime(entry.timestamp)}</span>
+            <span className="text-psi-muted text-[10px] flex-shrink-0 font-mono">{relativeTime(entry.timestamp)}</span>
         </motion.div>
     );
 }
@@ -304,13 +304,13 @@ function RuleBuilder({
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95 }}
                 onClick={e => e.stopPropagation()}
-                className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+                className="bg-psi-page border border-psi rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
             >
                 {/* Header */}
-                <div className="px-6 pt-6 pb-4 border-b border-slate-200 dark:border-slate-800 flex-shrink-0">
+                <div className="px-6 pt-6 pb-4 border-b border-psi flex-shrink-0">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-slate-900 dark:text-white font-black text-lg">{existing ? 'Edit Automation' : 'New Automation Rule'}</h2>
-                        <button onClick={onClose} className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <h2 className="text-psi-primary font-black text-lg">{existing ? 'Edit Automation' : 'New Automation Rule'}</h2>
+                        <button onClick={onClose} className="p-2 rounded-lg text-psi-secondary hover:text-psi-primary hover:bg-psi-subtle transition-colors">
                             <X size={16} />
                         </button>
                     </div>
@@ -318,8 +318,8 @@ function RuleBuilder({
                     <div className="flex gap-1">
                         {steps.map((s, i) => (
                             <div key={s} className="flex-1 flex flex-col items-center gap-1">
-                                <div className={cn('w-full h-1 rounded-full transition-all', i <= step ? 'bg-violet-500' : 'bg-slate-100 dark:bg-slate-800')} />
-                                <span className={cn('text-[9px] font-black uppercase tracking-wider', i === step ? 'text-violet-400' : i < step ? 'text-slate-600 dark:text-slate-400' : 'text-slate-700')}>{s}</span>
+                                <div className={cn('w-full h-1 rounded-full transition-all', i <= step ? 'bg-violet-500' : 'bg-psi-subtle')} />
+                                <span className={cn('text-[9px] font-black uppercase tracking-wider', i === step ? 'text-violet-400' : i < step ? 'text-psi-secondary' : 'text-psi-muted')}>{s}</span>
                             </div>
                         ))}
                     </div>
@@ -333,35 +333,35 @@ function RuleBuilder({
                         {step === 0 && (
                             <motion.div key="s0" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                                 className="space-y-3">
-                                <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">What event should start this automation?</p>
+                                <p className="text-psi-secondary text-xs mb-4">What event should start this automation?</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     {TRIGGER_OPTIONS.map(([key, def]) => (
                                         <button key={key} onClick={() => setTrigger(key)}
                                             className={cn('text-left p-3 rounded-xl border transition-all',
-                                                trigger === key ? 'border-violet-500 bg-violet-500/10' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700')}>
+                                                trigger === key ? 'border-violet-500 bg-violet-500/10' : 'border-psi bg-psi-surface hover:border-psi-strong')}>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className="text-lg">{def.emoji}</span>
-                                                <span className="text-slate-900 dark:text-white text-xs font-bold">{def.label}</span>
+                                                <span className="text-psi-primary text-xs font-bold">{def.label}</span>
                                                 {trigger === key && <CheckCircle2 size={12} className="text-violet-400 ml-auto" />}
                                             </div>
-                                            <p className="text-slate-600 dark:text-slate-400 text-[10px] leading-relaxed">{def.description}</p>
+                                            <p className="text-psi-secondary text-[10px] leading-relaxed">{def.description}</p>
                                         </button>
                                     ))}
                                 </div>
                                 {tDef.hasDelay && (
-                                    <div className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
-                                        <label className="text-slate-600 dark:text-slate-400 text-xs whitespace-nowrap">
+                                    <div className="flex items-center gap-3 bg-psi-surface border border-psi rounded-xl p-4">
+                                        <label className="text-psi-secondary text-xs whitespace-nowrap">
                                             {trigger === 'CAPACITY_THRESHOLD' ? 'At' : 'Fire'}
                                         </label>
                                         <input type="number" value={offset} onChange={e => setOffset(Number(e.target.value))}
-                                            className="w-24 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white text-sm text-center focus:outline-none focus:border-violet-500" />
-                                        <span className="text-slate-600 dark:text-slate-400 text-xs">{tDef.delayLabel}</span>
+                                            className="w-24 bg-psi-subtle border border-psi-strong rounded-lg px-2 py-1.5 text-psi-primary text-sm text-center focus:outline-none focus:border-violet-500" />
+                                        <span className="text-psi-secondary text-xs">{tDef.delayLabel}</span>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
-                                    <label className="text-slate-600 dark:text-slate-400 text-xs whitespace-nowrap">Session filter</label>
+                                <div className="flex items-center gap-3 bg-psi-surface border border-psi rounded-xl p-4">
+                                    <label className="text-psi-secondary text-xs whitespace-nowrap">Session filter</label>
                                     <select value={sessionFilter} onChange={e => setSessionFilter(e.target.value)}
-                                        className="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-violet-500">
+                                        className="flex-1 bg-psi-subtle border border-psi-strong rounded-lg px-2 py-1.5 text-psi-primary text-sm focus:outline-none focus:border-violet-500">
                                         {['All Sessions', 'Keynote', 'VIP Sessions', 'Workshop', 'Investment Track', 'ESG Track'].map(o => (
                                             <option key={o}>{o}</option>
                                         ))}
@@ -374,25 +374,25 @@ function RuleBuilder({
                         {step === 1 && (
                             <motion.div key="s1" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                                 className="space-y-4">
-                                <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">Give your automation a clear name for your team.</p>
+                                <p className="text-psi-secondary text-xs mb-4">Give your automation a clear name for your team.</p>
                                 <div>
-                                    <label className="text-slate-600 dark:text-slate-400 text-xs font-bold mb-1.5 block">Rule Name *</label>
+                                    <label className="text-psi-secondary text-xs font-bold mb-1.5 block">Rule Name *</label>
                                     <input value={name} onChange={e => setName(e.target.value)}
                                         placeholder="e.g. Session 1-Hour Reminder"
-                                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-600 focus:outline-none focus:border-violet-500 text-sm" />
+                                        className="w-full bg-psi-surface border border-psi-strong rounded-xl px-4 py-3 text-psi-primary placeholder-slate-600 focus:outline-none focus:border-violet-500 text-sm" />
                                 </div>
                                 <div>
-                                    <label className="text-slate-600 dark:text-slate-400 text-xs font-bold mb-1.5 block">Description</label>
+                                    <label className="text-psi-secondary text-xs font-bold mb-1.5 block">Description</label>
                                     <textarea value={desc} onChange={e => setDesc(e.target.value)} rows={3}
                                         placeholder="What does this automation do?"
-                                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-600 focus:outline-none focus:border-violet-500 text-sm resize-none" />
+                                        className="w-full bg-psi-surface border border-psi-strong rounded-xl px-4 py-3 text-psi-primary placeholder-slate-600 focus:outline-none focus:border-violet-500 text-sm resize-none" />
                                 </div>
                                 {/* Trigger summary */}
                                 <div className={cn('flex items-center gap-3 rounded-xl border p-3', tDef.color.split(' ').slice(1).join(' '))}>
                                     <span className="text-2xl">{tDef.emoji}</span>
                                     <div>
                                         <p className={cn('text-xs font-bold', tDef.color.split(' ')[0])}>{tDef.label}{tDef.hasDelay ? ` · ${offset} ${trigger === 'CAPACITY_THRESHOLD' ? '%' : 'min'}` : ''}</p>
-                                        <p className="text-slate-600 dark:text-slate-400 text-[10px]">{sessionFilter}</p>
+                                        <p className="text-psi-secondary text-[10px]">{sessionFilter}</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -402,56 +402,56 @@ function RuleBuilder({
                         {step === 2 && (
                             <motion.div key="s2" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                                 className="space-y-4">
-                                <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">Define what happens when this automation fires. You can chain multiple actions.</p>
+                                <p className="text-psi-secondary text-xs mb-4">Define what happens when this automation fires. You can chain multiple actions.</p>
                                 {actions.map((action, i) => (
-                                    <div key={i} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
+                                    <div key={i} className="bg-psi-surface border border-psi rounded-xl p-4 space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <span className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider">Action {i + 1}</span>
+                                            <span className="text-psi-secondary text-[10px] font-black uppercase tracking-wider">Action {i + 1}</span>
                                             {actions.length > 1 && (
-                                                <button onClick={() => removeAction(i)} className="p-1 rounded text-slate-600 hover:text-red-400 transition-colors">
+                                                <button onClick={() => removeAction(i)} className="p-1 rounded text-psi-muted hover:text-red-400 transition-colors">
                                                     <X size={12} />
                                                 </button>
                                             )}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             <div>
-                                                <label className="text-slate-600 dark:text-slate-400 text-[10px] font-bold mb-1 block">Action Type</label>
+                                                <label className="text-psi-secondary text-[10px] font-bold mb-1 block">Action Type</label>
                                                 <select value={action.type}
                                                     onChange={e => updateAction(i, { type: e.target.value as ActionType })}
-                                                    className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-violet-500">
+                                                    className="w-full bg-psi-subtle border border-psi-strong rounded-lg px-2 py-1.5 text-psi-primary text-xs focus:outline-none focus:border-violet-500">
                                                     {ACTION_OPTIONS.map(([key, def]) => (
                                                         <option key={key} value={key}>{def.emoji} {def.label}</option>
                                                     ))}
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className="text-slate-600 dark:text-slate-400 text-[10px] font-bold mb-1 block">Target</label>
+                                                <label className="text-psi-secondary text-[10px] font-bold mb-1 block">Target</label>
                                                 <select value={action.targetSegment}
                                                     onChange={e => updateAction(i, { targetSegment: e.target.value as AutomationAction['targetSegment'] })}
-                                                    className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-violet-500">
+                                                    className="w-full bg-psi-subtle border border-psi-strong rounded-lg px-2 py-1.5 text-psi-primary text-xs focus:outline-none focus:border-violet-500">
                                                     {['All Attendees', 'Session Attendees', 'VIP Only', 'Admins Only'].map(o => <option key={o}>{o}</option>)}
                                                 </select>
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="text-slate-600 dark:text-slate-400 text-[10px] font-bold mb-1 block">Title / Subject *</label>
+                                            <label className="text-psi-secondary text-[10px] font-bold mb-1 block">Title / Subject *</label>
                                             <input value={action.title}
                                                 onChange={e => updateAction(i, { title: e.target.value })}
                                                 placeholder="e.g. ⏰ Session Starting in 1 Hour"
-                                                className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-xs placeholder-slate-600 focus:outline-none focus:border-violet-500" />
+                                                className="w-full bg-psi-subtle border border-psi-strong rounded-lg px-3 py-2 text-psi-primary text-xs placeholder-slate-600 focus:outline-none focus:border-violet-500" />
                                         </div>
                                         <div>
-                                            <label className="text-slate-600 dark:text-slate-400 text-[10px] font-bold mb-1 block">Body <span className="normal-case font-normal text-slate-600">(use {'{{session_name}}'} etc)</span></label>
+                                            <label className="text-psi-secondary text-[10px] font-bold mb-1 block">Body <span className="normal-case font-normal text-psi-muted">(use {'{{session_name}}'} etc)</span></label>
                                             <textarea value={action.body}
                                                 onChange={e => updateAction(i, { body: e.target.value })}
                                                 rows={2} placeholder="Message body…"
-                                                className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white text-xs placeholder-slate-600 focus:outline-none focus:border-violet-500 resize-none" />
+                                                className="w-full bg-psi-subtle border border-psi-strong rounded-lg px-3 py-2 text-psi-primary text-xs placeholder-slate-600 focus:outline-none focus:border-violet-500 resize-none" />
                                         </div>
                                         {/* Token chips */}
                                         <div className="flex flex-wrap gap-1">
                                             {['{{session_name}}', '{{session_time}}', '{{session_room}}', '{{speaker_name}}', '{{attendee_count}}'].map(t => (
                                                 <button key={t} onClick={() => updateAction(i, { body: action.body + t })}
-                                                    className="text-[9px] bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded hover:text-slate-900 dark:hover:text-white hover:border-slate-500 transition-colors font-mono">
+                                                    className="text-[9px] bg-psi-subtle border border-psi-strong text-psi-secondary px-1.5 py-0.5 rounded hover:text-psi-primary hover:border-psi-strong transition-colors font-mono">
                                                     {t}
                                                 </button>
                                             ))}
@@ -460,7 +460,7 @@ function RuleBuilder({
                                 ))}
                                 {actions.length < 4 && (
                                     <button onClick={addAction}
-                                        className="w-full py-2.5 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 text-xs hover:border-violet-500/50 hover:text-violet-400 transition-colors flex items-center justify-center gap-2">
+                                        className="w-full py-2.5 border-2 border-dashed border-psi-strong rounded-xl text-psi-secondary text-xs hover:border-violet-500/50 hover:text-violet-400 transition-colors flex items-center justify-center gap-2">
                                         <Plus size={13} /> Add Another Action
                                     </button>
                                 )}
@@ -471,11 +471,11 @@ function RuleBuilder({
                         {step === 3 && (
                             <motion.div key="s3" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
                                 className="space-y-4">
-                                <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">Review your automation before saving. It will be set to <strong className="text-slate-900 dark:text-white">Active</strong> immediately.</p>
+                                <p className="text-psi-secondary text-xs mb-4">Review your automation before saving. It will be set to <strong className="text-psi-primary">Active</strong> immediately.</p>
 
-                                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-2">
-                                    <p className="text-slate-900 dark:text-white font-bold text-sm">{name}</p>
-                                    {desc && <p className="text-slate-600 dark:text-slate-400 text-xs">{desc}</p>}
+                                <div className="bg-psi-surface border border-psi rounded-xl p-4 space-y-2">
+                                    <p className="text-psi-primary font-bold text-sm">{name}</p>
+                                    {desc && <p className="text-psi-secondary text-xs">{desc}</p>}
                                 </div>
 
                                 <div className={cn('flex items-center gap-3 rounded-xl border p-3', TRIGGER_DEFS[trigger].color.split(' ').slice(1).join(' '))}>
@@ -485,7 +485,7 @@ function RuleBuilder({
                                             TRIGGER: {TRIGGER_DEFS[trigger].label}
                                             {TRIGGER_DEFS[trigger].hasDelay && ` · ${offset} ${trigger === 'CAPACITY_THRESHOLD' ? '%' : 'min'}`}
                                         </p>
-                                        <p className="text-slate-600 dark:text-slate-400 text-[10px]">{sessionFilter}</p>
+                                        <p className="text-psi-secondary text-[10px]">{sessionFilter}</p>
                                     </div>
                                 </div>
 
@@ -493,15 +493,15 @@ function RuleBuilder({
                                     const def = ACTION_DEFS[a.type];
                                     const Icon = ACTION_ICONS[a.type] ?? Bell;
                                     return (
-                                        <div key={i} className="flex items-start gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3">
+                                        <div key={i} className="flex items-start gap-3 bg-psi-surface border border-psi rounded-xl p-3">
                                             <div className="flex items-center gap-2 w-8 pt-0.5 flex-shrink-0">
-                                                {i === 0 ? <ChevronRight size={12} className="text-slate-600" /> : <span className="text-slate-600 text-xs">+</span>}
+                                                {i === 0 ? <ChevronRight size={12} className="text-psi-muted" /> : <span className="text-psi-muted text-xs">+</span>}
                                             </div>
                                             <Icon size={14} className={cn('mt-0.5 flex-shrink-0', def.color)} />
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-slate-900 dark:text-white text-xs font-semibold">{def.label} → {a.targetSegment}</p>
-                                                <p className="text-slate-600 dark:text-slate-400 text-xs font-bold mt-0.5">"{a.title}"</p>
-                                                {a.body && <p className="text-slate-600 text-[10px] mt-0.5 italic truncate">{a.body}</p>}
+                                                <p className="text-psi-primary text-xs font-semibold">{def.label} → {a.targetSegment}</p>
+                                                <p className="text-psi-secondary text-xs font-bold mt-0.5">"{a.title}"</p>
+                                                {a.body && <p className="text-psi-muted text-[10px] mt-0.5 italic truncate">{a.body}</p>}
                                             </div>
                                         </div>
                                     );
@@ -512,10 +512,10 @@ function RuleBuilder({
                 </div>
 
                 {/* Footer nav */}
-                <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+                <div className="px-6 py-4 border-t border-psi flex items-center justify-between flex-shrink-0">
                     <button
                         onClick={() => step === 0 ? onClose() : setStep((step - 1) as BuilderStep)}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-700 transition-colors">
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-psi-subtle border border-psi-strong text-psi-secondary text-sm font-semibold hover:bg-psi-subtle transition-colors">
                         {step === 0 ? 'Cancel' : <><ChevronLeft size={14} /> Back</>}
                     </button>
                     <div className="flex gap-2">
@@ -523,14 +523,14 @@ function RuleBuilder({
                             <button
                                 disabled={!canAdvance}
                                 onClick={() => setStep((step + 1) as BuilderStep)}
-                                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-slate-900 dark:text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
                                 Next <ChevronRight size={14} />
                             </button>
                         ) : (
                             <button
                                 disabled={!name.trim() || actions.some(a => !a.title.trim())}
                                 onClick={handleSave}
-                                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-900 dark:text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
                                 <CheckCircle2 size={14} /> Save & Activate
                             </button>
                         )}
@@ -554,14 +554,14 @@ function SimNotification({ msg, onDismiss }: { msg: string; onDismiss: () => voi
             initial={{ opacity: 0, y: -20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.97 }}
-            className="fixed top-16 right-4 z-[60] bg-white dark:bg-slate-900 border border-emerald-500/30 rounded-2xl px-4 py-3 max-w-xs shadow-2xl shadow-emerald-900/20"
+            className="fixed top-16 right-4 z-[60] bg-psi-surface border border-emerald-500/30 rounded-2xl px-4 py-3 max-w-xs shadow-2xl shadow-emerald-900/20"
         >
             <div className="flex items-center gap-2 mb-1">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <p className="text-emerald-400 text-[10px] font-black uppercase tracking-wider">Test Notification</p>
             </div>
-            <p className="text-slate-900 dark:text-white text-sm font-semibold">{msg}</p>
-            <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">This is a simulation — no real notification was sent</p>
+            <p className="text-psi-primary text-sm font-semibold">{msg}</p>
+            <p className="text-psi-secondary text-xs mt-0.5">This is a simulation — no real notification was sent</p>
         </motion.div>
     );
 }
@@ -668,30 +668,30 @@ export default function EventAutomation() {
         [rules, filterStatus]);
 
     return (
-        <div className="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans overflow-hidden">
+        <div className="h-screen bg-psi-page flex flex-col font-sans overflow-hidden">
 
             {/* ── Header ───────────────────────────────────────────────── */}
-            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-5 py-3.5 flex-shrink-0">
+            <div className="bg-psi-surface border-b border-psi px-5 py-3.5 flex-shrink-0">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
                         <div className="flex items-center gap-2">
                             <Zap size={18} className="text-violet-400" />
-                            <h1 className="text-slate-900 dark:text-white font-extrabold text-base">Event Automation</h1>
+                            <h1 className="text-psi-primary font-extrabold text-base">Event Automation</h1>
                         </div>
-                        <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">
+                        <p className="text-psi-secondary text-xs mt-0.5">
                             {ruleStats.active} active rules · {logStats.totalRecipients.toLocaleString()} notifications sent today
                         </p>
                     </div>
                     <button
                         onClick={() => { setEditingRule(undefined); setShowBuilder(true); }}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-slate-900 dark:text-white text-sm font-bold transition-colors shadow-lg">
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold transition-colors shadow-lg">
                         <Plus size={14} /> New Automation
                     </button>
                 </div>
             </div>
 
             {/* ── Tab bar ─────────────────────────────────────────────── */}
-            <div className="flex border-b border-slate-200 dark:border-slate-800 px-5 bg-white dark:bg-slate-900/40 flex-shrink-0">
+            <div className="flex border-b border-psi px-5 bg-psi-surface/40 flex-shrink-0">
                 {([
                     { id: 'dashboard', label: 'Overview', icon: BarChart2 },
                     { id: 'rules', label: `Rules (${ruleStats.total})`, icon: Settings2 },
@@ -699,7 +699,7 @@ export default function EventAutomation() {
                 ] as { id: AppView; label: string; icon: React.ElementType }[]).map(t => (
                     <button key={t.id} onClick={() => setView(t.id)}
                         className={cn('flex items-center gap-1.5 px-4 py-3 text-sm font-semibold border-b-2 transition-colors',
-                            view === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300')}>
+                            view === t.id ? 'border-violet-500 text-violet-400' : 'border-transparent text-psi-secondary hover:text-psi-primary')}>
                         <t.icon size={13} /> {t.label}
                     </button>
                 ))}
@@ -725,16 +725,16 @@ export default function EventAutomation() {
                             {/* Active rule quick-view */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div>
-                                    <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Active Automations</p>
+                                    <p className="text-psi-secondary text-[10px] font-black uppercase tracking-wider mb-3">Active Automations</p>
                                     <div className="space-y-2">
                                         {rules.filter(r => r.status === 'active').map(rule => {
                                             const tDef = TRIGGER_DEFS[rule.trigger];
                                             return (
-                                                <div key={rule.id} className="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3">
+                                                <div key={rule.id} className="flex items-center gap-3 bg-psi-surface border border-psi rounded-xl p-3">
                                                     <span className="text-lg">{tDef.emoji}</span>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-slate-900 dark:text-white text-xs font-semibold truncate">{rule.name}</p>
-                                                        <p className="text-slate-600 dark:text-slate-400 text-[10px]">{rule.runCount} runs · {rule.actions.length} action{rule.actions.length !== 1 ? 's' : ''}</p>
+                                                        <p className="text-psi-primary text-xs font-semibold truncate">{rule.name}</p>
+                                                        <p className="text-psi-secondary text-[10px]">{rule.runCount} runs · {rule.actions.length} action{rule.actions.length !== 1 ? 's' : ''}</p>
                                                     </div>
                                                     <div className="flex items-center gap-1">
                                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -748,8 +748,8 @@ export default function EventAutomation() {
 
                                 {/* Recent log */}
                                 <div>
-                                    <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Recent Activity</p>
-                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 divide-y divide-slate-800/60">
+                                    <p className="text-psi-secondary text-[10px] font-black uppercase tracking-wider mb-3">Recent Activity</p>
+                                    <div className="bg-psi-surface border border-psi rounded-xl px-4 divide-y divide-slate-800/60">
                                         {log.slice(0, 6).map(entry => (
                                             <LogRow key={entry.id} entry={entry} isNew={newLogIds.has(entry.id)} />
                                         ))}
@@ -759,7 +759,7 @@ export default function EventAutomation() {
 
                             {/* Trigger type breakdown */}
                             <div>
-                                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-black uppercase tracking-wider mb-3">Rules by Trigger Type</p>
+                                <p className="text-psi-secondary text-[10px] font-black uppercase tracking-wider mb-3">Rules by Trigger Type</p>
                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                     {Object.entries(TRIGGER_DEFS).map(([key, def]) => {
                                         const count = rules.filter(r => r.trigger === key).length;
@@ -769,7 +769,7 @@ export default function EventAutomation() {
                                                 <span className="text-xl">{def.emoji}</span>
                                                 <div>
                                                     <p className={cn('text-xs font-bold', def.color.split(' ')[0])}>{count} rule{count !== 1 ? 's' : ''}</p>
-                                                    <p className="text-slate-600 dark:text-slate-400 text-[9px]">{def.label}</p>
+                                                    <p className="text-psi-secondary text-[9px]">{def.label}</p>
                                                 </div>
                                             </div>
                                         );
@@ -790,8 +790,8 @@ export default function EventAutomation() {
                                     <button key={s} onClick={() => setFilterStatus(s)}
                                         className={cn('px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-wider transition-all',
                                             filterStatus === s
-                                                ? s === 'all' ? 'bg-violet-600 border-violet-500 text-slate-900 dark:text-white' : `${STATUS_STYLES[s as RuleStatus]?.bg} ${STATUS_STYLES[s as RuleStatus]?.text} ${STATUS_STYLES[s as RuleStatus]?.border}`
-                                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700')}>
+                                                ? s === 'all' ? 'bg-violet-600 border-violet-500 text-white' : `${STATUS_STYLES[s as RuleStatus]?.bg} ${STATUS_STYLES[s as RuleStatus]?.text} ${STATUS_STYLES[s as RuleStatus]?.border}`
+                                                : 'bg-psi-surface border-psi text-psi-secondary hover:border-psi-strong')}>
                                         {s === 'all' ? `All (${rules.length})` : `${s} (${rules.filter(r => r.status === s).length})`}
                                     </button>
                                 ))}
@@ -811,7 +811,7 @@ export default function EventAutomation() {
                             </AnimatePresence>
 
                             {filteredRules.length === 0 && (
-                                <div className="text-center py-16 text-slate-600">
+                                <div className="text-center py-16 text-psi-muted">
                                     <Zap size={32} className="mx-auto mb-3" />
                                     <p>No {filterStatus === 'all' ? '' : filterStatus + ' '}rules yet</p>
                                 </div>
@@ -826,20 +826,20 @@ export default function EventAutomation() {
                             {/* Stats strip */}
                             <div className="flex gap-4 mb-5 flex-wrap">
                                 {[
-                                    { label: 'Total Events', value: log.length, color: 'text-slate-900 dark:text-white' },
+                                    { label: 'Total Events', value: log.length, color: 'text-psi-primary' },
                                     { label: 'Sent', value: logStats.sent, color: 'text-emerald-400' },
                                     { label: 'Failed', value: logStats.failed, color: 'text-red-400' },
                                     { label: 'Recipients', value: logStats.totalRecipients.toLocaleString(), color: 'text-sky-400' },
                                 ].map(s => (
-                                    <div key={s.label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5">
+                                    <div key={s.label} className="bg-psi-surface border border-psi rounded-xl px-4 py-2.5">
                                         <p className={cn('text-lg font-black', s.color)}>{s.value}</p>
-                                        <p className="text-slate-600 dark:text-slate-400 text-[10px]">{s.label}</p>
+                                        <p className="text-psi-secondary text-[10px]">{s.label}</p>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Log */}
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl px-5 divide-y divide-slate-800/60">
+                            <div className="bg-psi-surface border border-psi rounded-2xl px-5 divide-y divide-slate-800/60">
                                 <AnimatePresence initial={false}>
                                     {log.map(entry => (
                                         <LogRow key={entry.id} entry={entry} isNew={newLogIds.has(entry.id)} />

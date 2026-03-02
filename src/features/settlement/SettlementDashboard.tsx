@@ -121,7 +121,7 @@ export default function SettlementDashboard() {
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                                <Calculator size={18} className="text-slate-900 dark:text-white" />
+                                <Calculator size={18} className="text-psi-primary" />
                             </div>
                             <span className="text-amber-500 dark:text-amber-400 text-xs font-bold tracking-[0.2em] uppercase">Commission Engine · v2 FX</span>
                         </div>
@@ -224,7 +224,7 @@ export default function SettlementDashboard() {
                                 <p className="font-bold text-psi-primary flex items-center gap-2">
                                     Previous Event Clawbacks
                                     {allDebts.length > 0 && (
-                                        <span className="text-xs bg-rose-500 text-slate-900 dark:text-white px-2 py-0.5 rounded-full font-bold">{allDebts.length} outstanding</span>
+                                        <span className="text-xs bg-rose-500 text-psi-primary px-2 py-0.5 rounded-full font-bold">{allDebts.length} outstanding</span>
                                     )}
                                 </p>
                                 <p className="text-xs text-psi-muted mt-0.5">Debts are automatically deducted from agent commissions when the report is generated.</p>
@@ -299,7 +299,7 @@ export default function SettlementDashboard() {
                             <span className="ml-2 text-xs bg-amber-500/20 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full font-bold">{agents.length} agents</span>
                         </h2>
                         <button id="add-agent-btn" onClick={addAgent}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white text-sm font-bold transition-colors">
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold transition-colors">
                             <Plus size={15} /> Add Agent
                         </button>
                     </div>
@@ -346,7 +346,7 @@ export default function SettlementDashboard() {
                         {localCurrency !== 'AED' && (
                             <div className="flex items-center gap-2 px-3 py-2 bg-violet-500/10 border border-violet-500/20 rounded-xl text-[11px] text-violet-700 dark:text-violet-300">
                                 <Globe size={12} className="flex-shrink-0 text-violet-500 dark:text-violet-400" />
-                                Travel + stand costs entered in <strong className="text-violet-900 dark:text-white">{localCurrency}</strong> are auto-converted to AED at <strong className="text-violet-900 dark:text-white">1 {localCurrency} = {effectiveRate.toFixed(4)} AED</strong> before the tier split is applied.
+                                Travel + stand costs entered in <strong className="text-violet-700">{localCurrency}</strong> are auto-converted to AED at <strong className="text-violet-700">1 {localCurrency} = {effectiveRate.toFixed(4)} AED</strong> before the tier split is applied.
                             </div>
                         )}
                     </div>
@@ -354,7 +354,7 @@ export default function SettlementDashboard() {
                     <div className="flex justify-center mt-6">
                         <motion.button id="generate-settlement-btn" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                             onClick={generateReport} disabled={isGenerating || validAgents.length === 0}
-                            className="flex items-center gap-3 px-6 md:px-10 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 dark:text-white font-extrabold text-base md:text-lg tracking-tight transition-all select-none shadow-lg shadow-amber-500/20">
+                            className="flex items-center gap-3 px-6 md:px-10 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed text-psi-primary font-extrabold text-base md:text-lg tracking-tight transition-all select-none shadow-lg shadow-amber-500/20">
                             {isGenerating ? (
                                 <><div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin" /> Calculating…</>
                             ) : (
@@ -380,7 +380,7 @@ export default function SettlementDashboard() {
                                         <Printer size={15} /> Save as PDF
                                     </button>
                                     <button id="download-report-btn" onClick={handlePrint}
-                                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white text-sm font-bold transition-colors">
+                                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-sm font-bold transition-colors">
                                         <Download size={15} /> Download Report
                                     </button>
                                 </div>
@@ -393,15 +393,15 @@ export default function SettlementDashboard() {
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
                                     className="mt-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl px-6 py-4 flex items-center gap-4">
                                     <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <Award size={20} className="text-slate-900 dark:text-white" />
+                                        <Award size={20} className="text-psi-primary" />
                                     </div>
                                     <div>
                                         <p className="text-amber-700 dark:text-amber-400 text-xs font-bold uppercase tracking-widest mb-0.5">Top Performer This Roadshow</p>
-                                        <p className="text-slate-900 dark:text-white font-bold">
+                                        <p className="text-psi-primary font-bold">
                                             {report.summary.highestEarner.agent.name}
                                             <span className="text-amber-600 dark:text-amber-400 ml-2">→ {formatAED(report.summary.highestEarner.agentCommission)} commission earned</span>
                                         </p>
-                                        <p className="text-slate-600 dark:text-slate-400 dark:text-slate-400 text-xs">
+                                        <p className="text-psi-secondary text-xs">
                                             {report.summary.highestEarner.agent.branch} · {report.summary.highestEarner.tier.label} tier ·{' '}
                                             Net {formatAED(report.summary.highestEarner.netRevenue)} (gross {formatAED(report.summary.highestEarner.agent.closedRevenue)} − {formatAED(report.summary.highestEarner.totalDeductionsAed)} deductions)
                                         </p>

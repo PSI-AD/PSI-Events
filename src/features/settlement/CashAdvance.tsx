@@ -80,7 +80,7 @@ const MAX_ADVANCE_PCT = 0.50;          // cap at 50% of locked commission
 
 const TIER_LABELS: Record<AgentTier, { label: string; color: string; bg: string; ring: string }> = {
     gold: { label: 'Gold', color: 'text-amber-400', bg: 'bg-amber-500/15', ring: 'ring-amber-500/30' },
-    silver: { label: 'Silver', color: 'text-slate-700 dark:text-slate-300', bg: 'bg-slate-500/15', ring: 'ring-slate-400/25' },
+    silver: { label: 'Silver', color: 'text-psi-secondary', bg: 'bg-psi-subtle0/15', ring: 'ring-slate-400/25' },
     bronze: { label: 'Bronze', color: 'text-orange-400', bg: 'bg-orange-500/15', ring: 'ring-orange-500/25' },
 };
 
@@ -186,9 +186,9 @@ function KPITile({ label, value, sub, icon, accent }: {
             <div className={`w-8 h-8 rounded-xl ${colors[accent]} flex items-center justify-center mb-3 ring-1 ${colors[accent]}`}>
                 <span className={iconColors[accent]}>{icon}</span>
             </div>
-            <p className="text-slate-900 dark:text-white font-extrabold text-xl font-mono">{value}</p>
-            <p className="text-slate-900 dark:text-white/40 text-[10px] font-bold uppercase tracking-widest mt-0.5">{label}</p>
-            {sub && <p className="text-slate-900 dark:text-white/25 text-[9px] mt-0.5">{sub}</p>}
+            <p className="text-psi-primary font-extrabold text-xl font-mono">{value}</p>
+            <p className="text-psi-muted text-[10px] font-bold uppercase tracking-widest mt-0.5">{label}</p>
+            {sub && <p className="text-psi-muted text-[9px] mt-0.5">{sub}</p>}
         </div>
     );
 }
@@ -283,24 +283,24 @@ export function AgentAdvanceView({
                             <Lock size={12} className="text-amber-400" />
                             <span className="text-amber-400 text-[10px] font-black uppercase tracking-[0.25em]">Locked Commission</span>
                         </div>
-                        <p className="text-4xl font-extrabold text-slate-900 dark:text-white font-mono mb-1">{fmt(lockedCommission)}</p>
-                        <p className="text-slate-900 dark:text-white/30 text-xs">{eventName} · Pending final settlement</p>
+                        <p className="text-4xl font-extrabold text-psi-primary font-mono mb-1">{fmt(lockedCommission)}</p>
+                        <p className="text-psi-muted text-xs">{eventName} · Pending final settlement</p>
                         <div className="mt-2">
                             <TierBadge tier={agentTier} />
                         </div>
                     </div>
 
                     {/* Max advance callout */}
-                    <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-right">
-                        <p className="text-slate-900 dark:text-white/30 text-[10px] font-bold uppercase tracking-widest mb-1">Max Advance (50%)</p>
+                    <div className="bg-psi-subtle border border-psi rounded-2xl px-5 py-4 text-right">
+                        <p className="text-psi-muted text-[10px] font-bold uppercase tracking-widest mb-1">Max Advance (50%)</p>
                         <p className="text-emerald-400 font-extrabold text-2xl font-mono">{fmt(maxAdvance)}</p>
-                        <p className="text-slate-900 dark:text-white/20 text-[9px] mt-0.5">After 2% fee: {fmt(Math.round(maxAdvance * 0.98))}</p>
+                        <p className="text-psi-muted text-[9px] mt-0.5">After 2% fee: {fmt(Math.round(maxAdvance * 0.98))}</p>
                     </div>
                 </div>
 
                 {/* Progress bar: remaining after max advance */}
                 <div className="mt-5">
-                    <div className="flex justify-between text-[9px] text-slate-900 dark:text-white/30 mb-1">
+                    <div className="flex justify-between text-[9px] text-psi-muted mb-1">
                         <span>Advanceable (50%)</span>
                         <span>Held until settlement (50%)</span>
                     </div>
@@ -317,11 +317,11 @@ export function AgentAdvanceView({
                     <div className="flex items-start justify-between gap-3">
                         <div>
                             <StatusBadge status={existingRequest.status} />
-                            <p className="text-slate-900 dark:text-white font-extrabold mt-2">{fmt(existingRequest.requestedAmount)} advance requested</p>
-                            <p className="text-slate-900 dark:text-white/40 text-xs mt-0.5">
+                            <p className="text-psi-primary font-extrabold mt-2">{fmt(existingRequest.requestedAmount)} advance requested</p>
+                            <p className="text-psi-muted text-xs mt-0.5">
                                 Fee: {fmt(existingRequest.feeAed)} · Net draw: {fmt(existingRequest.netDrawAed)}
                             </p>
-                            <p className="text-slate-900 dark:text-white/25 text-[10px] mt-1.5">{timeAgo(existingRequest.requestedAt)}</p>
+                            <p className="text-psi-muted text-[10px] mt-1.5">{timeAgo(existingRequest.requestedAt)}</p>
                             {existingRequest.status === 'declined' && existingRequest.declineReason && (
                                 <div className="mt-3 bg-rose-500/10 border border-rose-500/20 rounded-xl px-3 py-2">
                                     <p className="text-rose-400 text-xs italic">"{existingRequest.declineReason}"</p>
@@ -343,15 +343,15 @@ export function AgentAdvanceView({
             <AnimatePresence>
                 {showForm && (
                     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                        className="rounded-3xl bg-white/4 border border-black/10 dark:border-white/10 p-6 space-y-6">
+                        className="rounded-3xl bg-white/4 border border-psi p-6 space-y-6">
 
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Zap size={14} className="text-emerald-400" />
-                                <p className="text-slate-900 dark:text-white font-extrabold text-sm">Configure Advance Request</p>
+                                <p className="text-psi-primary font-extrabold text-sm">Configure Advance Request</p>
                             </div>
                             <button onClick={() => setShowForm(false)}
-                                className="w-7 h-7 rounded-lg bg-white/6 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white transition-all">
+                                className="w-7 h-7 rounded-lg bg-white/6 border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary transition-all">
                                 <X size={12} />
                             </button>
                         </div>
@@ -359,8 +359,8 @@ export function AgentAdvanceView({
                         {/* Slider */}
                         <div>
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-slate-900 dark:text-white/50 text-xs font-bold">Advance Amount</span>
-                                <span className="text-slate-900 dark:text-white font-extrabold text-lg font-mono">{fmt(requestedAmount)}</span>
+                                <span className="text-psi-secondary text-xs font-bold">Advance Amount</span>
+                                <span className="text-psi-primary font-extrabold text-lg font-mono">{fmt(requestedAmount)}</span>
                             </div>
                             <input
                                 id="advance-slider"
@@ -372,7 +372,7 @@ export function AgentAdvanceView({
                                 onChange={e => setRequestedAmount(Number(e.target.value))}
                                 className="w-full accent-emerald-500 cursor-pointer"
                             />
-                            <div className="flex justify-between text-[9px] text-slate-900 dark:text-white/25 mt-1">
+                            <div className="flex justify-between text-[9px] text-psi-muted mt-1">
                                 <span>AED 1,000</span>
                                 <span>Max {fmt(maxAdvance)}</span>
                             </div>
@@ -381,13 +381,13 @@ export function AgentAdvanceView({
                         {/* Breakdown */}
                         <div className="space-y-2">
                             {[
-                                { label: 'Advance Requested', value: fmt(requestedAmount), color: 'text-slate-900 dark:text-white' },
+                                { label: 'Advance Requested', value: fmt(requestedAmount), color: 'text-psi-primary' },
                                 { label: 'Advance Fee (2%)', value: '− ' + fmt(feeAed), color: 'text-rose-400' },
                                 { label: 'Net Amount Received', value: fmt(netDrawAed), color: 'text-emerald-400' },
-                                { label: 'Held to Settlement', value: fmt(lockedCommission - requestedAmount), color: 'text-slate-900 dark:text-white/40' },
+                                { label: 'Held to Settlement', value: fmt(lockedCommission - requestedAmount), color: 'text-psi-muted' },
                             ].map(({ label, value, color }) => (
                                 <div key={label} className="flex items-center justify-between py-1.5 border-b border-white/6 last:border-0">
-                                    <span className="text-slate-900 dark:text-white/40 text-xs">{label}</span>
+                                    <span className="text-psi-muted text-xs">{label}</span>
                                     <span className={`font-extrabold text-sm font-mono ${color}`}>{value}</span>
                                 </div>
                             ))}
@@ -407,7 +407,7 @@ export function AgentAdvanceView({
                             whileTap={{ scale: 0.97 }}
                             onClick={handleSubmit}
                             disabled={phase === 'submitting' || requestedAmount <= 0}
-                            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-emerald-600/20 disabled:opacity-40 transition-all"
+                            className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-base shadow-xl shadow-emerald-600/20 disabled:opacity-40 transition-all"
                         >
                             {phase === 'submitting'
                                 ? <><Loader2 size={16} className="animate-spin" /> Submitting…</>
@@ -436,7 +436,7 @@ export function AgentAdvanceView({
                     id="request-advance-btn"
                     whileTap={{ scale: 0.97 }}
                     onClick={() => setShowForm(true)}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-emerald-600/20 hover:from-emerald-500 hover:to-teal-500 transition-all"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-base shadow-xl shadow-emerald-600/20 hover:from-emerald-500 hover:to-teal-500 transition-all"
                 >
                     <Wallet size={18} /> Request Commission Advance
                 </motion.button>
@@ -446,7 +446,7 @@ export function AgentAdvanceView({
                     id="request-advance-btn-retry"
                     whileTap={{ scale: 0.97 }}
                     onClick={() => { setShowForm(true); setPhase('idle'); }}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-white/6 border border-white/15 text-slate-900 dark:text-white/80 font-bold text-sm transition-all hover:bg-black/10 dark:hover:bg-white/10"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-white/6 border border-white/15 text-psi-primary font-bold text-sm transition-all hover:bg-psi-subtle"
                 >
                     <Zap size={15} /> Submit New Request
                 </motion.button>
@@ -554,8 +554,8 @@ export function ManagerAdvanceQueue({
                     <button key={s} id={`queue-filter-${s}`}
                         onClick={() => setFilterStatus(s)}
                         className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${filterStatus === s
-                                ? 'bg-indigo-600 text-slate-900 dark:text-white'
-                                : 'bg-black/5 dark:bg-white/5 text-slate-900 dark:text-white/35 hover:text-slate-900 dark:hover:text-white/70'
+                                ? 'bg-indigo-600 text-psi-primary'
+                                : 'bg-psi-subtle text-psi-primary/35 hover:text-psi-primary/70'
                             }`}
                     >
                         {s === 'all' ? `All (${requests.length})` : `${s} (${requests.filter(r => r.status === s).length})`}
@@ -572,7 +572,7 @@ export function ManagerAdvanceQueue({
                             <motion.div key={req.id} layout
                                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
                                 className={`rounded-3xl border ${req.status === 'pending'
-                                        ? 'bg-white/4 border-black/10 dark:border-white/10'
+                                        ? 'bg-white/4 border-psi'
                                         : req.status === 'approved'
                                             ? 'bg-emerald-500/5 border-emerald-500/20'
                                             : 'bg-rose-500/4 border-rose-500/15'
@@ -582,20 +582,20 @@ export function ManagerAdvanceQueue({
                                 <div className="px-5 py-4 flex items-start justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                         {/* Avatar */}
-                                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-slate-900 dark:text-white font-black text-base flex-shrink-0">
+                                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-psi-primary font-black text-base flex-shrink-0">
                                             {req.agentName.split(' ').map(w => w[0]).slice(0, 2).join('')}
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-2 flex-wrap">
-                                                <span className="text-slate-900 dark:text-white font-extrabold">{req.agentName}</span>
+                                                <span className="text-psi-primary font-extrabold">{req.agentName}</span>
                                                 <TierBadge tier={req.agentTier} />
                                             </div>
                                             <div className="flex items-center gap-2 mt-0.5">
-                                                <Building2 size={10} className="text-slate-900 dark:text-white/25" />
-                                                <span className="text-slate-900 dark:text-white/35 text-[10px]">{req.agentBranch}</span>
-                                                <span className="text-slate-900 dark:text-white/15">·</span>
-                                                <Clock size={10} className="text-slate-900 dark:text-white/25" />
-                                                <span className="text-slate-900 dark:text-white/35 text-[10px]">{timeAgo(req.requestedAt)}</span>
+                                                <Building2 size={10} className="text-psi-muted" />
+                                                <span className="text-psi-primary/35 text-[10px]">{req.agentBranch}</span>
+                                                <span className="text-psi-primary/15">·</span>
+                                                <Clock size={10} className="text-psi-muted" />
+                                                <span className="text-psi-primary/35 text-[10px]">{timeAgo(req.requestedAt)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -606,13 +606,13 @@ export function ManagerAdvanceQueue({
                                 <div className="px-5 pb-4">
                                     <div className="grid grid-cols-3 gap-3 mb-4">
                                         {[
-                                            { label: 'Locked Commission', value: fmt(req.lockedCommission), color: 'text-slate-900 dark:text-white/80' },
+                                            { label: 'Locked Commission', value: fmt(req.lockedCommission), color: 'text-psi-primary' },
                                             { label: 'Amount Requested', value: fmt(req.requestedAmount), color: 'text-amber-400' },
                                             { label: 'Net Draw (after 2% fee)', value: fmt(req.netDrawAed), color: 'text-emerald-400' },
                                         ].map(({ label, value, color }) => (
                                             <div key={label} className="bg-white/4 rounded-xl p-3 border border-white/6">
                                                 <p className={`font-extrabold text-sm font-mono ${color}`}>{value}</p>
-                                                <p className="text-slate-900 dark:text-white/25 text-[9px] mt-0.5 leading-tight">{label}</p>
+                                                <p className="text-psi-muted text-[9px] mt-0.5 leading-tight">{label}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -621,7 +621,7 @@ export function ManagerAdvanceQueue({
                                     <div className="flex items-center justify-between px-3 py-2 bg-white/3 border border-white/6 rounded-xl mb-4">
                                         <div className="flex items-center gap-2">
                                             <Percent size={11} className="text-rose-400" />
-                                            <span className="text-slate-900 dark:text-white/40 text-xs">Advance Fee (2%)</span>
+                                            <span className="text-psi-muted text-xs">Advance Fee (2%)</span>
                                         </div>
                                         <span className="text-rose-400 font-extrabold text-sm font-mono">− {fmt(req.feeAed)}</span>
                                     </div>
@@ -629,14 +629,14 @@ export function ManagerAdvanceQueue({
                                     {/* Decline reason input */}
                                     {declineId === req.id && (
                                         <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
-                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/30 mb-1.5">
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-1.5">
                                                 Decline Reason (optional)
                                             </label>
                                             <textarea
                                                 id={`decline-reason-${req.id}`}
                                                 value={declineReason} onChange={e => setDeclineReason(e.target.value)}
                                                 rows={2} placeholder="e.g. Pending final audit completion…"
-                                                className="w-full bg-black/5 dark:bg-white/5 border border-rose-500/30 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white/80 text-xs leading-relaxed focus:outline-none focus:border-rose-500/60 resize-none"
+                                                className="w-full bg-psi-subtle border border-rose-500/30 rounded-xl px-3 py-2.5 text-psi-primary text-xs leading-relaxed focus:outline-none focus:border-rose-500/60 resize-none"
                                             />
                                         </motion.div>
                                     )}
@@ -663,13 +663,13 @@ export function ManagerAdvanceQueue({
                                                     <button id={`confirm-decline-${req.id}`}
                                                         onClick={() => handleDecline(req)}
                                                         disabled={!!isActing}
-                                                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-slate-900 dark:text-white font-extrabold text-sm disabled:opacity-50 transition-all"
+                                                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm disabled:opacity-50 transition-all"
                                                     >
                                                         {isActing === 'declining' ? <Loader2 size={14} className="animate-spin" /> : <ThumbsDown size={14} />}
                                                         Confirm Decline
                                                     </button>
                                                     <button onClick={() => setDeclineId(null)}
-                                                        className="px-4 rounded-xl bg-white/6 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/50 hover:text-slate-900 dark:hover:text-white transition-all">
+                                                        className="px-4 rounded-xl bg-white/6 border border-psi text-psi-secondary hover:text-psi-primary transition-all">
                                                         Cancel
                                                     </button>
                                                 </>
@@ -681,7 +681,7 @@ export function ManagerAdvanceQueue({
                                                         whileTap={{ scale: 0.97 }}
                                                         onClick={() => handleApprove(req)}
                                                         disabled={!!isActing}
-                                                        className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-emerald-600/20 disabled:opacity-40 transition-all"
+                                                        className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-sm shadow-lg shadow-emerald-600/20 disabled:opacity-40 transition-all"
                                                     >
                                                         {isActing === 'approving'
                                                             ? <><Loader2 size={14} className="animate-spin" /> Processing…</>
@@ -708,7 +708,7 @@ export function ManagerAdvanceQueue({
                 </AnimatePresence>
 
                 {filtered.length === 0 && (
-                    <div className="text-center py-16 text-slate-900 dark:text-white/15">
+                    <div className="text-center py-16 text-psi-primary/15">
                         <ClipboardList size={32} className="mx-auto mb-3 opacity-30" />
                         <p className="text-sm">No requests in this view</p>
                     </div>
@@ -736,30 +736,30 @@ export default function CashAdvancePage({
     const [role, setRole] = useState<ViewRole>(defaultRole);
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white">
+        <div className="min-h-screen bg-psi-page text-psi-primary">
 
             {/* Header */}
             <header className="border-b border-white/8 px-5 py-4">
                 <div className="flex items-center gap-2 mb-0.5">
                     <div className="w-6 h-6 rounded-lg bg-emerald-600 flex items-center justify-center">
-                        <Wallet size={13} className="text-slate-900 dark:text-white" />
+                        <Wallet size={13} className="text-psi-primary" />
                     </div>
                     <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">Settlement Engine</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                     <div>
-                        <h1 className="text-slate-900 dark:text-white text-xl font-extrabold">Commission Advance</h1>
-                        <p className="text-slate-900 dark:text-white/30 text-xs mt-0.5">{eventName} · Advance at 2% fee · 50% cap</p>
+                        <h1 className="text-psi-primary text-xl font-extrabold">Commission Advance</h1>
+                        <p className="text-psi-muted text-xs mt-0.5">{eventName} · Advance at 2% fee · 50% cap</p>
                     </div>
 
                     {/* Role switcher */}
-                    <div className="flex bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl p-1 gap-1">
+                    <div className="flex bg-psi-subtle border border-psi rounded-xl p-1 gap-1">
                         {(['agent', 'manager'] as const).map(r => (
                             <button key={r} id={`role-tab-${r}`}
                                 onClick={() => setRole(r)}
                                 className={`px-4 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all ${role === r
-                                        ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md'
-                                        : 'text-slate-900 dark:text-white/35 hover:text-slate-900 dark:hover:text-white/70'
+                                        ? 'bg-indigo-600 text-psi-primary shadow-md'
+                                        : 'text-psi-primary/35 hover:text-psi-primary/70'
                                     }`}
                             >
                                 {r === 'agent' ? <><User size={10} className="inline mr-1" />Agent View</> : <><Shield size={10} className="inline mr-1" />Manager Queue</>}

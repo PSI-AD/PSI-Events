@@ -77,17 +77,17 @@ function ManualNav({
     onSelect: (id: SectionId) => void;
 }) {
     return (
-        <aside className="hidden md:flex flex-col w-64 lg:w-72 flex-shrink-0 sticky top-0 self-start h-screen border-r border-slate-200 dark:border-slate-800/60 bg-white dark:bg-slate-900 py-8 px-4 overflow-y-auto scrollbar-none">
+        <aside className="hidden md:flex flex-col w-64 lg:w-72 flex-shrink-0 sticky top-0 self-start h-screen border-r border-psi bg-psi-surface py-8 px-4 overflow-y-auto scrollbar-none">
             {/* Logo cap */}
             <div className="flex items-center gap-3 px-2 mb-8">
                 <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-600/30">
-                    <BookOpen size={15} className="text-slate-900 dark:text-white" />
+                    <BookOpen size={15} className="text-psi-primary" />
                 </div>
                 <div>
-                    <p className="text-slate-900 dark:text-white font-extrabold text-sm tracking-tight leading-none">
+                    <p className="text-psi-primary font-extrabold text-sm tracking-tight leading-none">
                         System Manual
                     </p>
-                    <p className="text-slate-600 dark:text-slate-400 text-[10px] uppercase tracking-widest mt-0.5">
+                    <p className="text-psi-secondary text-[10px] uppercase tracking-widest mt-0.5">
                         PSI Event Portal
                     </p>
                 </div>
@@ -96,7 +96,7 @@ function ManualNav({
             {/* Nav items */}
             <nav className="space-y-1 relative">
                 {/* Vertical timeline line */}
-                <div className="absolute left-[19px] top-1 bottom-1 w-px bg-slate-200 dark:bg-slate-700/60" />
+                <div className="absolute left-[19px] top-1 bottom-1 w-px bg-psi-border/60" />
 
                 {SECTIONS.map((sec) => {
                     const isActive = sec.id === active;
@@ -134,21 +134,21 @@ function ManualNav({
                                 'relative w-full flex items-start gap-3 pl-3 pr-3 py-3 rounded-xl text-left transition-all group border',
                                 isActive
                                     ? cn('border', activeBg)
-                                    : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                                    : 'border-transparent hover:bg-psi-subtle/50'
                             )}
                         >
                             {/* Timeline dot */}
                             <div
                                 className={cn(
                                     'w-3 h-3 rounded-full flex-shrink-0 mt-0.5 relative z-10 transition-all ring-2 ring-white dark:ring-slate-900',
-                                    isActive ? cn(dotColor, 'scale-125') : 'bg-slate-300 dark:bg-slate-600'
+                                    isActive ? cn(dotColor, 'scale-125') : 'bg-psi-border-strong'
                                 )}
                             />
                             <div className="min-w-0">
                                 <p
                                     className={cn(
                                         'text-[10px] font-black uppercase tracking-[0.18em] mb-0.5',
-                                        isActive ? activeText : 'text-slate-600 dark:text-slate-400'
+                                        isActive ? activeText : 'text-psi-secondary'
                                     )}
                                 >
                                     Section {sec.number}
@@ -157,13 +157,13 @@ function ManualNav({
                                     className={cn(
                                         'text-sm font-bold leading-snug',
                                         isActive
-                                            ? 'text-slate-900 dark:text-white'
-                                            : 'text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200'
+                                            ? 'text-psi-primary'
+                                            : 'text-psi-secondary group-hover:text-psi-primary'
                                     )}
                                 >
                                     {sec.label}
                                 </p>
-                                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 leading-tight">
+                                <p className="text-[11px] text-psi-secondary mt-0.5 leading-tight">
                                     {sec.sublabel}
                                 </p>
                             </div>
@@ -179,8 +179,8 @@ function ManualNav({
             </nav>
 
             {/* Footer note */}
-            <div className="mt-auto pt-6 border-t border-slate-200 dark:border-slate-800/60 px-2">
-                <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            <div className="mt-auto pt-6 border-t border-psi px-2">
+                <p className="text-[10px] text-psi-secondary leading-relaxed">
                     This manual documents the live PSI Event Portal system. Screenshots are illustrative.
                 </p>
             </div>
@@ -198,18 +198,18 @@ function MobileNav({
     onSelect: (id: SectionId) => void;
 }) {
     return (
-        <div className="md:hidden sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800/60 px-4 py-3">
+        <div className="md:hidden sticky top-0 z-20 bg-psi-surface backdrop-blur-sm border-b border-psi px-4 py-3">
             <div className="flex gap-2 overflow-x-auto scrollbar-none pb-0.5">
                 {SECTIONS.map((sec) => {
                     const isActive = sec.id === active;
                     const activeStyle =
                         sec.accent === 'emerald'
-                            ? 'bg-emerald-500 text-slate-900 dark:text-white shadow-emerald-500/30'
+                            ? 'bg-emerald-500 text-psi-primary shadow-emerald-500/30'
                             : sec.accent === 'blue'
-                                ? 'bg-blue-500 text-slate-900 dark:text-white shadow-blue-500/30'
+                                ? 'bg-blue-500 text-psi-primary shadow-blue-500/30'
                                 : sec.accent === 'amber'
-                                    ? 'bg-amber-500 text-slate-900 dark:text-white shadow-amber-500/30'
-                                    : 'bg-violet-500 text-slate-900 dark:text-white shadow-violet-500/30';
+                                    ? 'bg-amber-500 text-white shadow-amber-500/30'
+                                    : 'bg-violet-500 text-psi-primary shadow-violet-500/30';
                     return (
                         <button
                             key={sec.id}
@@ -218,7 +218,7 @@ function MobileNav({
                                 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all',
                                 isActive
                                     ? cn(activeStyle, 'shadow-md')
-                                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 dark:text-slate-400'
+                                    : 'bg-psi-subtle text-psi-secondary'
                             )}
                         >
                             <span className="opacity-70 text-[9px] font-black">{sec.number}.</span>
@@ -271,10 +271,10 @@ function SectionHeader({
                 </span>
                 <div className={cn('flex-1 h-px bg-gradient-to-r max-w-[80px]', barColors[accent])} />
             </div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-psi-primary tracking-tight leading-tight">
                 {title}
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 dark:text-slate-400 mt-2 text-base leading-relaxed">
+            <p className="text-psi-secondary mt-2 text-base leading-relaxed">
                 {subtitle}
             </p>
         </div>
@@ -361,13 +361,13 @@ function ScreenshotPlaceholder({
 
     return (
         <figure className="my-6">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-xl shadow-slate-900/10 overflow-hidden bg-white dark:bg-slate-900 p-2">
+            <div className="rounded-2xl border border-psi shadow-xl shadow-black/5 overflow-hidden bg-psi-surface p-2">
                 {!imgError ? (
                     <img
                         src={src}
                         alt={alt}
                         onError={() => setImgError(true)}
-                        className="w-full h-auto rounded-xl border border-black/10 dark:border-white/10 block"
+                        className="w-full h-auto rounded-xl border border-psi block"
                     />
                 ) : (
                     /* ── Fallback placeholder — entire area is a link, opens target page ── */
@@ -377,10 +377,10 @@ function ScreenshotPlaceholder({
                         rel="noopener noreferrer"
                         onClick={!baseHref ? (e) => e.preventDefault() : undefined}
                         className={[
-                            'block rounded-xl border border-black/10 dark:border-white/10 bg-slate-100 dark:bg-slate-800/60',
+                            'block rounded-xl border border-psi bg-psi-subtle/60',
                             'min-h-[240px] md:min-h-[300px] flex flex-col items-center justify-center gap-5 px-6 py-10',
                             baseHref
-                                ? 'cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700/60 hover:border-blue-500/50 hover:ring-2 hover:ring-blue-500/30 transition-all duration-200 group'
+                                ? 'cursor-pointer hover:bg-psi-subtle/60 hover:border-blue-500/50 hover:ring-2 hover:ring-blue-500/30 transition-all duration-200 group'
                                 : 'cursor-default',
                         ].join(' ')}
                     >
@@ -392,8 +392,8 @@ function ScreenshotPlaceholder({
                                 <div className="w-2 h-2 rounded-full bg-emerald-400" />
                             </div>
                             <div className="h-3 bg-slate-600 rounded-md w-3/4" />
-                            <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded-md w-1/2" />
-                            <div className="h-20 bg-slate-200 dark:bg-slate-700/60 rounded-xl mt-2" />
+                            <div className="h-3 bg-psi-border rounded-md w-1/2" />
+                            <div className="h-20 bg-psi-border/60 rounded-xl mt-2" />
                             <div className="flex gap-2">
                                 <div className="h-8 bg-emerald-500/30 rounded-lg flex-1" />
                                 <div className="h-8 bg-slate-600/60 rounded-lg flex-1" />
@@ -405,7 +405,7 @@ function ScreenshotPlaceholder({
 
                             {/* ── Step 1: Open the page ── */}
                             {baseHref ? (
-                                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-slate-900 dark:text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
+                                <div className="inline-flex items-center gap-2 bg-blue-600 group-hover:bg-blue-500 text-psi-primary font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-150 shadow-lg shadow-blue-900/40 group-hover:scale-105">
                                     <span>📸 Click to open this screen</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -414,7 +414,7 @@ function ScreenshotPlaceholder({
                                     </svg>
                                 </div>
                             ) : (
-                                <p className="text-slate-700 dark:text-slate-300 font-bold text-sm">Screenshot needed</p>
+                                <p className="text-psi-secondary font-bold text-sm">Screenshot needed</p>
                             )}
 
                             {/* ── Step 2: What to do once on that page (distinct per screenshot) ── */}
@@ -427,25 +427,25 @@ function ScreenshotPlaceholder({
 
                             {/* ── Step 3: Click-to-copy filename ── */}
                             <div className="flex items-center justify-center gap-1.5 text-xs font-mono">
-                                <span className="text-slate-600 dark:text-slate-400">Save as</span>
+                                <span className="text-psi-secondary">Save as</span>
                                 <button
                                     type="button"
                                     onClick={copyFilename}
                                     title="Click to copy filename"
-                                    className="relative inline-flex items-center gap-1 bg-slate-200 dark:bg-slate-700/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer select-all"
+                                    className="relative inline-flex items-center gap-1 bg-psi-border/60 hover:bg-slate-600/80 border border-slate-600/60 hover:border-emerald-500/50 text-emerald-400 font-bold px-2 py-0.5 rounded-lg transition-all duration-150 cursor-pointer select-all"
                                 >
                                     {filename}
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600 dark:text-slate-400 flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-psi-secondary flex-shrink-0">
                                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                                     </svg>
                                     {/* Copied! flash */}
                                     {copied && (
-                                        <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-slate-900 dark:text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
+                                        <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md whitespace-nowrap shadow-lg">
                                             ✓ Copied!
                                         </span>
                                     )}
                                 </button>
-                                <span className="text-slate-600 dark:text-slate-400">→</span>
+                                <span className="text-psi-secondary">→</span>
                                 <span className="text-blue-400">public/manual/</span>
                             </div>
                         </div>
@@ -453,7 +453,7 @@ function ScreenshotPlaceholder({
                 )}
             </div>
             {caption && (
-                <figcaption className="text-center text-[11px] text-slate-600 dark:text-slate-400 mt-2 font-medium">
+                <figcaption className="text-center text-[11px] text-psi-secondary mt-2 font-medium">
                     {caption}
                 </figcaption>
             )}
@@ -510,7 +510,7 @@ function AnimatedConnector({ index }: { index: number }) {
     return (
         <div className="flex items-center justify-center flex-shrink-0 w-10 md:w-16 relative">
             {/* Static track */}
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-200 dark:bg-slate-700" />
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-psi-border" />
             {/* Animated pulse dot */}
             <motion.div
                 className="relative z-10 w-2 h-2 rounded-full bg-emerald-400 shadow-md shadow-emerald-400/50"
@@ -525,7 +525,7 @@ function AnimatedConnector({ index }: { index: number }) {
             {/* Arrow head */}
             <ArrowRight
                 size={13}
-                className="absolute right-0 text-slate-700 dark:text-slate-300 dark:text-slate-600"
+                className="absolute right-0 text-psi-secondary"
             />
         </div>
     );
@@ -548,7 +548,7 @@ function WorkflowNode({
         >
             {/* Step badge */}
             <div
-                className="text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full mb-3 text-slate-900 dark:text-white"
+                className="text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-full mb-3 text-psi-primary"
                 style={{
                     background: `linear-gradient(135deg, ${node.accentFrom}, ${node.accentTo})`,
                 }}
@@ -572,10 +572,10 @@ function WorkflowNode({
             </div>
 
             {/* Label */}
-            <p className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight whitespace-pre-line">
+            <p className="text-sm font-extrabold text-psi-primary leading-tight whitespace-pre-line">
                 {node.label}
             </p>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400 dark:text-slate-400 mt-1 leading-snug max-w-[120px]">
+            <p className="text-[11px] text-psi-secondary mt-1 leading-snug max-w-[120px]">
                 {node.sublabel}
             </p>
         </motion.div>
@@ -584,14 +584,14 @@ function WorkflowNode({
 
 function AccountabilityJourneyDiagram() {
     return (
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800/50 overflow-hidden shadow-xl shadow-slate-900/5 my-8">
+        <div className="rounded-2xl border border-psi bg-gradient-to-br from-slate-50 to-white dark:from-slate-900 dark:to-slate-800/50 overflow-hidden shadow-xl shadow-black/3 my-8">
             {/* Header bar */}
-            <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-psi flex items-center justify-between">
                 <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
                         Live Process Diagram
                     </p>
-                    <p className="text-slate-900 dark:text-white font-bold text-sm mt-0.5">
+                    <p className="text-psi-primary font-bold text-sm mt-0.5">
                         Agent Accountability Chain
                     </p>
                 </div>
@@ -622,7 +622,7 @@ function AccountabilityJourneyDiagram() {
             </div>
 
             {/* Footer legend */}
-            <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700/60 bg-slate-50 dark:bg-slate-800/30 grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="px-6 py-4 border-t border-psi bg-psi-subtle grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                     { label: 'Gate: Document Upload', color: '#10b981' },
                     { label: 'Gate: Manager Token', color: '#3b82f6' },
@@ -634,7 +634,7 @@ function AccountabilityJourneyDiagram() {
                             className="w-2.5 h-2.5 rounded-full flex-shrink-0"
                             style={{ backgroundColor: item.color }}
                         />
-                        <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium leading-tight">
+                        <p className="text-[11px] text-psi-secondary font-medium leading-tight">
                             {item.label}
                         </p>
                     </div>
@@ -710,11 +710,11 @@ function JourneySection() {
                         >
                             <div className="flex items-center gap-3">
                                 <Icon size={18} className={iconColorMap[card.color]} />
-                                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                                <h3 className="text-sm font-bold text-psi-primary">
                                     {card.title}
                                 </h3>
                             </div>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            <p className="text-sm text-psi-secondary leading-relaxed">
                                 {card.desc}
                             </p>
                         </div>
@@ -773,8 +773,8 @@ const ACCENT_STYLES = {
         iconBg: 'bg-blue-50 dark:bg-blue-500/10',
         iconColor: 'text-blue-600 dark:text-blue-400',
         badge: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300',
-        labelColor: 'text-slate-800 dark:text-white',
-        sublabelColor: 'text-slate-600 dark:text-slate-400 dark:text-slate-400',
+        labelColor: 'text-psi-primary',
+        sublabelColor: 'text-psi-secondary',
         border: 'border-blue-100 dark:border-blue-500/20',
         glow: '',
     },
@@ -792,7 +792,7 @@ const ACCENT_STYLES = {
 
 function CheckInFlowDiagram() {
     return (
-        <div className="my-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 lg:p-12 shadow-lg shadow-slate-900/5 overflow-hidden">
+        <div className="my-8 rounded-3xl border border-psi bg-psi-surface p-6 md:p-8 lg:p-12 shadow-lg shadow-black/3 overflow-hidden">
             {/* CSS for dashed line animation */}
             <style>{`
                 @keyframes dash-flow {
@@ -805,7 +805,7 @@ function CheckInFlowDiagram() {
                 }
             `}</style>
 
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-600 dark:text-slate-400 dark:text-slate-500 mb-6 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-psi-secondary mb-6 text-center">
                 Check-In Process · Event Day Flow
             </p>
 
@@ -830,7 +830,7 @@ function CheckInFlowDiagram() {
                                     s.ring, s.border, s.glow,
                                     step.accent === 'emerald'
                                         ? 'bg-gradient-to-b from-emerald-50/80 to-white dark:from-emerald-950/40 dark:to-slate-900'
-                                        : 'bg-white dark:bg-slate-800/60',
+                                        : 'bg-psi-surface/60',
                                 )}
                             >
                                 {/* Step badge */}
@@ -935,20 +935,20 @@ function CheckInFlowDiagram() {
             </div>
 
             {/* Legend */}
-            <div className="flex items-center justify-center gap-6 mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-center gap-6 mt-6 pt-5 border-t border-psi-subtle">
                 <div className="flex items-center gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-blue-400/60" />
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 dark:text-slate-400 font-semibold">Security Gate</span>
+                    <span className="text-[10px] text-psi-secondary font-semibold">Security Gate</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 dark:text-slate-400 font-semibold">Access Granted</span>
+                    <span className="text-[10px] text-psi-secondary font-semibold">Access Granted</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <svg width="20" height="6" viewBox="0 0 20 6" fill="none">
                         <line x1="0" y1="3" x2="20" y2="3" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" />
                     </svg>
-                    <span className="text-[10px] text-slate-600 dark:text-slate-400 dark:text-slate-400 font-semibold">Data flow</span>
+                    <span className="text-[10px] text-psi-secondary font-semibold">Data flow</span>
                 </div>
             </div>
         </div>
@@ -995,7 +995,7 @@ const CHECKIN_STEPS = [
 
 function CheckInSection() {
     return (
-        <section id="checkin" className="scroll-mt-6 pb-16 border-t border-slate-200 dark:border-slate-800/60 pt-12">
+        <section id="checkin" className="scroll-mt-6 pb-16 border-t border-psi pt-12">
             <SectionHeader
                 number={2}
                 title="How to Check-In"
@@ -1042,16 +1042,16 @@ function CheckInSection() {
                                             {s.role}
                                         </span>
                                     </div>
-                                    <h3 className="text-lg font-extrabold text-slate-900 dark:text-white leading-tight">
+                                    <h3 className="text-lg font-extrabold text-psi-primary leading-tight">
                                         {s.title}
                                     </h3>
                                     {s.url && (
-                                        <div className="mt-1.5 inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 rounded-lg px-2.5 py-1">
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400">📸 URL</span>
+                                        <div className="mt-1.5 inline-flex items-center gap-1.5 bg-psi-subtle/70 border border-psi rounded-lg px-2.5 py-1">
+                                            <span className="text-[9px] font-black uppercase tracking-widest text-psi-secondary">📸 URL</span>
                                             <span className="text-[11px] font-mono font-semibold text-blue-600 dark:text-blue-400">{s.url}</span>
                                         </div>
                                     )}
-                                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                                    <p className="text-sm text-psi-secondary mt-2 leading-relaxed">
                                         {s.desc}
                                     </p>
                                 </div>
@@ -1068,11 +1068,11 @@ function CheckInSection() {
                             {/* Divider between steps */}
                             {idx < CHECKIN_STEPS.length - 1 && (
                                 <div className="flex items-center gap-3 mt-4">
-                                    <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700/60" />
+                                    <div className="flex-1 h-px bg-psi-border/60" />
                                     <div className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center">
                                         <ChevronRight size={11} className="text-blue-500" />
                                     </div>
-                                    <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700/60" />
+                                    <div className="flex-1 h-px bg-psi-border/60" />
                                 </div>
                             )}
                         </div>
@@ -1149,14 +1149,14 @@ const RISK_PILLARS = [
         badgeBg: 'bg-slate-100 text-slate-600',
         riskBg: 'bg-slate-50 border-slate-200',
         riskText: 'text-slate-600',
-        flowText: 'text-slate-600 dark:text-slate-400',
-        darkCardBg: 'dark:bg-gradient-to-b dark:from-slate-800/80 dark:to-slate-900',
-        darkBorder: 'dark:border-slate-600/50',
-        darkPct: 'dark:text-slate-300',
-        darkBadge: 'dark:bg-slate-500/20 dark:text-slate-300',
-        darkRiskBg: 'dark:bg-slate-800/60 dark:border-slate-700/50',
-        darkRiskText: 'dark:text-slate-300',
-        darkFlow: 'dark:text-slate-400',
+        flowText: 'text-psi-secondary',
+        darkCardBg: '',
+        darkBorder: '',
+        darkPct: '',
+        darkBadge: '',
+        darkRiskBg: '',
+        darkRiskText: '',
+        darkFlow: '',
         barWidth: 'w-[60%]',
         topAgent: false,
     },
@@ -1193,7 +1193,7 @@ const RISK_PILLARS = [
 function RiskMatrixDiagram() {
     return (
         <div className="my-10">
-            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-600 dark:text-slate-400 dark:text-slate-500 mb-5 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-psi-secondary mb-5 text-center">
                 Financial Risk Matrix · Commission Split Model
             </p>
 
@@ -1251,13 +1251,13 @@ function RiskMatrixDiagram() {
                             </motion.span>
                             <span className={cn('text-2xl font-black mb-2', p.pctColor, p.darkPct)}>%</span>
                         </div>
-                        <p className="px-5 text-[11px] text-slate-600 dark:text-slate-400 dark:text-slate-400 font-semibold pb-3">
+                        <p className="px-5 text-[11px] text-psi-secondary font-semibold pb-3">
                             of Agent's Closed Revenue
                         </p>
 
                         {/* ── Animated bar ── */}
                         <div className="px-5 pb-4">
-                            <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                            <div className="h-2 rounded-full bg-psi-subtle overflow-hidden">
                                 <motion.div
                                     initial={{ width: '0%' }}
                                     whileInView={{ width: p.id === 'gold' ? '100%' : p.id === 'silver' ? '60%' : '40%' }}
@@ -1268,9 +1268,9 @@ function RiskMatrixDiagram() {
                             </div>
                             {/* Bar label */}
                             <div className="flex justify-between mt-1">
-                                <span className="text-[9px] text-slate-600 dark:text-slate-400 font-mono">0%</span>
+                                <span className="text-[9px] text-psi-secondary font-mono">0%</span>
                                 <span className={cn('text-[9px] font-bold font-mono', p.pctColor, p.darkPct)}>{p.share}%</span>
-                                <span className="text-[9px] text-slate-600 dark:text-slate-400 font-mono">100%</span>
+                                <span className="text-[9px] text-psi-secondary font-mono">100%</span>
                             </div>
                         </div>
 
@@ -1301,7 +1301,7 @@ function RiskMatrixDiagram() {
                             <p className={cn(
                                 'text-[10px] font-semibold text-center border-t pt-2 opacity-80',
                                 p.id === 'gold' ? 'border-amber-200 dark:border-amber-800/50' :
-                                    p.id === 'silver' ? 'border-slate-200 dark:border-slate-700/50' :
+                                    p.id === 'silver' ? 'border-psi/50' :
                                         'border-emerald-200 dark:border-emerald-800/50',
                             )}>
                                 {p.flowLabel}
@@ -1309,7 +1309,7 @@ function RiskMatrixDiagram() {
                         </div>
 
                         {/* ── Bottom description ── */}
-                        <p className="px-5 pb-5 text-[11px] text-slate-600 dark:text-slate-400 dark:text-slate-400 leading-relaxed">
+                        <p className="px-5 pb-5 text-[11px] text-psi-secondary leading-relaxed">
                             {p.riskDesc}
                         </p>
                     </motion.div>
@@ -1317,10 +1317,10 @@ function RiskMatrixDiagram() {
             </div>
 
             {/* Bottom rule */}
-            <div className="mt-6 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 flex items-start gap-3">
+            <div className="mt-6 px-4 py-3 rounded-xl bg-psi-subtle border border-psi/50 flex items-start gap-3">
                 <span className="text-base flex-shrink-0">⚖️</span>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                    <strong className="text-slate-800 dark:text-slate-200">Risk Principle:</strong>{' '}
+                <p className="text-[11px] text-psi-secondary leading-relaxed">
+                    <strong className="text-psi-primary">Risk Principle:</strong>{' '}
                     The higher the financial risk an agent accepts, the greater their share of the upside. Bronze agents are fully protected by the branch — ideal for onboarding new talent without financial friction.
                 </p>
             </div>
@@ -1330,7 +1330,7 @@ function RiskMatrixDiagram() {
 
 function SettlementsSection() {
     return (
-        <section id="settlements" className="scroll-mt-6 pb-16 border-t border-slate-200 dark:border-slate-800/60 pt-12">
+        <section id="settlements" className="scroll-mt-6 pb-16 border-t border-psi pt-12">
             <SectionHeader
                 number={3}
                 title="Understanding Settlements"
@@ -1348,7 +1348,7 @@ function SettlementsSection() {
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">
                             Core Formula
                         </p>
-                        <p className="text-slate-900 dark:text-white font-bold text-sm">
+                        <p className="text-psi-primary font-bold text-sm">
                             Agent Commission Calculation
                         </p>
                     </div>
@@ -1375,13 +1375,13 @@ function SettlementsSection() {
                                 'flex flex-wrap items-center gap-2 px-4 py-3 rounded-xl',
                                 row.highlight
                                     ? 'bg-amber-100 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/30'
-                                    : 'bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50'
+                                    : 'bg-psi-subtle border border-psi/50'
                             )}
                         >
-                            <span className="text-xs font-bold text-slate-600 dark:text-slate-400 dark:text-slate-400 w-36 flex-shrink-0">
+                            <span className="text-xs font-bold text-psi-secondary w-36 flex-shrink-0">
                                 {row.label}
                             </span>
-                            <span className="text-xs text-slate-800 dark:text-slate-200 font-semibold">
+                            <span className="text-xs text-psi-primary font-semibold">
                                 = {row.expr}
                             </span>
                         </div>
@@ -1394,14 +1394,14 @@ function SettlementsSection() {
 
             {/* Tier table */}
             <div className="mb-8">
-                <h3 className="text-sm font-black uppercase tracking-[0.15em] text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4">
+                <h3 className="text-sm font-black uppercase tracking-[0.15em] text-psi-secondary mb-4">
                     Risk Tiers — 50 / 30 / 20 Model
                 </h3>
-                <div className="rounded-2xl border border-slate-200 dark:border-slate-700/60 overflow-hidden shadow-sm">
+                <div className="rounded-2xl border border-psi overflow-hidden shadow-sm">
                     {/* Table header */}
-                    <div className="grid grid-cols-3 gap-0 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700/60">
+                    <div className="grid grid-cols-3 gap-0 bg-psi-subtle border-b border-psi">
                         {['Tier', 'Agent Share', 'Who Gets It'].map((h) => (
-                            <div key={h} className="px-4 py-3 text-[11px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 dark:text-slate-400">
+                            <div key={h} className="px-4 py-3 text-[11px] font-black uppercase tracking-widest text-psi-secondary">
                                 {h}
                             </div>
                         ))}
@@ -1412,21 +1412,21 @@ function SettlementsSection() {
                             key={row.tier}
                             className={cn(
                                 'grid grid-cols-3 gap-0 transition-colors',
-                                i < TIER_TABLE.length - 1 ? 'border-b border-slate-100 dark:border-slate-800/60' : ''
+                                i < TIER_TABLE.length - 1 ? 'border-b border-psi-subtle' : ''
                             )}
                         >
-                            <div className="px-4 py-4 text-sm font-bold text-slate-900 dark:text-white">
+                            <div className="px-4 py-4 text-sm font-bold text-psi-primary">
                                 {row.tier}
                             </div>
                             <div className="px-4 py-4">
                                 <span className="text-sm font-extrabold text-amber-600 dark:text-amber-400">
                                     {row.share}
                                 </span>
-                                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-mono leading-tight">
+                                <p className="text-[11px] text-psi-secondary mt-0.5 font-mono leading-tight">
                                     {row.example}
                                 </p>
                             </div>
-                            <div className="px-4 py-4 text-xs text-slate-600 dark:text-slate-400 leading-snug self-center">
+                            <div className="px-4 py-4 text-xs text-psi-secondary leading-snug self-center">
                                 {row.who}
                             </div>
                         </div>
@@ -1435,7 +1435,7 @@ function SettlementsSection() {
             </div>
 
             {/* Step-by-step settlement process */}
-            <h3 className="text-sm font-black uppercase tracking-[0.15em] text-slate-600 dark:text-slate-400 dark:text-slate-400 mb-4">
+            <h3 className="text-sm font-black uppercase tracking-[0.15em] text-psi-secondary mb-4">
                 Generating the Final Settlement Report
             </h3>
             <div className="space-y-3 mb-8">
@@ -1451,7 +1451,7 @@ function SettlementsSection() {
                     return (
                         <div
                             key={step.n}
-                            className="flex items-start gap-4 rounded-xl border border-slate-100 dark:border-slate-800/60 bg-white dark:bg-slate-900/50 px-5 py-4"
+                            className="flex items-start gap-4 rounded-xl border border-psi-subtle bg-psi-surface px-5 py-4"
                         >
                             <div className="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <Icon size={13} className="text-amber-600 dark:text-amber-400" />
@@ -1460,7 +1460,7 @@ function SettlementsSection() {
                                 <span className="text-[10px] font-black uppercase tracking-[0.15em] text-amber-600 dark:text-amber-400">
                                     Step {step.n}
                                 </span>
-                                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-0.5">
+                                <p className="text-sm text-psi-secondary leading-relaxed mt-0.5">
                                     {step.text}
                                 </p>
                             </div>
@@ -1556,12 +1556,12 @@ const RLS_LAYERS = [
         iconColor: 'text-slate-600',
         badgeBg: 'bg-slate-200 text-slate-600',
         tagBg: 'bg-slate-200/80 text-slate-600',
-        darkBorder: 'dark:border-slate-600/40',
-        darkBg: 'dark:bg-gradient-to-br dark:from-slate-800/80 dark:to-slate-900',
-        darkIconBg: 'dark:bg-slate-700',
-        darkIconColor: 'dark:text-slate-400',
-        darkBadge: 'dark:bg-slate-700 dark:text-slate-300',
-        darkTag: 'dark:bg-slate-700/60 dark:text-slate-400',
+        darkBorder: '',
+        darkBg: '',
+        darkIconBg: '',
+        darkIconColor: '',
+        darkBadge: '',
+        darkTag: '',
         lineColor: '#94a3b8',
         width: 'w-3/5',
     },
@@ -1569,7 +1569,7 @@ const RLS_LAYERS = [
 
 function RLSDiagram() {
     return (
-        <div className="relative my-10 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden shadow-xl shadow-slate-900/5">
+        <div className="relative my-10 rounded-3xl border border-psi bg-psi-surface overflow-hidden shadow-xl shadow-black/3">
 
             {/* ── Giant background lock watermark ── */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
@@ -1584,7 +1584,7 @@ function RLSDiagram() {
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500 dark:text-violet-400 mb-2 text-center">
                     Row-Level Security Model
                 </p>
-                <p className="text-xs text-slate-600 dark:text-slate-400 dark:text-slate-500 text-center mb-8">
+                <p className="text-xs text-psi-secondary text-center mb-8">
                     Every Firestore read is filtered server-side — no client-side bypass possible
                 </p>
 
@@ -1662,7 +1662,7 @@ function RLSDiagram() {
                                         )}>
                                             {layer.role}
                                         </span>
-                                        <p className="text-sm font-extrabold text-slate-900 dark:text-white mt-0.5 leading-tight">
+                                        <p className="text-sm font-extrabold text-psi-primary mt-0.5 leading-tight">
                                             {layer.label}
                                         </p>
                                     </div>
@@ -1685,7 +1685,7 @@ function RLSDiagram() {
 
                                 {/* Funnel width bar — represents data scope */}
                                 <div className="px-4 pb-3">
-                                    <div className="h-1.5 bg-white/50 dark:bg-slate-800/50 rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-psi-subtle rounded-full overflow-hidden">
                                         <motion.div
                                             initial={{ width: '0%' }}
                                             whileInView={{ width: layer.width.replace('w-full', '100%').replace('w-4/5', '80%').replace('w-3/5', '60%') }}
@@ -1695,14 +1695,14 @@ function RLSDiagram() {
                                             style={{ backgroundColor: layer.lineColor, opacity: 0.7 }}
                                         />
                                     </div>
-                                    <p className="text-[9px] text-slate-600 dark:text-slate-400 dark:text-slate-500 mt-1 font-mono">
+                                    <p className="text-[9px] text-psi-secondary mt-1 font-mono">
                                         Data scope: {layer.id === 'executive' ? '100%' : layer.id === 'manager' ? '~80%' : '~20%'}
                                     </p>
                                 </div>
 
                                 {/* Description */}
                                 <div className="px-4 pb-4">
-                                    <p className="text-[11px] text-slate-600 dark:text-slate-400 dark:text-slate-400 leading-relaxed">
+                                    <p className="text-[11px] text-psi-secondary leading-relaxed">
                                         {layer.desc}
                                     </p>
                                 </div>
@@ -1726,7 +1726,7 @@ function RLSDiagram() {
 
 function SecuritySection() {
     return (
-        <section id="security" className="scroll-mt-6 pb-16 border-t border-slate-200 dark:border-slate-800/60 pt-12">
+        <section id="security" className="scroll-mt-6 pb-16 border-t border-psi pt-12">
             <SectionHeader
                 number={4}
                 title="Enterprise Security & Privacy"
@@ -1785,14 +1785,14 @@ function SecuritySection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.4, delay: idx * 0.1 }}
-                            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/50 p-5 flex gap-4"
+                            className="rounded-2xl border border-psi/50 bg-psi-surface/50 p-5 flex gap-4"
                         >
                             <div className={cn('w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0', colorMap[card.color])}>
                                 <Icon size={17} />
                             </div>
                             <div>
-                                <p className="text-sm font-extrabold text-slate-900 dark:text-white">{card.title}</p>
-                                <p className="text-[11px] text-slate-600 dark:text-slate-400 dark:text-slate-400 mt-1 leading-relaxed">{card.desc}</p>
+                                <p className="text-sm font-extrabold text-psi-primary">{card.title}</p>
+                                <p className="text-[11px] text-psi-secondary mt-1 leading-relaxed">{card.desc}</p>
                             </div>
                         </motion.div>
                     );
@@ -1832,7 +1832,7 @@ export default function SystemManual() {
     };
 
     return (
-        <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 font-sans">
+        <div className="flex min-h-screen bg-psi-page font-sans">
 
             {/* ── Desktop Left Sidebar ── */}
             <ManualNav active={activeSection} onSelect={handleSelect} />
@@ -1844,20 +1844,20 @@ export default function SystemManual() {
                 <MobileNav active={activeSection} onSelect={handleSelect} />
 
                 {/* Page header */}
-                <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/60 px-6 md:px-10 lg:px-16 py-8 lg:py-10">
+                <div className="bg-psi-surface border-b border-psi px-6 md:px-10 lg:px-16 py-8 lg:py-10">
                     <div className="max-w-7xl w-full">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30">
                                 Visual System Manual
                             </span>
-                            <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">
+                            <span className="text-[10px] font-bold text-psi-secondary uppercase tracking-widest">
                                 v2.0
                             </span>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-psi-primary tracking-tight leading-tight">
                             PSI Event Portal
                         </h1>
-                        <p className="text-slate-600 dark:text-slate-400 dark:text-slate-400 mt-2 text-base leading-relaxed max-w-xl">
+                        <p className="text-psi-secondary mt-2 text-base leading-relaxed max-w-xl">
                             A complete visual reference for the end-to-end event lifecycle — from agent
                             registration to final commission settlement.
                         </p>

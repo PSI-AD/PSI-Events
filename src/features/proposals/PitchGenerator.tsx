@@ -277,7 +277,7 @@ export default function PitchGenerator() {
             {/* Header */}
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                    <Sparkles size={20} className="text-slate-900 dark:text-white" />
+                    <Sparkles size={20} className="text-psi-primary" />
                 </div>
                 <div>
                     <h2 className="text-xl font-extrabold text-psi-primary tracking-tight">Pitch Generator</h2>
@@ -352,7 +352,7 @@ export default function PitchGenerator() {
                                     onClick={() => { setSponsorAmount(String(amt)); setGeneratedUrl(''); }}
                                     className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all select-none
                                         ${sponsorAmount === String(amt)
-                                            ? 'bg-amber-500 text-slate-900 dark:text-white border-amber-500'
+                                            ? 'bg-amber-500 text-white border-amber-500'
                                             : 'psi-card text-psi-secondary hover:border-amber-400'
                                         }`}
                                 >
@@ -368,7 +368,7 @@ export default function PitchGenerator() {
                         type="button"
                         disabled={!canGenerate || isGenerating}
                         onClick={handleGenerate}
-                        className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-slate-300 disabled:to-slate-300 dark:disabled:from-slate-700 dark:disabled:to-slate-700 text-slate-900 dark:text-white disabled:text-slate-600 dark:disabled:text-slate-400 dark:disabled:text-slate-600 rounded-2xl font-extrabold text-sm transition-all shadow-lg shadow-amber-500/20 disabled:shadow-none active:scale-[0.98] select-none"
+                        className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:from-slate-300 disabled:to-slate-300 dark:disabled:from-slate-700 dark:disabled:to-slate-700 text-psi-primary disabled:text-slate-600 dark:disabled:text-slate-400 dark:disabled:text-slate-600 rounded-2xl font-extrabold text-sm transition-all shadow-lg shadow-amber-500/20 disabled:shadow-none active:scale-[0.98] select-none"
                     >
                         {isGenerating ? (
                             <>
@@ -427,7 +427,7 @@ export default function PitchGenerator() {
                                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all select-none active:scale-[0.97]
                                                 ${copied
                                                     ? 'bg-psi-success text-psi-success'
-                                                    : 'bg-emerald-500 hover:bg-emerald-600 text-slate-900 dark:text-white shadow-sm shadow-emerald-500/20'
+                                                    : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/20'
                                                 }`}
                                         >
                                             {copied ? <><CheckCheck size={16} /> Copied!</> : <><Copy size={16} /> Copy Link</>}

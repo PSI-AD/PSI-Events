@@ -15,7 +15,7 @@
  *   • Floating trigger button for demo/presentation testing
  *
  * Design system:
- *   bg-slate-50 dark:bg-slate-950 (TV-safe near-black)
+ *   bg-psi-page (TV-safe near-black)
  *   amber-500    gold accents  — headings, ranks, KPIs
  *   emerald-500  green accents — positive events, online indicators
  *   rose-500     red accents   — live indicators, urgent alerts
@@ -179,7 +179,7 @@ const TYPE_COLOR: Record<TelemetryEvent['type'], string> = {
     deal: 'text-rose-400',
     media: 'text-blue-400',
     ai: 'text-violet-400',
-    system: 'text-slate-600 dark:text-slate-400',
+    system: 'text-psi-secondary',
 };
 
 const TYPE_DOT: Record<TelemetryEvent['type'], string> = {
@@ -231,27 +231,27 @@ function DualClock() {
         <div className="flex items-center gap-6">
             {/* Event time (Moscow) */}
             <div className="text-right">
-                <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mb-0.5">
+                <p className="text-psi-secondary text-xs font-bold uppercase tracking-widest mb-0.5">
                     {EVENT_META.city} · MSK
                 </p>
                 <p className="font-mono font-black text-amber-400 text-4xl tracking-wider leading-none">
                     {event.time}
                 </p>
-                <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{event.date}</p>
+                <p className="text-psi-secondary text-xs mt-0.5">{event.date}</p>
             </div>
 
             {/* Divider */}
-            <div className="w-px h-12 bg-slate-200 dark:bg-slate-700" />
+            <div className="w-px h-12 bg-psi-border" />
 
             {/* HQ time (Dubai) */}
             <div className="text-right">
-                <p className="text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mb-0.5">
+                <p className="text-psi-secondary text-xs font-bold uppercase tracking-widest mb-0.5">
                     HQ · Dubai
                 </p>
-                <p className="font-mono font-black text-slate-700 dark:text-slate-300 text-3xl tracking-wider leading-none">
+                <p className="font-mono font-black text-psi-secondary text-3xl tracking-wider leading-none">
                     {hq.time}
                 </p>
-                <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{hq.date}</p>
+                <p className="text-psi-secondary text-xs mt-0.5">{hq.date}</p>
             </div>
         </div>
     );
@@ -268,12 +268,12 @@ function LiveIndicator() {
             </div>
             <div>
                 <p className="text-rose-400 text-xs font-black uppercase tracking-widest leading-none">On Air</p>
-                <p className="text-slate-900 dark:text-white font-black text-2xl md:text-3xl leading-tight truncate max-w-xs">
+                <p className="text-psi-primary font-black text-2xl md:text-3xl leading-tight truncate max-w-xs">
                     {EVENT_META.shortName}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
-                    <MapPin size={10} className="text-slate-600 dark:text-slate-400" />
-                    <p className="text-slate-600 dark:text-slate-400 text-xs">{EVENT_META.venueAddress}</p>
+                    <MapPin size={10} className="text-psi-secondary" />
+                    <p className="text-psi-secondary text-xs">{EVENT_META.venueAddress}</p>
                 </div>
             </div>
         </div>
@@ -315,12 +315,12 @@ function TelemetryFeed({ events }: { events: TelemetryEvent[] }) {
                                     ? 'bg-rose-500/10 border-rose-500/30'
                                     : ev.type === 'ai'
                                         ? 'bg-violet-500/8 border-violet-500/20'
-                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
+                                        : 'bg-psi-surface border-psi'
                                 }`}
                         >
                             <div className={`w-2 h-2 rounded-full flex-shrink-0 mt-1.5 ${TYPE_DOT[ev.type]}`} />
                             <div className="min-w-0">
-                                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-mono mb-0.5">{ev.time}</p>
+                                <p className="text-psi-secondary text-[10px] font-mono mb-0.5">{ev.time}</p>
                                 <p className={`text-sm leading-snug font-medium ${TYPE_COLOR[ev.type]}`}>
                                     {ev.text}
                                 </p>
@@ -376,12 +376,12 @@ function MediaWall({ items }: { items: MediaItem[] }) {
                                 />
                                 {/* Overlay label */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2">
-                                    <p className="text-slate-900 dark:text-white text-xs font-bold">{item.label}</p>
+                                    <p className="text-psi-primary text-xs font-bold">{item.label}</p>
                                 </div>
                                 {/* New badge (first 2 items) */}
                                 {i >= items.length - 2 && (
                                     <div className="absolute top-1.5 left-1.5">
-                                        <span className="px-1.5 py-0.5 bg-emerald-500 rounded-md text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                                        <span className="px-1.5 py-0.5 bg-emerald-500 rounded-md text-[9px] font-black text-psi-primary uppercase tracking-wider">
                                             NEW
                                         </span>
                                     </div>
@@ -399,7 +399,7 @@ function MediaWall({ items }: { items: MediaItem[] }) {
 
 const RANK_STYLES = {
     gold: { border: 'border-amber-400/50', bg: 'bg-amber-400/8', text: 'text-amber-400', medal: '🥇' },
-    silver: { border: 'border-slate-400/30', bg: 'bg-slate-400/5', text: 'text-slate-700 dark:text-slate-300', medal: '🥈' },
+    silver: { border: 'border-slate-400/30', bg: 'bg-slate-400/5', text: 'text-psi-secondary', medal: '🥈' },
     bronze: { border: 'border-orange-600/30', bg: 'bg-orange-600/5', text: 'text-orange-400', medal: '🥉' },
 };
 
@@ -419,20 +419,20 @@ function LeaderRow({ agent, rank }: { agent: AgentRank; rank: number }) {
             {/* Info */}
             <div className="flex-1 min-w-0">
                 <p className={`font-black text-base truncate ${style.text}`}>{agent.name}</p>
-                <p className="text-slate-600 dark:text-slate-400 text-xs truncate">{agent.branch}</p>
+                <p className="text-psi-secondary text-xs truncate">{agent.branch}</p>
             </div>
 
             {/* Leads */}
             <div className="text-right flex-shrink-0">
-                <p className="font-black text-2xl text-slate-900 dark:text-white">{agent.leadsToday}</p>
-                <p className="text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase">leads</p>
+                <p className="font-black text-2xl text-psi-primary">{agent.leadsToday}</p>
+                <p className="text-psi-secondary text-[10px] font-bold uppercase">leads</p>
             </div>
 
             {/* Deal value (if any) */}
             {agent.dealValue > 0 && (
                 <div className="flex-shrink-0 text-right">
                     <p className="font-black text-emerald-400 text-sm">{agent.dealValue}M</p>
-                    <p className="text-slate-600 dark:text-slate-400 text-[10px]">AED</p>
+                    <p className="text-psi-secondary text-[10px]">AED</p>
                 </div>
             )}
 
@@ -476,7 +476,7 @@ function InsightsPanel({
                     <div key={label} className={`${bg} border border-white/8 rounded-2xl p-3 text-center`}>
                         <div className={`${color} flex justify-center mb-1`}>{icon}</div>
                         <p className={`font-black text-4xl ${color}`}>{value}</p>
-                        <p className="text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider mt-0.5">{label}</p>
+                        <p className="text-psi-secondary text-[10px] font-bold uppercase tracking-wider mt-0.5">{label}</p>
                     </div>
                 ))}
             </div>
@@ -496,7 +496,7 @@ function InsightsPanel({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.5 }}
-                        className="text-slate-900 dark:text-white text-base leading-relaxed font-medium"
+                        className="text-psi-primary text-base leading-relaxed font-medium"
                     >
                         "{AI_INSIGHTS[insightIndex % AI_INSIGHTS.length]}"
                     </motion.p>
@@ -607,7 +607,7 @@ function DealFlashOverlay({
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 22 }}
-                                className="text-slate-900 dark:text-white font-black text-5xl md:text-7xl leading-tight mb-4"
+                                className="text-psi-primary font-black text-5xl md:text-7xl leading-tight mb-4"
                             >
                                 {deal.agentName}
                             </motion.h1>
@@ -632,8 +632,8 @@ function DealFlashOverlay({
                                 transition={{ delay: 0.5 }}
                                 className="space-y-1"
                             >
-                                <p className="text-slate-900 dark:text-white/80 text-2xl font-bold">{deal.projectName}</p>
-                                <p className="text-slate-600 dark:text-slate-400 text-lg">
+                                <p className="text-psi-primary text-2xl font-bold">{deal.projectName}</p>
+                                <p className="text-psi-secondary text-lg">
                                     <MapPin size={16} className="inline mr-1" />
                                     {deal.location}
                                 </p>
@@ -645,7 +645,7 @@ function DealFlashOverlay({
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 1.5 }}
                                 onClick={onDismiss}
-                                className="mt-12 px-6 py-3 bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20 rounded-2xl text-slate-900 dark:text-white/60 text-sm font-bold hover:bg-white/15 transition-colors"
+                                className="mt-12 px-6 py-3 bg-psi-border-subtle border border-black/20 dark:border-white/20 rounded-2xl text-psi-secondary text-sm font-bold hover:bg-white/15 transition-colors"
                             >
                                 Dismiss · Press any key
                             </motion.button>
@@ -746,10 +746,10 @@ export default function LiveHQ() {
     }
 
     return (
-        <div className="fixed inset-0 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col overflow-hidden select-none">
+        <div className="fixed inset-0 bg-psi-page text-psi-primary flex flex-col overflow-hidden select-none">
 
             {/* ── HEADER ──────────────────────────────────────────────────── */}
-            <header className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-black/5 dark:border-white/5 bg-slate-50 dark:bg-slate-950/80 backdrop-blur-sm">
+            <header className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-psi-subtle bg-psi-page backdrop-blur-sm">
                 <LiveIndicator />
 
                 {/* Centre KPI bar */}
@@ -777,12 +777,12 @@ export default function LiveHQ() {
             <div className="flex-1 flex overflow-hidden min-h-0">
 
                 {/* ── PANE 1: Telemetry Feed (30%) ─────────────────────── */}
-                <div className="w-[30%] flex-shrink-0 border-r border-black/5 dark:border-white/5 p-5 overflow-hidden flex flex-col">
+                <div className="w-[30%] flex-shrink-0 border-r border-psi-subtle p-5 overflow-hidden flex flex-col">
                     <TelemetryFeed events={telemetry} />
                 </div>
 
                 {/* ── PANE 2: Media Wall (40%) ─────────────────────────── */}
-                <div className="flex-1 border-r border-black/5 dark:border-white/5 p-5 overflow-hidden flex flex-col">
+                <div className="flex-1 border-r border-psi-subtle p-5 overflow-hidden flex flex-col">
                     <MediaWall items={mediaItems} />
                 </div>
 
@@ -798,7 +798,7 @@ export default function LiveHQ() {
             </div>
 
             {/* ── FOOTER TICKER ───────────────────────────────────────────── */}
-            <footer className="flex-shrink-0 border-t border-black/5 dark:border-white/5 bg-white dark:bg-slate-900/50 px-0 py-0 overflow-hidden">
+            <footer className="flex-shrink-0 border-t border-psi-subtle bg-psi-surface px-0 py-0 overflow-hidden">
                 <div className="flex items-center gap-4 py-2.5 px-4">
                     <div className="flex items-center gap-2 flex-shrink-0">
                         <Monitor size={12} className="text-amber-400" />
@@ -820,7 +820,7 @@ export default function LiveHQ() {
                                         `📊 ${totalLeads} total leads captured across ${agentsOnFloor} agents`,
                                         `🚀 Property Shop Investment Dubai — Live From ${EVENT_META.city}`,
                                     ].map((msg, i) => (
-                                        <span key={i} className="text-slate-600 dark:text-slate-400 text-xs font-bold">
+                                        <span key={i} className="text-psi-secondary text-xs font-bold">
                                             {msg}
                                             <span className="text-slate-700 mx-4">·</span>
                                         </span>
@@ -845,7 +845,7 @@ export default function LiveHQ() {
                         <button
                             id="trigger-deal-flash-btn"
                             onClick={triggerDeal}
-                            className="flex items-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/30 rounded-2xl text-slate-900 dark:text-white text-sm font-black shadow-2xl shadow-emerald-500/20 transition-all active:scale-95"
+                            className="flex items-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 border border-emerald-500/30 rounded-2xl text-psi-primary text-sm font-black shadow-2xl shadow-emerald-500/20 transition-all active:scale-95"
                         >
                             <Zap size={16} />
                             Simulate Deal Close
@@ -868,7 +868,7 @@ export default function LiveHQ() {
                                     text: 'Media Officer uploaded a new photo to the Journal.',
                                 }]);
                             }}
-                            className="flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-500 border border-blue-500/30 rounded-2xl text-slate-900 dark:text-white text-sm font-black shadow-xl shadow-blue-500/20 transition-all active:scale-95"
+                            className="flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-500 border border-blue-500/30 rounded-2xl text-psi-primary text-sm font-black shadow-xl shadow-blue-500/20 transition-all active:scale-95"
                         >
                             <Camera size={16} />
                             Simulate Photo Upload
@@ -877,7 +877,7 @@ export default function LiveHQ() {
                         {/* Hide controls */}
                         <button
                             onClick={() => setShowControls(false)}
-                            className="flex items-center gap-2 px-4 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-2xl text-slate-600 dark:text-slate-400 text-sm font-bold transition-all active:scale-95"
+                            className="flex items-center gap-2 px-4 py-3 bg-psi-subtle hover:bg-psi-subtle border border-psi-strong rounded-2xl text-psi-secondary text-sm font-bold transition-all active:scale-95"
                         >
                             <X size={14} />
                             Hide Controls
@@ -894,7 +894,7 @@ export default function LiveHQ() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setShowControls(true)}
-                        className="fixed bottom-16 right-5 z-40 w-10 h-10 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                        className="fixed bottom-16 right-5 z-40 w-10 h-10 bg-psi-subtle border border-psi-strong rounded-xl flex items-center justify-center text-psi-secondary hover:text-psi-primary transition-colors"
                     >
                         <Play size={14} />
                     </motion.button>

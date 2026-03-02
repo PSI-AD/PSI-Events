@@ -104,7 +104,7 @@ const STATUS_CONFIG: Record<ComplianceStatus, {
         icon: <User size={16} />,
         cardBg: 'bg-slate-500/5',
         cardBorder: 'border-slate-500/20',
-        textColor: 'text-slate-600 dark:text-slate-400',
+        textColor: 'text-psi-secondary',
         badgeBg: 'bg-slate-500/10',
     },
     disabled: {
@@ -112,7 +112,7 @@ const STATUS_CONFIG: Record<ComplianceStatus, {
         icon: <Shield size={16} />,
         cardBg: 'bg-slate-500/5',
         cardBorder: 'border-slate-500/15',
-        textColor: 'text-slate-600 dark:text-slate-400',
+        textColor: 'text-psi-secondary',
         badgeBg: 'bg-slate-500/8',
     },
 };
@@ -149,7 +149,7 @@ function ExplanationModal({
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.92, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-                className="bg-white dark:bg-slate-900 border border-rose-500/30 rounded-3xl p-6 max-w-sm w-full shadow-2xl"
+                className="bg-psi-surface border border-rose-500/30 rounded-3xl p-6 max-w-sm w-full shadow-2xl"
                 onClick={e => e.stopPropagation()}
             >
                 <div className="flex items-center gap-3 mb-4">
@@ -157,16 +157,16 @@ function ExplanationModal({
                         <MailWarning size={20} className="text-rose-400" />
                     </div>
                     <div>
-                        <p className="font-extrabold text-slate-900 dark:text-white text-sm">Request Explanation</p>
-                        <p className="text-[11px] text-slate-900 dark:text-white/30">{event.name}</p>
+                        <p className="font-extrabold text-psi-primary text-sm">Request Explanation</p>
+                        <p className="text-[11px] text-psi-muted">{event.name}</p>
                     </div>
                 </div>
 
                 {!sent ? (
                     <>
-                        <p className="text-sm text-slate-900 dark:text-white/70 leading-relaxed mb-4">
+                        <p className="text-sm text-psi-primary/70 leading-relaxed mb-4">
                             This will send an in-app notification to{' '}
-                            <span className="text-slate-900 dark:text-white font-bold">{officerName ?? 'the assigned Media Officer'}</span>{' '}
+                            <span className="text-psi-primary font-bold">{officerName ?? 'the assigned Media Officer'}</span>{' '}
                             requesting an explanation for zero journal coverage during this event.
                             <br /><br />
                             The request will be logged in the system audit trail.
@@ -174,14 +174,14 @@ function ExplanationModal({
                         <div className="flex gap-3">
                             <button
                                 onClick={onClose}
-                                className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white/60 text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                                className="flex-1 py-2.5 rounded-xl bg-psi-subtle text-psi-secondary text-sm font-bold hover:bg-psi-subtle transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 id="send-explanation-request-btn"
                                 onClick={handleSend}
-                                className="flex-1 py-2.5 rounded-xl bg-rose-500 text-slate-900 dark:text-white text-sm font-bold hover:bg-rose-400 transition-colors flex items-center justify-center gap-1.5"
+                                className="flex-1 py-2.5 rounded-xl bg-rose-500 text-psi-primary text-sm font-bold hover:bg-rose-400 transition-colors flex items-center justify-center gap-1.5"
                             >
                                 <MailWarning size={14} />
                                 Send Request
@@ -195,8 +195,8 @@ function ExplanationModal({
                         className="flex flex-col items-center gap-3 py-4"
                     >
                         <CheckCircle2 size={32} className="text-emerald-400" />
-                        <p className="font-bold text-slate-900 dark:text-white text-sm">Request Sent</p>
-                        <p className="text-xs text-slate-900 dark:text-white/40 text-center">
+                        <p className="font-bold text-psi-primary text-sm">Request Sent</p>
+                        <p className="text-xs text-psi-muted text-center">
                             {officerName ?? 'The Media Officer'} has been notified and logged.
                         </p>
                     </motion.div>
@@ -238,17 +238,17 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
                         {/* Event info */}
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
-                                <p className="font-extrabold text-slate-900 dark:text-white text-sm truncate">{record.event.name}</p>
+                                <p className="font-extrabold text-psi-primary text-sm truncate">{record.event.name}</p>
                                 <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${cfg.badgeBg} ${cfg.textColor}`}>
                                     {cfg.icon}
                                     {cfg.label}
                                 </span>
                             </div>
-                            <p className="text-[11px] text-slate-900 dark:text-white/30">
+                            <p className="text-[11px] text-psi-muted">
                                 {record.event.city}, {record.event.country}
                                 {' · '}
                                 {record.isEventOver
-                                    ? <span className="text-slate-900 dark:text-white/20">Event ended {new Date(record.event.end_date).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}</span>
+                                    ? <span className="text-psi-muted">Event ended {new Date(record.event.end_date).toLocaleDateString('en-AE', { day: 'numeric', month: 'short' })}</span>
                                     : <span className="text-emerald-400">In progress</span>
                                 }
                             </p>
@@ -263,7 +263,7 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
                                     <p className={`text-2xl font-extrabold font-mono ${cfg.textColor}`}>
                                         {record.postCount}
                                     </p>
-                                    <p className="text-[10px] text-slate-900 dark:text-white/25 font-bold">posts</p>
+                                    <p className="text-[10px] text-psi-muted font-bold">posts</p>
                                 </>
                             )}
                         </div>
@@ -272,13 +272,13 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
                     {/* Officer strip */}
                     {record.event.assignedMediaOfficerId && (
                         <div className="mt-3 flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                                <Camera size={11} className="text-slate-600 dark:text-slate-400" />
+                            <div className="w-6 h-6 rounded-lg bg-psi-border flex items-center justify-center">
+                                <Camera size={11} className="text-psi-secondary" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-[11px] text-slate-900 dark:text-white/50 truncate">
+                                <p className="text-[11px] text-psi-secondary truncate">
                                     Media Officer:&nbsp;
-                                    <span className="text-slate-900 dark:text-white/80 font-bold">
+                                    <span className="text-psi-primary font-bold">
                                         {record.officerName ?? record.event.assignedMediaOfficerId}
                                     </span>
                                 </p>
@@ -287,7 +287,7 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
                             {/* Expand toggle */}
                             <button
                                 onClick={() => setExpanded(v => !v)}
-                                className="flex-shrink-0 text-slate-900 dark:text-white/30 hover:text-slate-900 dark:hover:text-white/60 transition-colors"
+                                className="flex-shrink-0 text-psi-muted hover:text-psi-primary/60 transition-colors"
                             >
                                 {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             </button>
@@ -304,7 +304,7 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
                                 transition={{ duration: 0.18 }}
                                 className="overflow-hidden"
                             >
-                                <div className="mt-3 pt-3 border-t border-black/5 dark:border-white/5 space-y-1.5">
+                                <div className="mt-3 pt-3 border-t border-psi-subtle space-y-1.5">
                                     <InfoRow label="Event dates" value={`${record.event.start_date} → ${record.event.end_date}`} />
                                     <InfoRow label="Officer ID" value={record.event.assignedMediaOfficerId ?? '—'} mono />
                                     <InfoRow label="Journal" value={record.event.isJournalEnabled ? 'Enabled' : 'Disabled'} />
@@ -323,7 +323,7 @@ function ComplianceCard({ record }: { record: ComplianceRecord }) {
 
                     {/* Action buttons */}
                     {(isFailure || isAtRisk) && record.event.assignedMediaOfficerId && (
-                        <div className="mt-3 pt-3 border-t border-black/5 dark:border-white/5">
+                        <div className="mt-3 pt-3 border-t border-psi-subtle">
                             {isFailure ? (
                                 <button
                                     id={`request-explanation-${record.event.id}`}
@@ -367,9 +367,9 @@ function InfoRow({
 }) {
     return (
         <div className="flex items-start justify-between gap-3">
-            <span className="text-[10px] font-bold text-slate-900 dark:text-white/25 uppercase tracking-wider flex-shrink-0 pt-px">{label}</span>
+            <span className="text-[10px] font-bold text-psi-muted uppercase tracking-wider flex-shrink-0 pt-px">{label}</span>
             <span className={`text-[11px] text-right break-all
-                ${mono ? 'font-mono text-slate-900 dark:text-white/50' : 'text-slate-900 dark:text-white/60'}
+                ${mono ? 'font-mono text-psi-secondary' : 'text-psi-secondary'}
                 ${warning ? 'text-amber-400 font-bold' : ''}
             `}>
                 {value}
@@ -473,7 +473,7 @@ export default function MediaCompliance({ events, currentUserRole }: MediaCompli
 
     if (!canView) {
         return (
-            <div className="p-6 text-center text-slate-600 dark:text-slate-400 text-sm">
+            <div className="p-6 text-center text-psi-secondary text-sm">
                 Media compliance data is restricted to Organizers and Managers.
             </div>
         );
@@ -488,8 +488,8 @@ export default function MediaCompliance({ events, currentUserRole }: MediaCompli
                     <Camera size={16} className="text-rose-400" />
                 </div>
                 <div>
-                    <h2 className="font-extrabold text-slate-900 dark:text-white text-base">Media Officer Compliance</h2>
-                    <p className="text-[11px] text-slate-900 dark:text-white/30">Journal coverage tracker per event</p>
+                    <h2 className="font-extrabold text-psi-primary text-base">Media Officer Compliance</h2>
+                    <p className="text-[11px] text-psi-muted">Journal coverage tracker per event</p>
                 </div>
             </div>
 
@@ -504,11 +504,11 @@ export default function MediaCompliance({ events, currentUserRole }: MediaCompli
                         key={label}
                         onClick={() => setFilterStatus(prev => prev === filter ? 'all' : filter)}
                         className={`rounded-2xl border p-3 text-center transition-all active:scale-[0.97]
-                            ${filterStatus === filter ? `${bg} ${border}` : 'bg-white/3 border-white/8 hover:bg-black/5 dark:hover:bg-white/5'}
+                            ${filterStatus === filter ? `${bg} ${border}` : 'bg-white/3 border-white/8 hover:bg-psi-subtle'}
                         `}
                     >
                         <p className={`text-2xl font-extrabold font-mono ${color}`}>{count}</p>
-                        <p className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${filterStatus === filter ? color : 'text-slate-900 dark:text-white/30'}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${filterStatus === filter ? color : 'text-psi-muted'}`}>
                             {label}
                         </p>
                     </button>
@@ -518,7 +518,7 @@ export default function MediaCompliance({ events, currentUserRole }: MediaCompli
             {/* Filter label */}
             {filterStatus !== 'all' && (
                 <div className="flex items-center justify-between">
-                    <p className="text-[11px] text-slate-900 dark:text-white/30 font-bold">
+                    <p className="text-[11px] text-psi-muted font-bold">
                         Showing {filteredRecords.length} {filterStatus.replace('_', ' ')} events
                     </p>
                     <button
@@ -550,7 +550,7 @@ export default function MediaCompliance({ events, currentUserRole }: MediaCompli
             {records.length === 0 && (
                 <div className="text-center py-10 text-slate-600">
                     <Camera size={28} className="mx-auto mb-3 opacity-30" />
-                    <p className="text-sm font-bold text-slate-600 dark:text-slate-400">No events loaded</p>
+                    <p className="text-sm font-bold text-psi-secondary">No events loaded</p>
                     <p className="text-xs mt-1">Pass the events array to this component to track compliance.</p>
                 </div>
             )}

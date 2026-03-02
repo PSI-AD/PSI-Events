@@ -45,11 +45,11 @@ export default function AdminEventManagement() {
 
     if (!activeEvent && events.length === 0) {
         return (
-            <div className="p-10 flex flex-col items-center justify-center h-full text-slate-600 dark:text-slate-400">
+            <div className="p-10 flex flex-col items-center justify-center h-full text-psi-secondary">
                 <p>No events found. Create one.</p>
                 <button
                     onClick={() => setIsCreating(true)}
-                    className="mt-4 px-4 py-2 bg-emerald-500 text-slate-900 dark:text-white rounded-lg flex items-center gap-2"
+                    className="mt-4 px-4 py-2 bg-emerald-500 text-psi-primary rounded-lg flex items-center gap-2"
                 >
                     <Plus size={16} /> Create Event
                 </button>
@@ -68,24 +68,24 @@ export default function AdminEventManagement() {
     ];
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 font-sans">
+        <div className="flex flex-col h-full bg-psi-page font-sans">
             {/* Header */}
-            <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between flex-shrink-0">
+            <header className="bg-psi-surface border-b border-psi px-6 py-4 flex items-center justify-between flex-shrink-0">
                 <div>
-                    <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                        <span className="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
-                            <Settings size={20} className="text-slate-600 dark:text-slate-300" />
+                    <h1 className="text-xl font-bold text-psi-primary flex items-center gap-3">
+                        <span className="bg-psi-subtle p-2 rounded-lg">
+                            <Settings size={20} className="text-psi-secondary" />
                         </span>
                         Multi-Event Management
                     </h1>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                        Currently managing: <span className="font-semibold text-slate-700 dark:text-slate-300">{current.name}</span>
+                    <p className="text-sm text-psi-secondary mt-1">
+                        Currently managing: <span className="font-semibold text-psi-secondary">{current.name}</span>
                     </p>
                 </div>
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-900 dark:text-white font-medium rounded-lg flex items-center gap-2 transition-colors"
+                        className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg flex items-center gap-2 transition-colors"
                     >
                         <Plus size={16} /> New Event
                     </button>
@@ -93,7 +93,7 @@ export default function AdminEventManagement() {
             </header>
 
             {/* Tabs */}
-            <div className="px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 flex-shrink-0 flex gap-6">
+            <div className="px-6 border-b border-psi bg-psi-surface/40 flex-shrink-0 flex gap-6">
                 {TABS.map(t => (
                     <button
                         key={t.id}
@@ -102,7 +102,7 @@ export default function AdminEventManagement() {
                             "flex items-center gap-2 py-4 text-sm font-semibold border-b-2 transition-all block",
                             tab === t.id
                                 ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
-                                : "border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                                : "border-transparent text-psi-secondary hover:text-psi-primary"
                         )}
                     >
                         <t.icon size={16} />
@@ -117,54 +117,54 @@ export default function AdminEventManagement() {
                     {/* Settings Tab */}
                     {tab === 'settings' && (
                         <motion.div key="settings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="max-w-3xl space-y-6">
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Core Information</h2>
+                            <div className="bg-psi-surface border border-psi rounded-2xl p-6">
+                                <h2 className="text-lg font-bold text-psi-primary mb-4">Core Information</h2>
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Event Name</label>
+                                        <label className="block text-sm font-medium text-psi-secondary mb-1">Event Name</label>
                                         <input
                                             type="text"
                                             value={current.name}
                                             onChange={(e) => updateEvent(current.id, { name: e.target.value })}
-                                            className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                                            className="w-full px-4 py-2 rounded-xl border border-psi bg-psi-surface text-psi-primary focus:ring-2 focus:ring-emerald-500 outline-none"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Start Date</label>
+                                            <label className="block text-sm font-medium text-psi-secondary mb-1">Start Date</label>
                                             <input
                                                 type="date"
                                                 value={current.dateStart}
                                                 onChange={(e) => updateEvent(current.id, { dateStart: e.target.value })}
-                                                className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                                                className="w-full px-4 py-2 rounded-xl border border-psi bg-psi-surface text-psi-primary focus:ring-2 focus:ring-emerald-500 outline-none"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">End Date</label>
+                                            <label className="block text-sm font-medium text-psi-secondary mb-1">End Date</label>
                                             <input
                                                 type="date"
                                                 value={current.dateEnd}
                                                 onChange={(e) => updateEvent(current.id, { dateEnd: e.target.value })}
-                                                className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                                                className="w-full px-4 py-2 rounded-xl border border-psi bg-psi-surface text-psi-primary focus:ring-2 focus:ring-emerald-500 outline-none"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Location</label>
+                                        <label className="block text-sm font-medium text-psi-secondary mb-1">Location</label>
                                         <input
                                             type="text"
                                             value={current.location}
                                             onChange={(e) => updateEvent(current.id, { location: e.target.value })}
-                                            className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                                            className="w-full px-4 py-2 rounded-xl border border-psi bg-psi-surface text-psi-primary focus:ring-2 focus:ring-emerald-500 outline-none"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Branding & Theme</h2>
+                            <div className="bg-psi-surface border border-psi rounded-2xl p-6">
+                                <h2 className="text-lg font-bold text-psi-primary mb-4">Branding & Theme</h2>
                                 <div>
-                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Primary Color</label>
+                                    <label className="block text-sm font-medium text-psi-secondary mb-2">Primary Color</label>
                                     <div className="flex gap-3">
                                         {['slate', 'blue', 'emerald', 'violet', 'rose', 'amber'].map(color => (
                                             <button
@@ -204,19 +204,19 @@ export default function AdminEventManagement() {
                     {tab === 'sessions' && (
                         <motion.div key="sessions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Agenda & Sessions</h2>
-                                <button className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                                <h2 className="text-lg font-bold text-psi-primary">Agenda & Sessions</h2>
+                                <button className="px-3 py-1.5 bg-psi-subtle hover:bg-psi-subtle text-psi-primary rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
                                     <Plus size={14} /> Add Session
                                 </button>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {MOCK_SESSIONS.map(s => (
-                                    <div key={s.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col gap-2">
+                                    <div key={s.id} className="bg-psi-surface border border-psi rounded-xl p-4 flex flex-col gap-2">
                                         <div className="flex justify-between items-start">
-                                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-[10px] font-bold uppercase">{s.track} Track</span>
-                                            <span className="text-slate-600 dark:text-slate-400 text-xs font-mono">{s.time}</span>
+                                            <span className="px-2 py-0.5 bg-psi-subtle text-psi-secondary rounded text-[10px] font-bold uppercase">{s.track} Track</span>
+                                            <span className="text-psi-secondary text-xs font-mono">{s.time}</span>
                                         </div>
-                                        <p className="font-bold text-slate-900 dark:text-white">{s.title}</p>
+                                        <p className="font-bold text-psi-primary">{s.title}</p>
                                         <button className="mt-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 hover:gap-2 transition-all">
                                             Manage <ArrowRight size={14} />
                                         </button>
@@ -230,31 +230,31 @@ export default function AdminEventManagement() {
                     {tab === 'speakers' && (
                         <motion.div key="speakers" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Speaker Directory</h2>
-                                <button className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                                <h2 className="text-lg font-bold text-psi-primary">Speaker Directory</h2>
+                                <button className="px-3 py-1.5 bg-psi-subtle hover:bg-psi-subtle text-psi-primary rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
                                     <Plus size={14} /> Add Speaker
                                 </button>
                             </div>
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                            <div className="bg-psi-surface border border-psi rounded-xl overflow-hidden">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 dark:text-slate-400">
+                                    <thead className="bg-psi-subtle text-psi-secondary">
                                         <tr>
                                             <th className="px-4 py-3 font-medium">Name</th>
                                             <th className="px-4 py-3 font-medium">Role</th>
                                             <th className="px-4 py-3 font-medium">Company</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                                    <tbody className="divide-y divide-psi-subtle">
                                         {MOCK_SPEAKERS.map(s => (
-                                            <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                                <td className="px-4 py-3 font-medium text-slate-900 dark:text-white flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold">
+                                            <tr key={s.id} className="hover:bg-psi-subtle/30 transition-colors">
+                                                <td className="px-4 py-3 font-medium text-psi-primary flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-psi-border flex items-center justify-center text-xs font-bold">
                                                         {s.name.charAt(0)}
                                                     </div>
                                                     {s.name}
                                                 </td>
-                                                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{s.role}</td>
-                                                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{s.company}</td>
+                                                <td className="px-4 py-3 text-psi-secondary">{s.role}</td>
+                                                <td className="px-4 py-3 text-psi-secondary">{s.company}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -267,38 +267,38 @@ export default function AdminEventManagement() {
                     {tab === 'attendees' && (
                         <motion.div key="attendees" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Attendee Roster</h2>
+                                <h2 className="text-lg font-bold text-psi-primary">Attendee Roster</h2>
                                 <div className="flex gap-2">
-                                    <button className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                                    <button className="px-3 py-1.5 border border-psi hover:bg-psi-subtle text-psi-primary rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
                                         <Upload size={14} /> Import CSV
                                     </button>
-                                    <button className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                                    <button className="px-3 py-1.5 bg-psi-subtle hover:bg-psi-subtle text-psi-primary rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
                                         <Plus size={14} /> Add Attendee
                                     </button>
                                 </div>
                             </div>
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                            <div className="bg-psi-surface border border-psi rounded-xl overflow-hidden">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 dark:text-slate-400">
+                                    <thead className="bg-psi-subtle text-psi-secondary">
                                         <tr>
                                             <th className="px-4 py-3 font-medium">Name</th>
                                             <th className="px-4 py-3 font-medium">Type</th>
                                             <th className="px-4 py-3 font-medium">Company</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                                    <tbody className="divide-y divide-psi-subtle">
                                         {MOCK_ATTENDEES.map(a => (
-                                            <tr key={a.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                                                <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{a.name}</td>
+                                            <tr key={a.id} className="hover:bg-psi-subtle/30 transition-colors">
+                                                <td className="px-4 py-3 font-medium text-psi-primary">{a.name}</td>
                                                 <td className="px-4 py-3">
                                                     <span className={cn(
                                                         "px-2 py-0.5 rounded text-[10px] font-bold uppercase",
-                                                        a.type === 'VIP' ? "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                                                        a.type === 'VIP' ? "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400" : "bg-slate-100 text-slate-600"
                                                     )}>
                                                         {a.type}
                                                     </span>
                                                 </td>
-                                                <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{a.company}</td>
+                                                <td className="px-4 py-3 text-psi-secondary">{a.company}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -311,37 +311,37 @@ export default function AdminEventManagement() {
 
             {/* Create Event Modal */}
             {isCreating && (
-                <div className="fixed inset-0 bg-white dark:bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-psi-surface/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl p-6 w-full max-w-md"
+                        className="bg-psi-surface border border-psi shadow-2xl rounded-2xl p-6 w-full max-w-md"
                     >
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Create New Platform Event</h2>
+                        <h2 className="text-xl font-bold text-psi-primary mb-4">Create New Platform Event</h2>
                         <form onSubmit={handleCreateEvent}>
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Event Name</label>
+                                <label className="block text-sm font-medium text-psi-secondary mb-2">Event Name</label>
                                 <input
                                     autoFocus
                                     type="text"
                                     placeholder="e.g. Q3 Global Summit"
                                     value={newEventName}
                                     onChange={(e) => setNewEventName(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                                    className="w-full px-4 py-3 rounded-xl border border-psi bg-psi-page text-psi-primary focus:ring-2 focus:ring-emerald-500 outline-none"
                                 />
                             </div>
                             <div className="flex justify-end gap-3">
                                 <button
                                     type="button"
                                     onClick={() => setIsCreating(false)}
-                                    className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium transition-colors"
+                                    className="px-4 py-2 text-psi-secondary hover:bg-psi-subtle rounded-lg font-medium transition-colors"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={!newEventName}
-                                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
+                                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-psi-primary font-medium rounded-lg transition-colors"
                                 >
                                     Create Event
                                 </button>

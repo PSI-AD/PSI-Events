@@ -189,7 +189,7 @@ export default function DigitalBrochurePage({
             <div>
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-9 h-9 bg-gradient-to-br from-amber-500 to-rose-500 rounded-xl flex items-center justify-center shadow-md shadow-amber-500/20">
-                        <QrCode size={18} className="text-slate-900 dark:text-white" />
+                        <QrCode size={18} className="text-psi-primary" />
                     </div>
                     <span className="text-amber-500 text-xs font-black tracking-[0.2em] uppercase">Digital Goodie Bag</span>
                 </div>
@@ -216,7 +216,7 @@ export default function DigitalBrochurePage({
                     <button key={t.id} id={`brochure-tab-${t.id}`}
                         onClick={() => update('tab', t.id)}
                         className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all ${state.tab === t.id
-                            ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/20'
+                            ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-psi-primary shadow-md shadow-amber-500/20'
                             : 'text-psi-muted hover:text-psi-primary'
                             }`}>
                         {t.icon} {t.label}
@@ -312,7 +312,7 @@ export default function DigitalBrochurePage({
                         onClick={handleSend}
                         disabled={!canSend}
                         className={`w-full flex items-center justify-center gap-2.5 py-5 rounded-2xl font-extrabold text-sm transition-all ${canSend
-                            ? 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-900 dark:text-white shadow-xl shadow-amber-500/20'
+                            ? 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-xl shadow-amber-500/20'
                             : 'bg-psi-subtle text-psi-muted cursor-not-allowed'
                             }`}
                     >

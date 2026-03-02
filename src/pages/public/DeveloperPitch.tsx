@@ -106,14 +106,14 @@ function StatCard({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.5, ease: 'easeOut' }}
-            className="bg-black/5 dark:bg-white/5 backdrop-blur-sm border border-black/10 dark:border-white/10 rounded-2xl p-5"
+            className="bg-psi-subtle backdrop-blur-sm border border-psi rounded-2xl p-5"
         >
             <div className={`flex items-center gap-2 mb-3 ${color}`}>
                 <Icon size={16} />
                 <span className="text-[10px] font-bold uppercase tracking-widest opacity-80">{label}</span>
             </div>
-            <p className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{value}</p>
-            {sub && <p className="text-xs text-slate-900 dark:text-white/50 mt-1">{sub}</p>}
+            <p className="text-2xl md:text-3xl font-extrabold text-psi-primary tracking-tight">{value}</p>
+            {sub && <p className="text-xs text-psi-secondary mt-1">{sub}</p>}
         </motion.div>
     );
 }
@@ -143,11 +143,11 @@ function FunnelStep({
             className="flex flex-col items-center gap-2"
         >
             <div className={`${width} h-12 md:h-14 ${color} rounded-xl flex items-center justify-center shadow-lg`}>
-                <span className="text-slate-900 dark:text-white font-extrabold text-lg">{value}</span>
+                <span className="text-psi-primary font-extrabold text-lg">{value}</span>
             </div>
-            <span className="text-xs text-slate-900 dark:text-white/60 font-bold uppercase tracking-wider text-center">{label}</span>
+            <span className="text-xs text-psi-secondary font-bold uppercase tracking-wider text-center">{label}</span>
             {!isLast && (
-                <ChevronRight size={16} className="text-slate-900 dark:text-white/30 rotate-90 -mt-1" />
+                <ChevronRight size={16} className="text-psi-muted rotate-90 -mt-1" />
             )}
         </motion.div>
     );
@@ -157,11 +157,11 @@ function FunnelStep({
 
 function InvalidPitch() {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-8 text-center">
+        <div className="min-h-screen bg-psi-page flex items-center justify-center p-8 text-center">
             <div>
                 <Building2 size={48} className="mx-auto text-slate-700 mb-4" />
-                <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Invalid or Expired Pitch</h1>
-                <p className="text-slate-600 dark:text-slate-400">This sponsorship link is invalid or has malformed data. Please request a new link from your PSI contact.</p>
+                <h1 className="text-2xl font-extrabold text-psi-primary mb-2">Invalid or Expired Pitch</h1>
+                <p className="text-psi-secondary">This sponsorship link is invalid or has malformed data. Please request a new link from your PSI contact.</p>
             </div>
         </div>
     );
@@ -197,7 +197,7 @@ export default function DeveloperPitch() {
     const mailtoHref = `mailto:propertyshopinvest@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans">
+        <div className="min-h-screen bg-psi-page text-psi-primary font-sans">
 
             {/* ── 1. HERO ──────────────────────────────────────────────────── */}
             <section className="relative overflow-hidden">
@@ -224,14 +224,14 @@ export default function DeveloperPitch() {
                                 <Zap size={18} className="text-emerald-400" />
                             </div>
                             <div>
-                                <p className="text-[10px] font-bold text-slate-900 dark:text-white/40 uppercase tracking-[0.2em]">Property Shop Investment LLC</p>
-                                <p className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">PSI Event Portal</p>
+                                <p className="text-[10px] font-bold text-psi-muted uppercase tracking-[0.2em]">Property Shop Investment LLC</p>
+                                <p className="text-sm font-extrabold text-psi-primary leading-tight">PSI Event Portal</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 text-3xl">
                             {pitch.developerLogo}
                             <div className="ml-2">
-                                <p className="text-sm font-extrabold text-slate-900 dark:text-white">{pitch.developerName}</p>
+                                <p className="text-sm font-extrabold text-psi-primary">{pitch.developerName}</p>
                                 <span className="px-2 py-0.5 bg-amber-500/20 border border-amber-500/30 text-amber-400 rounded-full text-[10px] font-bold uppercase tracking-wider">
                                     {pitch.developerTier} Partner
                                 </span>
@@ -257,7 +257,7 @@ export default function DeveloperPitch() {
                         transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                         className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] mb-4"
                     >
-                        <span className="text-slate-900 dark:text-white">Exclusive Sponsorship</span>
+                        <span className="text-psi-primary">Exclusive Sponsorship</span>
                         <br />
                         <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
                             {pitch.eventName}
@@ -269,7 +269,7 @@ export default function DeveloperPitch() {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.25 }}
-                        className="flex flex-wrap gap-4 mb-12 text-sm text-slate-900 dark:text-white/60"
+                        className="flex flex-wrap gap-4 mb-12 text-sm text-psi-secondary"
                     >
                         <span className="flex items-center gap-1.5">
                             <MapPin size={14} className="text-amber-400" />
@@ -296,7 +296,7 @@ export default function DeveloperPitch() {
             </section>
 
             {/* ── 2. ROI FUNNEL ─────────────────────────────────────────────── */}
-            <section className="py-16 md:py-20 border-t border-black/5 dark:border-white/5">
+            <section className="py-16 md:py-20 border-t border-psi-subtle">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
@@ -309,7 +309,7 @@ export default function DeveloperPitch() {
                         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
                             How Your Investment Converts
                         </h2>
-                        <p className="text-slate-900 dark:text-white/50 mt-2 text-sm max-w-xl">
+                        <p className="text-psi-secondary mt-2 text-sm max-w-xl">
                             Based on PSI's verified 3-year roadshow performance data across {pitch.eventCity} and comparable Tier 1 markets.
                         </p>
                     </motion.div>
@@ -332,10 +332,10 @@ export default function DeveloperPitch() {
                             { stage: 'Deals', n: deals, rate: fmtPct(pitch.dealRate), color: 'border-emerald-500/30' },
                             { stage: 'Brokerage Return', n: brokerFee, rate: 'AED', color: 'border-emerald-700/30', isAed: true },
                         ].map(({ stage, n, rate, color, isAed }) => (
-                            <div key={stage} className={`bg-black/5 dark:bg-white/5 border rounded-xl p-4 ${color}`}>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/40 mb-1">{stage}</p>
-                                <p className="text-xl font-extrabold text-slate-900 dark:text-white">{isAed ? fmtAed(n) : n.toLocaleString()}</p>
-                                <p className="text-[10px] text-slate-900 dark:text-white/40 mt-0.5">{isAed ? '4% brokerage' : `${rate} of prev. stage`}</p>
+                            <div key={stage} className={`bg-psi-subtle border rounded-xl p-4 ${color}`}>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-1">{stage}</p>
+                                <p className="text-xl font-extrabold text-psi-primary">{isAed ? fmtAed(n) : n.toLocaleString()}</p>
+                                <p className="text-[10px] text-psi-muted mt-0.5">{isAed ? '4% brokerage' : `${rate} of prev. stage`}</p>
                             </div>
                         ))}
                     </div>
@@ -343,7 +343,7 @@ export default function DeveloperPitch() {
             </section>
 
             {/* ── 3. ROSTER POWER ──────────────────────────────────────────── */}
-            <section className="py-16 md:py-20 border-t border-black/5 dark:border-white/5 bg-white/[0.02]">
+            <section className="py-16 md:py-20 border-t border-psi-subtle bg-white/[0.02]">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
@@ -363,12 +363,12 @@ export default function DeveloperPitch() {
                         </div>
                         <div className="flex gap-4 text-right">
                             <div>
-                                <p className="text-3xl font-extrabold text-slate-900 dark:text-white">87%</p>
-                                <p className="text-xs text-slate-900 dark:text-white/40">Attendance track record</p>
+                                <p className="text-3xl font-extrabold text-psi-primary">87%</p>
+                                <p className="text-xs text-psi-muted">Attendance track record</p>
                             </div>
                             <div>
-                                <p className="text-3xl font-extrabold text-slate-900 dark:text-white">4.2%</p>
-                                <p className="text-xs text-slate-900 dark:text-white/40">Avg. intl. conv. rate</p>
+                                <p className="text-3xl font-extrabold text-psi-primary">4.2%</p>
+                                <p className="text-xs text-psi-muted">Avg. intl. conv. rate</p>
                             </div>
                         </div>
                     </motion.div>
@@ -382,7 +382,7 @@ export default function DeveloperPitch() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.05, duration: 0.4 }}
-                                className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-4 hover:bg-white/8 hover:border-emerald-500/20 transition-all"
+                                className="bg-psi-subtle border border-psi rounded-2xl p-4 hover:bg-white/8 hover:border-emerald-500/20 transition-all"
                             >
                                 <div className="flex items-center gap-2.5 mb-3">
                                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-white dark:to-slate-900 flex items-center justify-center text-sm font-extrabold text-emerald-400">
@@ -390,10 +390,10 @@ export default function DeveloperPitch() {
                                     </div>
                                     <span className="text-xl">{agent.flag}</span>
                                 </div>
-                                <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{agent.name}</p>
-                                <p className="text-[10px] text-slate-900 dark:text-white/40 mt-1">{agent.lang}</p>
-                                <div className="mt-3 pt-3 border-t border-black/10 dark:border-white/10">
-                                    <p className="text-[10px] font-bold text-slate-900 dark:text-white/30 uppercase tracking-widest">YTD Closed</p>
+                                <p className="text-sm font-bold text-psi-primary leading-tight">{agent.name}</p>
+                                <p className="text-[10px] text-psi-muted mt-1">{agent.lang}</p>
+                                <div className="mt-3 pt-3 border-t border-psi">
+                                    <p className="text-[10px] font-bold text-psi-muted uppercase tracking-widest">YTD Closed</p>
                                     <p className="text-sm font-extrabold text-emerald-400 font-mono">AED {agent.ytd}</p>
                                 </div>
                             </motion.div>
@@ -401,23 +401,23 @@ export default function DeveloperPitch() {
                     </div>
 
                     {/* +N more */}
-                    <div className="flex items-center gap-3 p-4 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl">
+                    <div className="flex items-center gap-3 p-4 bg-psi-subtle border border-psi rounded-2xl">
                         <div className="flex -space-x-2">
                             {['RB', 'FS', 'TA', 'WM', 'ZA', 'HE', 'NY'].map(init => (
-                                <div key={init} className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-slate-950 flex items-center justify-center text-[10px] font-bold text-slate-900 dark:text-white">
+                                <div key={init} className="w-8 h-8 rounded-full bg-psi-border border-2 border-slate-950 flex items-center justify-center text-[10px] font-bold text-psi-primary">
                                     {init}
                                 </div>
                             ))}
                         </div>
-                        <p className="text-sm text-slate-900 dark:text-white/60">
-                            + <span className="font-bold text-slate-900 dark:text-white">{Math.max(0, agentCount - TOP_AGENTS.length)}</span> additional agents selected for their multilingual skills and luxury real estate expertise.
+                        <p className="text-sm text-psi-secondary">
+                            + <span className="font-bold text-psi-primary">{Math.max(0, agentCount - TOP_AGENTS.length)}</span> additional agents selected for their multilingual skills and luxury real estate expertise.
                         </p>
                     </div>
                 </div>
             </section>
 
             {/* ── 4. SPONSORSHIP BREAKDOWN ──────────────────────────────────── */}
-            <section className="py-16 md:py-20 border-t border-black/5 dark:border-white/5">
+            <section className="py-16 md:py-20 border-t border-psi-subtle">
                 <div className="max-w-6xl mx-auto px-6">
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
@@ -445,14 +445,14 @@ export default function DeveloperPitch() {
                                     <Zap size={24} className="text-amber-400" />
                                 </div>
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400/70 mb-2">Requested Sponsorship</p>
-                                <p className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                                <p className="text-4xl md:text-5xl font-extrabold text-psi-primary tracking-tight">
                                     {fmtAed(pitch.requestedAmtAed)}
                                 </p>
-                                <p className="text-sm text-slate-900 dark:text-white/50 mt-2">One-time event investment</p>
+                                <p className="text-sm text-psi-secondary mt-2">One-time event investment</p>
                             </div>
                             <div className="mt-8 pt-6 border-t border-amber-500/20">
-                                <p className="text-xs text-slate-900 dark:text-white/40">Developer: {pitch.developerName}</p>
-                                <p className="text-xs text-slate-900 dark:text-white/40 mt-0.5">Generated: {genDate}</p>
+                                <p className="text-xs text-psi-muted">Developer: {pitch.developerName}</p>
+                                <p className="text-xs text-psi-muted mt-0.5">Generated: {genDate}</p>
                             </div>
                         </motion.div>
 
@@ -462,9 +462,9 @@ export default function DeveloperPitch() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
-                            className="md:col-span-2 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8"
+                            className="md:col-span-2 bg-psi-subtle border border-psi rounded-3xl p-8"
                         >
-                            <p className="text-sm font-bold text-slate-900 dark:text-white/60 uppercase tracking-widest mb-5">What's Included</p>
+                            <p className="text-sm font-bold text-psi-secondary uppercase tracking-widest mb-5">What's Included</p>
                             <div className="space-y-4">
                                 {[
                                     { icon: Target, text: `Exclusive feature placement across all ${pitch.targetLeads.toLocaleString()} prospect touchpoints`, badge: 'High Impact' },
@@ -479,9 +479,9 @@ export default function DeveloperPitch() {
                                             <Icon size={15} className="text-emerald-400" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm text-slate-900 dark:text-white/80 leading-relaxed">{text}</p>
+                                            <p className="text-sm text-psi-primary leading-relaxed">{text}</p>
                                         </div>
-                                        <span className="flex-shrink-0 px-2 py-0.5 bg-black/5 dark:bg-white/5 text-slate-900 dark:text-white/40 rounded-full text-[10px] font-bold border border-black/10 dark:border-white/10 hidden md:inline">
+                                        <span className="flex-shrink-0 px-2 py-0.5 bg-psi-subtle text-psi-muted rounded-full text-[10px] font-bold border border-psi hidden md:inline">
                                             {badge}
                                         </span>
                                     </div>
@@ -489,14 +489,14 @@ export default function DeveloperPitch() {
                             </div>
 
                             {/* Projected return row */}
-                            <div className="mt-6 pt-6 border-t border-black/10 dark:border-white/10 grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div className="mt-6 pt-6 border-t border-psi grid grid-cols-2 md:grid-cols-3 gap-4">
                                 {[
                                     { label: 'Brokerage Exposure', value: fmtAed(brokerFee), color: 'text-emerald-400' },
                                     { label: 'Projected Margin', value: `${projMargin}%`, color: 'text-amber-400' },
                                     { label: 'Expected Deals', value: deals.toLocaleString(), color: 'text-blue-400' },
                                 ].map(({ label, value, color }) => (
                                     <div key={label}>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/30 mb-1">{label}</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-1">{label}</p>
                                         <p className={`text-2xl font-extrabold ${color}`}>{value}</p>
                                     </div>
                                 ))}
@@ -507,7 +507,7 @@ export default function DeveloperPitch() {
             </section>
 
             {/* ── 5. CTA ────────────────────────────────────────────────────── */}
-            <section className="py-20 md:py-28 border-t border-black/5 dark:border-white/5 relative overflow-hidden">
+            <section className="py-20 md:py-28 border-t border-psi-subtle relative overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-emerald-500/8 rounded-full blur-[100px]" />
                 </div>
@@ -527,7 +527,7 @@ export default function DeveloperPitch() {
                                 Market Position?
                             </span>
                         </h2>
-                        <p className="text-slate-900 dark:text-white/50 text-lg mb-10 max-w-xl mx-auto">
+                        <p className="text-psi-secondary text-lg mb-10 max-w-xl mx-auto">
                             Click below to approve the sponsorship budget. Your message will be sent directly to the PSI Event Management team who will respond within 4 business hours.
                         </p>
 
@@ -541,7 +541,7 @@ export default function DeveloperPitch() {
                                     inline-flex items-center gap-3 px-10 py-5
                                     bg-gradient-to-r from-emerald-500 to-emerald-600
                                     hover:from-emerald-400 hover:to-emerald-500
-                                    text-slate-900 dark:text-white font-extrabold text-lg rounded-2xl
+                                    text-psi-primary font-extrabold text-lg rounded-2xl
                                     shadow-2xl shadow-emerald-500/25
                                     transition-all duration-200 active:scale-[0.98]
                                     select-none
@@ -562,7 +562,7 @@ export default function DeveloperPitch() {
                             </motion.div>
                         )}
 
-                        <p className="text-xs text-slate-900 dark:text-white/25 mt-6">
+                        <p className="text-xs text-psi-muted mt-6">
                             This pitch was generated by PSI Event Portal on {genDate} and is intended exclusively for {pitch.developerName}.
                         </p>
                     </motion.div>
@@ -570,8 +570,8 @@ export default function DeveloperPitch() {
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-black/5 dark:border-white/5 py-8">
-                <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-900 dark:text-white/20">
+            <footer className="border-t border-psi-subtle py-8">
+                <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-psi-muted">
                     <p>© 2026 Property Shop Investment LLC. All rights reserved.</p>
                     <p>propertyshopinvest@gmail.com · Abu Dhabi, UAE</p>
                 </div>

@@ -287,7 +287,7 @@ function TaskRow({ draft, index, total, isEditing, onEdit, onDelete, onMoveUp, o
                     title="Edit task"
                     className={`w-7 h-7 flex items-center justify-center rounded-lg transition-colors
             ${isEditing
-                            ? 'bg-psi-action text-slate-900 dark:text-white'
+                            ? 'bg-psi-action text-psi-primary'
                             : 'text-psi-muted hover:bg-psi-subtle hover:text-psi-primary'
                         }`}
                 >
@@ -299,7 +299,7 @@ function TaskRow({ draft, index, total, isEditing, onEdit, onDelete, onMoveUp, o
                     <div className="flex items-center gap-1">
                         <button
                             onClick={onDelete}
-                            className="px-2 py-1 rounded-lg bg-rose-500 text-slate-900 dark:text-white text-[10px] font-bold"
+                            className="px-2 py-1 rounded-lg bg-rose-500 text-psi-primary text-[10px] font-bold"
                         >
                             Yes
                         </button>
@@ -668,7 +668,7 @@ function TemplatePanel({ role, items, onUpdate }: TemplatePanelProps) {
                             <span className="text-[10px] text-rose-600 font-medium">Reset to defaults?</span>
                             <button
                                 onClick={handleReset}
-                                className="px-2 py-1 rounded-lg bg-rose-500 text-slate-900 dark:text-white text-[10px] font-bold"
+                                className="px-2 py-1 rounded-lg bg-rose-500 text-psi-primary text-[10px] font-bold"
                             >Yes</button>
                             <button
                                 onClick={() => setShowReset(false)}

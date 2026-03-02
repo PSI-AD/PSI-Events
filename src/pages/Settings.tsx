@@ -144,12 +144,12 @@ function ProfileSection() {
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
                         <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                            <span className="text-slate-900 dark:text-white font-extrabold text-2xl tracking-tight">
+                            <span className="text-psi-primary font-extrabold text-2xl tracking-tight">
                                 {PROFILE.initials}
                             </span>
                         </div>
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-psi-surface flex items-center justify-center">
-                            <CheckCircle2 size={11} className="text-slate-900 dark:text-white" />
+                            <CheckCircle2 size={11} className="text-psi-primary" />
                         </div>
                     </div>
 
@@ -250,7 +250,7 @@ function UIThemePicker() {
                                     layoutId="ui-theme-selected"
                                     className="absolute top-3 right-3 w-5 h-5 bg-psi-action rounded-full flex items-center justify-center shadow-sm"
                                 >
-                                    <CheckCircle2 size={12} className="text-slate-900 dark:text-white" />
+                                    <CheckCircle2 size={12} className="text-psi-primary" />
                                 </motion.div>
                             )}
 
@@ -770,7 +770,7 @@ export default function Settings() {
                 title="Fetch live property data from PSI CRM and save to Firestore"
                 className="fixed bottom-4 right-36 z-50 flex items-center gap-2 px-4 py-2 rounded-xl
                            bg-emerald-600 hover:bg-emerald-500 border border-emerald-500
-                           text-slate-900 dark:text-white text-xs font-bold tracking-wide
+                           text-psi-primary text-xs font-bold tracking-wide
                            disabled:opacity-50 disabled:cursor-not-allowed
                            shadow-lg shadow-emerald-900/40 transition-all"
             >
@@ -794,7 +794,7 @@ export default function Settings() {
                 disabled={seeding}
                 title="DEV: Inject Firestore seed data"
                 className="fixed bottom-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 rounded-lg
-                           bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-600
+                           bg-psi-border text-psi-secondary border border-slate-600
                            text-[10px] font-mono font-bold tracking-wider
                            opacity-20 hover:opacity-80 transition-opacity duration-300
                            disabled:cursor-not-allowed select-none shadow-lg"

@@ -163,7 +163,7 @@ export function AgentRow({
                     <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-psi-muted pointer-events-none" />
                 </div>
                 <button id={`remove-agent-${agent.id}`} onClick={onRemove}
-                    className="flex items-center justify-center w-full md:w-9 h-9 rounded-xl text-slate-600 dark:text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors min-h-[44px] md:min-h-0">
+                    className="flex items-center justify-center w-full md:w-9 h-9 rounded-xl text-psi-secondary hover:text-red-400 hover:bg-red-500/10 transition-colors min-h-[44px] md:min-h-0">
                     <Trash2 size={15} />
                 </button>
             </div>

@@ -98,7 +98,7 @@ const CATEGORIES: { value: IntelCategory; label: string; icon: React.ReactNode; 
     { value: 'stand_design', label: 'Stand Design', icon: <Building2 size={13} />, color: 'text-violet-500 bg-violet-500/10 border-violet-500/25' },
     { value: 'promotion', label: 'Promotion', icon: <Tag size={13} />, color: 'text-amber-500 bg-amber-500/10 border-amber-500/25' },
     { value: 'foot_traffic', label: 'Foot Traffic', icon: <TrendingUp size={13} />, color: 'text-rose-500 bg-rose-500/10 border-rose-500/25' },
-    { value: 'other', label: 'Other', icon: <Eye size={13} />, color: 'text-slate-600 dark:text-slate-400 bg-slate-500/10 border-slate-500/25' },
+    { value: 'other', label: 'Other', icon: <Eye size={13} />, color: 'text-psi-secondary bg-slate-500/10 border-slate-500/25' },
 ];
 
 function getCategoryMeta(cat: IntelCategory) {
@@ -409,7 +409,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                 animate={{ scale: 1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleOpen}
-                className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-slate-900 dark:text-white shadow-2xl shadow-rose-600/40 flex items-center justify-center hover:from-rose-400 hover:to-rose-500 transition-all"
+                className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-psi-primary shadow-2xl shadow-rose-600/40 flex items-center justify-center hover:from-rose-400 hover:to-rose-500 transition-all"
                 title="Drop Competitor Intel"
             >
                 <div className="flex flex-col items-center gap-0.5">
@@ -437,21 +437,21 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                 animate={{ y: 0 }}
                                 exit={{ y: '100%' }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="mt-auto bg-white dark:bg-slate-900 rounded-t-3xl p-6 space-y-6 border-t border-black/10 dark:border-white/10"
+                                className="mt-auto bg-psi-surface rounded-t-3xl p-6 space-y-6 border-t border-psi"
                             >
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-[10px] font-black tracking-[0.2em] uppercase text-rose-400 mb-0.5">Market Intelligence</p>
-                                        <h2 className="text-slate-900 dark:text-white text-xl font-extrabold">Drop Competitor Intel</h2>
+                                        <h2 className="text-psi-primary text-xl font-extrabold">Drop Competitor Intel</h2>
                                     </div>
-                                    <button id="intel-fab-close" onClick={handleClose} className="w-9 h-9 rounded-xl bg-black/10 dark:bg-white/10 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white">
+                                    <button id="intel-fab-close" onClick={handleClose} className="w-9 h-9 rounded-xl bg-psi-border-subtle flex items-center justify-center text-psi-secondary hover:text-psi-primary">
                                         <X size={18} />
                                     </button>
                                 </div>
 
                                 {/* Category */}
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/40 mb-3">Category</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-3">Category</p>
                                     <div className="grid grid-cols-3 gap-2">
                                         {CATEGORIES.map(c => (
                                             <button key={c.value}
@@ -461,7 +461,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                                     'flex flex-col items-center gap-1.5 p-3 rounded-2xl border text-xs font-bold transition-all',
                                                     category === c.value
                                                         ? `${c.color} border-current`
-                                                        : 'bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10 text-slate-900 dark:text-white/50 hover:border-black/20 dark:hover:border-white/20',
+                                                        : 'bg-psi-subtle border-psi text-psi-secondary hover:border-black/20 dark:hover:border-white/20',
                                                 )}
                                             >
                                                 {c.icon}
@@ -473,14 +473,14 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
 
                                 {/* Voice note quick caption */}
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/40 mb-2">Quick Caption (Optional)</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-2">Quick Caption (Optional)</p>
                                     <input
                                         type="text"
                                         value={voiceNote}
                                         maxLength={120}
                                         onChange={e => setVoiceNote(e.target.value)}
                                         placeholder="e.g. 'Emaar stand offering 8% guaranteed return'"
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm placeholder:text-slate-900 dark:placeholder:text-white/25 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
+                                        className="w-full bg-psi-subtle border border-psi rounded-xl px-4 py-3 text-psi-primary text-sm placeholder:text-psi-muted focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20"
                                     />
                                 </div>
 
@@ -489,7 +489,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                     id="intel-open-camera"
                                     whileTap={{ scale: 0.97 }}
                                     onClick={openCamera}
-                                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-rose-600/30 hover:shadow-rose-600/50 transition-all"
+                                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-base shadow-xl shadow-rose-600/30 hover:shadow-rose-600/50 transition-all"
                                 >
                                     <Camera size={20} /> Open Camera
                                 </motion.button>
@@ -515,7 +515,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                             <div key={i} className={`absolute w-8 h-8 border-white ${cls}`} />
                                         ))}
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <span className="text-slate-900 dark:text-white/50 text-xs font-bold tracking-widest uppercase">Aim at competitor stand</span>
+                                            <span className="text-psi-secondary text-xs font-bold tracking-widest uppercase">Aim at competitor stand</span>
                                         </div>
                                     </div>
                                 </div>
@@ -530,18 +530,18 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
 
                                 {/* Controls */}
                                 <div className="absolute bottom-0 left-0 right-0 p-8 flex items-center justify-center gap-8 bg-gradient-to-t from-black/60 to-transparent">
-                                    <button onClick={handleClose} className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-slate-900 dark:text-white">
+                                    <button onClick={handleClose} className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-psi-primary">
                                         <X size={22} />
                                     </button>
                                     <motion.button
                                         id="intel-snap-btn"
                                         whileTap={{ scale: 0.9 }}
                                         onClick={takeSnapshot}
-                                        className="w-20 h-20 rounded-full border-4 border-white bg-black/20 dark:bg-white/20 flex items-center justify-center"
+                                        className="w-20 h-20 rounded-full border-4 border-white bg-psi-border flex items-center justify-center"
                                     >
                                         <div className="w-14 h-14 rounded-full bg-white" />
                                     </motion.button>
-                                    <button onClick={() => fileInputRef.current?.click()} className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-slate-900 dark:text-white">
+                                    <button onClick={() => fileInputRef.current?.click()} className="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center text-psi-primary">
                                         <Image size={22} />
                                     </button>
                                 </div>
@@ -562,14 +562,14 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                 </div>
 
                                 {/* Bottom panel */}
-                                <div className="bg-white dark:bg-slate-900 p-5 space-y-4 border-t border-black/10 dark:border-white/10">
+                                <div className="bg-psi-surface p-5 space-y-4 border-t border-psi">
                                     <div className="flex items-center justify-between">
                                         <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold ${getCategoryMeta(category).color}`}>
                                             {getCategoryMeta(category).icon}
                                             {getCategoryMeta(category).label}
                                         </div>
                                         <button onClick={() => { setPreviewUrl(null); setCapturedFile(null); setPhase('idle'); }}
-                                            className="flex items-center gap-1 text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white text-xs">
+                                            className="flex items-center gap-1 text-psi-muted hover:text-psi-primary text-xs">
                                             <RotateCcw size={12} /> Retake
                                         </button>
                                     </div>
@@ -581,7 +581,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                         maxLength={140}
                                         onChange={e => setVoiceNote(e.target.value)}
                                         placeholder="Add context (competitor name, key price point…)"
-                                        className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm placeholder:text-slate-900 dark:placeholder:text-white/25 focus:outline-none focus:border-rose-500/50 focus:ring-1 focus:ring-rose-500/20"
+                                        className="w-full bg-psi-subtle border border-psi rounded-xl px-4 py-3 text-psi-primary text-sm placeholder:text-psi-muted focus:outline-none focus:border-rose-500/50 focus:ring-1 focus:ring-rose-500/20"
                                     />
 
                                     {error && (
@@ -592,7 +592,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
 
                                     <div className="grid grid-cols-2 gap-3">
                                         <button onClick={handleClose}
-                                            className="py-3.5 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-slate-900 dark:text-white/60 text-sm font-bold hover:bg-black/10 dark:hover:bg-white/10 transition-all">
+                                            className="py-3.5 rounded-2xl bg-psi-subtle border border-psi text-psi-secondary text-sm font-bold hover:bg-psi-subtle transition-all">
                                             Cancel
                                         </button>
                                         <motion.button
@@ -600,7 +600,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                             whileTap={{ scale: 0.97 }}
                                             onClick={handleSubmit}
                                             disabled={submitting}
-                                            className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-slate-900 dark:text-white font-extrabold text-sm shadow-lg shadow-rose-600/25 disabled:opacity-60 transition-all"
+                                            className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-rose-500 text-white font-extrabold text-sm shadow-lg shadow-rose-600/25 disabled:opacity-60 transition-all"
                                         >
                                             {submitting
                                                 ? <><Loader2 size={15} className="animate-spin" /> Uploading…</>
@@ -614,7 +614,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
 
                         {/* ── ANALYSING ───────────────────────────────────────────────── */}
                         {phase === 'analysing' && (
-                            <div className="flex-1 flex flex-col items-center justify-center gap-6 text-slate-900 dark:text-white">
+                            <div className="flex-1 flex flex-col items-center justify-center gap-6 text-psi-primary">
                                 <div className="relative w-20 h-20 flex items-center justify-center">
                                     <motion.div
                                         className="absolute inset-0 rounded-full border-[3px] border-t-rose-500 border-r-rose-500/30 border-b-transparent border-l-transparent"
@@ -630,7 +630,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                 </div>
                                 <div className="text-center">
                                     <p className="font-extrabold text-lg mb-1">Gemini is analysing…</p>
-                                    <p className="text-slate-900 dark:text-white/40 text-sm">Extracting competitor intel from your image</p>
+                                    <p className="text-psi-muted text-sm">Extracting competitor intel from your image</p>
                                 </div>
                             </div>
                         )}
@@ -640,7 +640,7 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="flex-1 flex flex-col items-center justify-center gap-6 text-slate-900 dark:text-white px-6"
+                                className="flex-1 flex flex-col items-center justify-center gap-6 text-psi-primary px-6"
                             >
                                 <motion.div
                                     initial={{ scale: 0 }}
@@ -652,10 +652,10 @@ export function IntelDropFAB({ eventId, agentId, agentName }: IntelDropFABProps)
                                 </motion.div>
                                 <div className="text-center">
                                     <h2 className="text-2xl font-extrabold mb-2">Intel Dropped! 🎯</h2>
-                                    <p className="text-slate-900 dark:text-white/50 text-sm">Your intel is live on the HQ dashboard. Organizers can see it in real-time.</p>
+                                    <p className="text-psi-secondary text-sm">Your intel is live on the HQ dashboard. Organizers can see it in real-time.</p>
                                 </div>
                                 <button id="intel-done-btn" onClick={handleClose}
-                                    className="px-8 py-3.5 rounded-2xl bg-black/10 dark:bg-white/10 border border-white/15 text-slate-900 dark:text-white font-bold hover:bg-white/15 transition-all">
+                                    className="px-8 py-3.5 rounded-2xl bg-psi-border-subtle border border-white/15 text-psi-primary font-bold hover:bg-white/15 transition-all">
                                     Back to Floor
                                 </button>
                             </motion.div>
@@ -683,7 +683,7 @@ function IntelCard({ drop, onClick }: { drop: IntelDrop; onClick: () => void }) 
             className="psi-card rounded-3xl overflow-hidden cursor-pointer group hover:ring-2 hover:ring-rose-500/30 transition-all"
         >
             {/* Image */}
-            <div className="relative overflow-hidden bg-slate-100 dark:bg-slate-800" style={{ height: `${Math.floor(180 + Math.random() * 120)}px` }}>
+            <div className="relative overflow-hidden bg-psi-subtle" style={{ height: `${Math.floor(180 + Math.random() * 120)}px` }}>
                 <img
                     src={drop.imageUrl}
                     alt="Competitor intel"
@@ -700,13 +700,13 @@ function IntelCard({ drop, onClick }: { drop: IntelDrop; onClick: () => void }) 
                 </div>
 
                 {/* Expand icon */}
-                <button className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-black/40 backdrop-blur-sm border border-white/15 flex items-center justify-center text-slate-900 dark:text-white/70 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button className="absolute top-3 right-3 w-7 h-7 rounded-lg bg-black/40 backdrop-blur-sm border border-white/15 flex items-center justify-center text-psi-primary/70 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Maximize2 size={12} />
                 </button>
 
                 {/* Competitor name overlay */}
                 <div className="absolute bottom-3 left-3 right-3">
-                    <p className="text-slate-900 dark:text-white text-xs font-black truncate">{drop.competitorName}</p>
+                    <p className="text-psi-primary text-xs font-black truncate">{drop.competitorName}</p>
                 </div>
             </div>
 
@@ -733,7 +733,7 @@ function IntelCard({ drop, onClick }: { drop: IntelDrop; onClick: () => void }) 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-1">
                     <div className="flex items-center gap-1.5">
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-slate-900 dark:text-white font-black text-[9px]">
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-psi-primary font-black text-[9px]">
                             {drop.agentName.charAt(0)}
                         </div>
                         <span className="text-psi-muted text-[10px] font-bold">{drop.agentName.split(' ')[0]}</span>
@@ -766,14 +766,14 @@ function IntelLightbox({ drop, onClose }: { drop: IntelDrop; onClose: () => void
             </div>
 
             {/* Side panel */}
-            <div className="w-full md:w-96 bg-white dark:bg-slate-900 border-t md:border-t-0 md:border-l border-black/10 dark:border-white/10 flex flex-col overflow-y-auto">
+            <div className="w-full md:w-96 bg-psi-surface border-t md:border-t-0 md:border-l border-psi flex flex-col overflow-y-auto">
                 {/* Header */}
-                <div className="flex items-center justify-between p-5 border-b border-black/10 dark:border-white/10">
+                <div className="flex items-center justify-between p-5 border-b border-psi">
                     <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold ${meta.color}`}>
                         {meta.icon} {meta.label}
                     </div>
                     <button id="intel-lb-close" onClick={onClose}
-                        className="w-9 h-9 rounded-xl bg-black/10 dark:bg-white/10 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white">
+                        className="w-9 h-9 rounded-xl bg-psi-border-subtle flex items-center justify-center text-psi-secondary hover:text-psi-primary">
                         <X size={18} />
                     </button>
                 </div>
@@ -781,8 +781,8 @@ function IntelLightbox({ drop, onClose }: { drop: IntelDrop; onClose: () => void
                 <div className="p-5 space-y-5 flex-1">
                     {/* Competitor */}
                     <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white/30 mb-1">Competitor</p>
-                        <p className="text-slate-900 dark:text-white text-xl font-extrabold">{drop.competitorName}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-psi-muted mb-1">Competitor</p>
+                        <p className="text-psi-primary text-xl font-extrabold">{drop.competitorName}</p>
                     </div>
 
                     {/* AI Summary */}
@@ -792,7 +792,7 @@ function IntelLightbox({ drop, onClose }: { drop: IntelDrop; onClose: () => void
                             <p className="text-[10px] font-black uppercase tracking-widest text-rose-400">Gemini AI Analysis</p>
                         </div>
                         <div className="bg-rose-500/8 border border-rose-500/15 rounded-2xl p-4">
-                            <p className="text-slate-900 dark:text-white text-sm leading-relaxed">{drop.aiSummary}</p>
+                            <p className="text-psi-primary text-sm leading-relaxed">{drop.aiSummary}</p>
                         </div>
                     </div>
 
@@ -800,26 +800,26 @@ function IntelLightbox({ drop, onClose }: { drop: IntelDrop; onClose: () => void
                     {drop.voiceNote && (
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <Mic size={12} className="text-slate-900 dark:text-white/30" />
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white/30">Agent Note</p>
+                                <Mic size={12} className="text-psi-muted" />
+                                <p className="text-[10px] font-black uppercase tracking-widest text-psi-muted">Agent Note</p>
                             </div>
-                            <p className="text-slate-900 dark:text-white/60 text-sm italic">&ldquo;{drop.voiceNote}&rdquo;</p>
+                            <p className="text-psi-secondary text-sm italic">&ldquo;{drop.voiceNote}&rdquo;</p>
                         </div>
                     )}
 
                     {/* Meta */}
-                    <div className="flex items-center justify-between pt-2 border-t border-black/10 dark:border-white/10">
+                    <div className="flex items-center justify-between pt-2 border-t border-psi">
                         <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-slate-900 dark:text-white font-black text-xs">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-psi-primary font-black text-xs">
                                 {drop.agentName.charAt(0)}
                             </div>
                             <div>
-                                <p className="text-slate-900 dark:text-white text-xs font-bold">{drop.agentName}</p>
-                                <p className="text-slate-900 dark:text-white/30 text-[10px]">Field agent</p>
+                                <p className="text-psi-primary text-xs font-bold">{drop.agentName}</p>
+                                <p className="text-psi-muted text-[10px]">Field agent</p>
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-slate-900 dark:text-white/30 text-[10px]">{timeAgo(drop.createdAt)}</p>
+                            <p className="text-psi-muted text-[10px]">{timeAgo(drop.createdAt)}</p>
                         </div>
                     </div>
                 </div>
@@ -922,7 +922,7 @@ export function MarketIntelDashboard({ eventId }: MarketIntelDashboardProps) {
                     <div>
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-7 h-7 bg-rose-500 rounded-lg flex items-center justify-center">
-                                <BarChart2 size={15} className="text-slate-900 dark:text-white" />
+                                <BarChart2 size={15} className="text-psi-primary" />
                             </div>
                             <span className="text-rose-500 text-xs font-extrabold tracking-[0.2em] uppercase">Live Intel Feed</span>
                             <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />

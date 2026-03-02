@@ -203,7 +203,7 @@ function anonymiseAgent(agentId: string | undefined): string {
 const TIER_CFG = {
     Luxury: { label: 'Luxury', color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/30', dot: 'bg-amber-400', icon: <Crown size={11} /> },
     Medium: { label: 'Medium', color: 'text-blue-400', bg: 'bg-blue-400/10', border: 'border-blue-400/30', dot: 'bg-blue-400', icon: <Star size={11} /> },
-    Average: { label: 'Average', color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-400/10', border: 'border-slate-600/30', dot: 'bg-slate-500', icon: <Users size={11} /> },
+    Average: { label: 'Average', color: 'text-psi-secondary', bg: 'bg-slate-400/10', border: 'border-slate-600/30', dot: 'bg-slate-500', icon: <Users size={11} /> },
 };
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -214,7 +214,7 @@ const SOURCE_LABEL: Record<string, string> = {
 
 const TIER_SPONSOR = {
     Gold: { bg: 'from-amber-500/20 to-amber-600/5', border: 'border-amber-500/40', text: 'text-amber-400' },
-    Silver: { bg: 'from-slate-400/20 to-slate-500/5', border: 'border-slate-400/40', text: 'text-slate-700 dark:text-slate-300' },
+    Silver: { bg: 'from-slate-400/20 to-slate-500/5', border: 'border-slate-400/40', text: 'text-psi-secondary' },
     Bronze: { bg: 'from-orange-600/20 to-orange-700/5', border: 'border-orange-600/40', text: 'text-orange-400' },
 };
 
@@ -240,7 +240,7 @@ function KPICard({ icon, label, value, sub, color, delay = 0, pulse = false }: K
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 overflow-hidden group hover:bg-white/[0.07] transition-colors"
+            className="relative bg-psi-subtle border border-psi rounded-3xl p-6 overflow-hidden group hover:bg-white/[0.07] transition-colors"
         >
             {/* Radial glow backdrop */}
             <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-20 ${color.replace('text-', 'bg-')}`} />
@@ -255,8 +255,8 @@ function KPICard({ icon, label, value, sub, color, delay = 0, pulse = false }: K
                     </span>
                 )}
             </div>
-            <p className={`text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1`}>{value}</p>
-            {sub && <p className="text-xs text-slate-900 dark:text-white/40">{sub}</p>}
+            <p className={`text-3xl md:text-4xl font-extrabold tracking-tight text-psi-primary mb-1`}>{value}</p>
+            {sub && <p className="text-xs text-psi-muted">{sub}</p>}
         </motion.div>
     );
 }
@@ -279,7 +279,7 @@ function TierBreakdown({ leads }: { leads: CRMLeadDoc[] }) {
     }));
 
     return (
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6">
+        <div className="bg-psi-subtle border border-psi rounded-3xl p-6">
             <div className="flex items-center gap-2 mb-5">
                 <BarChart3 size={14} className="text-violet-400" />
                 <p className="text-[10px] font-bold uppercase tracking-widest text-violet-400">Lead Quality Breakdown</p>
@@ -311,9 +311,9 @@ function TierBreakdown({ leads }: { leads: CRMLeadDoc[] }) {
                         <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${t.dot}`} />
                         <div className={`flex items-center gap-1 flex-shrink-0 ${t.color}`}>{t.icon}</div>
                         <span className={`text-sm font-bold ${t.color}`}>{t.label}</span>
-                        <div className="flex-1 h-px bg-black/5 dark:bg-white/5 mx-2" />
-                        <span className="text-slate-900 dark:text-white font-extrabold text-sm font-mono">{t.count}</span>
-                        <span className="text-slate-900 dark:text-white/30 text-xs w-8 text-right">{t.pct}%</span>
+                        <div className="flex-1 h-px bg-psi-subtle mx-2" />
+                        <span className="text-psi-primary font-extrabold text-sm font-mono">{t.count}</span>
+                        <span className="text-psi-muted text-xs w-8 text-right">{t.pct}%</span>
                     </motion.div>
                 ))}
             </div>
@@ -335,11 +335,11 @@ function ProjectBars({ leads, projects }: { leads: CRMLeadDoc[]; projects: strin
     const PROJECT_COLORS = ['bg-amber-500', 'bg-blue-500', 'bg-violet-500', 'bg-emerald-500', 'bg-rose-500'];
 
     return (
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6">
+        <div className="bg-psi-subtle border border-psi rounded-3xl p-6">
             <div className="flex items-center gap-2 mb-5">
                 <TrendingUp size={14} className="text-emerald-400" />
                 <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Leads by Project</p>
-                <span className="ml-auto text-slate-900 dark:text-white/25 text-xs font-mono">{leads.length} total</span>
+                <span className="ml-auto text-psi-muted text-xs font-mono">{leads.length} total</span>
             </div>
 
             <div className="space-y-4">
@@ -349,10 +349,10 @@ function ProjectBars({ leads, projects }: { leads: CRMLeadDoc[]; projects: strin
                     return (
                         <div key={project}>
                             <div className="flex items-center justify-between mb-1.5">
-                                <span className="text-sm font-bold text-slate-900 dark:text-white/80 truncate pr-3">{project}</span>
-                                <span className="text-slate-900 dark:text-white font-extrabold text-sm font-mono flex-shrink-0">{count}</span>
+                                <span className="text-sm font-bold text-psi-primary truncate pr-3">{project}</span>
+                                <span className="text-psi-primary font-extrabold text-sm font-mono flex-shrink-0">{count}</span>
                             </div>
-                            <div className="h-2.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-2.5 bg-psi-subtle rounded-full overflow-hidden">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${pct}%` }}
@@ -378,12 +378,12 @@ function LiveFeed({ entries }: { entries: FeedEntry[] }) {
     }, [entries.length]);
 
     return (
-        <div className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: '460px' }}>
+        <div className="bg-psi-subtle border border-psi rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: '460px' }}>
             {/* Feed header */}
             <div className="flex items-center gap-2 px-6 py-4 border-b border-white/8 flex-shrink-0">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-emerald-400 text-[10px] font-black uppercase tracking-widest">Live Lead Feed</span>
-                <span className="ml-auto text-slate-900 dark:text-white/25 text-xs font-mono">{entries.length} events</span>
+                <span className="ml-auto text-psi-muted text-xs font-mono">{entries.length} events</span>
             </div>
 
             {/* Scrollable list */}
@@ -406,28 +406,28 @@ function LiveFeed({ entries }: { entries: FeedEntry[] }) {
 
                                 {/* Main text */}
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-slate-900 dark:text-white/80 font-medium leading-snug">
+                                    <p className="text-sm text-psi-primary font-medium leading-snug">
                                         New lead captured for{' '}
-                                        <span className="text-slate-900 dark:text-white font-bold">{entry.project}</span>
+                                        <span className="text-psi-primary font-bold">{entry.project}</span>
                                         {' '}by Agent{' '}
-                                        <span className="font-mono text-slate-900 dark:text-white/60">{entry.agentInitials}</span>
+                                        <span className="font-mono text-psi-secondary">{entry.agentInitials}</span>
                                     </p>
                                     <div className="flex items-center gap-2 mt-0.5">
                                         <span className={`text-[10px] font-bold ${tc.color}`}>{tc.label}</span>
-                                        <span className="text-slate-900 dark:text-white/20 text-[10px]">·</span>
-                                        <span className="text-slate-900 dark:text-white/30 text-[10px]">{SOURCE_LABEL[entry.source] ?? entry.source}</span>
+                                        <span className="text-psi-muted text-[10px]">·</span>
+                                        <span className="text-psi-muted text-[10px]">{SOURCE_LABEL[entry.source] ?? entry.source}</span>
                                     </div>
                                 </div>
 
                                 {/* Time */}
-                                <span className="flex-shrink-0 text-slate-900 dark:text-white/25 text-[10px] font-mono">{entry.time}</span>
+                                <span className="flex-shrink-0 text-psi-muted text-[10px] font-mono">{entry.time}</span>
                             </motion.div>
                         );
                     })}
                 </AnimatePresence>
 
                 {entries.length === 0 && (
-                    <div className="text-center py-12 text-slate-900 dark:text-white/20">
+                    <div className="text-center py-12 text-psi-muted">
                         <Activity size={28} className="mx-auto mb-3 opacity-30" />
                         <p className="text-sm font-bold">No lead events yet</p>
                         <p className="text-xs mt-1">Events will appear here in real time</p>
@@ -483,7 +483,7 @@ function AccessGate({ onUnlock }: AccessGateProps) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col items-center justify-center px-6">
+        <div className="min-h-screen bg-psi-page text-psi-primary flex flex-col items-center justify-center px-6">
             {/* Background glow */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-amber-500/8 rounded-full blur-[120px]" />
@@ -506,8 +506,8 @@ function AccessGate({ onUnlock }: AccessGateProps) {
                         <Zap size={20} className="text-amber-400" />
                     </div>
                     <div>
-                        <p className="text-[10px] font-bold text-slate-900 dark:text-white/30 uppercase tracking-[0.2em]">Property Shop Investment LLC</p>
-                        <p className="text-base font-extrabold text-slate-900 dark:text-white leading-tight">Sponsor ROI Portal</p>
+                        <p className="text-[10px] font-bold text-psi-muted uppercase tracking-[0.2em]">Property Shop Investment LLC</p>
+                        <p className="text-base font-extrabold text-psi-primary leading-tight">Sponsor ROI Portal</p>
                     </div>
                 </motion.div>
 
@@ -516,21 +516,21 @@ function AccessGate({ onUnlock }: AccessGateProps) {
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-8"
+                    className="bg-psi-subtle border border-psi rounded-3xl p-8"
                 >
                     <div className="text-center mb-8">
                         <div className="w-14 h-14 bg-amber-500/15 border border-amber-500/25 rounded-2xl flex items-center justify-center mx-auto mb-4">
                             <Lock size={24} className="text-amber-400" />
                         </div>
-                        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Secure Access</h1>
-                        <p className="text-sm text-slate-900 dark:text-white/50 leading-relaxed">
+                        <h1 className="text-2xl font-extrabold text-psi-primary mb-2">Secure Access</h1>
+                        <p className="text-sm text-psi-secondary leading-relaxed">
                             Enter the Sponsor Access Token provided by your PSI Event Manager to view your live ROI dashboard.
                         </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label htmlFor="sponsor-token-input" className="block text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/40 mb-2">
+                            <label htmlFor="sponsor-token-input" className="block text-[10px] font-bold uppercase tracking-widest text-psi-muted mb-2">
                                 Sponsor Access Token
                             </label>
                             <div className="relative">
@@ -540,14 +540,14 @@ function AccessGate({ onUnlock }: AccessGateProps) {
                                     value={input}
                                     onChange={e => { setInput(e.target.value); setError(''); }}
                                     placeholder="Paste your access token here"
-                                    className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3.5 pr-12 text-sm text-slate-900 dark:text-white placeholder-white/20 font-mono focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+                                    className="w-full bg-psi-subtle border border-psi rounded-2xl px-4 py-3.5 pr-12 text-sm text-psi-primary placeholder-white/20 font-mono focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
                                     autoComplete="off"
                                     spellCheck={false}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShow(s => !s)}
-                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-900 dark:text-white/30 hover:text-slate-900 dark:hover:text-white/60 transition-colors"
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-psi-muted hover:text-psi-primary/60 transition-colors"
                                 >
                                     {show ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
@@ -568,7 +568,7 @@ function AccessGate({ onUnlock }: AccessGateProps) {
                             type="submit"
                             disabled={loading}
                             whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 text-slate-900 dark:text-white font-extrabold text-base shadow-xl shadow-amber-500/20 transition-all"
+                            className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 text-psi-primary font-extrabold text-base shadow-xl shadow-amber-500/20 transition-all"
                         >
                             {loading ? (
                                 <><RefreshCw size={18} className="animate-spin" /> Verifying…</>
@@ -583,14 +583,14 @@ function AccessGate({ onUnlock }: AccessGateProps) {
                         <button
                             id="demo-token-btn"
                             onClick={loadDemo}
-                            className="text-xs text-slate-900 dark:text-white/30 hover:text-amber-400/70 transition-colors font-semibold underline underline-offset-2"
+                            className="text-xs text-psi-muted hover:text-amber-400/70 transition-colors font-semibold underline underline-offset-2"
                         >
                             Load demo token (Emaar Properties)
                         </button>
                     </div>
                 </motion.div>
 
-                <p className="text-center text-xs text-slate-900 dark:text-white/15 mt-6">
+                <p className="text-center text-xs text-psi-primary/15 mt-6">
                     This portal is protected. Access is logged and monitored.<br />
                     © 2026 Property Shop Investment LLC
                 </p>
@@ -603,12 +603,12 @@ function AccessGate({ onUnlock }: AccessGateProps) {
 
 function ExpiredScreen({ tokenName }: { tokenName?: string }) {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-8 text-center text-slate-900 dark:text-white">
+        <div className="min-h-screen bg-psi-page flex items-center justify-center p-8 text-center text-psi-primary">
             <div>
                 <AlertCircle size={48} className="mx-auto text-rose-500 mb-4" />
                 <h1 className="text-2xl font-extrabold mb-2">Access Token Expired</h1>
-                <p className="text-slate-900 dark:text-white/50 max-w-sm mx-auto">
-                    {tokenName && <span className="font-bold text-slate-900 dark:text-white">{tokenName}'s </span>}
+                <p className="text-psi-secondary max-w-sm mx-auto">
+                    {tokenName && <span className="font-bold text-psi-primary">{tokenName}'s </span>}
                     portal access has expired. Please contact your PSI Event Manager to receive a new link.
                 </p>
             </div>
@@ -725,7 +725,7 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
     const tierStyle = TIER_SPONSOR[token.sponsorTier];
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white font-sans">
+        <div className="min-h-screen bg-psi-page text-psi-primary font-sans">
 
             {/* ── Background ambiance ─────────────────────────────────────── */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -738,7 +738,7 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
             </div>
 
             {/* ── HEADER ─────────────────────────────────────────────────────── */}
-            <header className="relative z-10 border-b border-white/8 bg-slate-50 dark:bg-slate-950/80 backdrop-blur-sm">
+            <header className="relative z-10 border-b border-white/8 bg-psi-page backdrop-blur-sm">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
                     {/* PSI branding */}
                     <div className="flex items-center gap-3">
@@ -746,8 +746,8 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                             <Zap size={17} className="text-amber-400" />
                         </div>
                         <div className="hidden sm:block">
-                            <p className="text-[9px] font-bold text-slate-900 dark:text-white/25 uppercase tracking-[0.2em]">Property Shop Investment</p>
-                            <p className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">Sponsor ROI Portal</p>
+                            <p className="text-[9px] font-bold text-psi-muted uppercase tracking-[0.2em]">Property Shop Investment</p>
+                            <p className="text-sm font-extrabold text-psi-primary leading-tight">Sponsor ROI Portal</p>
                         </div>
                     </div>
 
@@ -760,7 +760,7 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                     >
                         <span className="text-2xl">{token.sponsorLogo}</span>
                         <div>
-                            <p className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">{token.sponsorName}</p>
+                            <p className="text-sm font-extrabold text-psi-primary leading-tight">{token.sponsorName}</p>
                             <p className={`text-[10px] font-bold uppercase tracking-widest ${tierStyle.text}`}>
                                 {token.sponsorTier} Partner
                             </p>
@@ -774,7 +774,7 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                             {isConnected ? 'Live' : 'Offline'}
                         </div>
                         {lastUpdated && (
-                            <div className="hidden lg:flex items-center gap-1.5 text-slate-900 dark:text-white/25 text-[10px] font-mono">
+                            <div className="hidden lg:flex items-center gap-1.5 text-psi-muted text-[10px] font-mono">
                                 <Clock size={10} />
                                 {lastUpdated.toLocaleTimeString('en-AE', { hour: '2-digit', minute: '2-digit', hour12: true })}
                             </div>
@@ -792,7 +792,7 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                             <motion.div
                                 initial={{ opacity: 0, y: -8 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/50 mb-4"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-psi-subtle border border-psi rounded-full text-[10px] font-bold uppercase tracking-widest text-psi-secondary mb-4"
                             >
                                 <Activity size={10} className="text-emerald-400" />
                                 {token.eventName}
@@ -809,17 +809,17 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                                     Sponsorship ROI
                                 </span>
                                 <br />
-                                <span className="text-slate-900 dark:text-white/70 text-2xl md:text-3xl">Dashboard</span>
+                                <span className="text-psi-primary/70 text-2xl md:text-3xl">Dashboard</span>
                             </motion.h1>
 
                             <motion.p
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.18 }}
-                                className="text-slate-900 dark:text-white/40 text-sm mt-3 max-w-xl"
+                                className="text-psi-muted text-sm mt-3 max-w-xl"
                             >
                                 Real-time lead intelligence scoped exclusively to your portfolio:{' '}
-                                <span className="text-slate-900 dark:text-white/60 font-semibold">
+                                <span className="text-psi-secondary font-semibold">
                                     {token.allowedProjects.join(' · ')}
                                 </span>
                             </motion.p>
@@ -830,12 +830,12 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                             initial={{ opacity: 0, x: 16 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.25 }}
-                            className="flex items-start gap-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 max-w-xs"
+                            className="flex items-start gap-3 bg-psi-subtle border border-psi rounded-2xl px-5 py-4 max-w-xs"
                         >
                             <ShieldCheck size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                             <div>
                                 <p className="text-emerald-400 text-xs font-bold">Data Firewall Active</p>
-                                <p className="text-slate-900 dark:text-white/40 text-[11px] mt-0.5 leading-relaxed">
+                                <p className="text-psi-muted text-[11px] mt-0.5 leading-relaxed">
                                     You only see leads attributed to your {token.allowedProjects.length} project{token.allowedProjects.length > 1 ? 's' : ''}.
                                     Competitor data is invisible to this portal.
                                 </p>
@@ -924,15 +924,15 @@ function DashboardView({ token, useDemoData = true }: DashboardViewProps) {
                             className={`rounded-3xl p-6 border ${item.color}`}
                         >
                             <div className="mb-3">{item.icon}</div>
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white/35 mb-1">{item.title}</p>
-                            <p className="text-xl font-extrabold text-slate-900 dark:text-white mb-1">{item.value}</p>
-                            <p className="text-xs text-slate-900 dark:text-white/40 leading-relaxed">{item.desc}</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-psi-primary/35 mb-1">{item.title}</p>
+                            <p className="text-xl font-extrabold text-psi-primary mb-1">{item.value}</p>
+                            <p className="text-xs text-psi-muted leading-relaxed">{item.desc}</p>
                         </motion.div>
                     ))}
                 </div>
 
                 {/* ── FOOTER DISCLAIMER ─────────────────────────────────────── */}
-                <div className="border-t border-white/8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-900 dark:text-white/20">
+                <div className="border-t border-white/8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-psi-muted">
                     <p>© 2026 Property Shop Investment LLC. All rights reserved.</p>
                     <p className="flex items-center gap-1.5">
                         <ShieldCheck size={11} />
@@ -987,7 +987,7 @@ export default function SponsorDashboard() {
     if (!sponsorToken) {
         // Decoding URL param — brief loading state
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+            <div className="min-h-screen bg-psi-page flex items-center justify-center">
                 <RefreshCw size={28} className="animate-spin text-amber-400" />
             </div>
         );

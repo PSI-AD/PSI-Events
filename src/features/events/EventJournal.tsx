@@ -119,7 +119,7 @@ export default function EventJournal({
     // ── Locked gate ───────────────────────────────────────────────────────────
     if (!event.isJournalEnabled) {
         return (
-            <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+            <div className="min-h-screen bg-psi-page">
                 <JournalHeader event={event} postCount={0} />
                 <JournalLockedView />
             </div>
@@ -127,7 +127,7 @@ export default function EventJournal({
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
+        <div className="min-h-screen bg-psi-page pb-32">
             <JournalHeader event={event} postCount={posts.length} />
 
             {/* Feed */}

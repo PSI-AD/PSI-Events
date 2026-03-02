@@ -230,19 +230,19 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                         className="fixed top-[12vh] left-1/2 -translate-x-1/2 w-full max-w-xl z-[81] px-4"
                     >
-                        <div className="bg-white dark:bg-slate-900 border border-white/12 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden">
+                        <div className="bg-psi-surface border border-psi rounded-2xl shadow-2xl shadow-black/10 overflow-hidden">
                             {/* Search bar */}
                             <div className="flex items-center gap-3 px-4 py-3 border-b border-white/8">
-                                <Search size={16} className="text-slate-900 dark:text-white/30 flex-shrink-0" />
+                                <Search size={16} className="text-psi-muted flex-shrink-0" />
                                 <input
                                     ref={inputRef}
                                     id="cmd-palette-input"
                                     value={query}
                                     onChange={e => setQuery(e.target.value)}
                                     placeholder="Search pages, features, actions…"
-                                    className="flex-1 bg-transparent text-slate-900 dark:text-white placeholder:text-slate-900 dark:placeholder:text-white/25 text-sm outline-none"
+                                    className="flex-1 bg-transparent text-psi-primary placeholder:text-psi-muted text-sm outline-none"
                                 />
-                                <kbd className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-white/8 border border-black/10 dark:border-white/10 rounded text-[10px] text-slate-900 dark:text-white/30 font-mono">
+                                <kbd className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 bg-white/8 border border-psi rounded text-[10px] text-psi-muted font-mono">
                                     ESC
                                 </kbd>
                             </div>
@@ -250,10 +250,10 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                             {/* Results */}
                             <div className="max-h-[56vh] overflow-y-auto p-2">
                                 {groups.length === 0 ? (
-                                    <p className="text-slate-900 dark:text-white/30 text-sm text-center py-8">No results for "{query}"</p>
+                                    <p className="text-psi-muted text-sm text-center py-8">No results for "{query}"</p>
                                 ) : groups.map(group => (
                                     <div key={group} className="mb-2">
-                                        <p className="px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white/20">{group}</p>
+                                        <p className="px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group}</p>
                                         {results.filter(r => r.group === group).map(item => (
                                             <button
                                                 key={item.id}
@@ -261,14 +261,14 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                                                 onClick={() => handleSelect(item.path)}
                                                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/6 text-left transition-all group"
                                             >
-                                                <span className="w-7 h-7 rounded-lg bg-white/6 flex items-center justify-center text-slate-900 dark:text-white/50 flex-shrink-0 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                                                <span className="w-7 h-7 rounded-lg bg-white/6 flex items-center justify-center text-psi-secondary flex-shrink-0 group-hover:text-psi-primary transition-colors">
                                                     {item.icon}
                                                 </span>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-slate-900 dark:text-white text-sm font-semibold truncate">{item.label}</p>
-                                                    {item.description && <p className="text-slate-900 dark:text-white/30 text-[11px] truncate">{item.description}</p>}
+                                                    <p className="text-psi-primary text-sm font-semibold truncate">{item.label}</p>
+                                                    {item.description && <p className="text-psi-muted text-[11px] truncate">{item.description}</p>}
                                                 </div>
-                                                <ChevronRight size={12} className="text-slate-900 dark:text-white/15 flex-shrink-0 group-hover:text-slate-900 dark:group-hover:text-white/40 transition-colors" />
+                                                <ChevronRight size={12} className="text-psi-primary/15 flex-shrink-0 group-hover:text-psi-primary/40 transition-colors" />
                                             </button>
                                         ))}
                                     </div>
@@ -276,7 +276,7 @@ function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void 
                             </div>
 
                             {/* Footer */}
-                            <div className="border-t border-white/8 px-4 py-2 flex items-center gap-4 text-[10px] text-slate-900 dark:text-white/20">
+                            <div className="border-t border-white/8 px-4 py-2 flex items-center gap-4 text-[10px] text-psi-muted">
                                 <span className="flex items-center gap-1"><kbd className="px-1 bg-white/8 rounded text-[9px] font-mono">↑↓</kbd> navigate</span>
                                 <span className="flex items-center gap-1"><kbd className="px-1 bg-white/8 rounded text-[9px] font-mono">↵</kbd> open</span>
                                 <span className="flex items-center gap-1"><kbd className="px-1 bg-white/8 rounded text-[9px] font-mono">ESC</kbd> close</span>
@@ -313,24 +313,24 @@ function NotificationPanel({ open, onClose }: { open: boolean; onClose: () => vo
                         animate={{ opacity: 1, x: 0, scale: 1 }}
                         exit={{ opacity: 0, x: 20, scale: 0.97 }}
                         transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-                        className="fixed top-14 right-3 sm:right-4 w-[calc(100vw-1.5rem)] sm:w-96 z-[71] max-h-[80vh] flex flex-col bg-white dark:bg-slate-900 border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden"
+                        className="fixed top-14 right-3 sm:right-4 w-[calc(100vw-1.5rem)] sm:w-96 z-[71] max-h-[80vh] flex flex-col bg-psi-surface border border-psi rounded-2xl shadow-2xl shadow-black/10 overflow-hidden"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-white/8">
                             <div className="flex items-center gap-2">
-                                <Bell size={15} className="text-slate-900 dark:text-white/50" />
-                                <span className="text-slate-900 dark:text-white font-extrabold text-sm">Notifications</span>
+                                <Bell size={15} className="text-psi-secondary" />
+                                <span className="text-psi-primary font-extrabold text-sm">Notifications</span>
                                 {unread > 0 && (
-                                    <span className="bg-rose-500 text-slate-900 dark:text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">{unread}</span>
+                                    <span className="bg-rose-500 text-psi-primary text-[9px] font-black px-1.5 py-0.5 rounded-full">{unread}</span>
                                 )}
                             </div>
                             <div className="flex items-center gap-2">
                                 {unread > 0 && (
-                                    <button onClick={markAllRead} className="text-slate-900 dark:text-white/30 hover:text-slate-900 dark:hover:text-white text-[10px] font-bold transition-colors">
+                                    <button onClick={markAllRead} className="text-psi-muted hover:text-psi-primary text-[10px] font-bold transition-colors">
                                         Mark all read
                                     </button>
                                 )}
-                                <button onClick={onClose} className="w-7 h-7 rounded-lg bg-white/6 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white transition-all">
+                                <button onClick={onClose} className="w-7 h-7 rounded-lg bg-white/6 border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary transition-all">
                                     <X size={12} />
                                 </button>
                             </div>
@@ -344,18 +344,18 @@ function NotificationPanel({ open, onClose }: { open: boolean; onClose: () => vo
                                     <div
                                         key={n.id}
                                         onClick={() => { if (n.link) { navigate(n.link); onClose(); } setNotifs(prev => prev.map(x => x.id === n.id ? { ...x, read: true } : x)); }}
-                                        className={`flex items-start gap-3 px-4 py-3 border-b border-black/5 dark:border-white/5 cursor-pointer transition-all hover:bg-white/4 ${!n.read ? 'bg-white/3' : ''}`}
+                                        className={`flex items-start gap-3 px-4 py-3 border-b border-psi-subtle cursor-pointer transition-all hover:bg-white/4 ${!n.read ? 'bg-white/3' : ''}`}
                                     >
                                         <div className={`w-7 h-7 rounded-xl ${cfg.bg} ${cfg.color} flex items-center justify-center flex-shrink-0 mt-0.5`}>
                                             {cfg.icon}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className={`text-sm font-bold leading-tight ${n.read ? 'text-slate-900 dark:text-white/60' : 'text-slate-900 dark:text-white'}`}>{n.title}</p>
-                                            <p className="text-slate-900 dark:text-white/35 text-[11px] leading-relaxed mt-0.5 line-clamp-2">{n.body}</p>
+                                            <p className={`text-sm font-bold leading-tight ${n.read ? 'text-psi-secondary' : 'text-psi-primary'}`}>{n.title}</p>
+                                            <p className="text-psi-primary/35 text-[11px] leading-relaxed mt-0.5 line-clamp-2">{n.body}</p>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <Clock size={9} className="text-slate-900 dark:text-white/20" />
-                                                <span className="text-slate-900 dark:text-white/20 text-[9px]">{n.relativeTime}</span>
-                                                {n.link && <span className="text-slate-900 dark:text-white/20 text-[9px] flex items-center gap-0.5"><ArrowRight size={8} /> view</span>}
+                                                <Clock size={9} className="text-psi-muted" />
+                                                <span className="text-psi-muted text-[9px]">{n.relativeTime}</span>
+                                                {n.link && <span className="text-psi-muted text-[9px] flex items-center gap-0.5"><ArrowRight size={8} /> view</span>}
                                             </div>
                                         </div>
                                         {!n.read && <span className="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0 mt-1" />}
@@ -366,7 +366,7 @@ function NotificationPanel({ open, onClose }: { open: boolean; onClose: () => vo
 
                         {/* Footer */}
                         <div className="border-t border-white/8 px-4 py-3 text-center">
-                            <p className="text-slate-900 dark:text-white/20 text-[10px]">Notifications sync live · powered by Firestore</p>
+                            <p className="text-psi-muted text-[10px]">Notifications sync live · powered by Firestore</p>
                         </div>
                     </motion.div>
                 </>
@@ -421,19 +421,19 @@ function AIChatAssistant({ open, onClose }: { open: boolean; onClose: () => void
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 24, scale: 0.95 }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    className="fixed bottom-[5.5rem] md:bottom-6 right-3 sm:right-4 w-[calc(100vw-1.5rem)] sm:w-96 z-[72] flex flex-col bg-white dark:bg-slate-900 border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl shadow-black/60 overflow-hidden"
+                    className="fixed bottom-[5.5rem] md:bottom-6 right-3 sm:right-4 w-[calc(100vw-1.5rem)] sm:w-96 z-[72] flex flex-col bg-psi-surface border border-psi rounded-2xl shadow-2xl shadow-black/10 overflow-hidden"
                     style={{ maxHeight: '70vh' }}
                 >
                     {/* Header */}
                     <div className="flex items-center gap-3 px-4 py-3 border-b border-white/8 bg-gradient-to-r from-indigo-600/20 to-violet-600/20">
                         <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center flex-shrink-0">
-                            <Sparkles size={14} className="text-slate-900 dark:text-white" />
+                            <Sparkles size={14} className="text-psi-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-slate-900 dark:text-white font-extrabold text-sm">PSI AI Assistant</p>
+                            <p className="text-psi-primary font-extrabold text-sm">PSI AI Assistant</p>
                             <p className="text-indigo-300/60 text-[9px]">Powered by Gemini · Always available</p>
                         </div>
-                        <button onClick={onClose} className="w-7 h-7 rounded-lg bg-white/6 border border-black/10 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white/40 hover:text-slate-900 dark:hover:text-white transition-all">
+                        <button onClick={onClose} className="w-7 h-7 rounded-lg bg-white/6 border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary transition-all">
                             <X size={12} />
                         </button>
                     </div>
@@ -443,12 +443,12 @@ function AIChatAssistant({ open, onClose }: { open: boolean; onClose: () => void
                         {messages.map((msg, i) => (
                             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[85%] rounded-2xl px-3 py-2.5 ${msg.role === 'user'
-                                        ? 'bg-indigo-600 text-slate-900 dark:text-white text-sm'
-                                        : 'bg-white/6 border border-white/8 text-slate-900 dark:text-white/85 text-sm'
+                                        ? 'bg-indigo-600 text-psi-primary text-sm'
+                                        : 'bg-white/6 border border-white/8 text-psi-primary/85 text-sm'
                                     }`}>
                                     {/* Render **bold** markdown */}
                                     <p className="leading-relaxed whitespace-pre-wrap text-[13px]"
-                                        dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code class="bg-black/10 dark:bg-white/10 px-1 rounded text-xs font-mono">$1</code>') }}
+                                        dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`(.+?)`/g, '<code class="bg-psi-border-subtle px-1 rounded text-xs font-mono">$1</code>') }}
                                     />
                                     {msg.links && msg.links.length > 0 && (
                                         <div className="mt-2 flex flex-wrap gap-1.5">
@@ -464,7 +464,7 @@ function AIChatAssistant({ open, onClose }: { open: boolean; onClose: () => void
                             </div>
                         ))}
                         {loading && (
-                            <div className="flex items-center gap-2 text-slate-900 dark:text-white/30 text-xs">
+                            <div className="flex items-center gap-2 text-psi-muted text-xs">
                                 <Loader2 size={12} className="animate-spin" /> Thinking…
                             </div>
                         )}
@@ -476,7 +476,7 @@ function AIChatAssistant({ open, onClose }: { open: boolean; onClose: () => void
                         <div className="px-4 pb-2 flex gap-1.5 overflow-x-auto scrollbar-none">
                             {QUICK.map(q => (
                                 <button key={q} onClick={() => { setInput(q); setTimeout(handleSend, 50); }}
-                                    className="flex-shrink-0 px-2.5 py-1.5 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl text-slate-900 dark:text-white/50 text-[10px] font-semibold hover:bg-black/10 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all whitespace-nowrap">
+                                    className="flex-shrink-0 px-2.5 py-1.5 bg-psi-subtle border border-psi rounded-xl text-psi-secondary text-[10px] font-semibold hover:bg-psi-subtle hover:text-psi-primary transition-all whitespace-nowrap">
                                     {q}
                                 </button>
                             ))}
@@ -492,13 +492,13 @@ function AIChatAssistant({ open, onClose }: { open: boolean; onClose: () => void
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleSend()}
                             placeholder="Ask anything about the portal…"
-                            className="flex-1 bg-white/6 border border-black/10 dark:border-white/10 rounded-xl px-3 py-2 text-slate-900 dark:text-white text-xs placeholder:text-slate-900 dark:placeholder:text-white/25 outline-none focus:border-indigo-500/50 transition-colors"
+                            className="flex-1 bg-white/6 border border-psi rounded-xl px-3 py-2 text-psi-primary text-xs placeholder:text-psi-muted outline-none focus:border-indigo-500/50 transition-colors"
                         />
                         <button
                             id="ai-chat-send"
                             onClick={handleSend}
                             disabled={!input.trim() || loading}
-                            className="w-8 h-8 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 text-slate-900 dark:text-white flex items-center justify-center transition-all"
+                            className="w-8 h-8 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 text-psi-primary flex items-center justify-center transition-all"
                         >
                             <Send size={13} />
                         </button>
@@ -558,26 +558,26 @@ export function GlobalActionButtons({ className = '' }: { className?: string }) 
             {/* Search / Command Palette */}
             <button id="cmd-palette-btn" onClick={() => setCmdOpen(true)}
                 aria-label="Open command palette (⌘K)"
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/6 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-medium transition-all">
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/6 hover:bg-psi-subtle border border-psi rounded-xl text-psi-secondary hover:text-psi-primary text-xs font-medium transition-all">
                 <Search size={13} />
                 <span className="hidden md:inline">Search…</span>
-                <kbd className="hidden md:flex items-center gap-0.5 text-[9px] font-mono bg-black/10 dark:bg-white/10 px-1 rounded">
+                <kbd className="hidden md:flex items-center gap-0.5 text-[9px] font-mono bg-psi-border-subtle px-1 rounded">
                     <Command size={8} />K
                 </kbd>
             </button>
             <button id="cmd-palette-btn-mobile" onClick={() => setCmdOpen(true)}
                 aria-label="Search"
-                className="sm:hidden p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
+                className="sm:hidden p-2 rounded-xl text-psi-secondary hover:bg-slate-800 hover:text-psi-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <Search size={18} />
             </button>
 
             {/* Notifications */}
             <button id="notifications-btn" onClick={() => setNotifOpen(!notifOpen)}
                 aria-label="Notifications"
-                className="relative p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
-                <Bell size={18} className={notifOpen ? 'text-slate-900 dark:text-white' : ''} />
+                className="relative p-2 rounded-xl text-psi-secondary hover:bg-slate-800 hover:text-psi-primary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <Bell size={18} className={notifOpen ? 'text-psi-primary' : ''} />
                 {unreadCount > 0 && (
-                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-slate-900 dark:text-white text-[8px] font-black rounded-full flex items-center justify-center">
+                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-psi-primary text-[8px] font-black rounded-full flex items-center justify-center">
                         {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                 )}
@@ -586,7 +586,7 @@ export function GlobalActionButtons({ className = '' }: { className?: string }) 
             {/* AI Chat */}
             <button id="ai-chat-btn" onClick={() => setChatOpen(!chatOpen)}
                 aria-label="AI Assistant"
-                className={`p-2 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${chatOpen ? 'bg-indigo-600 text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'}`}>
+                className={`p-2 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${chatOpen ? 'bg-indigo-600 text-psi-primary' : 'text-psi-secondary hover:bg-slate-800 hover:text-psi-primary'}`}>
                 <MessageSquare size={18} />
             </button>
         </div>

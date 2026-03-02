@@ -342,16 +342,16 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                     <div>
                         <div className="flex items-center gap-2 mb-3">
                             <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-                                <FileText size={13} className="text-slate-900 dark:text-white" />
+                                <FileText size={13} className="text-psi-primary" />
                             </div>
                             <span className="text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] print:text-blue-700">
                                 PSI Properties · Executive Post-Mortem
                             </span>
                         </div>
-                        <h1 className="text-slate-900 dark:text-white text-2xl font-black tracking-tight leading-tight mb-1 print:text-slate-900">
+                        <h1 className="text-psi-primary text-2xl font-black tracking-tight leading-tight mb-1 print:text-slate-900">
                             {input.event.name}
                         </h1>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm print:text-slate-600">
+                        <p className="text-psi-secondary text-sm print:text-slate-600">
                             {input.event.city}, {input.event.country} &nbsp;·&nbsp; {input.event.start_date} — {input.event.end_date}
                         </p>
                     </div>
@@ -364,7 +364,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                             { label: 'Spend', value: `AED ${formatAED(input.totalExpenses)}`, icon: <DollarSign size={12} />, color: 'text-amber-400' },
                             { label: 'Net ROI', value: `${input.netROI.toFixed(0)}%`, icon: <TrendingUp size={12} />, color: input.netROI >= 0 ? 'text-emerald-400' : 'text-rose-400' },
                         ].map(({ label, value, icon, color }) => (
-                            <div key={label} className="bg-white/6 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 min-w-[90px] text-center print:border-slate-200 print:bg-slate-50">
+                            <div key={label} className="bg-white/6 border border-psi rounded-xl px-4 py-3 min-w-[90px] text-center print:border-slate-200 print:bg-slate-50">
                                 <div className={`flex items-center justify-center gap-1 ${color} print:text-slate-600 mb-1`}>{icon}<span className="text-[9px] font-black uppercase tracking-widest">{label}</span></div>
                                 <p className={`text-base font-extrabold ${color} print:text-slate-900`}>{value}</p>
                             </div>
@@ -374,7 +374,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
 
                 {/* Expense breakdown mini bar */}
                 <div className="mt-6 space-y-1">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 mb-2">Expense Breakdown</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-psi-secondary mb-2">Expense Breakdown</p>
                     <div className="flex gap-1 h-2 rounded-full overflow-hidden">
                         {Object.entries(input.expenseBreakdown).map(([cat, val], i) => {
                             const pct = input.totalExpenses > 0 ? (val / input.totalExpenses) * 100 : 0;
@@ -388,7 +388,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                             return (
                                 <div key={cat} className="flex items-center gap-1">
                                     <span className={`w-1.5 h-1.5 rounded-full ${colors[i % colors.length]} opacity-80 flex-shrink-0`} style={{ backgroundColor: 'currentColor' }} />
-                                    <span className="text-[9px] text-slate-600 dark:text-slate-400 print:text-slate-600">{cat} <strong className="text-slate-700 dark:text-slate-300 print:text-slate-800">AED {formatAED(val)}</strong></span>
+                                    <span className="text-[9px] text-psi-secondary print:text-slate-600">{cat} <strong className="text-psi-secondary print:text-slate-800">AED {formatAED(val)}</strong></span>
                                 </div>
                             );
                         })}
@@ -398,13 +398,13 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
                 {/* Action buttons */}
                 <div className="absolute top-4 right-4 flex gap-2 print:hidden">
                     <button id="debrief-print-btn" onClick={handlePrint}
-                        className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 border border-white/15 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-white/15 transition-all"
+                        className="w-8 h-8 rounded-lg bg-psi-border-subtle border border-white/15 flex items-center justify-center text-psi-secondary hover:text-psi-primary hover:bg-white/15 transition-all"
                         title="Print report"
                     >
                         <Printer size={14} />
                     </button>
                     <button id="debrief-download-btn" onClick={handleDownload}
-                        className="w-8 h-8 rounded-lg bg-black/10 dark:bg-white/10 border border-white/15 flex items-center justify-center text-slate-900 dark:text-white/60 hover:text-slate-900 dark:hover:text-white hover:bg-white/15 transition-all"
+                        className="w-8 h-8 rounded-lg bg-psi-border-subtle border border-white/15 flex items-center justify-center text-psi-secondary hover:text-psi-primary hover:bg-white/15 transition-all"
                         title="Download as text"
                     >
                         <Download size={14} />
@@ -423,7 +423,7 @@ function DebriefDocument({ debrief, input }: { debrief: GeneratedDebrief; input:
 
                 {/* Executive Summary */}
                 <ReportSection icon={<FileText size={16} />} title="Executive Summary" accent="border-blue-600">
-                    <p className="text-slate-700 dark:text-slate-300 text-sm leading-7 tracking-wide">
+                    <p className="text-psi-secondary text-sm leading-7 tracking-wide">
                         {debrief.executiveSummary}
                     </p>
                 </ReportSection>
@@ -574,8 +574,8 @@ export function GenerateDebriefButton({ event, eventId, isCompleted }: GenerateD
                 className={clsx(
                     'flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all select-none shadow-lg',
                     isLoading
-                        ? 'bg-indigo-400 cursor-not-allowed text-slate-900 dark:text-white shadow-indigo-400/20'
-                        : 'bg-gradient-to-r from-indigo-600 to-violet-600 text-slate-900 dark:text-white shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500',
+                        ? 'bg-indigo-400 cursor-not-allowed text-psi-primary shadow-indigo-400/20'
+                        : 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500',
                 )}
             >
                 {isLoading ? (
@@ -617,7 +617,7 @@ export function GenerateDebriefButton({ event, eventId, isCompleted }: GenerateD
                             <div className="flex items-center justify-between px-6 py-4 bg-psi-subtle border-b border-psi print:hidden">
                                 <div className="flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
-                                        <Sparkles size={14} className="text-slate-900 dark:text-white" />
+                                        <Sparkles size={14} className="text-psi-primary" />
                                     </div>
                                     <div>
                                         <p className="font-extrabold text-psi-primary text-sm">AI Executive Debrief</p>

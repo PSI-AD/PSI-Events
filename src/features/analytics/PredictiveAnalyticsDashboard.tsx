@@ -126,7 +126,7 @@ function RecommendationCard({ rec }: { rec: SponsorshipRecommendation }) {
             <div className="psi-card rounded-2xl border-amber-500/30 p-5 mb-4 flex-shrink-0">
                 <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                        <Lightbulb size={16} className="text-slate-900 dark:text-white" />
+                        <Lightbulb size={16} className="text-psi-primary" />
                     </div>
                     <div>
                         <p className="text-amber-600 dark:text-amber-400 text-[10px] font-bold tracking-[0.2em] uppercase">System Recommendation</p>
@@ -262,7 +262,7 @@ export default function PredictiveAnalyticsDashboard({
                 <div>
                     <div className="flex items-center gap-2 mb-1">
                         <div className="w-7 h-7 bg-violet-600 rounded-lg flex items-center justify-center">
-                            <Sparkles size={15} className="text-slate-900 dark:text-white" />
+                            <Sparkles size={15} className="text-psi-primary" />
                         </div>
                         <span className="text-violet-600 dark:text-violet-400 text-xs font-bold tracking-[0.15em] uppercase">AI Analytics Engine</span>
                     </div>
@@ -459,7 +459,7 @@ export default function PredictiveAnalyticsDashboard({
                         {recommendation ? (
                             <RecommendationCard key={city} rec={recommendation} />
                         ) : (
-                            <div className="flex items-center justify-center h-64 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-slate-600 text-sm">
+                            <div className="flex items-center justify-center h-64 bg-psi-surface rounded-2xl border border-psi text-psi-muted text-sm">
                                 No historical data for {city}
                             </div>
                         )}

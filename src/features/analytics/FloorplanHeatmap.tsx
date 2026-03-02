@@ -237,9 +237,9 @@ function ZoneBadge({ zone, count, total }: { zone: FloorZone; count: number; tot
             initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', delay: 0.3 }}>
             <div className={clsx('flex flex-col items-center gap-0.5 px-2.5 py-1.5 rounded-xl border border-black/20 dark:border-white/20 shadow-lg backdrop-blur-sm', zone.colour, 'bg-opacity-85')}>
-                <span className="text-slate-900 dark:text-white font-black text-lg leading-none">{count}</span>
-                <span className="text-slate-900 dark:text-white/80 text-[9px] font-bold leading-none">{pct}%</span>
-                <span className="text-slate-900 dark:text-white/60 text-[8px] uppercase tracking-widest leading-none">{zone.name.split('—')[0].trim()}</span>
+                <span className="text-psi-primary font-black text-lg leading-none">{count}</span>
+                <span className="text-psi-primary text-[9px] font-bold leading-none">{pct}%</span>
+                <span className="text-psi-secondary text-[8px] uppercase tracking-widest leading-none">{zone.name.split('—')[0].trim()}</span>
             </div>
         </motion.div>
     );
@@ -317,7 +317,7 @@ function SetupTab({ eventId, imageUrl, setImageUrl, zones, setZones }: {
                         <p className="text-psi-primary font-bold text-sm flex items-center gap-2"><MapPin size={14} className="text-amber-500" /> Define Zones</p>
                         <button id="add-zone-btn" onClick={() => { setAddingZone(p => !p); setPendingPos(null); }}
                             className={clsx('flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all',
-                                addingZone ? 'bg-amber-500 text-slate-900 dark:text-white' : 'psi-card border border-psi text-psi-secondary hover:text-psi-primary')}>
+                                addingZone ? 'bg-amber-500 text-white' : 'psi-card border border-psi text-psi-secondary hover:text-psi-primary')}>
                             {addingZone ? <><X size={12} /> Cancel</> : <><Plus size={12} /> Add Zone</>}
                         </button>
                     </div>
@@ -333,7 +333,7 @@ function SetupTab({ eventId, imageUrl, setImageUrl, zones, setZones }: {
                                         placeholder="Zone name (e.g. Zone A — Aldar)"
                                         className="psi-input flex-1 px-3 py-2 text-sm rounded-lg" />
                                     <button id="confirm-zone-btn" onClick={confirmZone} disabled={!zoneName.trim()}
-                                        className="px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white text-xs font-bold disabled:opacity-40">
+                                        className="px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold disabled:opacity-40">
                                         Confirm
                                     </button>
                                 </div>
@@ -342,19 +342,19 @@ function SetupTab({ eventId, imageUrl, setImageUrl, zones, setZones }: {
                     )}
                     <div ref={mapRef} onClick={handleMapClick}
                         className={clsx('relative rounded-xl overflow-hidden select-none border border-psi', addingZone ? 'cursor-crosshair' : 'cursor-default')}>
-                        <img src={imageUrl} alt="Floorplan" className="w-full h-auto block max-h-72 object-contain bg-white dark:bg-slate-900" />
+                        <img src={imageUrl} alt="Floorplan" className="w-full h-auto block max-h-72 object-contain bg-psi-surface" />
                         {zones.map(z => (
                             <div key={z.id} style={{ left: `${z.x * 100}%`, top: `${z.y * 100}%` }} className="absolute -translate-x-1/2 -translate-y-1/2 group">
                                 <div className={clsx('w-5 h-5 rounded-full border-2 border-white shadow-lg flex items-center justify-center', z.colour)}>
-                                    <MapPin size={10} className="text-slate-900 dark:text-white" />
+                                    <MapPin size={10} className="text-psi-primary" />
                                 </div>
-                                <div className="absolute left-1/2 -translate-x-1/2 bottom-6 hidden group-hover:block bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap shadow-xl border border-slate-300 dark:border-slate-700">{z.name}</div>
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-6 hidden group-hover:block bg-psi-surface text-psi-primary text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap shadow-xl border border-psi-strong">{z.name}</div>
                             </div>
                         ))}
                         {pendingPos && (
                             <motion.div style={{ left: `${pendingPos.x * 100}%`, top: `${pendingPos.y * 100}%` }}
                                 initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -translate-x-1/2 -translate-y-1/2">
-                                <div className="w-6 h-6 rounded-full bg-amber-500 border-2 border-white shadow-xl animate-bounce flex items-center justify-center"><Plus size={12} className="text-slate-900 dark:text-white" /></div>
+                                <div className="w-6 h-6 rounded-full bg-amber-500 border-2 border-white shadow-xl animate-bounce flex items-center justify-center"><Plus size={12} className="text-psi-primary" /></div>
                             </motion.div>
                         )}
                     </div>
@@ -362,7 +362,7 @@ function SetupTab({ eventId, imageUrl, setImageUrl, zones, setZones }: {
                         <div className="space-y-2">
                             {zones.map((z, i) => (
                                 <div key={z.id} className="flex items-center gap-3 p-2.5 bg-psi-subtle rounded-xl">
-                                    <div className={clsx('w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0', z.colour)}><span className="text-slate-900 dark:text-white text-[10px] font-black">{i + 1}</span></div>
+                                    <div className={clsx('w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0', z.colour)}><span className="text-psi-primary text-[10px] font-black">{i + 1}</span></div>
                                     <p className="flex-1 text-psi-primary text-sm font-bold">{z.name}</p>
                                     <p className="text-psi-muted text-[10px]">({Math.round(z.x * 100)}%, {Math.round(z.y * 100)}%)</p>
                                     <button onClick={() => removeZone(z.id)} className="text-psi-muted hover:text-red-400 transition-colors"><Trash2 size={13} /></button>
@@ -374,7 +374,7 @@ function SetupTab({ eventId, imageUrl, setImageUrl, zones, setZones }: {
             )}
             {imageUrl && zones.length > 0 && (
                 <motion.button id="save-floorplan-btn" whileTap={{ scale: 0.97 }} onClick={handleSave} disabled={saving}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-900 dark:text-white font-extrabold text-sm disabled:opacity-50 shadow-lg shadow-amber-500/20 transition-all">
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-extrabold text-sm disabled:opacity-50 shadow-lg shadow-amber-500/20 transition-all">
                     {saving ? <><Loader2 size={16} className="animate-spin" /> Saving…</> :
                         saved ? <><CheckCircle2 size={16} /> Saved to Firestore ✓</> :
                             <><Layers size={16} /> Save Floorplan &amp; Zones</>}
@@ -432,7 +432,7 @@ function AgentLoggerTab({ eventId, agentId, agentName, imageUrl, zones, useDemoD
                 <p className="text-psi-muted text-xs mb-4">Tap where you are standing on the floorplan to log a lead position.</p>
                 <div ref={mapRef} onClick={handleMapTap} onTouchStart={handleMapTap}
                     className="relative rounded-xl overflow-hidden cursor-crosshair border border-psi select-none touch-none">
-                    <img src={imageUrl} alt="Floorplan" className="w-full h-auto block max-h-60 object-contain bg-white dark:bg-slate-900" />
+                    <img src={imageUrl} alt="Floorplan" className="w-full h-auto block max-h-60 object-contain bg-psi-surface" />
                     {ripples.map(r => (
                         <motion.div key={r.id} style={{ left: `${r.x * 100}%`, top: `${r.y * 100}%` }}
                             className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -445,14 +445,14 @@ function AgentLoggerTab({ eventId, agentId, agentName, imageUrl, zones, useDemoD
                             initial={{ scale: 0, y: -10 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0 }}
                             className="absolute -translate-x-1/2 -translate-y-full z-20 pointer-events-none">
                             <div className="relative">
-                                <div className="w-7 h-7 rounded-full bg-amber-500 border-2 border-white shadow-xl flex items-center justify-center"><MapPin size={14} className="text-slate-900 dark:text-white" /></div>
+                                <div className="w-7 h-7 rounded-full bg-amber-500 border-2 border-white shadow-xl flex items-center justify-center"><MapPin size={14} className="text-psi-primary" /></div>
                                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rotate-45 bg-amber-500" />
                             </div>
                         </motion.div>
                     )}</AnimatePresence>
                     {zones.map(z => (
                         <div key={z.id} style={{ left: `${z.x * 100}%`, top: `${z.y * 100}%` }} className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                            <div className={clsx('text-[9px] font-black text-slate-900 dark:text-white px-1.5 py-0.5 rounded-md opacity-70', z.colour)}>{z.name.split('—')[0].trim()}</div>
+                            <div className={clsx('text-[9px] font-black text-psi-primary px-1.5 py-0.5 rounded-md opacity-70', z.colour)}>{z.name.split('—')[0].trim()}</div>
                         </div>
                     ))}
                 </div>
@@ -464,7 +464,7 @@ function AgentLoggerTab({ eventId, agentId, agentName, imageUrl, zones, useDemoD
                 )}
             </div>
             <motion.button id="log-lead-position-btn" whileTap={{ scale: 0.97 }} onClick={handleLog} disabled={!tapPos || logging}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-900 dark:text-white font-extrabold text-sm disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20 transition-all">
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-extrabold text-sm disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20 transition-all">
                 {logging ? <><Loader2 size={16} className="animate-spin" /> Logging…</> : <><MapPin size={16} /> {tapPos ? 'Log My Position' : 'Tap the map first'}</>}
             </motion.button>
             <AnimatePresence>{logged && (
@@ -533,11 +533,11 @@ function HeatmapTab({ imageUrl, zones, points }: { imageUrl: string; zones: Floo
                     <input type="range" min={20} max={120} value={radius} onChange={e => setRadius(+e.target.value)} onMouseUp={drawHeatmap} onTouchEnd={drawHeatmap} className="flex-1 accent-amber-500" />
                     <span className="text-psi-muted text-xs font-mono w-8">{radius}px</span>
                 </div>
-                <button id="export-heatmap-btn" onClick={handleExport} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 dark:text-white text-xs font-bold transition-colors shadow-md shadow-amber-500/20">
+                <button id="export-heatmap-btn" onClick={handleExport} className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold transition-colors shadow-md shadow-amber-500/20">
                     <Download size={13} /> Export PNG
                 </button>
             </div>
-            <div ref={containerRef} className="relative rounded-2xl overflow-hidden border border-psi bg-white dark:bg-slate-900" style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '55vh' }}>
+            <div ref={containerRef} className="relative rounded-2xl overflow-hidden border border-psi bg-psi-surface" style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '55vh' }}>
                 <div style={{ transform: `scale(${zoom})`, transformOrigin: 'top left', transition: 'transform 0.2s', width: `${100 / zoom}%` }}>
                     <div className="relative">
                         <img ref={imgRef} src={imageUrl} alt="Floorplan" className="w-full h-auto block" onLoad={drawHeatmap} crossOrigin="anonymous" />
@@ -561,7 +561,7 @@ function HeatmapTab({ imageUrl, zones, points }: { imageUrl: string; zones: Floo
                             <motion.div key={z.id} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}
                                 className={clsx('rounded-xl p-3 border', isTop ? 'border-amber-500/40 bg-amber-500/5' : 'border-psi bg-psi-subtle')}>
                                 <div className="flex items-center gap-3 mb-2">
-                                    <div className={clsx('w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0 text-slate-900 dark:text-white', z.colour)}>{i === 0 ? '🏆' : `#${i + 1}`}</div>
+                                    <div className={clsx('w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0 text-psi-primary', z.colour)}>{i === 0 ? '🏆' : `#${i + 1}`}</div>
                                     <div className="flex-1 min-w-0">
                                         <p className="text-psi-primary font-bold text-sm truncate">{z.name}</p>
                                         {z.sponsor && <p className="text-psi-muted text-[10px]">{z.sponsor}</p>}
@@ -648,7 +648,7 @@ export default function FloorplanHeatmap({
             <div>
                 <div className="flex items-center gap-2 mb-2">
                     <div className="w-9 h-9 bg-gradient-to-br from-rose-500 to-amber-500 rounded-xl flex items-center justify-center shadow-md shadow-rose-500/20">
-                        <Flame size={18} className="text-slate-900 dark:text-white" />
+                        <Flame size={18} className="text-psi-primary" />
                     </div>
                     <span className="text-rose-500 text-xs font-black tracking-[0.2em] uppercase">Smart Floorplan · Heatmap</span>
                 </div>
@@ -668,8 +668,8 @@ export default function FloorplanHeatmap({
                             'flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all',
                             tab === t.id
                                 ? t.id === 'heatmap'
-                                    ? 'bg-gradient-to-r from-rose-500 to-amber-500 text-slate-900 dark:text-white shadow-md'
-                                    : 'bg-amber-500 text-slate-900 dark:text-white shadow-md shadow-amber-500/20'
+                                    ? 'bg-gradient-to-r from-rose-500 to-amber-500 text-psi-primary shadow-md'
+                                    : 'bg-amber-500 text-white shadow-md shadow-amber-500/20'
                                 : 'text-psi-muted hover:text-psi-primary'
                         )}>
                         {t.icon} {t.label}

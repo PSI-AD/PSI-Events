@@ -69,7 +69,7 @@ const AdminEventManagement = lazy(() => import('./features/eventManagement/Admin
 /** Full-screen spinner shown while a public page chunk loads */
 function PublicPageLoader() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-psi-page flex items-center justify-center">
       <div className="w-8 h-8 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
     </div>
   );
@@ -81,7 +81,7 @@ function DashboardPageLoader() {
     <div className="flex-1 flex items-center justify-center min-h-screen bg-slate-50">
       <div className="flex flex-col items-center gap-3">
         <div className="w-8 h-8 rounded-full border-2 border-emerald-400 border-t-transparent animate-spin" />
-        <p className="text-xs text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest">Loading…</p>
+        <p className="text-xs text-psi-secondary font-bold uppercase tracking-widest">Loading…</p>
       </div>
     </div>
   );
