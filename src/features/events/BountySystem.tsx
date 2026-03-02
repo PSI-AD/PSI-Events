@@ -43,6 +43,38 @@ import { clsx } from './bounty/utils';
 import { BountyCard, IncentiveIcon } from './bounty/BountyCard';
 import { BountyAlertOverlay } from './bounty/BountyAlertOverlay';
 
+// ── Demo fallback bounties (shown if Firebase is empty/slow) ────────────────
+
+const DEMO_BOUNTIES: BountyDocument[] = [
+    {
+        id: 'demo_bounty_vida',
+        eventId: 'evt_london_luxury_expo_2026',
+        targetProject: 'Vida Residence',
+        incentiveLabel: '+2% Commission',
+        incentiveAed: 0,
+        incentiveType: 'commission_pct',
+        commissionPctBonus: 2,
+        durationMinutes: 120,
+        expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+        issuedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+        issuedBy: 'Amr ElFangary',
+        status: 'active',
+    },
+    {
+        id: 'demo_bounty_moscow',
+        eventId: 'evt_london_luxury_expo_2026',
+        targetProject: 'Moscow Expo Top Closer',
+        incentiveLabel: '5,000 AED Bonus',
+        incentiveAed: 5000,
+        incentiveType: 'cash',
+        durationMinutes: 180,
+        expiresAt: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+        issuedAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+        issuedBy: 'Amr ElFangary',
+        status: 'active',
+    },
+];
+
 // ── Bounty Creator Form ───────────────────────────────────────────────────────
 
 function BountyCreatorForm({
@@ -203,8 +235,12 @@ export function OrganizerBountyManager({
     useEffect(() => {
         const unsub: Unsubscribe = onSnapshot(
             query(collection(db, 'events', eventId, 'bounties'), orderBy('_createdAt', 'desc')),
-            snap => { setBounties(snap.docs.map(d => ({ id: d.id, ...d.data() } as BountyDocument))); setLoading(false); },
-            err => { console.error('[BountySystem] Firestore read error:', err); setLoading(false); }
+            snap => {
+                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() } as BountyDocument));
+                setBounties(docs.length > 0 ? docs : DEMO_BOUNTIES);
+                setLoading(false);
+            },
+            err => { console.error('[BountySystem] Firestore read error:', err); setBounties(DEMO_BOUNTIES); setLoading(false); }
         );
         return () => unsub();
     }, [eventId]);
@@ -354,9 +390,10 @@ export function AgentBountyView({
             query(collection(db, 'events', eventId, 'bounties'), orderBy('_createdAt', 'desc')),
             snap => {
                 const docs = snap.docs.map(d => ({ id: d.id, ...d.data() } as BountyDocument));
-                setBounties(docs);
+                const data = docs.length > 0 ? docs : DEMO_BOUNTIES;
+                setBounties(data);
                 setLoading(false);
-                for (const b of docs) {
+                for (const b of data) {
                     if (b.status === 'active' && !seenIds.current.has(b.id)) {
                         seenIds.current.add(b.id);
                         setAlertBounty(b);

@@ -226,102 +226,194 @@ export default function DigitalBrochurePage({
 
             {/* ── Tab: Compose ── */}
             {state.tab === 'compose' && (
-                <div className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* Property grid */}
-                    <div className="psi-card rounded-2xl p-5">
-                        <p className="text-psi-primary font-bold text-sm mb-3 flex items-center gap-2">
-                            <ClipboardList size={14} className="text-amber-500" />
-                            Select Properties
-                            {state.selectedProjectIds.length > 0 && (
-                                <span className="ml-auto text-xs font-black text-amber-500">
-                                    {state.selectedProjectIds.length} selected
-                                </span>
+                    {/* ── Left: Controls ── */}
+                    <div className="space-y-6">
+
+                        {/* Property grid */}
+                        <div className="psi-card rounded-2xl p-5">
+                            <p className="text-psi-primary font-bold text-sm mb-3 flex items-center gap-2">
+                                <ClipboardList size={14} className="text-amber-500" />
+                                Select Properties
+                                {state.selectedProjectIds.length > 0 && (
+                                    <span className="ml-auto text-xs font-black text-amber-500">
+                                        {state.selectedProjectIds.length} selected
+                                    </span>
+                                )}
+                            </p>
+
+                            {state.loadingProjects ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <Loader2 size={24} className="text-psi-muted animate-spin" />
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                    {state.projects.map(p => (
+                                        <ProjectPickerCard
+                                            key={p.id}
+                                            project={p}
+                                            selected={state.selectedProjectIds.includes(p.id)}
+                                            onToggle={() => toggleProject(p.id)}
+                                        />
+                                    ))}
+                                </div>
                             )}
-                        </p>
+                        </div>
 
-                        {state.loadingProjects ? (
-                            <div className="flex items-center justify-center py-12">
-                                <Loader2 size={24} className="text-psi-muted animate-spin" />
+                        {/* Client details */}
+                        <div className="psi-card rounded-2xl p-5 space-y-4">
+                            <p className="text-psi-primary font-bold text-sm flex items-center gap-2">
+                                <MessageCircle size={14} className="text-amber-500" /> Client Details
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Client Name *</label>
+                                    <input id="brochure-client-name" type="text" value={state.clientName}
+                                        onChange={e => update('clientName', e.target.value)}
+                                        placeholder="e.g. Mohammed Al Rashid"
+                                        className="psi-input w-full px-3 py-2.5 rounded-xl text-sm" />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Client Email *</label>
+                                    <input id="brochure-client-email" type="email" value={state.clientEmail}
+                                        onChange={e => update('clientEmail', e.target.value)}
+                                        placeholder="client@email.com"
+                                        className="psi-input w-full px-3 py-2.5 rounded-xl text-sm" />
+                                </div>
                             </div>
-                        ) : (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                {state.projects.map(p => (
-                                    <ProjectPickerCard
-                                        key={p.id}
-                                        project={p}
-                                        selected={state.selectedProjectIds.includes(p.id)}
-                                        onToggle={() => toggleProject(p.id)}
-                                    />
+                            <div className="space-y-1">
+                                <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Personal Note (optional)</label>
+                                <textarea id="brochure-personal-note" rows={3} value={state.personalNote}
+                                    onChange={e => update('personalNote', e.target.value)}
+                                    placeholder="e.g. It was great meeting you at our stand today, Mohammed! As promised, here's our curated selection…"
+                                    className="psi-input w-full px-3 py-2 rounded-xl text-sm resize-none" />
+                            </div>
+                        </div>
+
+                        {/* Selected summary */}
+                        {selectedProjects.length > 0 && (
+                            <div className="psi-card rounded-2xl p-4 flex flex-wrap gap-2">
+                                <span className="text-psi-muted text-xs font-bold w-full mb-1">Sending:</span>
+                                {selectedProjects.map(p => (
+                                    <span key={p.id}
+                                        className="flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400">
+                                        {p.name}
+                                        <button onClick={() => toggleProject(p.id)} className="w-4 h-4 rounded-full bg-amber-500/20 hover:bg-amber-500/40 flex items-center justify-center transition-colors">
+                                            <X size={10} />
+                                        </button>
+                                    </span>
                                 ))}
                             </div>
                         )}
+
+                        {/* Send button */}
+                        <motion.button
+                            id="send-brochure-btn"
+                            whileHover={{ scale: canSend ? 1.01 : 1 }}
+                            whileTap={{ scale: canSend ? 0.97 : 1 }}
+                            onClick={handleSend}
+                            disabled={!canSend}
+                            className={`w-full flex items-center justify-center gap-2.5 py-5 rounded-2xl font-extrabold text-sm transition-all ${canSend
+                                ? 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-xl shadow-amber-500/20'
+                                : 'bg-psi-subtle text-psi-muted cursor-not-allowed'
+                                }`}
+                        >
+                            {state.sending ? (
+                                <><Loader2 size={18} className="animate-spin" /> Generating Link…</>
+                            ) : (
+                                <><Send size={18} /> Send Presentation</>
+                            )}
+                        </motion.button>
+
                     </div>
 
-                    {/* Client details */}
-                    <div className="psi-card rounded-2xl p-5 space-y-4">
-                        <p className="text-psi-primary font-bold text-sm flex items-center gap-2">
-                            <MessageCircle size={14} className="text-amber-500" /> Client Details
+                    {/* ── Right: Live PDF Preview ── */}
+                    <div className="hidden lg:block">
+                        <p className="text-psi-primary font-bold text-sm mb-3 flex items-center gap-2">
+                            <Eye size={14} className="text-amber-500" />
+                            Live PDF Preview
                         </p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                                <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Client Name *</label>
-                                <input id="brochure-client-name" type="text" value={state.clientName}
-                                    onChange={e => update('clientName', e.target.value)}
-                                    placeholder="e.g. Mohammed Al Rashid"
-                                    className="psi-input w-full px-3 py-2.5 rounded-xl text-sm" />
+                        <div className="sticky top-6">
+                            <div className="aspect-[1/1.414] bg-white border border-slate-200 shadow-2xl rounded-sm transform scale-95 origin-top relative overflow-hidden">
+
+                                {/* PDF Header */}
+                                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 py-5 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+                                            <span className="text-white font-black text-xs">PSI</span>
+                                        </div>
+                                        <div>
+                                            <p className="text-white font-extrabold text-sm tracking-tight">
+                                                {selectedProjects.length > 0 ? selectedProjects[0].name : 'Vida Residence'}
+                                            </p>
+                                            <p className="text-slate-400 text-[9px] font-medium">Investment Brief · Confidential</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-slate-500 text-[8px] uppercase tracking-widest font-bold">Prepared by</p>
+                                        <p className="text-slate-300 text-[10px] font-bold">{agentName}</p>
+                                    </div>
+                                </div>
+
+                                {/* Hero Image Placeholder */}
+                                <div className="mx-5 mt-4 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 h-[22%] flex items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="w-10 h-10 mx-auto rounded-full bg-slate-300/60 flex items-center justify-center mb-1.5">
+                                            <Eye size={16} className="text-slate-500" />
+                                        </div>
+                                        <p className="text-slate-500 text-[9px] font-bold">Property Hero Image</p>
+                                        <p className="text-slate-400 text-[7px]">High-resolution render</p>
+                                    </div>
+                                </div>
+
+                                {/* ROI Stats Grid */}
+                                <div className="mx-5 mt-4 grid grid-cols-2 gap-2.5">
+                                    {[
+                                        { label: 'Expected Yield', value: '7.5%', sub: 'Annual ROI' },
+                                        { label: 'Price Range', value: selectedProjects.length > 0 ? (selectedProjects[0].priceRange ?? fmtAED(selectedProjects[0].expected_avg_deal)) : 'AED 1.8M – 4.2M', sub: 'Starting price' },
+                                        { label: 'Completion', value: selectedProjects.length > 0 ? (selectedProjects[0].completionYear ?? '2027') : '2027-Q2', sub: 'Handover date' },
+                                        { label: 'Avg. Deal', value: selectedProjects.length > 0 ? fmtAED(selectedProjects[0].expected_avg_deal) : 'AED 2.2M', sub: 'Expected deal size' },
+                                    ].map(({ label, value, sub }) => (
+                                        <div key={label} className="bg-slate-50 border border-slate-100 rounded-lg p-2.5">
+                                            <p className="text-slate-400 text-[7px] font-bold uppercase tracking-widest">{label}</p>
+                                            <p className="text-slate-900 font-extrabold text-sm mt-0.5">{value}</p>
+                                            <p className="text-slate-400 text-[7px]">{sub}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Key Highlights */}
+                                <div className="mx-5 mt-4">
+                                    <p className="text-slate-400 text-[7px] font-black uppercase tracking-widest mb-1.5">Key Highlights</p>
+                                    <div className="space-y-1">
+                                        {[
+                                            'Premium branded residences with 5-star amenities',
+                                            'Prime location — walking distance to landmarks',
+                                            'Flexible payment plan: 60/40 structure',
+                                            'Golden Visa eligible for qualifying units',
+                                        ].map((point, i) => (
+                                            <div key={i} className="flex items-start gap-1.5">
+                                                <span className="w-1 h-1 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
+                                                <p className="text-slate-600 text-[8px] leading-tight">{point}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Footer */}
+                                <div className="absolute bottom-0 left-0 right-0 px-5 py-3 border-t border-slate-100 bg-slate-50/80">
+                                    <p className="text-slate-500 text-[7px] text-center">
+                                        Prepared specifically for <strong className="text-slate-700">{state.clientName || '[Client Name]'}</strong> by <strong className="text-slate-700">{agentName}</strong>
+                                    </p>
+                                    <p className="text-slate-400 text-[6px] text-center mt-0.5">
+                                        PSI Events · Confidential Investment Document · {new Date().getFullYear()}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="space-y-1">
-                                <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Client Email *</label>
-                                <input id="brochure-client-email" type="email" value={state.clientEmail}
-                                    onChange={e => update('clientEmail', e.target.value)}
-                                    placeholder="client@email.com"
-                                    className="psi-input w-full px-3 py-2.5 rounded-xl text-sm" />
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-psi-muted text-[10px] font-black uppercase tracking-widest">Personal Note (optional)</label>
-                            <textarea id="brochure-personal-note" rows={3} value={state.personalNote}
-                                onChange={e => update('personalNote', e.target.value)}
-                                placeholder="e.g. It was great meeting you at our stand today, Mohammed! As promised, here's our curated selection…"
-                                className="psi-input w-full px-3 py-2 rounded-xl text-sm resize-none" />
                         </div>
                     </div>
 
-                    {/* Selected summary */}
-                    {selectedProjects.length > 0 && (
-                        <div className="psi-card rounded-2xl p-4 flex flex-wrap gap-2">
-                            <span className="text-psi-muted text-xs font-bold w-full mb-1">Sending:</span>
-                            {selectedProjects.map(p => (
-                                <span key={p.id}
-                                    className="flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400">
-                                    {p.name}
-                                    <button onClick={() => toggleProject(p.id)} className="w-4 h-4 rounded-full bg-amber-500/20 hover:bg-amber-500/40 flex items-center justify-center transition-colors">
-                                        <X size={10} />
-                                    </button>
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Send button */}
-                    <motion.button
-                        id="send-brochure-btn"
-                        whileHover={{ scale: canSend ? 1.01 : 1 }}
-                        whileTap={{ scale: canSend ? 0.97 : 1 }}
-                        onClick={handleSend}
-                        disabled={!canSend}
-                        className={`w-full flex items-center justify-center gap-2.5 py-5 rounded-2xl font-extrabold text-sm transition-all ${canSend
-                            ? 'bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white shadow-xl shadow-amber-500/20'
-                            : 'bg-psi-subtle text-psi-muted cursor-not-allowed'
-                            }`}
-                    >
-                        {state.sending ? (
-                            <><Loader2 size={18} className="animate-spin" /> Generating Link…</>
-                        ) : (
-                            <><Send size={18} /> Send Presentation</>
-                        )}
-                    </motion.button>
                 </div>
             )}
 

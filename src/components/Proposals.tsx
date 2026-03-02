@@ -12,7 +12,7 @@ import {
 import PitchGenerator from '../features/proposals/PitchGenerator';
 
 export default function Proposals() {
-  const [activeTab, setActiveTab] = useState<'developer' | 'branch' | 'agent'>('developer');
+  const [activeTab, setActiveTab] = useState<'developer' | 'branch' | 'agent'>('branch');
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
@@ -143,10 +143,10 @@ function TabButton({
     <button
       onClick={onClick}
       className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all select-none ${active
-          // Active: uses the user's chosen accent colour
-          ? 'btn-accent shadow-sm'
-          // Inactive: transparent, muted text
-          : 'text-psi-muted hover:text-psi-primary hover:bg-psi-subtle'
+        // Active: uses the user's chosen accent colour
+        ? 'btn-accent shadow-sm'
+        // Inactive: transparent, muted text
+        : 'text-psi-muted hover:text-psi-primary hover:bg-psi-subtle'
         }`}
     >
       {icon}

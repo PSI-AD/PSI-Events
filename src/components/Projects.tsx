@@ -66,10 +66,66 @@ const TIER_BAR: Record<string, string> = {
 
 type TierFilter = 'All' | 'Luxury' | 'Medium' | 'Average';
 
+// ── Demo fallback data ────────────────────────────────────────────────────────
+
+const DEMO_PROJECTS: CrmProject[] = [
+  {
+    id: 'demo_vida',
+    name: 'Vida Residence',
+    developer: 'Emaar',
+    tier: 'Luxury',
+    price_range_aed: { min: 1_800_000, max: 4_200_000 },
+    location: { city: 'Dubai', community: 'Downtown Dubai' },
+    unit_types: ['1BR', '2BR', '3BR', 'Penthouse'],
+    completion_date: '2027-Q2',
+    handover_status: 'Under Construction',
+    commission_pct: 5,
+    commission_notes: 'Golden visa eligible units available',
+    description: 'Premium branded residences in the heart of Downtown Dubai with panoramic views of the Burj Khalifa and Dubai Fountain. World-class amenities by Vida Hotels & Resorts.',
+    total_units: 340,
+    sold_units: 187,
+    is_featured: true,
+  },
+  {
+    id: 'demo_mamsha',
+    name: 'Mamsha Gardens',
+    developer: 'Aldar',
+    tier: 'Luxury',
+    price_range_aed: { min: 2_500_000, max: 6_500_000 },
+    location: { city: 'Abu Dhabi', community: 'Saadiyat Island' },
+    unit_types: ['2BR', '3BR', '4BR', 'Villa'],
+    completion_date: '2026-Q4',
+    handover_status: 'Under Construction',
+    commission_pct: 6,
+    commission_notes: 'Beachfront premium — 2% early-bird bonus',
+    description: 'Exclusive beachfront residences on Saadiyat Island, offering direct beach access and lush landscaped gardens. Minutes from the Louvre Abu Dhabi.',
+    total_units: 220,
+    sold_units: 165,
+    is_featured: true,
+  },
+  {
+    id: 'demo_louvre',
+    name: 'Louvre Abu Dhabi Residences',
+    developer: 'Aldar',
+    tier: 'Luxury',
+    price_range_aed: { min: 3_200_000, max: 9_800_000 },
+    location: { city: 'Abu Dhabi', community: 'Saadiyat Cultural District' },
+    unit_types: ['2BR', '3BR', 'Duplex', 'Penthouse'],
+    completion_date: '2027-Q3',
+    handover_status: 'Off-Plan',
+    commission_pct: 7,
+    commission_notes: 'Tiered commission — up to 7% on penthouses',
+    description: 'Ultra-luxury residences adjacent to the iconic Louvre Abu Dhabi, blending world-class art and architecture with waterfront living.',
+    total_units: 150,
+    sold_units: 52,
+    is_featured: true,
+  },
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Projects() {
-  const [projects, setProjects] = useState<CrmProject[]>([]);
+  const [projects, setProjects] = useState<CrmProject[]>(DEMO_PROJECTS);
   const [loading, setLoading] = useState(true);
   const [activeTier, setActiveTier] = useState<TierFilter>('All');
   const [query, setQuery] = useState('');
@@ -89,7 +145,8 @@ export default function Projects() {
           if (ai !== bi) return ai - bi;
           return a.name.localeCompare(b.name);
         });
-        setProjects(docs);
+        // Use Firebase data if available, otherwise keep demo fallback
+        setProjects(docs.length > 0 ? docs : DEMO_PROJECTS);
         setLoading(false);
       },
       err => {

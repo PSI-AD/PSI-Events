@@ -169,6 +169,13 @@ function SidebarLink({
                     className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-psi-accent"
                 />
             )}
+
+            {/* Collapsed tooltip — appears on hover */}
+            {collapsed && (
+                <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
+                    {label}
+                </span>
+            )}
         </Link>
     );
 }
@@ -215,7 +222,16 @@ function usePageTitle(): string {
 export default function DashboardLayout() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [openGroups, setOpenGroups] = useState<string[]>(['Core']);
     const pageTitle = usePageTitle();
+
+    const toggleGroup = (label: string) => {
+        setOpenGroups(prev =>
+            prev.includes(label)
+                ? prev.filter(g => g !== label)
+                : [...prev, label]
+        );
+    };
 
     return (
         <GlobalFeaturesProvider>
@@ -255,32 +271,57 @@ export default function DashboardLayout() {
                     </div>
 
                     {/* ── Nav groups ── */}
-                    <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-4">
-                        {NAV_GROUPS.map(group => (
-                            <div key={group.label}>
-                                {/* Group label — hidden when collapsed */}
-                                {!isCollapsed && (
-                                    <div className="px-3 mb-1">
-                                        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
-                                    </div>
-                                )}
-                                {/* Collapsed: thin divider line instead of label */}
-                                {isCollapsed && (
-                                    <div className="mx-3 mb-1 h-px bg-psi-border" />
-                                )}
-                                <div className="space-y-0.5">
-                                    {group.items.map(({ to, icon, label }) => (
-                                        <SidebarLink
-                                            key={to}
-                                            to={to}
-                                            icon={icon}
-                                            label={label}
-                                            collapsed={isCollapsed}
-                                        />
-                                    ))}
+                    <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-1">
+                        {NAV_GROUPS.map(group => {
+                            const isOpen = openGroups.includes(group.label);
+                            return (
+                                <div key={group.label}>
+                                    {/* Group header — clickable accordion toggle */}
+                                    {!isCollapsed ? (
+                                        <button
+                                            onClick={() => toggleGroup(group.label)}
+                                            className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-psi-subtle transition-colors group/header"
+                                        >
+                                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
+                                            <ChevronRight
+                                                size={10}
+                                                className={cn(
+                                                    'text-psi-muted transition-transform duration-200',
+                                                    isOpen && 'rotate-90'
+                                                )}
+                                            />
+                                        </button>
+                                    ) : (
+                                        <div className="mx-3 my-1 h-px bg-psi-border" />
+                                    )}
+                                    {/* Collapsible children */}
+                                    <AnimatePresence initial={false}>
+                                        {(isCollapsed || isOpen) && (
+                                            <motion.div
+                                                key={`${group.label}-items`}
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="space-y-0.5">
+                                                    {group.items.map(({ to, icon, label }) => (
+                                                        <SidebarLink
+                                                            key={to}
+                                                            to={to}
+                                                            icon={icon}
+                                                            label={label}
+                                                            collapsed={isCollapsed}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </nav>
 
                     {/* ── Footer links ── */}

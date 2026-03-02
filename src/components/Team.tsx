@@ -68,10 +68,71 @@ const ROLE_BADGE_VARIANT: Record<string, 'warning' | 'info' | 'neutral'> = {
   'Agent': 'neutral',
 };
 
+// ── Demo fallback data ────────────────────────────────────────────────────────
+
+const DEMO_TEAM: CrmUser[] = [
+  {
+    id: 'demo_amr',
+    full_name: 'Amr ElFangary',
+    email: 'amr@psi-events.ae',
+    role: 'Manager',
+    branch: 'Dubai Marina',
+    languages: ['English', 'Arabic'],
+    rera_number: 'BRN-34521',
+    nationality: 'Egyptian',
+    is_active: true,
+    is_penalized: false,
+    performance: {
+      team_size: 8,
+      team_ytd_revenue_aed: 14_500_000,
+      total_closed_aed: 6_200_000,
+      ytd_deals: 12,
+      roadshows_attended: 5,
+      roadshow_closings: 3,
+    },
+  },
+  {
+    id: 'demo_sara',
+    full_name: 'Sara Almarzouqi',
+    email: 'sara@psi-events.ae',
+    role: 'Agent',
+    branch: 'Abu Dhabi HQ',
+    languages: ['English', 'Arabic', 'French'],
+    rera_number: 'BRN-41290',
+    nationality: 'Emirati',
+    is_active: true,
+    is_penalized: false,
+    performance: {
+      total_closed_aed: 3_500_000,
+      ytd_deals: 8,
+      roadshows_attended: 4,
+      roadshow_closings: 2,
+    },
+  },
+  {
+    id: 'demo_khalid',
+    full_name: 'Khalid Al-Mansouri',
+    email: 'khalid@psi-events.ae',
+    role: 'Agent',
+    branch: 'Dubai Marina',
+    languages: ['English', 'Arabic'],
+    rera_number: 'BRN-52087',
+    nationality: 'Emirati',
+    is_active: true,
+    is_penalized: false,
+    performance: {
+      total_closed_aed: 2_100_000,
+      ytd_deals: 5,
+      roadshows_attended: 3,
+      roadshow_closings: 1,
+    },
+  },
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Team() {
-  const [users, setUsers] = useState<CrmUser[]>([]);
+  const [users, setUsers] = useState<CrmUser[]>(DEMO_TEAM);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -90,7 +151,8 @@ export default function Team() {
           if (ai !== bi) return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
           return displayName(a).localeCompare(displayName(b));
         });
-        setUsers(docs);
+        // Use Firebase data if available, otherwise keep demo fallback
+        setUsers(docs.length > 0 ? docs : DEMO_TEAM);
         setLoading(false);
       },
       err => {
