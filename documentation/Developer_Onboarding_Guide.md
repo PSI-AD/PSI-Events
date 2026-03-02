@@ -1,55 +1,166 @@
-# Developer Onboarding Guide & Day 1 Setup
-
-**Project:** Enterprise Event Management & ROI Tracking Portal  
-**Company:** Property Shop Investment (PSI) LLC  
-**Role:** Full-Stack / Front-End / Back-End Engineer
+# 🧑‍💻 Developer Onboarding Guide — PSI Event Portal (v2.0)
+**Last Updated:** March 2026
 
 ---
 
-## 👋 Welcome to the Team!
-You are building the financial and logistical engine that will power PSI's roadshow operations. This system replaces spreadsheets with automated serverless math, strict manager approvals, and real-time ROI tracking. Accuracy, security, and scalable architecture are our highest priorities. Let's get your local environment set up.
+## Day 0 — Before Your First Commit
+
+Read these documents in order:
+1. `README.md` — Product overview and route map
+2. `documentation/Project_Master.MD` — Architecture, routes, DB schema, financial models
+3. `Frontend_Architecture.md` — Folder structure and 7 architectural principles
+4. `documentation/UX_Design_System.md` — Design tokens, UX patterns, animation standards
+5. `documentation/AI_Systems_Documentation.md` — AI feature overview and GenAI SDK usage
+6. `documentation/Firestore_Security_Rules_Logic.md` — RLS model (read before touching Firestore)
 
 ---
 
-## 📚 1. Required Reading (The Architecture Map)
-Before you set up your local environment, you must understand the business logic. Please review these files in the `/documentation` folder in this exact order:
+## Day 1 — Environment Setup
 
-1.  **[Project_Master.md](./documentation/Project_Master.MD):** Start here. This explains the core problem, the Firebase NoSQL database schema, and the serverless Cloud Function logic.
-2.  **[Utils_Math_Specifications.md](./documentation/Utils_Math_Specifications.md):** The absolute source of truth for our 50/30/20 commission splits and Gross Profit margins.
-3.  **[Frontend_Architecture.md](./Frontend_Architecture.md):** Our strict Feature-Sliced Design UI folder structure.
-4.  **[UI_Component_Schemas.md](./documentation/UI_Component_Schemas.md):** The exact data structures your UI components must accept to match the Figma designs perfectly.
-5.  **[Firestore_Security_Rules_Logic.md](./documentation/Firestore_Security_Rules_Logic.md):** How we use Row-Level Security to firewall financial data from the sales floor.
+### Prerequisites
+- Node.js 20+
+- npm 10+
+- A Google account (for Firebase Console access)
+- A `VITE_GEMINI_API_KEY` from Google AI Studio
+
+### Steps
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/PSI-AD/PSI-Events.git
+cd PSI-Events
+
+# 2. Install dependencies
+npm install
+
+# 3. Create your local env file
+cp .env.example .env.local
+# → Fill in all VITE_FIREBASE_* and VITE_GEMINI_API_KEY values
+
+# 4. Start the dev server
+npm run dev
+# → Opens at http://localhost:3000
+
+# 5. Type check
+npm run lint
+# → tsc --noEmit (zero errors expected)
+```
+
+### `.env.local` Required Keys
+
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_GEMINI_API_KEY=
+```
 
 ---
 
-## 🛠️ 2. Workstation Prerequisites
-Ensure your local machine has the following enterprise tools installed and authorized:
+## Day 1 — Seeding Demo Data
 
-*   **Version Control:** Git (Ensure you have access to the PSI corporate repository).
-*   **Environment:** Node.js (Use the LTS version designated by the Lead Developer).
-*   **Backend Emulation:** Firebase CLI (Required to run the Firestore database and Cloud Functions locally without touching production data).
-*   **API Testing:** Postman (Import the `API_Postman_Collection.md` specs to test the CRM webhooks).
+The app ships with a seeder accessible from the `/login` page (visible when not authenticated).
 
----
+1. Open `http://localhost:3000/login`
+2. Click **"🚀 Inject Full Demo Data"** — seeds events, users, projects, leads, rosters, expenses, agent debts
+3. OR click **"🎯 Inject Presentation Data"** — seeds the exact executive demo payload
 
-## 🚀 3. Day 1 Setup Objectives
-Your goal for today is to get the app running locally with mock data, completely isolated from the live CRM.
+> ⚠️ **Never run these seeders against the production Firebase project.** Always confirm your `.env.local` points to a development/staging project.
 
-### Step A: Initialize the Repository
-Clone the project repository to your local machine. Verify that the folder structure perfectly matches the `Frontend_Architecture.md` specification. If folders are missing, create them according to the spec.
-
-### Step B: Start the Firebase Local Emulator
-Do not connect your local build to the live production Firebase project. Start the Firebase Local Emulator Suite. This gives you a safe, isolated sandbox to test database queries and serverless math.
-
-### Step C: Seed the Mock Data
-Open `Database_Seeding_Strategy.md`. Follow the instructions to manually inject the four test users (Organizer, Manager, Perfect Agent, Penalized Agent) and the mock roadshow events into your local emulator. This provides the predictable data you need to build the UI.
-
-### Step D: Build Your First Component
-Navigate to the `/src/components` directory. Using the data seeded in Step C and the specs in `UI_Component_Schemas.md`, build the `EventOverviewCard` component. Verify that it renders correctly in your browser.
+Source file: `src/utils/firebaseSeeder.ts`
 
 ---
 
-## 🛑 4. Core Development Rules to Remember
-*   **Rule 1: No Math in the UI.** All financial calculations must live exclusively in the `/utils` folder. UI components should only display data, never calculate it.
-*   **Rule 2: Never Push Directly to Main.** All code must be committed to a `feature/` branch and pushed through the automated CI/CD pipeline (`Deployment_and_CICD_Strategy.md`).
-*   **Rule 3: Test the Edge Cases.** When building forms or Cloud Functions, always test the divide-by-zero scenario and the empty-field scenario.
+## Core Development Rules
+
+### 1. Real-Time Data Only
+Use `onSnapshot` — not `getDocs`. Always return the unsubscribe function:
+```tsx
+useEffect(() => {
+  const unsub = onSnapshot(collection(db, 'name'), snap => { ... });
+  return () => unsub();
+}, []);
+```
+
+### 2. UX Trinity — No Exceptions
+Every form submit must have: loading spinner + success toast + error toast.
+
+### 3. No Hardcoded `margin-left`
+The sidebar layout uses `flex-1` on the content column. Never add `ml-64` or similar.
+
+### 4. Design Tokens Only
+Use `psi-card`, `psi-input`, `btn-accent`, etc. Do not use raw Tailwind color classes for backgrounds and text — this breaks theme switching.
+
+### 5. Empty States Are Mandatory
+If a list can return zero items, implement a `BeautifulEmptyState` — never a blank screen.
+
+### 6. TypeScript is Strict
+All Firestore document types live in `src/types/`. If you add a new status value to an interface (e.g., `'Upcoming'`), update the union type and all `STATUS_STYLE` maps.
+
+### 7. Fallback Data Pattern
+For any view used in demos/presentations, initialize state with `DEMO_DATA` and only replace it when Firestore returns live records:
+```tsx
+const [data, setData] = useState(DEMO_DATA);
+// in onSnapshot: if (docs.length > 0) setData(docs);
+```
+
+---
+
+## Adding a New Feature
+
+1. **Create the folder:** `src/features/{feature-name}/`
+2. **Add the component:** `FeatureName.tsx`
+3. **Add the route:** In `App.tsx`, add a new `<Route>` inside the appropriate layout
+4. **Add to sidebar:** In `DashboardLayout.tsx`, add to the correct `NAV_GROUPS` entry
+5. **Follow UX Trinity:** Loading state + toasts + empty state
+6. **Write types:** Add TypeScript interfaces to `src/types/` if new Firestore collections are used
+
+---
+
+## Build & Deploy
+
+```bash
+# Production build
+npm run build
+# → Output in dist/
+
+# Deploy to Firebase Hosting
+firebase deploy --only hosting
+```
+
+CI/CD via GitHub Actions triggers automatically on push to `main`. See `.github/workflows/` for pipeline config.
+
+---
+
+## Key Files Reference
+
+| File | Purpose |
+|---|---|
+| `src/App.tsx` | All 37 routes + global `<Toaster>` |
+| `src/index.css` | Full design system |
+| `src/layouts/DashboardLayout.tsx` | Collapsible sidebar layout |
+| `src/services/firebase/firebaseConfig.ts` | Firebase SDK init |
+| `src/utils/firebaseSeeder.ts` | Demo data injection |
+| `src/utils/checklistEngine.ts` | Checklist task rule engine |
+| `src/features/settlement/CommissionEngine.ts` | 50/30/20 financial math |
+| `src/components/Dashboard.tsx` | Main KPI dashboard |
+| `src/components/EventsList.tsx` | Events + DEMO_EVENTS fallback |
+| `src/components/Analytics.tsx` | Live analytics (onSnapshot) |
+| `src/features/help/SystemManual.tsx` | In-app visual manual |
+
+---
+
+## Common Gotchas
+
+| Issue | Cause | Fix |
+|---|---|---|
+| Sidebar gap after collapse | Hardcoded `ml-*` on content | Remove margin, use `flex-1` |
+| Theme not applied | Using raw color classes | Use `psi-*` token classes |
+| Data doesn't update live | Using `getDocs` | Switch to `onSnapshot` |
+| Memory leak warning | Missing unsubscribe | Return `unsub()` from `useEffect` |
+| TS error on status union | New status not in type | Add to interface union + STATUS_STYLE |
+| Toast not showing | Sonner Toaster missing | Check `App.tsx` for `<Toaster>` |
+| AI not working | Missing env key | Check `VITE_GEMINI_API_KEY` in `.env.local` |

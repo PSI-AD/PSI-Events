@@ -1,152 +1,330 @@
-# 🏢 Project_Master: Enterprise Event Management & ROI Tracking Portal
+# 🏢 Project Master: PSI Event Management & ROI Tracking Portal
+**Version:** 2.0 (Updated March 2026)
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase_12-ffca28?style=for-the-badge&logo=firebase&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript_5.8-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 **Company:** Property Shop Investment LLC  
 **Document Purpose:** Comprehensive System Architecture, Business Logic, and Technical Blueprint.  
-**Target Audience:** Executive Management, Investors, System Architects, and Full-Stack Developers.
+**Target Audience:** Executive Management, System Architects, and Full-Stack Developers.
 
 ---
 
 ## 🚀 1. Executive Overview
 
-The **Event Management & ROI Tracking Portal** is a custom-built, enterprise-grade web application designed to track roadshow expenses, automate staff logistics, and calculate highly granular **Return on Investment (ROI)**.
+The **PSI Event Portal** is a production-deployed, enterprise-grade SPA built on **React 19 + Vite 6**, backed by **Firebase (Firestore, Auth, Storage)**. It replaces all spreadsheet-based event tracking and disconnected WhatsApp approvals with a single, auditable platform.
 
-It bridges the gap between human operations (event planning, L&D, manager approvals) and complex financial analytics (tiered commission models, dynamic lead targets, and developer sponsorships).
-
-### 🛠️ Tech Stack Philosophy
-*   **🎨 Front-End:** Designed via Figma, utilizing **React/Next.js** for real-time dashboard updates and high-performance rendering.
-*   **🗄️ Database:** **Firebase NoSQL (Firestore)** for rapid document retrieval and scalable analytics.
-*   **⚡ Backend:** **Firebase Cloud Functions** for serverless, event-driven calculations.
-*   **🔗 Integrations:** Secure, one-way API webhooks pulling personnel and inventory data strictly from the existing corporate CRM.
-
----
-
-## 🏗️ 2. System Architecture & Data Integration
-
-The system enforces a strict boundary between mirrored CRM data and natively generated portal data.
-
-### 📍 A. Data Origins
-
-| Data Source | Type | Fields Included |
-| :--- | :--- | :--- |
-| **CRM (Read-Only)** | 👤 Personnel | Name, Contact, Nationality, Languages, Department, Branch |
-| **CRM (Read-Only)** | 🏢 Inventory | Developer Names, Projects, Tiers (Luxury/Medium/Average) |
-| **CRM (Read-Only)** | 💰 Revenue | Post-event closed deals, Actual gross revenue |
-| **Portal (Native)** | 📅 Logistics | Event Name, Location, Dates, Flight Details, Stand Size |
-| **Portal (Native)** | ⚙️ Operations | Approvals, Document Verification, L&D Assessments |
-| **Portal (Native)** | 📊 Analytics | Dynamic Lead Targets, Expense Ledger, Disciplinary Logs |
-
-### 🔌 B. API Integration Contracts (CRM to Firebase)
-
-Secure webhooks using **Bearer Tokens (JWT)** push updates into read-only Firebase collections.
-
-*   **👥 1. Staff & Hierarchy Sync** (`/api/v1/sync/users` - POST/PUT)
-    *   `crm_user_id`: Absolute source-of-truth ID.
-    *   `manager_id`: Used for hierarchical approval routing.
-*   **🏗️ 2. Property Inventory Sync** (`/api/v1/sync/projects` - POST/PUT)
-    *   `project_id`: Matches PSI Maps database ID.
-    *   `project_tier`: Restricted to *Luxury*, *Medium*, or *Average*.
-*   **📈 3. Post-Event Revenue Sync** (`/api/v1/events/{event_id}/actuals` - PATCH)
-    *   Includes **Idempotency Keys** to prevent double-counting of revenue.
+The platform covers the complete roadshow lifecycle:
+- Agent registration and manager approvals
+- Logistics verification (visa, flight, travel desk)
+- QR-based physical check-in on event day
+- Live lead distribution and KPI tracking
+- Commission settlement with the 50/30/20 tiered model
+- AI-powered tools (Follow-Up Copilot, Business Card Scanner, Pitch Simulator)
+- Executive analytics and post-event debrief
 
 ---
 
-## 🗃️ 3. Database Schema (Firebase NoSQL)
+## 🛠️ 2. Actual Technology Stack (v2.0)
 
-Strategic denormalization feeds fast-loading dashboards.
+> ⚠️ Earlier docs referenced Next.js. The production application uses **Vite 6** (not Next.js). This section reflects the live codebase.
 
-*   **📂 crm_users (Collection):** Mirrored CRM staff data.
-    *   *Sub-collection:* `historical_kpis` (Past performance & native `penalized_no_show` tags).
-*   **📂 crm_projects (Collection):** Mirrored property inventory categorized by tiers.
-*   **📂 events (Collection - The Hub):** Master document for event logistics.
-    *   *Sub-collection:* `attendees` (Role, Package, Approval Status, Docs, L&D Clearance).
-    *   *Sub-collection:* `proposals` (Developer/Branch/Agent pitches, Expected ROI).
-    *   *Sub-collection:* `expenses` (Granular cost ledger: Venue, Hospitality, Marketing, Travel).
-*   **📂 analytics_snapshots (Collection):** Pre-calculated dashboard data updated via Cloud Functions.
-
----
-
-## 💰 4. Core Business Logic & Financial Models
-
-> ### 💎 Agent Commission Packages (Cost Logic)
-> *Assuming AED 100,000 Gross Revenue and AED 8,000 in total costs:*
->
-> *   **🥇 Gold Package (50%):** Agent gets 50% (AED 50k) but pays their own AED 8k costs. 
->     *   **Agent Net:** AED 42k | **Branch Net:** AED 50k
-> *   **🥈 Silver Package (30%):** Agent gets 30% (AED 30k) but pays their own AED 8k costs. 
->     *   **Agent Net:** AED 22k | **Branch Net:** AED 70k
-> *   **🥉 Bronze Package (20%):** Agent gets 20% (AED 20k). Branch pays the AED 8k costs. 
->     *   **Agent Net:** AED 20k | **Branch Net:** AED 72k
-
-> ### 📊 Sponsorship vs. Branch Funded (P&L Scenarios)
-> *Assuming AED 500,000 Gross Revenue, AED 100,000 Event Cost, AED 20,000 Travel Cost, 20% Bronze Agent Commissions (AED 100k), and a 10% Organizer Share:*
->
-> *   **🏢 Scenario A (Sponsored):** Developer funds AED 120,000. Source Agent gets AED 10k reward.
->     *   **Sponsorship Profit:** AED 10k
->     *   **Gross Profit:** AED 390k
->     *   **Branch Net Profit:** **AED 351,000**
-> *   **🏦 Scenario B (Non-Sponsored):** Branch funds event.
->     *   **Gross Profit:** AED 280k
->     *   **Branch Net Profit:** **AED 252,000**
+| Layer | Technology | Version |
+|---|---|---|
+| Frontend Framework | React | 19.0 |
+| Build Tool | Vite | 6.2 |
+| Language | TypeScript | 5.8 |
+| Styling | Tailwind CSS | 4.1 |
+| Animations | Motion (Framer Motion) | 12.x |
+| Routing | React Router DOM | 7.x |
+| Charts | Recharts | 3.x |
+| Icons | Lucide React | 0.546 |
+| Toast Notifications | Sonner | 2.x |
+| Database | Firebase Firestore | 12.x |
+| Auth | Firebase Auth (Google SSO) | 12.x |
+| File Storage | Firebase Storage | 12.x |
+| AI Integration | Google GenAI SDK (`@google/genai`) | 1.29 |
+| QR Codes | qrcode.react | 4.x |
+| Date Utilities | date-fns | 4.x |
+| Utility | clsx + tailwind-merge | — |
+| Fonts | Inter + JetBrains Mono (Fontsource) | — |
 
 ---
 
-## ⚙️ 5. Dynamic Lead Target Engine
+## 🗂️ 3. Complete Route Inventory (37 Routes)
 
-The system automatically recalculates expectations if branch participation changes.
+### Public Routes (no sidebar, unauthenticated access)
 
-*   **🎯 The Trigger:** Function listens to `attendees` sub-collection for "Approved" status changes.
-*   **🧮 The Math:** If a Branch targets 300 leads via 3 agents (100/agent) and 4 agents actually attend, the system recalculates the per-agent target to **75 leads**.
-*   **📉 Deep Funnel Recalculation:** This fractional math applies to Marketing Leads, Walk-ins, Qualified, Meetings, and Deals.
+| Route | Component | Description |
+|---|---|---|
+| `/login` | `Login.tsx` | Google SSO login + DEV seed buttons |
+| `/executive-presentation` | `ExecutivePresentation.tsx` | Hardcoded dark-mode exec pitch deck |
+| `/pitch/:token` | `DeveloperPitch` | Tokenized developer sponsorship pitch |
+| `/live` | `LiveHQ.tsx` | Public live event HQ display |
+| `/sponsor/:token` | `SponsorDashboard` | Tokenized sponsor-facing dashboard |
+| `/sponsor` | `SponsorDashboard` | Generic sponsor view |
+| `/client-portal/:token` | `ClientPortalPage` | Client-facing brochure portal |
+
+### Dashboard Routes (requires authentication, collapsible sidebar)
+
+| Route | Component | Category |
+|---|---|---|
+| `/` | `Dashboard.tsx` | Core — Live KPI dashboard |
+| `/events` | `EventsList.tsx` | Core — Roadshow event management |
+| `/proposals` | `Proposals.tsx` | Core — Proposal & AI tools config |
+| `/projects` | `Projects.tsx` | Core — CRM property inventory |
+| `/team` | `Team.tsx` | Core — Agent & staff roster |
+| `/analytics` | `Analytics.tsx` | Core — Advanced analytics |
+| `/settlement` | `SettlementDashboard.tsx` | Finance — Commission & ROI settlement |
+| `/cash-advance` | `CashAdvance.tsx` | Finance — Commission advance requests |
+| `/burn-rate` | `BurnRateAuditor.tsx` | Finance — Live expense burn rate |
+| `/check-in` | `CheckInDashboard.tsx` | Operations — QR check-in & scanner |
+| `/checklist` | `ChecklistPage.tsx` | Operations — Logistics action checklist |
+| `/traffic-controller` | `TrafficController.tsx` | Operations — Event traffic command center |
+| `/vip-intercept` | `VIPIntercept.tsx` | Operations — VIP lead intercept tool |
+| `/vip-concierge` | `VIPConcierge.tsx` | Operations — AI concierge messaging |
+| `/travel-desk` | `TravelDesk.tsx` | Operations — Flight & hotel logistics |
+| `/floorplan-heatmap` | `FloorplanHeatmap.tsx` | Operations — Floor heatmap analytics |
+| `/approvals` | `ApprovalQueue.tsx` | AI — AI-powered approval queue |
+| `/follow-up-copilot` | `FollowUpCopilot.tsx` | AI — AI follow-up message generator |
+| `/bounties` | `BountySystemPage.tsx` | Gamification — Agent bounty board |
+| `/digital-brochure` | `DigitalBrochure.tsx` | Gamification — Digital brochure builder |
+| `/fast-pass` | `FastPass.tsx` | Client — Express client check-in |
+| `/card-scanner` | `BusinessCardScanner.tsx` | Leads — AI business card scanner |
+| `/localized-pitch` | `LocalizedPitch.tsx` | Leads — Multi-language pitch builder |
+| `/pitch-simulator` | `AIPitchSimulator.tsx` | Training — AI pitch roleplay simulator |
+| `/market-intel` | `IntelDrop.tsx` | Intel — Market intelligence drops |
+| `/executive-debrief` | `ExecutiveDebrief.tsx` | Analytics — Post-event exec debrief |
+| `/journal` | `EventJournalPage.tsx` | Events — Event journal & notes |
+| `/compliance` | `MediaCompliancePage.tsx` | Operations — Media compliance review |
+| `/manual` | `SystemManual.tsx` | Help — In-app visual system manual |
+| `/settings` | `Settings.tsx` | Config — App settings & theme |
 
 ---
 
-## 📋 6. Operational Workflows & Accountability
+## 🗃️ 4. Database Schema (Firestore Collections)
 
-### 🔐 A. Manager Approvals & No-Show Penalties
-1.  **Survey:** Agent submits participation survey (Gold/Silver/Bronze).
-2.  **Routing:** Routes to CRM-assigned Manager for *Approve*, *Reject*, or *Pending*.
-3.  **Verification:** Once Approved, Agent uploads Visa/Flight docs for Organizer verification.
-4.  **Penalty:** If an Agent reaches "Confirmed" but fails to attend, a **"Penalized"** tag is permanently added to their profile.
-
-### 🎓 B. Learning & Development (L&D) Validation
-*   **Locking:** Projects are locked for an event and tagged by CRM tier.
-*   **Notification:** L&D team uploads tier-specific training and assessments.
-*   **Clearance:** Agents must pass project assessments to gain final clearance for the roadshow floor.
-
----
-
-## 🎨 7. UI/UX Interface Mapping
-
-*   **🕹️ Organizer Dashboard:** Mission control for event creation, global settings, and expense ledgers.
-*   **📝 Proposal Screens:** Interactive survey forms and exportable web-views for Developer Sponsorship pitches.
-*   **📥 Logistics Desk:** Split-screen view for Manager Approval queues and Document Verification.
-*   **📈 Analytics Dashboard:** Visual readouts of Gross Revenue, Funnel widgets, and Agent Leaderboards.
+| Collection | Description |
+|---|---|
+| `events` | Master event documents (name, location, status, budget) |
+| `crm_events` | Enriched event data for analytics (budget, sponsorship, agents) |
+| `crm_users` | Mirrored CRM staff records (name, branch, role, nationality) |
+| `crm_projects` | Property inventory (developer, tier, price, location) |
+| `crm_leads` | Lead records linked to events and agents |
+| `event_rosters` | Per-event agent participation records (tier, closed revenue) |
+| `event_expenses` | Granular expense ledger per event |
+| `agent_debts` | Outstanding cost-recovery tracking per agent |
+| `checklist_tasks` | Onboarding/compliance task items |
+| `bounties` | Agent challenge and reward records |
+| `analytics_snapshots` | Pre-aggregated KPI snapshots for dashboards |
 
 ---
 
-## 🔐 8. Role-Based Access Control (RBAC) Matrix
+## 💰 5. Core Financial Models
 
-| Role | Access Level | Data Scope |
-| :--- | :--- | :--- |
-| **Organizer (Admin)** | 👑 Full Access | Global P&L, All Events, All Expenses |
-| **Branch Manager** | 🏢 Branch View | Own Branch Approvals & Performance |
-| **Agent (Sales)** | 👤 Personal View | Own Targets, Deals, and Net Revenue |
-| **L&D Team** | 🎓 Specialist | Attendee Lists, Assessment Management |
-| **Developer** | 🔗 External | Tokenized, View-only Proposal Links |
+### 5A. Commission Package Matrix (50/30/20)
+
+| Tier | Agent Share | Risk Bearer | Use Case |
+|---|---|---|---|
+| 🥇 Gold | 50% of closed revenue | Agent pays all costs | Top performers seeking maximum upside |
+| 🥈 Silver | 30% of closed revenue | Shared risk | Mid-tier agents with solid track record |
+| 🥉 Bronze | 20% of closed revenue | Branch pays all costs | New agents; zero financial barrier |
+
+**Example** (AED 1,000,000 closed revenue, AED 8,000 costs):
+- **Gold:** Agent nets AED 492,000 | Branch nets AED 500,000
+- **Silver:** Agent nets AED 292,000 | Branch nets AED 700,000
+- **Bronze:** Agent nets AED 200,000 | Branch nets AED 792,000
+
+### 5B. Sponsorship P&L Scenarios
+
+| Scenario | Event Cost | Sponsorship | Branch Net |
+|---|---|---|---|
+| Developer Sponsored | AED 120,000 | AED 120,000+ | Higher ROI |
+| Branch Funded | AED 120,000 | AED 0 | Lower ROI |
+
+### 5C. Commission Advance System (`/cash-advance`)
+Agents may request an advance against projected closing commissions. The system tracks outstanding advances against actual deal closures and flags over-advance situations.
 
 ---
 
-## 🔔 9. Automated Notification Matrix
+## 🤖 6. AI & Automation Systems
 
-*   **📢 Event Published:** Alert to Branch Managers to select participation model.
-*   **📩 Agent Survey:** High-priority alert to Branch Manager for approval.
-*   **✅ Manager Approval:** Request to Agent for Visa/Flight uploads.
-*   **⚠️ Missing Docs:** Warning to Agent & Manager regarding spot forfeiture.
-*   **🚫 No-Show:** Alert to Branch Manager regarding historical penalty tag.
-*   **🔄 CRM Sync:** Notification that final ROI dashboards are updated.
+### 6A. Google GenAI Integration (`@google/genai`)
+The portal integrates Google's Generative AI SDK across multiple modules:
+
+- **Follow-Up Copilot** (`/follow-up-copilot`): Generates personalized follow-up messages per lead with tone controls (Professional, Warm, Urgent).
+- **AI Pitch Simulator** (`/pitch-simulator`): Interactive roleplay simulator with AI-powered objection handling.
+- **Business Card Scanner** (`/card-scanner`): AI extracts contact data from business card photos.
+- **VIP Concierge** (`/vip-concierge`): AI-generated concierge messages for VIP clients.
+- **Localized Pitch** (`/localized-pitch`): Multi-language pitch generation (Arabic, Russian, Chinese, etc.).
+- **AI Approvals Queue** (`/approvals`): AI-assisted agent approval with risk-scoring.
+- **Predictive Analytics Engine** (`PredictiveEngine.ts`): ML-driven ROI forecasting per city/event.
+
+### 6B. Automated Engine: 48-Hour Nudger
+Firestore-triggered function that fires notifications to agents with incomplete document uploads within 48 hours of the document deadline. Protects against last-minute no-shows.
+
+### 6C. Dynamic Lead Target Dilution
+When approved headcount changes, the per-agent lead target auto-recalculates:
+```
+Per-Agent Target = Branch Total Target ÷ Actual Approved Agents
+```
+Applied across the full funnel: Marketing Leads → Walk-ins → Qualified → Meetings → Deals.
+
+---
+
+## 📋 7. Checklist & Compliance Engine (`checklistEngine.ts`)
+
+A rule-driven task engine managing agent onboarding and pre-event compliance:
+- Supports file uploads (Firebase Storage: `agent_documents/{userId}/{taskId}_{filename}`)
+- Upload tasks auto-complete on successful Firestore `updateDoc`
+- Deadline tracking with `URGENT` / overdue highlighting
+- Progress bar widget on Dashboard; full view at `/checklist`
+- Firestore collections: `checklist_tasks`
+
+---
+
+## 🔐 8. Row-Level Security (RLS) Model
+
+| Role | Firestore Access |
+|---|---|
+| **Executive / Admin** | All collections, all branches, all P&L |
+| **Branch Manager** | Own branch agents, events, and P&L only |
+| **Agent (Sales)** | Own leads, own QR pass, own settlement only |
+| **L&D Team** | Attendee lists and assessment management |
+| **Developer (External)** | Tokenized read-only proposal/brochure links |
+
+Security is enforced server-side via **Firestore Security Rules** — not client-side. Client JS cannot bypass these rules.
+
+---
+
+## 🎨 9. UI/UX Architecture
+
+### Layout System
+- **DashboardLayout** (`src/layouts/DashboardLayout.tsx`): Collapsible sidebar (`w-64` expanded, `w-20` collapsed), responsive top header, mobile drawer + bottom nav.
+- **PublicLayout** (`src/layouts/PublicLayout.tsx`): Full-bleed, no sidebar — used for executive presentation, sponsor portals, live HQ.
+
+### Theme System (`Settings.tsx`)
+Two switchable themes:
+1. **Standard Theme** — Dark slate + emerald accent (default)
+2. **Modern Theme** — Clean minimal, Google/ChatGPT inspired
+
+### Global Features
+- **Sonner Toasts** — Global `<Toaster>` in `App.tsx`; `toast.success` / `toast.error` fired on all Firestore writes
+- **Button Loading Spinners** — All form submit buttons show inline spinner + `disabled` state during async operations
+- **Beautiful Empty States** — All data views render a centered empty state with CTA when collections return 0 records
+- **Skeleton Loaders** — Shimmer placeholders shown during initial Firestore hydration
+
+### Design System (`src/index.css`)
+CSS custom properties (`--psi-*`) provide theme tokens:
+- `--psi-surface`, `--psi-raised`, `--psi-subtle` — background layers
+- `--psi-primary`, `--psi-secondary`, `--psi-muted` — text hierarchy
+- `--psi-border`, `--psi-border-strong` — border tokens
+- Utility classes: `psi-card`, `psi-input`, `btn-accent`, `badge-success`, etc.
+
+---
+
+## 📊 10. Dashboard KPI Architecture
+
+The main Dashboard (`/`) uses live `onSnapshot` listeners:
+
+| KPI | Source Collection | Calculation |
+|---|---|---|
+| Total Leads | `crm_leads` | `docs.length` |
+| Conversion Rate | `crm_leads` | `deal_closed` / total × 100 |
+| Total Revenue | `event_rosters` | `SUM(closedRevenueAed)` |
+| Avg Commission Split | `event_rosters` | `SUM(tierPercentage)` / count |
+| Revenue vs Budget Chart | `crm_events` | Timeline area chart |
+| Agent Tiers Pie | `event_rosters` | Gold/Silver/Bronze counts |
+
+Checklist Summary Widget shows task completion progress with deep-link to `/checklist`.
+
+---
+
+## 🔔 11. Notification Matrix
+
+| Trigger | Recipient | Channel |
+|---|---|---|
+| Event Published | Branch Managers | In-app + email |
+| Agent Nominates | Branch Manager | In-app approval queue |
+| Manager Approves | Agent | In-app notification |
+| 48hr Doc Missing | Agent + Manager | Sonner toast + email nudge |
+| Check-In Complete | Both screens | Real-time Firestore update |
+| Settlement Generated | Finance team | PDF download available |
+
+---
+
+## 🌱 12. Data Seeding (`firebaseSeeder.ts`)
+
+Two seeder functions are accessible via DEV buttons on the Login page:
+
+1. **`injectSeedData()`** — Full rich dataset covering events, users, projects, leads, rosters, expenses, and agent debts
+2. **`injectPresentationData()`** — Exact data payload for executive demo (specific IDs and collection paths)
+
+Both use Firestore `writeBatch` for atomic multi-document writes.
+
+---
+
+## 🚀 13. Deployment
+
+- **Platform:** Firebase Hosting
+- **Build:** `vite build` → `dist/`
+- **CI/CD:** GitHub Actions (`.github/workflows/`)
+- **Dev Server:** `npm run dev` (port 3000, `0.0.0.0` host)
+- **Lint:** `tsc --noEmit`
+
+---
+
+## 📁 14. Actual Folder Structure (Current)
+
+```
+src/
+├── App.tsx                  # Router with 37 routes, Sonner Toaster
+├── index.css                # Design system CSS custom properties
+├── main.tsx                 # React 19 entry point
+├── components/              # Core data views
+│   ├── Dashboard.tsx        # Live KPI dashboard
+│   ├── EventsList.tsx       # Events CRUD + demo fallback
+│   ├── Team.tsx             # Agent roster
+│   ├── Projects.tsx         # Property inventory
+│   ├── Analytics.tsx        # Advanced analytics (live onSnapshot)
+│   ├── Proposals.tsx        # AI proposal config
+│   └── shared/ui.tsx        # Shared UI primitives
+├── features/
+│   ├── analytics/           # ExecutiveDebrief, FloorplanHeatmap, PredictiveEngine
+│   ├── approvals/           # ApprovalQueue, MediaCompliance
+│   ├── check-in/            # CheckInDashboard, OrganizerScannerView, AgentPassView
+│   ├── checklists/          # ActionChecklist, ChecklistSummaryWidget
+│   ├── clients/             # FastPass, VIPConcierge
+│   ├── events/              # BountySystem, DigitalBrochure, EventJournal, IntelDrop, LocalizedPitch
+│   ├── expenses/            # BurnRateAuditor, BurnRateWidgets
+│   ├── help/                # SystemManual (4-section visual guide)
+│   ├── leads/               # BusinessCardScanner, FollowUpCopilot, VIPIntercept
+│   ├── logistics/           # TrafficController, TravelDesk
+│   ├── proposals/           # ProposalEngine
+│   ├── settlement/          # SettlementDashboard, CashAdvance, CommissionEngine, ReportCard
+│   └── training/            # AIPitchSimulator
+├── layouts/
+│   ├── DashboardLayout.tsx  # Collapsible sidebar + header + mobile nav
+│   └── PublicLayout.tsx     # Full-bleed public page wrapper
+├── pages/
+│   ├── Login.tsx            # Google SSO + DEV seeders
+│   ├── Settings.tsx         # Theme + preferences
+│   ├── ChecklistPage.tsx    # Full checklist action center
+│   ├── ExecutivePresentation.tsx  # Dark-mode pitch deck
+│   ├── LiveHQ.tsx           # Public live event feed
+│   ├── ProductManual.tsx    # Detailed product manual
+│   ├── BountySystemPage.tsx
+│   ├── EventJournalPage.tsx
+│   └── MediaCompliancePage.tsx
+├── services/
+│   └── firebase/            # Firestore, Auth, Storage config
+├── utils/
+│   ├── checklistEngine.ts   # Task rule engine
+│   ├── firebaseSeeder.ts    # Demo data injection
+│   ├── ai/                  # AI helper utilities
+│   └── math/                # Commission & ROI calculations
+└── types/                   # TypeScript interfaces
+```
