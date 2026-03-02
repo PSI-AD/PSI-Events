@@ -34,7 +34,10 @@ import { db } from '../services/firebase/firebaseConfig';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
-const CRM_BASE_URL = 'https://integration.psi-crm.com/ExternalApis';
+// In development: requests to /crm-api are proxied by Vite → integration.psi-crm.com
+// (avoids CORS — the proxy runs in Node.js, not the browser).
+// In production: deploy a Firebase Cloud Function that does the same server-side forwarding.
+const CRM_BASE_URL = '/crm-api/ExternalApis';
 const CRM_API_KEY = import.meta.env.VITE_PSI_CRM_API_KEY as string;
 
 // Firestore limits a single batch to 500 operations

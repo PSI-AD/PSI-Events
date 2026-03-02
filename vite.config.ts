@@ -102,6 +102,19 @@ export default defineConfig(({ mode }) => {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modify — file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+      // ── CRM API proxy ───────────────────────────────────────────────────────
+      // The PSI CRM server does not send Access-Control-Allow-Origin headers,
+      // so direct browser fetch() calls are always blocked by CORS.
+      // This proxy forwards /crm-api/* requests through Node.js (no CORS).
+      // In production, replace with a Firebase Cloud Function proxy.
+      proxy: {
+        '/crm-api': {
+          target: 'https://integration.psi-crm.com',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path: string) => path.replace(/^\/crm-api/, ''),
+        },
+      },
     },
     build: {
       // Raise the warning threshold — our single-chunk bundle is intentional for now
