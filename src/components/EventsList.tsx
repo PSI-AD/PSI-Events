@@ -13,6 +13,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase/firebaseConfig';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import { useCurrentEvent } from '../context/EventContext';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -121,6 +123,8 @@ export default function EventsList() {
   const [filter, setFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
+  const { setActiveEvent } = useCurrentEvent();
 
   const [newEvent, setNewEvent] = useState({
     name: '',
@@ -334,6 +338,17 @@ export default function EventsList() {
           {filtered.map((event, idx) => (
             <motion.div
               key={event.id}
+              onClick={() => {
+                // If the user's platform logic requires creating local Context Events,
+                // do that. Since we map Firebase ids to context, we just set it and go to /.
+                setActiveEvent(event.id, {
+                  name: event.name,
+                  status: event.status as any,
+                  location: event.location?.city ? `${event.location.city}, ${event.location.country}` : 'Unknown Location',
+                  stats: { attendees: event.actual_leads || 0, sessions: 0, speakers: 0 }
+                });
+                navigate('/');
+              }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.06 }}

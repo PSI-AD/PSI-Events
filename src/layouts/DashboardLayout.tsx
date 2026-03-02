@@ -17,6 +17,7 @@ import {
     GlobalFeaturesProvider,
     GlobalActionButtons,
 } from '../components/GlobalFeatures';
+import EventSwitcher from '../components/EventSwitcher';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -247,6 +248,10 @@ export default function DashboardLayout() {
                                 <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest mt-0.5 whitespace-nowrap">Real Estate Events</p>
                             </div>
                         )}
+                    </div>
+
+                    <div className="mt-4 px-2">
+                        <EventSwitcher collapsed={isCollapsed} />
                     </div>
 
                     {/* ── Nav groups ── */}

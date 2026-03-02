@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { EventProvider } from './context/EventContext';
 import { Toaster } from 'sonner';
 
 // Layouts (small, load eagerly — they are the shells for every route)
@@ -61,6 +62,7 @@ const Marketplace = lazy(() => import('./features/marketplace/Marketplace'));
 const ContentHub = lazy(() => import('./features/contentHub/ContentHub'));
 const EventAutomation = lazy(() => import('./features/automation/EventAutomation'));
 const AIInsightsEngine = lazy(() => import('./features/insights/AIInsightsEngine'));
+const AdminEventManagement = lazy(() => import('./features/eventManagement/AdminEventManagement'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -108,402 +110,412 @@ function DashboardPageLoader() {
  */
 export default function App() {
   return (
-    <Router>
-      <Toaster
-        position="top-right"
-        richColors
-        closeButton
-        theme="system"
-        toastOptions={{
-          style: { fontFamily: 'inherit', fontSize: '13px' },
-          duration: 3500,
-        }}
-      />
-      <Routes>
-        {/* ── PUBLIC ROUTES ─────────────────────────────────────────────────
+    <EventProvider>
+      <Router>
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          theme="system"
+          toastOptions={{
+            style: { fontFamily: 'inherit', fontSize: '13px' },
+            duration: 3500,
+          }}
+        />
+        <Routes>
+          {/* ── PUBLIC ROUTES ─────────────────────────────────────────────────
             Standalone pages. No sidebar, no header.
             Accessible to unauthenticated users (executives, guests).
         ──────────────────────────────────────────────────────────────────── */}
-        <Route element={<PublicLayout />}>
-          <Route
-            path="/login"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <Login />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/executive-presentation"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <ExecutivePresentation />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/pitch/:token"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <DeveloperPitch />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/live"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <LiveHQ />
-              </Suspense>
-            }
-          />
-          {/* Sponsor ROI Portal — standalone, token-gated */}
-          <Route
-            path="/sponsor/:token"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <SponsorDashboard />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/sponsor"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <SponsorDashboard />
-              </Suspense>
-            }
-          />
-          {/* Client-facing Digital Brochure portal — no auth, no sidebar */}
-          <Route
-            path="/client-portal/:token"
-            element={
-              <Suspense fallback={<PublicPageLoader />}>
-                <ClientPortalPage />
-              </Suspense>
-            }
-          />
-        </Route>
+          <Route element={<PublicLayout />}>
+            <Route
+              path="/login"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/executive-presentation"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <ExecutivePresentation />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/pitch/:token"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <DeveloperPitch />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/live"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <LiveHQ />
+                </Suspense>
+              }
+            />
+            {/* Sponsor ROI Portal — standalone, token-gated */}
+            <Route
+              path="/sponsor/:token"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <SponsorDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/sponsor"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <SponsorDashboard />
+                </Suspense>
+              }
+            />
+            {/* Client-facing Digital Brochure portal — no auth, no sidebar */}
+            <Route
+              path="/client-portal/:token"
+              element={
+                <Suspense fallback={<PublicPageLoader />}>
+                  <ClientPortalPage />
+                </Suspense>
+              }
+            />
+          </Route>
 
-        {/* ── DASHBOARD ROUTES ──────────────────────────────────────────────
+          {/* ── DASHBOARD ROUTES ──────────────────────────────────────────────
             All authenticated pages wrapped in the sidebar + main shell.
             Add <ProtectedRoute> guard here when auth is fully wired.
         ──────────────────────────────────────────────────────────────────── */}
-        <Route element={<DashboardLayout />}>
-          <Route
-            path="/"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Dashboard />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/events"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <EventsList />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/proposals"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Proposals />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Projects />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/team"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Team />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/analytics"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Analytics />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/settlement"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Settlement />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/check-in"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <CheckIn />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/manual"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <ProductManual />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Settings />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/approvals"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <ApprovalQueue />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/journal"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <EventJournalPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/compliance"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <MediaCompliancePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/bounties"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <BountySystemPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/vip-intercept"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <VIPIntercept />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/burn-rate"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <BurnRateAuditor />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/checklist"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <ChecklistPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/digital-brochure"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <DigitalBrochurePage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/fast-pass"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <FastPassPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/floorplan-heatmap"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <FloorplanHeatmap useDemoData />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/travel-desk"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <TravelDesk useDemoData />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/card-scanner"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <BusinessCardScanner eventId="event_demo" agentId="agent_demo" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/localized-pitch"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <LocalizedPitch />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/pitch-simulator"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <AIPitchSimulator eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/market-intel"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <IntelDropPage eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" view="hq" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/executive-debrief"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <ExecutiveDebrief eventId="event_demo" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/vip-concierge"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <VIPConcierge eventId="event_demo" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/follow-up-copilot"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <FollowUpCopilot eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/cash-advance"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <CashAdvancePage eventId="event_demo" eventName="London Luxury Expo 2026" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/traffic-controller"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <TrafficController eventId="event_demo" eventName="London Luxury Property Expo 2026" />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/networking"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <NetworkingHub />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/event-analytics"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <EventAnalyticsDashboard />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/agenda"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <SmartAgendaBuilder />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/venue-map"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <VenueMap />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/engagement"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <SessionEngagement />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/marketplace"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <Marketplace />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/content-hub"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <ContentHub />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/automation"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <EventAutomation />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/insights"
-            element={
-              <Suspense fallback={<DashboardPageLoader />}>
-                <AIInsightsEngine />
-              </Suspense>
-            }
-          />
-        </Route>
-      </Routes>
-    </Router>
+          <Route element={<DashboardLayout />}>
+            <Route
+              path="/"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Dashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/events"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <EventsList />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/proposals"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Proposals />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Projects />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/team"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Team />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Analytics />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/settlement"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Settlement />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/check-in"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <CheckIn />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/manual"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <ProductManual />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Settings />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/approvals"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <ApprovalQueue />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/journal"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <EventJournalPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/compliance"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <MediaCompliancePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/bounties"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <BountySystemPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/vip-intercept"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <VIPIntercept />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/burn-rate"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <BurnRateAuditor />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/checklist"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <ChecklistPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/digital-brochure"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <DigitalBrochurePage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/fast-pass"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <FastPassPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/floorplan-heatmap"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <FloorplanHeatmap useDemoData />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/travel-desk"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <TravelDesk useDemoData />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/card-scanner"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <BusinessCardScanner eventId="event_demo" agentId="agent_demo" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/localized-pitch"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <LocalizedPitch />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/pitch-simulator"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <AIPitchSimulator eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/market-intel"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <IntelDropPage eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" view="hq" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/executive-debrief"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <ExecutiveDebrief eventId="event_demo" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/vip-concierge"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <VIPConcierge eventId="event_demo" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/follow-up-copilot"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <FollowUpCopilot eventId="event_demo" agentId="agent_demo_001" agentName="Khalid Al-Mansouri" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/cash-advance"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <CashAdvancePage eventId="event_demo" eventName="London Luxury Expo 2026" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/traffic-controller"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <TrafficController eventId="event_demo" eventName="London Luxury Property Expo 2026" />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/networking"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <NetworkingHub />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/event-analytics"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <EventAnalyticsDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/agenda"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <SmartAgendaBuilder />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/venue-map"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <VenueMap />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/engagement"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <SessionEngagement />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/marketplace"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <Marketplace />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/content-hub"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <ContentHub />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/automation"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <EventAutomation />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/insights"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <AIInsightsEngine />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/admin/events"
+              element={
+                <Suspense fallback={<DashboardPageLoader />}>
+                  <AdminEventManagement />
+                </Suspense>
+              }
+            />
+          </Route>
+        </Routes>
+      </Router>
+    </EventProvider>
   );
 }
