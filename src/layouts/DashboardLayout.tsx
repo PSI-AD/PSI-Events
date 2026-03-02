@@ -7,7 +7,7 @@ import {
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
     ChevronRight, ChevronLeft, Search, ClipboardCheck, Network, Activity,
-    Map, Store, LibraryBig,
+    Map, Store, LibraryBig, BotMessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -55,6 +55,7 @@ const NAV_GROUPS = [
             { to: '/engagement', icon: Zap, label: 'Live Engagement' },
             { to: '/venue-map', icon: Map, label: 'Venue Map' },
             { to: '/marketplace', icon: Store, label: 'Marketplace' },
+            { to: '/automation', icon: BotMessageSquare, label: 'Automation' },
             { to: '/traffic-controller', icon: Radio, label: 'Traffic Control' },
             { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
             { to: '/vip-concierge', icon: MessageSquare, label: 'VIP Concierge' },
@@ -98,6 +99,7 @@ const EXTRA_TITLE_MAP: Record<string, string> = {
     '/engagement': 'Live Engagement',
     '/marketplace': 'Marketplace',
     '/content-hub': 'Content Hub',
+    '/automation': 'Event Automation',
 };
 
 // Bottom nav — 5 highest-traffic items

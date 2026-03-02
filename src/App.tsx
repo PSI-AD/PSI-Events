@@ -59,6 +59,7 @@ const VenueMap = lazy(() => import('./features/venueMap/VenueMap'));
 const SessionEngagement = lazy(() => import('./features/engagement/SessionEngagement'));
 const Marketplace = lazy(() => import('./features/marketplace/Marketplace'));
 const ContentHub = lazy(() => import('./features/contentHub/ContentHub'));
+const EventAutomation = lazy(() => import('./features/automation/EventAutomation'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -481,6 +482,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <ContentHub />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/automation"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <EventAutomation />
               </Suspense>
             }
           />
