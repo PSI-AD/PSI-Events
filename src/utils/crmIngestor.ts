@@ -173,17 +173,19 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         `${CRM_BASE_URL}/GetAllProperties` +
         `?pageIndex=${pageIndex}&pageSize=${pageSize}&apiKey=${encodeURIComponent(CRM_API_KEY)}`;
 
-    // Only send headers that are CORS-safe "simple" headers to avoid an
-    // OPTIONS preflight that the server may reject with 405. Authorization is
-    // a non-simple header but is the industry-standard bearer pattern; we send
-    // it alongside the URL param so either mechanism can succeed.
+    // Debug: confirm the exact URL (check browser DevTools → Console tab)
+    console.log('[CRM Ingestor] GET', url);
+
+    // Pure GET — no body property.
     const res = await fetch(url, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Authorization': `Bearer ${CRM_API_KEY}`,
+            'X-Api-Key': CRM_API_KEY,
         },
     });
+
 
     if (!res.ok) {
         const body = await res.text().catch(() => '');
