@@ -205,11 +205,11 @@ export default function DashboardLayout() {
                 {/* ── Desktop Sidebar ──────────────────────────────────── */}
                 <aside
                     className={cn(
-                        'hidden md:flex flex-col flex-shrink-0',
+                        'hidden md:flex flex-col shrink-0',
                         'bg-white dark:bg-slate-900 text-slate-900 dark:text-white',
                         'border-r border-slate-200 dark:border-slate-800/60',
                         'transition-all duration-300 ease-in-out',
-                        isCollapsed ? 'w-[72px]' : 'w-60',
+                        isCollapsed ? 'w-20' : 'w-64',
                     )}
                 >
                     {/* ── Logo / Branding ── */}
