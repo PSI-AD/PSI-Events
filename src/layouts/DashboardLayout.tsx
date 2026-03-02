@@ -56,6 +56,7 @@ const NAV_GROUPS = [
             { to: '/venue-map', icon: Map, label: 'Venue Map' },
             { to: '/marketplace', icon: Store, label: 'Marketplace' },
             { to: '/automation', icon: BotMessageSquare, label: 'Automation' },
+            { to: '/insights', icon: BrainCircuit, label: 'AI Insights' },
             { to: '/traffic-controller', icon: Radio, label: 'Traffic Control' },
             { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
             { to: '/vip-concierge', icon: MessageSquare, label: 'VIP Concierge' },
@@ -100,6 +101,7 @@ const EXTRA_TITLE_MAP: Record<string, string> = {
     '/marketplace': 'Marketplace',
     '/content-hub': 'Content Hub',
     '/automation': 'Event Automation',
+    '/insights': 'AI Event Insights',
 };
 
 // Bottom nav — 5 highest-traffic items

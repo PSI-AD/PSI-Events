@@ -60,6 +60,7 @@ const SessionEngagement = lazy(() => import('./features/engagement/SessionEngage
 const Marketplace = lazy(() => import('./features/marketplace/Marketplace'));
 const ContentHub = lazy(() => import('./features/contentHub/ContentHub'));
 const EventAutomation = lazy(() => import('./features/automation/EventAutomation'));
+const AIInsightsEngine = lazy(() => import('./features/insights/AIInsightsEngine'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -490,6 +491,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <EventAutomation />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/insights"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <AIInsightsEngine />
               </Suspense>
             }
           />
