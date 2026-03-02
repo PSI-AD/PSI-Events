@@ -55,6 +55,7 @@ const TrafficController = lazy(() => import('./features/logistics/TrafficControl
 const NetworkingHub = lazy(() => import('./features/networking/NetworkingHub'));
 const EventAnalyticsDashboard = lazy(() => import('./features/eventAnalytics/EventAnalyticsDashboard'));
 const SmartAgendaBuilder = lazy(() => import('./features/agenda/SmartAgendaBuilder'));
+const VenueMap = lazy(() => import('./features/venueMap/VenueMap'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -445,6 +446,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <SmartAgendaBuilder />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/venue-map"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <VenueMap />
               </Suspense>
             }
           />
