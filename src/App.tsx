@@ -53,6 +53,7 @@ const FollowUpCopilot = lazy(() => import('./features/leads/FollowUpCopilot'));
 const CashAdvancePage = lazy(() => import('./features/settlement/CashAdvance'));
 const TrafficController = lazy(() => import('./features/logistics/TrafficController'));
 const NetworkingHub = lazy(() => import('./features/networking/NetworkingHub'));
+const EventAnalyticsDashboard = lazy(() => import('./features/eventAnalytics/EventAnalyticsDashboard'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -427,6 +428,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <NetworkingHub />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/event-analytics"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <EventAnalyticsDashboard />
               </Suspense>
             }
           />
