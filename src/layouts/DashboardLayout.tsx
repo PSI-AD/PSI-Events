@@ -7,7 +7,7 @@ import {
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
     ChevronRight, ChevronLeft, Search, ClipboardCheck, Network, Activity,
-    Map, Store,
+    Map, Store, LibraryBig,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -35,6 +35,7 @@ const NAV_GROUPS = [
             { to: '/team', icon: Users, label: 'Team' },
             { to: '/analytics', icon: BarChart3, label: 'Analytics' },
             { to: '/event-analytics', icon: Activity, label: 'Event Analytics' },
+            { to: '/content-hub', icon: LibraryBig, label: 'Content Hub' },
         ],
     },
     {
@@ -96,6 +97,7 @@ const EXTRA_TITLE_MAP: Record<string, string> = {
     '/venue-map': 'Venue Map',
     '/engagement': 'Live Engagement',
     '/marketplace': 'Marketplace',
+    '/content-hub': 'Content Hub',
 };
 
 // Bottom nav — 5 highest-traffic items
