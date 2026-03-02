@@ -170,8 +170,8 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         );
     }
 
-    // The server returns 405 on GET — it requires POST.
-    // Params sent in the URL query string AND in the JSON body.
+    // The server requires POST but reads params from the URL query string only.
+    // Sending a JSON body causes a 500 server-side model-binding crash.
     const url =
         `${CRM_BASE_URL}/GetAllProperties` +
         `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
@@ -183,14 +183,11 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${CRM_API_KEY}`,
             'X-Api-Key': CRM_API_KEY,
         },
-        body: JSON.stringify({ pageIndex, pageSize, apiKey: CRM_API_KEY }),
+        // No body — params are in the URL query string.
     });
-
-
     if (!res.ok) {
         const body = await res.text().catch(() => '');
         throw new Error(`CRM API ${res.status} ${res.statusText}${body ? ': ' + body.slice(0, 200) : ''}`);
