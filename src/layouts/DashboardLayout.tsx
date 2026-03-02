@@ -6,7 +6,7 @@ import {
     QrCode, Menu, X, TrendingUp, BookOpen,
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
-    ChevronRight, ChevronLeft, Search, ClipboardCheck,
+    ChevronRight, ChevronLeft, Search, ClipboardCheck, Network,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -48,6 +48,7 @@ const NAV_GROUPS = [
         items: [
             { to: '/check-in', icon: QrCode, label: 'Check-In' },
             { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
+            { to: '/networking', icon: Network, label: 'Networking' },
             { to: '/traffic-controller', icon: Radio, label: 'Traffic Control' },
             { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
             { to: '/vip-concierge', icon: MessageSquare, label: 'VIP Concierge' },
@@ -84,6 +85,7 @@ const EXTRA_TITLE_MAP: Record<string, string> = {
     '/traffic-controller': 'Traffic Controller',
     '/vip-concierge': 'VIP Concierge',
     '/follow-up-copilot': 'Follow-Up Copilot',
+    '/networking': 'Smart Networking',
 };
 
 // Bottom nav — 5 highest-traffic items

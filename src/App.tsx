@@ -52,6 +52,7 @@ const VIPConcierge = lazy(() => import('./features/clients/VIPConcierge'));
 const FollowUpCopilot = lazy(() => import('./features/leads/FollowUpCopilot'));
 const CashAdvancePage = lazy(() => import('./features/settlement/CashAdvance'));
 const TrafficController = lazy(() => import('./features/logistics/TrafficController'));
+const NetworkingHub = lazy(() => import('./features/networking/NetworkingHub'));
 
 // ── SUSPENSE FALLBACKS ────────────────────────────────────────────────────────
 
@@ -418,6 +419,14 @@ export default function App() {
             element={
               <Suspense fallback={<DashboardPageLoader />}>
                 <TrafficController eventId="event_demo" eventName="London Luxury Property Expo 2026" />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/networking"
+            element={
+              <Suspense fallback={<DashboardPageLoader />}>
+                <NetworkingHub />
               </Suspense>
             }
           />
