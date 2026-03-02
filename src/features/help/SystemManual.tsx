@@ -660,7 +660,7 @@ function JourneySection() {
             <AccountabilityJourneyDiagram />
 
             {/* Node-by-node explanation */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
                 {[
                     {
                         icon: User,
@@ -792,7 +792,7 @@ const ACCENT_STYLES = {
 
 function CheckInFlowDiagram() {
     return (
-        <div className="my-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 shadow-lg shadow-slate-900/5 overflow-hidden">
+        <div className="my-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 lg:p-12 shadow-lg shadow-slate-900/5 overflow-hidden">
             {/* CSS for dashed line animation */}
             <style>{`
                 @keyframes dash-flow {
@@ -1580,7 +1580,7 @@ function RLSDiagram() {
                 />
             </div>
 
-            <div className="relative z-10 p-6 md:p-10">
+            <div className="relative z-10 p-6 md:p-10 lg:p-14">
                 <p className="text-[10px] font-black uppercase tracking-[0.25em] text-violet-500 dark:text-violet-400 mb-2 text-center">
                     Row-Level Security Model
                 </p>
@@ -1744,7 +1744,7 @@ function SecuritySection() {
             <RLSDiagram />
 
             {/* Feature grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
                 {[
                     {
                         icon: ShieldCheck,
@@ -1844,8 +1844,8 @@ export default function SystemManual() {
                 <MobileNav active={activeSection} onSelect={handleSelect} />
 
                 {/* Page header */}
-                <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/60 px-6 md:px-10 lg:px-16 py-8">
-                    <div className="max-w-3xl">
+                <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800/60 px-6 md:px-10 lg:px-16 py-8 lg:py-10">
+                    <div className="max-w-7xl w-full">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30">
                                 Visual System Manual
@@ -1869,7 +1869,7 @@ export default function SystemManual() {
                     ref={contentRef}
                     className="flex-1 overflow-y-auto px-6 md:px-10 lg:px-16 py-10"
                 >
-                    <div className="max-w-3xl">
+                    <div className="max-w-7xl w-full">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key="content"
