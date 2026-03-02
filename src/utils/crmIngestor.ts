@@ -167,15 +167,21 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         );
     }
 
-    const url = `${CRM_BASE_URL}/GetAllProperties?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    // API key included in URL as well — some PSI CRM endpoints require it as a
+    // query param rather than (or in addition to) headers.
+    const url =
+        `${CRM_BASE_URL}/GetAllProperties` +
+        `?pageIndex=${pageIndex}&pageSize=${pageSize}&apiKey=${encodeURIComponent(CRM_API_KEY)}`;
 
+    // Only send headers that are CORS-safe "simple" headers to avoid an
+    // OPTIONS preflight that the server may reject with 405. Authorization is
+    // a non-simple header but is the industry-standard bearer pattern; we send
+    // it alongside the URL param so either mechanism can succeed.
     const res = await fetch(url, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Authorization': `Bearer ${CRM_API_KEY}`,
-            // Some PSI endpoints use a plain header instead:
-            'X-Api-Key': CRM_API_KEY,
         },
     });
 
