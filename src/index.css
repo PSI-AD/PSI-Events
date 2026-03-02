@@ -53,15 +53,15 @@
 
 :root {
   /* ── Page & Layout ──────────────────────────────────────────────────────── */
-  --psi-bg: #f8fafc;
-  /* slate-50  — page background           */
+  --psi-bg: #ffffff;
+  /* pure white — page background (Google-style) */
   --psi-bg-subtle: #f1f5f9;
-  /* slate-100 — inset/secondary bg        */
-  --psi-surface: #ffffff;
-  /* white     — card / panel surface      */
+  /* slate-100 — inset/secondary bg         */
+  --psi-surface: #f8fafc;
+  /* slate-50  — card / panel surface       */
   --psi-surface-raised: #ffffff;
-  /* white     — modal / popover           */
-  --psi-surface-overlay: rgba(255, 255, 255, 0.85);
+  /* white     — modal / popover            */
+  --psi-surface-overlay: rgba(255, 255, 255, 0.90);
   /* frosted glass            */
 
   /* ── Borders ────────────────────────────────────────────────────────────── */
@@ -77,8 +77,8 @@
   /* slate-900 — headings / key data       */
   --psi-text-secondary: #475569;
   /* slate-600 — supporting text           */
-  --psi-text-muted: #94a3b8;
-  /* slate-400 — placeholders / labels     */
+  --psi-text-muted: #64748b;
+  /* slate-500 — readable muted labels     */
   --psi-text-disabled: #cbd5e1;
   /* slate-300                             */
 
@@ -354,6 +354,8 @@
     border: 1px solid var(--psi-border);
     border-radius: 1.25rem;
     /* rounded-2xl */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    /* shadow-sm — subtle lift against white bg */
   }
 
   .psi-card-sm {
@@ -361,6 +363,7 @@
     border: 1px solid var(--psi-border);
     border-radius: 0.75rem;
     /* rounded-xl */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   }
 
   /* ── Input / Select ─────────────────────────────────────────────────────── */

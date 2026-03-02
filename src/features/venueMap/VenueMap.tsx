@@ -380,7 +380,7 @@ export default function VenueMap() {
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                             placeholder="Search rooms, booths, services…"
-                            className="w-full bg-psi-subtle border border-psi-strong rounded-xl pl-8 pr-3 py-2 text-xs text-psi-primary placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                            className="w-full bg-psi-subtle border border-psi-strong rounded-xl pl-8 pr-3 py-2 text-xs text-psi-primary placeholder:text-psi-muted focus:outline-none focus:border-emerald-500 transition-colors"
                         />
                         {query && (
                             <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-psi-secondary hover:text-psi-primary">
@@ -402,7 +402,7 @@ export default function VenueMap() {
                                         : 'bg-psi-subtle border-psi-strong text-psi-secondary hover:border-psi-strong'
                                 )}
                             >
-                                <cat.icon size={10} className={catFilter === cat.type ? 'text-psi-primary' : cat.color} />
+                                <cat.icon size={10} className={catFilter === cat.type ? 'text-white' : cat.color} />
                                 {cat.label}
                             </button>
                         ))}
@@ -436,7 +436,7 @@ export default function VenueMap() {
             </div>
 
             {/* ── Map area ───────────────────────────────────────────────── */}
-            <div className="flex-1 relative overflow-hidden">
+            <div className="flex-1 relative overflow-hidden rounded-3xl border border-psi shadow-md m-4">
 
                 {/* SVG Canvas */}
                 <svg

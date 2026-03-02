@@ -80,7 +80,7 @@ const MAX_ADVANCE_PCT = 0.50;          // cap at 50% of locked commission
 
 const TIER_LABELS: Record<AgentTier, { label: string; color: string; bg: string; ring: string }> = {
     gold: { label: 'Gold', color: 'text-amber-400', bg: 'bg-amber-500/15', ring: 'ring-amber-500/30' },
-    silver: { label: 'Silver', color: 'text-psi-secondary', bg: 'bg-psi-subtle0/15', ring: 'ring-slate-400/25' },
+    silver: { label: 'Silver', color: 'text-psi-secondary', bg: 'bg-psi-subtle', ring: 'ring-slate-400/25' },
     bronze: { label: 'Bronze', color: 'text-orange-400', bg: 'bg-orange-500/15', ring: 'ring-orange-500/25' },
 };
 
@@ -273,7 +273,7 @@ export function AgentAdvanceView({
         <div className="space-y-5">
 
             {/* Locked commission banner */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white dark:from-slate-900 via-slate-800 to-white dark:to-slate-900 border border-white/8 p-6">
+            <div className="relative overflow-hidden rounded-3xl psi-card p-6">
                 {/* Top accent bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500" />
 
@@ -304,7 +304,7 @@ export function AgentAdvanceView({
                         <span>Advanceable (50%)</span>
                         <span>Held until settlement (50%)</span>
                     </div>
-                    <div className="h-2 bg-white/8 rounded-full overflow-hidden">
+                    <div className="h-2 bg-psi-subtle rounded-full overflow-hidden">
                         <div className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full" style={{ width: '50%' }} />
                     </div>
                 </div>
@@ -343,7 +343,7 @@ export function AgentAdvanceView({
             <AnimatePresence>
                 {showForm && (
                     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-                        className="rounded-3xl bg-white/4 border border-psi p-6 space-y-6">
+                        className="rounded-3xl psi-card p-6 space-y-6">
 
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
@@ -351,7 +351,7 @@ export function AgentAdvanceView({
                                 <p className="text-psi-primary font-extrabold text-sm">Configure Advance Request</p>
                             </div>
                             <button onClick={() => setShowForm(false)}
-                                className="w-7 h-7 rounded-lg bg-white/6 border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary transition-all">
+                                className="w-7 h-7 rounded-lg bg-psi-subtle border border-psi flex items-center justify-center text-psi-muted hover:text-psi-primary transition-all">
                                 <X size={12} />
                             </button>
                         </div>
@@ -386,7 +386,7 @@ export function AgentAdvanceView({
                                 { label: 'Net Amount Received', value: fmt(netDrawAed), color: 'text-emerald-400' },
                                 { label: 'Held to Settlement', value: fmt(lockedCommission - requestedAmount), color: 'text-psi-muted' },
                             ].map(({ label, value, color }) => (
-                                <div key={label} className="flex items-center justify-between py-1.5 border-b border-white/6 last:border-0">
+                                <div key={label} className="flex items-center justify-between py-1.5 border-b border-psi last:border-0">
                                     <span className="text-psi-muted text-xs">{label}</span>
                                     <span className={`font-extrabold text-sm font-mono ${color}`}>{value}</span>
                                 </div>
@@ -446,7 +446,7 @@ export function AgentAdvanceView({
                     id="request-advance-btn-retry"
                     whileTap={{ scale: 0.97 }}
                     onClick={() => { setShowForm(true); setPhase('idle'); }}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-white/6 border border-white/15 text-psi-primary font-bold text-sm transition-all hover:bg-psi-subtle"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-psi-subtle border border-psi text-psi-primary font-bold text-sm transition-all hover:bg-psi-border"
                 >
                     <Zap size={15} /> Submit New Request
                 </motion.button>
@@ -554,8 +554,8 @@ export function ManagerAdvanceQueue({
                     <button key={s} id={`queue-filter-${s}`}
                         onClick={() => setFilterStatus(s)}
                         className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${filterStatus === s
-                                ? 'bg-indigo-600 text-psi-primary'
-                                : 'bg-psi-subtle text-psi-primary/35 hover:text-psi-primary/70'
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-psi-subtle text-psi-muted hover:text-psi-primary'
                             }`}
                     >
                         {s === 'all' ? `All (${requests.length})` : `${s} (${requests.filter(r => r.status === s).length})`}
@@ -572,17 +572,17 @@ export function ManagerAdvanceQueue({
                             <motion.div key={req.id} layout
                                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
                                 className={`rounded-3xl border ${req.status === 'pending'
-                                        ? 'bg-white/4 border-psi'
-                                        : req.status === 'approved'
-                                            ? 'bg-emerald-500/5 border-emerald-500/20'
-                                            : 'bg-rose-500/4 border-rose-500/15'
+                                    ? 'bg-psi-subtle border-psi'
+                                    : req.status === 'approved'
+                                        ? 'bg-emerald-500/5 border-emerald-500/20'
+                                        : 'bg-rose-500/4 border-rose-500/15'
                                     } overflow-hidden`}
                             >
                                 {/* Card header */}
                                 <div className="px-5 py-4 flex items-start justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                         {/* Avatar */}
-                                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-psi-primary font-black text-base flex-shrink-0">
+                                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-base flex-shrink-0">
                                             {req.agentName.split(' ').map(w => w[0]).slice(0, 2).join('')}
                                         </div>
                                         <div>
@@ -610,7 +610,7 @@ export function ManagerAdvanceQueue({
                                             { label: 'Amount Requested', value: fmt(req.requestedAmount), color: 'text-amber-400' },
                                             { label: 'Net Draw (after 2% fee)', value: fmt(req.netDrawAed), color: 'text-emerald-400' },
                                         ].map(({ label, value, color }) => (
-                                            <div key={label} className="bg-white/4 rounded-xl p-3 border border-white/6">
+                                            <div key={label} className="bg-psi-subtle rounded-xl p-3 border border-psi">
                                                 <p className={`font-extrabold text-sm font-mono ${color}`}>{value}</p>
                                                 <p className="text-psi-muted text-[9px] mt-0.5 leading-tight">{label}</p>
                                             </div>
@@ -618,7 +618,7 @@ export function ManagerAdvanceQueue({
                                     </div>
 
                                     {/* Fee highlight */}
-                                    <div className="flex items-center justify-between px-3 py-2 bg-white/3 border border-white/6 rounded-xl mb-4">
+                                    <div className="flex items-center justify-between px-3 py-2 bg-psi-subtle border border-psi rounded-xl mb-4">
                                         <div className="flex items-center gap-2">
                                             <Percent size={11} className="text-rose-400" />
                                             <span className="text-psi-muted text-xs">Advance Fee (2%)</span>
@@ -669,7 +669,7 @@ export function ManagerAdvanceQueue({
                                                         Confirm Decline
                                                     </button>
                                                     <button onClick={() => setDeclineId(null)}
-                                                        className="px-4 rounded-xl bg-white/6 border border-psi text-psi-secondary hover:text-psi-primary transition-all">
+                                                        className="px-4 rounded-xl bg-psi-subtle border border-psi text-psi-secondary hover:text-psi-primary transition-all">
                                                         Cancel
                                                     </button>
                                                 </>
@@ -739,10 +739,10 @@ export default function CashAdvancePage({
         <div className="min-h-screen bg-psi-page text-psi-primary">
 
             {/* Header */}
-            <header className="border-b border-white/8 px-5 py-4">
+            <header className="border-b border-psi px-5 py-4">
                 <div className="flex items-center gap-2 mb-0.5">
                     <div className="w-6 h-6 rounded-lg bg-emerald-600 flex items-center justify-center">
-                        <Wallet size={13} className="text-psi-primary" />
+                        <Wallet size={13} className="text-white" />
                     </div>
                     <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">Settlement Engine</span>
                 </div>
@@ -758,8 +758,8 @@ export default function CashAdvancePage({
                             <button key={r} id={`role-tab-${r}`}
                                 onClick={() => setRole(r)}
                                 className={`px-4 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all ${role === r
-                                        ? 'bg-indigo-600 text-psi-primary shadow-md'
-                                        : 'text-psi-primary/35 hover:text-psi-primary/70'
+                                    ? 'bg-indigo-600 text-white shadow-md'
+                                    : 'text-psi-muted hover:text-psi-primary'
                                     }`}
                             >
                                 {r === 'agent' ? <><User size={10} className="inline mr-1" />Agent View</> : <><Shield size={10} className="inline mr-1" />Manager Queue</>}
