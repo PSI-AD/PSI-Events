@@ -51,6 +51,7 @@ const NAV_GROUPS = [
             { to: '/check-in', icon: QrCode, label: 'Check-In' },
             { to: '/checklist', icon: ClipboardCheck, label: 'Checklist' },
             { to: '/networking', icon: Network, label: 'Networking' },
+            { to: '/engagement', icon: Zap, label: 'Live Engagement' },
             { to: '/venue-map', icon: Map, label: 'Venue Map' },
             { to: '/traffic-controller', icon: Radio, label: 'Traffic Control' },
             { to: '/vip-intercept', icon: Crown, label: 'VIP Intercept' },
@@ -92,6 +93,7 @@ const EXTRA_TITLE_MAP: Record<string, string> = {
     '/event-analytics': 'Event Analytics',
     '/agenda': 'Agenda Builder',
     '/venue-map': 'Venue Map',
+    '/engagement': 'Live Engagement',
 };
 
 // Bottom nav — 5 highest-traffic items
