@@ -183,11 +183,15 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         method: 'POST',
         headers: {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${CRM_API_KEY}`,
             'X-Api-Key': CRM_API_KEY,
         },
-        // No body — params are in the URL query string.
+        // Server requires Content-Type: application/json (returns 415 without it).
+        // Pagination params are read from URL query string; body must be valid JSON.
+        body: JSON.stringify({}),
     });
+
     if (!res.ok) {
         const body = await res.text().catch(() => '');
         throw new Error(`CRM API ${res.status} ${res.statusText}${body ? ': ' + body.slice(0, 200) : ''}`);
