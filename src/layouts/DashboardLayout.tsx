@@ -191,9 +191,9 @@ function SidebarLink({
                 />
             )}
 
-            {/* Collapsed tooltip — appears on hover */}
+            {/* Collapsed tooltip — instant, no delay, escapes any overflow clip */}
             {collapsed && (
-                <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
+                <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-75 ease-out z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
                     {label}
                 </span>
             )}
@@ -380,6 +380,7 @@ export default function DashboardLayout() {
                                         <div
                                             key={group.label}
                                             ref={el => { groupRefs.current[group.label] = el; }}
+                                            className={isCollapsed ? 'overflow-visible' : undefined}
                                         >
                                             {/* Group header — clickable accordion toggle */}
                                             {!isCollapsed ? (
@@ -400,8 +401,8 @@ export default function DashboardLayout() {
                                                 /* Collapsed: divider + tooltip on hover */
                                                 <div className="relative group/grphdr flex items-center justify-center py-1">
                                                     <div className="mx-3 h-px bg-psi-border w-full" />
-                                                    {/* Collapsed group tooltip */}
-                                                    <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover/grphdr:opacity-100 group-hover/grphdr:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
+                                                    {/* Collapsed group tooltip — instant, matches SidebarLink tooltip style */}
+                                                    <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover/grphdr:opacity-100 group-hover/grphdr:visible transition-all duration-75 ease-out z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
                                                         {group.label}
                                                     </span>
                                                 </div>
@@ -415,7 +416,7 @@ export default function DashboardLayout() {
                                                         animate={{ height: 'auto', opacity: 1 }}
                                                         exit={{ height: 0, opacity: 0 }}
                                                         transition={{ duration: 0.2, ease: 'easeInOut' }}
-                                                        className={isCollapsed ? undefined : 'overflow-hidden'}
+                                                        className={isCollapsed ? 'overflow-visible' : 'overflow-hidden'}
                                                     >
                                                         <div className="space-y-0.5">
                                                             {group.items.map(({ to, icon, label }) => (
