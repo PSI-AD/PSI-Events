@@ -139,8 +139,29 @@ export default function Analytics() {
 
   const loading = loadingEvents || loadingRosters;
 
+  // ── Guard: loading phase ───────────────────────────────────────────────────
+  // Must return BEFORE any derived math so null data never reaches a calculation.
+  if (loading) {
+    return (
+      <PageShell>
+        <PageHeader title="Advanced Analytics" subtitle="Loading live data…" />
+      </PageShell>
+    );
+  }
+
+  // ── Guard: no events seeded yet ────────────────────────────────────────────
+  if (!events || events.length === 0) {
+    return (
+      <PageShell>
+        <PageHeader title="Advanced Analytics" subtitle="Granular ROI tracking and P&L scenarios." />
+        <EmptyAnalytics />
+      </PageShell>
+    );
+  }
+
   // ── Derived KPIs ───────────────────────────────────────────────────────────
-  const activeEvent = events?.find(e => e.is_sponsored || e.budgetType === 'developer_sponsored') ?? events?.[0];
+  // Safe to execute: loading is false and events is a non-empty array.
+  const activeEvent = events.find(e => e.is_sponsored || e.budgetType === 'developer_sponsored') ?? events[0];
 
   const attendeeCount = rosters?.length ?? 0;
   const totalClosedAed = rosters?.reduce((s, r) => s + (r.closedRevenueAed ?? 0), 0) ?? 0;
@@ -166,30 +187,18 @@ export default function Analytics() {
   ];
 
   // Branch opportunity targets from real event data
-  const branchTargets = events
-    ? events.slice(0, 4).map((ev, idx) => {
-      const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-violet-500'];
-      const evName = (ev.eventName ?? ev.name ?? `Event ${idx + 1}`).slice(0, 20);
-      const total = ev.agentCount ?? 5;
-      const done = Math.round(total * (0.7 + idx * 0.08));
-      return {
-        label: evName,
-        sublabel: `${done} / ${total} Agents`,
-        value: Math.round((done / total) * 100),
-        colorClass: colors[idx % colors.length],
-      };
-    })
-    : [];
-
-  // ── Empty state ────────────────────────────────────────────────────────────
-  if (!loading && (!events || events.length === 0)) {
-    return (
-      <PageShell>
-        <PageHeader title="Advanced Analytics" subtitle="Granular ROI tracking and P&L scenarios." />
-        <EmptyAnalytics />
-      </PageShell>
-    );
-  }
+  const branchTargets = events.slice(0, 4).map((ev, idx) => {
+    const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-violet-500'];
+    const evName = (ev.eventName ?? ev.name ?? `Event ${idx + 1}`).slice(0, 20);
+    const total = ev.agentCount ?? 5;
+    const done = Math.round(total * (0.7 + idx * 0.08));
+    return {
+      label: evName,
+      sublabel: `${done} / ${total} Agents`,
+      value: Math.round((done / total) * 100),
+      colorClass: colors[idx % colors.length],
+    };
+  });
 
   return (
     <PageShell className="space-y-8">
