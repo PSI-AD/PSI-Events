@@ -16,9 +16,12 @@ import React, { useState } from 'react';
 import {
     Building2, Zap, Copy, CheckCheck, ExternalLink,
     ChevronDown, Sparkles, TrendingUp, Users, DollarSign,
-    BarChart3, ArrowRight, RefreshCcw,
+    BarChart3, ArrowRight, RefreshCcw, Save, CheckCircle2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../../services/firebase/firebaseConfig';
+import { toast } from 'sonner';
 
 // ── Mock data (mirrors Firestore seed) ───────────────────────────────────────
 
@@ -219,6 +222,8 @@ export default function PitchGenerator() {
     const [generatedUrl, setGeneratedUrl] = useState('');
     const [copied, setCopied] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [savedId, setSavedId] = useState<string | null>(null);
 
     const canGenerate = selectedEvent && selectedDev && sponsorAmount && parseFloat(sponsorAmount) > 0;
 
@@ -269,6 +274,39 @@ export default function PitchGenerator() {
         setSponsorAmount('');
         setGeneratedUrl('');
         setCopied(false);
+        setSavedId(null);
+    }
+
+    async function handleSaveToCRM() {
+        if (!selectedEvent || !selectedDev || !generatedUrl) return;
+        setIsSaving(true);
+        try {
+            const ref = await addDoc(collection(db, 'proposals'), {
+                type: 'developer_pitch',
+                eventId: selectedEvent.id,
+                eventName: selectedEvent.name,
+                developerId: selectedDev.id,
+                developerName: selectedDev.name,
+                developerLogo: selectedDev.logo,
+                developerTier: selectedDev.tier,
+                requestedAmtAed: parseFloat(sponsorAmount),
+                pitchUrl: generatedUrl,
+                stage: 'Sent',
+                aiGenerated: true,
+                generatedBy: 'usr_said_abu_laila_admin',
+                generatedAt: serverTimestamp(),
+            });
+            setSavedId(ref.id);
+            toast.success('Proposal saved to database', {
+                description: `${selectedDev.name} · ${selectedEvent.name}`,
+            });
+        } catch (err) {
+            toast.error('Failed to save proposal', {
+                description: err instanceof Error ? err.message : 'Unknown error',
+            });
+        } finally {
+            setIsSaving(false);
+        }
     }
 
     return (
@@ -448,6 +486,24 @@ export default function PitchGenerator() {
                                             className="px-3 py-3 psi-card text-psi-muted rounded-xl hover:bg-psi-subtle transition-all select-none"
                                         >
                                             <RefreshCcw size={16} />
+                                        </button>
+                                        <button
+                                            id="save-pitch-crm-btn"
+                                            onClick={handleSaveToCRM}
+                                            disabled={isSaving || !!savedId}
+                                            title={savedId ? 'Saved to proposals' : 'Save pitch to Firestore proposals collection'}
+                                            className={`px-3 py-3 rounded-xl font-bold text-sm flex items-center gap-1.5 transition-all select-none
+                                                ${savedId
+                                                    ? 'bg-psi-success text-psi-success border border-psi-accent'
+                                                    : 'bg-violet-600 hover:bg-violet-500 text-white shadow-sm shadow-violet-500/20'
+                                                } disabled:opacity-60`}
+                                        >
+                                            {savedId
+                                                ? <><CheckCircle2 size={14} /> Saved</>
+                                                : isSaving
+                                                    ? <><div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving…</>
+                                                    : <><Save size={14} /> Save to CRM</>
+                                            }
                                         </button>
                                     </div>
                                     <p className="text-[10px] text-psi-muted text-center flex items-center justify-center gap-1">

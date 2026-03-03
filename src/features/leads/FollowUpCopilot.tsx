@@ -28,13 +28,14 @@ import {
     User, Phone, Mail, Building2, Briefcase, Tag,
     Loader2, CheckCircle2, Clock, X, Edit3, RefreshCcw,
     Search, Filter, ArrowLeft, ExternalLink, Zap,
-    AlertCircle, Star,
+    AlertCircle, Star, Save,
 } from 'lucide-react';
 import {
     collection, getDocs, onSnapshot, orderBy, query,
-    where, Unsubscribe, limit,
+    where, Unsubscribe, limit, addDoc, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../services/firebase/firebaseConfig';
+import { toast } from 'sonner';
 
 // ═══════════════════════════════════════════════════════════════════
 // Types
@@ -256,7 +257,8 @@ function SourceBadge({ source }: { source?: string }) {
 // Lead Row
 // ═══════════════════════════════════════════════════════════════════
 
-function LeadRow({ lead, selected, onSelect }: {
+function LeadRow({ key, lead, selected, onSelect }: {
+    key?: React.Key;
     lead: CRMLead;
     selected: boolean;
     onSelect: () => void;
@@ -270,8 +272,8 @@ function LeadRow({ lead, selected, onSelect }: {
             onClick={onSelect}
             id={`lead-row-${lead.id}`}
             className={`cursor-pointer rounded-2xl p-3.5 border transition-all ${selected
-                    ? 'bg-emerald-500/8 border-emerald-500/30 ring-1 ring-emerald-500/20'
-                    : 'bg-white/3 border-white/8 hover:border-white/15 hover:bg-psi-subtle'
+                ? 'bg-emerald-500/8 border-emerald-500/30 ring-1 ring-emerald-500/20'
+                : 'bg-white/3 border-white/8 hover:border-white/15 hover:bg-psi-subtle'
                 }`}
         >
             <div className="flex items-center gap-3">
@@ -320,6 +322,8 @@ function DraftPanel({ lead, agentName, onBack }: {
     const [draft, setDraft] = useState('');
     const [copied, setCopied] = useState(false);
     const [charCount, setCharCount] = useState(0);
+    const [isSaving, setIsSaving] = useState(false);
+    const [savedId, setSavedId] = useState<string | null>(null);
 
     const handleDraftChange = (v: string) => {
         setDraft(v);
@@ -345,6 +349,38 @@ function DraftPanel({ lead, agentName, onBack }: {
         await navigator.clipboard.writeText(draft).catch(() => { });
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleSaveToCRM = async () => {
+        if (!draft.trim() || isSaving || savedId) return;
+        setIsSaving(true);
+        try {
+            const ref = await addDoc(collection(db, 'proposals'), {
+                type: 'follow_up_message',
+                leadId: lead.id,
+                clientName: `${lead.firstName} ${lead.lastName}`,
+                clientEmail: lead.email,
+                clientPhone: lead.phone,
+                clientCompany: lead.company,
+                property: lead.projectInterest,
+                agentName,
+                content: draft.trim(),
+                channel: 'WhatsApp',
+                stage: 'Draft',
+                aiGenerated: true,
+                generatedAt: serverTimestamp(),
+            });
+            setSavedId(ref.id);
+            toast.success('Draft saved to proposals', {
+                description: `${lead.firstName} ${lead.lastName} · ${lead.projectInterest}`,
+            });
+        } catch (err) {
+            toast.error('Failed to save draft', {
+                description: err instanceof Error ? err.message : 'Unknown error',
+            });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const proj = getProjectDetail(lead.projectInterest);
@@ -506,6 +542,25 @@ function DraftPanel({ lead, agentName, onBack }: {
                             <Mail size={14} /> Send Email
                         </a>
                     </div>
+
+                    {/* Save draft to Firestore proposals */}
+                    <button
+                        id="save-draft-crm-btn"
+                        onClick={handleSaveToCRM}
+                        disabled={isSaving || !!savedId}
+                        className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all select-none
+                            ${savedId
+                                ? 'bg-emerald-600/20 border border-emerald-500/30 text-emerald-400'
+                                : 'bg-violet-600 hover:bg-violet-500 text-white shadow-sm shadow-violet-500/20'
+                            } disabled:opacity-60`}
+                    >
+                        {savedId
+                            ? <><CheckCircle2 size={14} /> Saved to CRM</>
+                            : isSaving
+                                ? <><div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving to CRM…</>
+                                : <><Save size={14} /> Save Draft to CRM</>
+                        }
+                    </button>
                 </motion.div>
             )}
         </div>
@@ -628,8 +683,8 @@ export default function FollowUpCopilot({
                                 <button key={s} id={`filter-${s}`}
                                     onClick={() => setFilterSource(s)}
                                     className={`flex-shrink-0 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all ${filterSource === s
-                                            ? 'bg-emerald-600 text-white'
-                                            : 'bg-psi-subtle text-psi-primary/35 hover:text-psi-primary/60'
+                                        ? 'bg-emerald-600 text-white'
+                                        : 'bg-psi-subtle text-psi-primary/35 hover:text-psi-primary/60'
                                         }`}
                                 >
                                     {s === 'all' ? `All (${leads.length})` : s}

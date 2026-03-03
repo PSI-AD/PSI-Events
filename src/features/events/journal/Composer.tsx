@@ -201,6 +201,7 @@ export function Composer({
                 setUploadProgress(null);
             }
 
+            // Sub-collection write (event-scoped viewer, media compliance, etc.)
             await addDoc(collection(db, 'events', eventId, 'journal'), {
                 eventId, authorId, authorName, authorRole,
                 content: text.trim(),
@@ -215,6 +216,20 @@ export function Composer({
                 timestamp: serverTimestamp(),
                 isPinned: false,
                 viewCount: 0,
+            });
+
+            // Top-level write — so the Event Journal page's
+            // onSnapshot(collection(db, 'event_journal')) picks up this post.
+            await addDoc(collection(db, 'event_journal'), {
+                eventId, authorId, authorName, authorRole,
+                author: authorName,
+                type: 'Update',
+                severity: 'Normal',
+                content: text.trim(),
+                mediaUrls: media.map(m => m.url),
+                tags: [],
+                pinned: false,
+                timestamp: serverTimestamp(),
             });
 
             setText('');
