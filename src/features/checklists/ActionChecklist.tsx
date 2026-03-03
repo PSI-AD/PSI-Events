@@ -34,7 +34,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import React, { useMemo, useState, useCallback, useRef } from 'react';
+import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -62,7 +62,11 @@ import {
 } from '../../utils/checklistEngine';
 import { storage, db } from '../../services/firebase/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import {
+    doc, updateDoc, serverTimestamp,
+    collection, onSnapshot, query, where, orderBy,
+} from 'firebase/firestore';
+import { toast } from 'sonner';
 
 // ── Document upload hook ──────────────────────────────────────────────────────
 
@@ -357,9 +361,11 @@ interface TaskCardProps {
     task: ChecklistTask;
     index: number;
     onNavigate: (route: string) => void;
+    /** Called when user clicks the check icon — triggers Firestore toggle */
+    onToggle: (task: ChecklistTask) => void;
 }
 
-function TaskCard({ task, index, onNavigate }: TaskCardProps) {
+function TaskCard({ task, index, onNavigate, onToggle }: TaskCardProps) {
     const [expanded, setExpanded] = useState(false);
     const isDocTask = DOCUMENT_CATEGORIES.has(task.category ?? '');
     const upload = useDocumentUpload(task);
@@ -397,8 +403,19 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                 role="button"
                 aria-expanded={expanded}
             >
-                {/* Check / circle icon */}
-                <div className="flex-shrink-0 mt-0.5">
+                {/* Check / circle icon — clicking this toggles completion */}
+                <div
+                    className="flex-shrink-0 mt-0.5 cursor-pointer"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onToggle(task);
+                    }}
+                    role="checkbox"
+                    aria-checked={task.isCompleted}
+                    aria-label={task.isCompleted ? 'Mark incomplete' : 'Mark complete'}
+                    id={`task-toggle-${task.id}`}
+                    title={task.isCompleted ? 'Mark incomplete' : 'Mark complete'}
+                >
                     {task.isCompleted || upload.status === 'success' ? (
                         <motion.div
                             initial={{ scale: 0 }}
@@ -412,10 +429,10 @@ function TaskCard({ task, index, onNavigate }: TaskCardProps) {
                             size={20}
                             className={
                                 deadlineOverdue
-                                    ? 'text-rose-500'
+                                    ? 'text-rose-500 hover:text-emerald-400 transition-colors'
                                     : deadlineUrgent
-                                        ? 'text-amber-400'
-                                        : 'text-psi-muted'
+                                        ? 'text-amber-400 hover:text-emerald-400 transition-colors'
+                                        : 'text-psi-muted hover:text-emerald-400 transition-colors'
                             }
                         />
                     )}
@@ -702,10 +719,11 @@ interface PriorityGroupProps {
     priority: ChecklistTask['priority'];
     tasks: ChecklistTask[];
     onNavigate: (route: string) => void;
+    onToggle: (task: ChecklistTask) => void;
     startIndex: number;
 }
 
-function PriorityGroup({ priority, tasks, onNavigate, startIndex }: PriorityGroupProps) {
+function PriorityGroup({ priority, tasks, onNavigate, onToggle, startIndex }: PriorityGroupProps) {
     const [collapsed, setCollapsed] = useState(false);
     if (tasks.length === 0) return null;
 
@@ -756,6 +774,7 @@ function PriorityGroup({ priority, tasks, onNavigate, startIndex }: PriorityGrou
                                 task={task}
                                 index={startIndex + i}
                                 onNavigate={onNavigate}
+                                onToggle={onToggle}
                             />
                         ))}
                     </motion.div>
@@ -770,10 +789,12 @@ function PriorityGroup({ priority, tasks, onNavigate, startIndex }: PriorityGrou
 // ═══════════════════════════════════════════════════════════════════════════
 
 export interface ActionChecklistProps {
-    /** Hydrated task list for this user + event (from checklistEngine). */
+    /** Hydrated task list for this user + event (from checklistEngine). Used as fallback when Firestore is empty. */
     tasks: ChecklistTask[];
     /** Determines which role label and icon to use. */
     role: 'agent' | 'manager';
+    /** Optional event ID — when provided, checklist syncs live with Firestore 'checklists' collection. */
+    eventId?: string;
     /** Optional display name of the event shown in the header. */
     eventName?: string;
     /** Extra classes on the outermost div. */
@@ -781,12 +802,87 @@ export interface ActionChecklistProps {
 }
 
 export default function ActionChecklist({
-    tasks,
+    tasks: tasksProp,
     role,
+    eventId,
     eventName,
     className = '',
 }: ActionChecklistProps) {
     const navigate = useNavigate();
+
+    // ── Live Firestore snapshot for 'checklists' collection ─────────────────
+    // When eventId is provided we do a real-time query filtered to that event.
+    // The snapshot data overrides (and extends) any locally-passed tasks prop.
+    const [firestoreTasks, setFirestoreTasks] = useState<ChecklistTask[] | null>(null);
+
+    useEffect(() => {
+        if (!eventId) return; // no eventId — use tasks prop only
+        const q = query(
+            collection(db, 'checklists'),
+            where('eventId', '==', eventId),
+            orderBy('dueDate', 'asc'),
+        );
+        const unsub = onSnapshot(
+            q,
+            snap => {
+                if (snap.empty) {
+                    setFirestoreTasks(null); // fall back to prop tasks
+                    return;
+                }
+                const live = snap.docs.map(d => {
+                    const data = d.data();
+                    return {
+                        id: d.id,
+                        title: data.task ?? data.title ?? 'Untitled Task',
+                        description: data.description ?? '',
+                        actionRoute: data.actionRoute ?? '/logistics',
+                        actionLabel: data.actionLabel,
+                        deadline: data.dueDate?.toMillis?.() ?? Date.now() + 86400000,
+                        isCompleted: data.status === 'Done' || data.isCompleted === true,
+                        requiresValidation: data.requiresValidation ?? false,
+                        isValidated: data.isValidated ?? false,
+                        completedAt: data.doneAt?.toDate?.()?.toISOString() ?? data.completedAt,
+                        phase: (data.phase ?? 'always') as ChecklistTask['phase'],
+                        priority: ((data.priority ?? 'medium') as string).toLowerCase() as ChecklistTask['priority'],
+                        category: data.category ?? 'logistics',
+                        roleTarget: (data.roleTarget ?? 'agent') as ChecklistTask['roleTarget'],
+                    } as ChecklistTask;
+                });
+                setFirestoreTasks(live);
+            },
+            err => {
+                console.error('[ActionChecklist] Firestore snapshot error:', err);
+                setFirestoreTasks(null);
+            }
+        );
+        return () => unsub();
+    }, [eventId]);
+
+    // Effective task list: Firestore data wins over prop when available
+    const tasks = firestoreTasks ?? tasksProp;
+
+    // ── Firestore toggle handler ─────────────────────────────────────────────
+    const handleToggle = useCallback(async (task: ChecklistTask) => {
+        const newCompleted = !task.isCompleted;
+        const newStatus = newCompleted ? 'Done' : 'Pending';
+        try {
+            await updateDoc(doc(db, 'checklists', task.id), {
+                status: newStatus,
+                isCompleted: newCompleted,
+                doneAt: newCompleted ? serverTimestamp() : null,
+            });
+            // If no eventId (no live listener), update prop-derived state locally
+            if (!eventId) {
+                toast.success(newCompleted ? 'Task marked complete' : 'Task reopened', {
+                    description: task.title,
+                });
+            }
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : 'Unknown error';
+            console.error('[ActionChecklist] updateDoc failed:', err);
+            toast.error('Failed to update task', { description: msg });
+        }
+    }, [eventId]);
 
     // ── Derived data ────────────────────────────────────────────────────────
 
@@ -926,6 +1022,7 @@ export default function ActionChecklist({
                         priority={priority}
                         tasks={displayGrouped[priority]}
                         onNavigate={onNavigate}
+                        onToggle={handleToggle}
                         startIndex={displayOffsets[priority]}
                     />
                 ))}
