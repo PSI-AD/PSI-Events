@@ -183,7 +183,7 @@ export default function DigitalBrochurePage({
 
     // ── UI ──────────────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-psi-page p-4 md:p-6 max-w-3xl mx-auto space-y-6">
+        <div className="min-h-screen bg-psi-page p-4 md:p-8 space-y-6">
 
             {/* Header */}
             <div>
@@ -226,10 +226,10 @@ export default function DigitalBrochurePage({
 
             {/* ── Tab: Compose ── */}
             {state.tab === 'compose' && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                    {/* ── Left: Controls ── */}
-                    <div className="space-y-6">
+                    {/* ── Left: Controls (8 cols) ── */}
+                    <div className="lg:col-span-8 space-y-6">
 
                         {/* Property grid */}
                         <div className="psi-card rounded-2xl p-5">
@@ -248,7 +248,7 @@ export default function DigitalBrochurePage({
                                     <Loader2 size={24} className="text-psi-muted animate-spin" />
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
                                     {state.projects.map(p => (
                                         <ProjectPickerCard
                                             key={p.id}
@@ -291,7 +291,7 @@ export default function DigitalBrochurePage({
                             </div>
                         </div>
 
-                        {/* Selected summary */}
+                        {/* Selected summary chips */}
                         {selectedProjects.length > 0 && (
                             <div className="psi-card rounded-2xl p-4 flex flex-wrap gap-2">
                                 <span className="text-psi-muted text-xs font-bold w-full mb-1">Sending:</span>
@@ -328,86 +328,121 @@ export default function DigitalBrochurePage({
 
                     </div>
 
-                    {/* ── Right: Live PDF Preview ── */}
-                    <div className="hidden lg:block">
-                        <p className="text-psi-primary font-bold text-sm mb-3 flex items-center gap-2">
-                            <Eye size={14} className="text-amber-500" />
-                            Live PDF Preview
-                        </p>
-                        <div className="sticky top-6">
-                            <div className="aspect-[1/1.414] bg-white border border-slate-200 shadow-2xl rounded-sm transform scale-95 origin-top relative overflow-hidden">
+                    {/* ── Right: Live PDF Preview (4 cols, sticky) ── */}
+                    <div className="hidden lg:block lg:col-span-4">
+                        <div className="sticky top-8">
+                            <p className="text-psi-primary font-bold text-sm mb-3 flex items-center gap-2">
+                                <Eye size={14} className="text-amber-500" />
+                                Live PDF Preview
+                                {selectedProjects.length > 0 && (
+                                    <span className="ml-auto text-[10px] font-black text-amber-500">
+                                        {selectedProjects.length} propert{selectedProjects.length === 1 ? 'y' : 'ies'}
+                                    </span>
+                                )}
+                            </p>
 
-                                {/* PDF Header */}
-                                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-6 py-5 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-                                            <span className="text-white font-black text-xs">PSI</span>
+                            {/* A4 wrapper — fixed aspect ratio, flex column */}
+                            <div className="aspect-[1/1.414] bg-white border border-slate-200 shadow-2xl rounded-sm origin-top relative flex flex-col overflow-hidden">
+
+                                {/* PDF Header — always visible */}
+                                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-3 flex items-center justify-between flex-shrink-0">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-6 h-6 rounded-md bg-emerald-600 flex items-center justify-center">
+                                            <span className="text-white font-black text-[8px]">PSI</span>
                                         </div>
                                         <div>
-                                            <p className="text-white font-extrabold text-sm tracking-tight">
-                                                {selectedProjects.length > 0 ? selectedProjects[0].name : 'Vida Residence'}
+                                            <p className="text-white font-extrabold text-[10px] tracking-tight leading-tight">
+                                                Property Investment Brief
                                             </p>
-                                            <p className="text-slate-400 text-[9px] font-medium">Investment Brief · Confidential</p>
+                                            <p className="text-slate-400 text-[7px]">Confidential · {new Date().getFullYear()}</p>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-slate-500 text-[8px] uppercase tracking-widest font-bold">Prepared by</p>
-                                        <p className="text-slate-300 text-[10px] font-bold">{agentName}</p>
+                                        <p className="text-slate-500 text-[7px] uppercase tracking-widest font-bold">By</p>
+                                        <p className="text-slate-300 text-[9px] font-bold">{agentName}</p>
                                     </div>
                                 </div>
 
-                                {/* Hero Image Placeholder */}
-                                <div className="mx-5 mt-4 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 h-[22%] flex items-center justify-center">
-                                    <div className="text-center">
-                                        <div className="w-10 h-10 mx-auto rounded-full bg-slate-300/60 flex items-center justify-center mb-1.5">
-                                            <Eye size={16} className="text-slate-500" />
-                                        </div>
-                                        <p className="text-slate-500 text-[9px] font-bold">Property Hero Image</p>
-                                        <p className="text-slate-400 text-[7px]">High-resolution render</p>
+                                {/* Client banner — shows when name is entered */}
+                                {state.clientName && (
+                                    <div className="px-4 py-1.5 bg-amber-50 border-b border-amber-100 flex-shrink-0">
+                                        <p className="text-amber-700 text-[8px] font-bold">
+                                            Prepared for: <span className="text-amber-900">{state.clientName}</span>
+                                        </p>
                                     </div>
-                                </div>
+                                )}
 
-                                {/* ROI Stats Grid */}
-                                <div className="mx-5 mt-4 grid grid-cols-2 gap-2.5">
-                                    {[
-                                        { label: 'Expected Yield', value: '7.5%', sub: 'Annual ROI' },
-                                        { label: 'Price Range', value: selectedProjects.length > 0 ? (selectedProjects[0].priceRange ?? fmtAED(selectedProjects[0].expected_avg_deal)) : 'AED 1.8M – 4.2M', sub: 'Starting price' },
-                                        { label: 'Completion', value: selectedProjects.length > 0 ? (selectedProjects[0].completionYear ?? '2027') : '2027-Q2', sub: 'Handover date' },
-                                        { label: 'Avg. Deal', value: selectedProjects.length > 0 ? fmtAED(selectedProjects[0].expected_avg_deal) : 'AED 2.2M', sub: 'Expected deal size' },
-                                    ].map(({ label, value, sub }) => (
-                                        <div key={label} className="bg-slate-50 border border-slate-100 rounded-lg p-2.5">
-                                            <p className="text-slate-400 text-[7px] font-bold uppercase tracking-widest">{label}</p>
-                                            <p className="text-slate-900 font-extrabold text-sm mt-0.5">{value}</p>
-                                            <p className="text-slate-400 text-[7px]">{sub}</p>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Key Highlights */}
-                                <div className="mx-5 mt-4">
-                                    <p className="text-slate-400 text-[7px] font-black uppercase tracking-widest mb-1.5">Key Highlights</p>
-                                    <div className="space-y-1">
-                                        {[
-                                            'Premium branded residences with 5-star amenities',
-                                            'Prime location — walking distance to landmarks',
-                                            'Flexible payment plan: 60/40 structure',
-                                            'Golden Visa eligible for qualifying units',
-                                        ].map((point, i) => (
-                                            <div key={i} className="flex items-start gap-1.5">
-                                                <span className="w-1 h-1 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
-                                                <p className="text-slate-600 text-[8px] leading-tight">{point}</p>
+                                {/* Scrollable property list body */}
+                                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+                                    {selectedProjects.length === 0 ? (
+                                        /* ── Empty state ── */
+                                        <div className="h-full flex flex-col items-center justify-center gap-3 py-8">
+                                            <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
+                                                <Eye size={22} className="text-slate-300" />
                                             </div>
-                                        ))}
-                                    </div>
+                                            <div className="text-center">
+                                                <p className="text-slate-500 text-[10px] font-bold">Select properties to build brochure</p>
+                                                <p className="text-slate-400 text-[8px] mt-1 leading-relaxed max-w-[140px] mx-auto">
+                                                    Tick cards on the left — they'll appear here in real time.
+                                                </p>
+                                            </div>
+                                            {/* Decorative lines */}
+                                            <div className="w-full space-y-1.5 opacity-30">
+                                                {[70, 100, 55, 85].map((w, i) => (
+                                                    <div key={i} className="h-1.5 bg-slate-200 rounded-full" style={{ width: `${w}%` }} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        /* ── Real property cards ── */
+                                        selectedProjects.map((p, idx) => (
+                                            <div key={p.id} className="rounded-lg border border-slate-100 overflow-hidden shadow-sm">
+                                                {/* Property hero image */}
+                                                <div className="relative h-16 bg-slate-100">
+                                                    {p.imageUrl ? (
+                                                        <img
+                                                            src={p.imageUrl}
+                                                            alt={p.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                                                            <Eye size={14} className="text-slate-400" />
+                                                        </div>
+                                                    )}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                                                    {/* Index badge */}
+                                                    <span className="absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center text-white text-[7px] font-black">
+                                                        {idx + 1}
+                                                    </span>
+                                                    {/* Property name overlay */}
+                                                    <p className="absolute bottom-1.5 left-2 right-2 text-white font-extrabold text-[9px] leading-tight drop-shadow-sm truncate">
+                                                        {p.name}
+                                                    </p>
+                                                </div>
+                                                {/* Property details strip */}
+                                                <div className="px-2.5 py-2 bg-white flex items-center justify-between gap-2">
+                                                    <div className="min-w-0">
+                                                        <p className="text-slate-500 text-[7px] leading-tight truncate">
+                                                            {p.developer_name ?? 'PSI Developer'}{p.location ? ` · ${p.location}` : ''}
+                                                        </p>
+                                                        {p.completionYear && (
+                                                            <p className="text-slate-400 text-[7px]">Completion: {p.completionYear}</p>
+                                                        )}
+                                                    </div>
+                                                    <span className="flex-shrink-0 text-[8px] font-extrabold text-amber-600 font-mono">
+                                                        {p.priceRange ?? fmtAED(p.expected_avg_deal)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
 
-                                {/* Footer */}
-                                <div className="absolute bottom-0 left-0 right-0 px-5 py-3 border-t border-slate-100 bg-slate-50/80">
-                                    <p className="text-slate-500 text-[7px] text-center">
-                                        Prepared specifically for <strong className="text-slate-700">{state.clientName || '[Client Name]'}</strong> by <strong className="text-slate-700">{agentName}</strong>
-                                    </p>
-                                    <p className="text-slate-400 text-[6px] text-center mt-0.5">
-                                        PSI Events · Confidential Investment Document · {new Date().getFullYear()}
+                                {/* PDF Footer — always pinned */}
+                                <div className="px-4 py-2 border-t border-slate-100 bg-slate-50/90 flex-shrink-0">
+                                    <p className="text-slate-400 text-[6px] text-center">
+                                        PSI Events · Confidential · {new Date().getFullYear()}
                                     </p>
                                 </div>
                             </div>

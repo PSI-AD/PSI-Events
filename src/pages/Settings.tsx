@@ -365,6 +365,36 @@ function PreferencesSection() {
             {/* UI Theme switcher — shown before appearance */}
             <UIThemePicker />
 
+            {/* ROI Vision launch card */}
+            <SettingsCard
+                title="ROI Vision"
+                description="Open the Executive Presentation in a new tab — a full-screen dark-mode showcase of portfolio performance."
+            >
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div className="flex-1 flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-psi-accent-subtle border border-psi-accent flex items-center justify-center flex-shrink-0">
+                            <Sparkles size={18} className="text-psi-accent" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-psi-primary">Executive Presentation Mode</p>
+                            <p className="text-xs text-psi-muted mt-0.5 leading-relaxed">
+                                A curated dark-mode deck with live KPI slides, ROI summaries, and portfolio charts — designed for C-suite demos.
+                            </p>
+                        </div>
+                    </div>
+                    <a
+                        href="/executive-presentation"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        id="roi-vision-launch-btn"
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-psi-accent text-white font-bold text-sm hover:opacity-90 active:scale-95 transition-all duration-150 flex-shrink-0 shadow-md"
+                    >
+                        <Sparkles size={14} />
+                        Launch ROI Vision
+                    </a>
+                </div>
+            </SettingsCard>
+
             {/* Theme selector */}
             <SettingsCard
                 title="Appearance"

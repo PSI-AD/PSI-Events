@@ -12,7 +12,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
     GlobalFeaturesProvider,
     GlobalActionButtons,
@@ -222,15 +222,25 @@ function usePageTitle(): string {
 export default function DashboardLayout() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [openGroups, setOpenGroups] = useState<string[]>(['Core']);
+    // Single-accordion: only one group open at a time, null = all closed
+    const [openGroup, setOpenGroup] = useState<string | null>('Core');
+    const groupRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const pageTitle = usePageTitle();
 
     const toggleGroup = (label: string) => {
-        setOpenGroups(prev =>
-            prev.includes(label)
-                ? prev.filter(g => g !== label)
-                : [...prev, label]
-        );
+        setOpenGroup(prev => {
+            const opening = prev !== label;
+            if (opening) {
+                // Scroll the group header into view after state settles
+                requestAnimationFrame(() => {
+                    groupRefs.current[label]?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                    });
+                });
+            }
+            return opening ? label : null;
+        });
     };
 
     return (
@@ -273,9 +283,12 @@ export default function DashboardLayout() {
                     {/* ── Nav groups ── */}
                     <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-1">
                         {NAV_GROUPS.map(group => {
-                            const isOpen = openGroups.includes(group.label);
+                            const isOpen = openGroup === group.label;
                             return (
-                                <div key={group.label}>
+                                <div
+                                    key={group.label}
+                                    ref={el => { groupRefs.current[group.label] = el; }}
+                                >
                                     {/* Group header — clickable accordion toggle */}
                                     {!isCollapsed ? (
                                         <button
@@ -292,9 +305,16 @@ export default function DashboardLayout() {
                                             />
                                         </button>
                                     ) : (
-                                        <div className="mx-3 my-1 h-px bg-psi-border" />
+                                        /* Collapsed: divider + tooltip on hover */
+                                        <div className="relative group/grphdr flex items-center justify-center py-1">
+                                            <div className="mx-3 h-px bg-psi-border w-full" />
+                                            {/* Collapsed group tooltip */}
+                                            <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover/grphdr:opacity-100 group-hover/grphdr:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
+                                                {group.label}
+                                            </span>
+                                        </div>
                                     )}
-                                    {/* Collapsible children */}
+                                    {/* Collapsible children — overflow-hidden only when expanded (not collapsed), so tooltips can escape */}
                                     <AnimatePresence initial={false}>
                                         {(isCollapsed || isOpen) && (
                                             <motion.div
@@ -303,7 +323,7 @@ export default function DashboardLayout() {
                                                 animate={{ height: 'auto', opacity: 1 }}
                                                 exit={{ height: 0, opacity: 0 }}
                                                 transition={{ duration: 0.2, ease: 'easeInOut' }}
-                                                className="overflow-hidden"
+                                                className={isCollapsed ? undefined : 'overflow-hidden'}
                                             >
                                                 <div className="space-y-0.5">
                                                     {group.items.map(({ to, icon, label }) => (
@@ -326,26 +346,6 @@ export default function DashboardLayout() {
 
                     {/* ── Footer links ── */}
                     <div className="border-t border-psi p-2 space-y-0.5">
-                        {/* ROI Vision special link */}
-                        <a
-                            href="/executive-presentation"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={isCollapsed ? 'ROI Vision' : undefined}
-                            className={cn(
-                                'flex items-center gap-3 px-3 py-2.5 rounded-xl',
-                                'text-psi-accent',
-                                'hover:bg-psi-accent-subtle',
-                                'transition-all duration-150 group',
-                                'border border-psi-accent min-h-[40px]',
-                                isCollapsed && 'justify-center px-0',
-                            )}
-                        >
-                            <span className="group-hover:scale-105 transition-transform flex-shrink-0">
-                                <Sparkles size={17} />
-                            </span>
-                            {!isCollapsed && <span className="font-bold text-sm">ROI Vision</span>}
-                        </a>
                         <SidebarLink to="/manual" icon={BookOpen} label="System Manual" collapsed={isCollapsed} />
                         <SidebarLink to="/settings" icon={Settings} label="Settings" collapsed={isCollapsed} />
                     </div>
@@ -395,18 +395,6 @@ export default function DashboardLayout() {
 
                         {/* Right: global actions */}
                         <div className="flex items-center gap-1.5">
-                            {/* ROI Vision — desktop only */}
-                            <a
-                                href="/executive-presentation"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-psi-accent border border-psi-accent hover:bg-psi-accent-subtle transition-all text-xs font-bold"
-                                aria-label="ROI Vision"
-                            >
-                                <Sparkles size={13} />
-                                <span>ROI Vision</span>
-                            </a>
-
                             {/* Global action buttons (search + notif + AI) */}
                             <GlobalActionButtons />
 
@@ -484,15 +472,6 @@ export default function DashboardLayout() {
 
                                 {/* Drawer footer */}
                                 <div className="border-t border-psi p-2 space-y-0.5">
-                                    <a
-                                        href="/executive-presentation"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-psi-accent hover:bg-psi-accent-subtle transition-all group border border-psi-accent min-h-[40px]"
-                                    >
-                                        <Sparkles size={17} />
-                                        <span className="font-bold text-sm">ROI Vision</span>
-                                    </a>
                                     <SidebarLink to="/manual" icon={BookOpen} label="System Manual" onClick={() => setDrawerOpen(false)} />
                                     <SidebarLink to="/settings" icon={Settings} label="Settings" onClick={() => setDrawerOpen(false)} />
                                 </div>
