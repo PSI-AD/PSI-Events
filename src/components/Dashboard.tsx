@@ -155,28 +155,56 @@ function useRosterKpis() {
   return { totalRevenue, tierCounts, avgSplit, isLive: rosters !== FALLBACK_ROSTERS };
 }
 
-// ── KPI hook — crm_events ─────────────────────────────────────────────────────
+// ── KPI hook — events + crm_events ───────────────────────────────────────────
 
 function useEventChartData() {
-  // Pre-seeded: 3 realistic UAE events shown instantly,
-  // replaced by real Firestore docs only when they arrive.
+  // Fallback shown instantly on mount; both Firestore collections replace it
+  // when they arrive. Merges 'events' (seeder) + 'crm_events' (live CRM sync).
   const [events, setEvents] = useState<EventDoc[]>(FALLBACK_EVENTS);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
-    const unsub = onSnapshot(
-      collection(db, 'crm_events'),
+    let eventsData: EventDoc[] = [];
+    let crmEventsData: EventDoc[] = [];
+
+    function merge() {
+      const combined = [...eventsData, ...crmEventsData];
+      if (combined.length > 0) {
+        const seen = new Set<string>();
+        const unique = combined.filter(e => {
+          if (seen.has(e.id)) return false;
+          seen.add(e.id);
+          return true;
+        });
+        setEvents(unique);
+        setIsLive(true);
+      }
+    }
+
+    const unsubEvents = onSnapshot(
+      collection(db, 'events'),
       snap => {
-        const docs = snap.docs.map(d => ({ id: d.id, ...d.data() } as EventDoc));
-        if (docs.length > 0) setEvents(docs);
-        // else: keep FALLBACK_EVENTS so chart never goes blank
+        eventsData = snap.docs.map(d => ({ id: d.id, ...d.data() } as EventDoc));
+        merge();
       },
       err => console.error('[Dashboard/events]', err)
     );
-    return () => unsub();
+
+    const unsubCrm = onSnapshot(
+      collection(db, 'crm_events'),
+      snap => {
+        crmEventsData = snap.docs.map(d => ({ id: d.id, ...d.data() } as EventDoc));
+        merge();
+      },
+      err => console.error('[Dashboard/crm_events]', err)
+    );
+
+    return () => { unsubEvents(); unsubCrm(); };
   }, []);
 
-  return events;
+  return { events, isLive };
 }
+
 
 // ── Skeleton shimmer ──────────────────────────────────────────────────────────
 
@@ -189,7 +217,7 @@ function KpiSkeleton() {
 export default function Dashboard() {
   const { total: totalLeads, closed: closedLeads } = useLeadKpis();
   const { totalRevenue, tierCounts, avgSplit, isLive: rostersLive } = useRosterKpis();
-  const events = useEventChartData();
+  const { events, isLive: eventsLive } = useEventChartData();
 
   // Build chart data: one bar per event (revenue vs budget)
   // events is always non-empty (FALLBACK_EVENTS pre-seeded)
@@ -269,7 +297,7 @@ export default function Dashboard() {
           className="lg:col-span-2"
           headerRight={
             <span className="text-[11px] text-psi-muted font-mono">
-              {events.some(e => !['fb1', 'fb2', 'fb3'].includes(e.id))
+              {eventsLive
                 ? `${events.length} events · live`
                 : `${events.length} events · demo`}
             </span>

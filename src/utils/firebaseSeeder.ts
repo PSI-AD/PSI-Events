@@ -10,7 +10,7 @@
  *   The "one-click demo ready" seeder. Populates every collection the app
  *   reads from so the Firestore console shows data immediately.
  *
- *   Collections written (8):
+ *   Collections written (13):
  *     • crm_projects     — 3 premium UAE developments
  *     • events           — 2 active roadshow events
  *     • crm_users        — 1 manager + 2 agents
@@ -19,6 +19,11 @@
  *     • expenses         — 2 itemised expense lines
  *     • checklists       — 2 pre-event tasks
  *     • crm_leads        — 2 qualified leads
+ *     • proposals        — 3 AI-generated pitch documents
+ *     • event_journal    — 3 live intel feed entries
+ *     • logistics_desk   — 3 travel & visa records
+ *     • venue_booths     — 3 booth/floor plan assignments
+ *     • brochures        — 2 digital brochure metadata records
  *
  *   injectPresentationData()
  *   ─────────────────────────
@@ -86,6 +91,30 @@ const IDS = {
     // Leads
     leadAhmed: 'lead_ahmed_almaktoum',
     leadJohn: 'lead_john_smith',
+
+    // Proposals
+    propVidaAhmed: 'prop_vida_ahmed_vip',
+    propMamshaJohn: 'prop_mamsha_john_uk',
+    propLouvreVip: 'prop_louvre_corporate',
+
+    // Event Journal
+    jrnlIntel1: 'jrnl_intel_emaar_dld',
+    jrnlUpdate1: 'jrnl_update_leads_day1',
+    jrnlAlert1: 'jrnl_alert_vip_arrival',
+
+    // Logistics Desk
+    lgstAmr: 'lgst_amr_london',
+    lgstSara: 'lgst_sara_london',
+    lgstKhalid: 'lgst_khalid_london',
+
+    // Venue Booths
+    boothB12: 'booth_B12',
+    boothC05: 'booth_C05',
+    boothA01: 'booth_A01',
+
+    // Brochures
+    brochVida: 'broch_vida_london',
+    brochMamsha: 'broch_mamsha_london',
 } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -474,6 +503,266 @@ export async function injectSeedData(): Promise<{
 
         await b2.commit();
         console.log('✅ Batch 2 committed — 3 rosters, 2 bounties, 2 expenses, 2 checklists, 2 leads');
+
+        // ── Batch 3: Proposals, Journal, Logistics, Booths, Brochures ────────
+        console.log('📦 Batch 3 — proposals, event_journal, logistics_desk, venue_booths, brochures...');
+        const b3 = writeBatch(db);
+
+        // ── I. proposals (AI pitch documents) ──────────────────────────────
+        b3.set(doc(db, 'proposals', IDS.propVidaAhmed), {
+            eventId: IDS.evtLondon,
+            clientName: 'Ahmed Al Maktoum',
+            clientEmail: 'ahmed.almaktoum@example.ae',
+            leadId: IDS.leadAhmed,
+            agentId: IDS.usrKhalid,
+            agentName: 'Khalid Al-Mansouri',
+            property: 'Vida Residence',
+            projectId: IDS.projVida,
+            title: 'Exclusive VIP Investment Opportunity — Vida Residence, Dubai Marina',
+            content: 'Dear Mr. Al Maktoum,\n\nBased on your investment profile and interest in waterfront luxury, we are pleased to present an exclusive opportunity at Vida Residence by Emaar.\n\nKey Highlights:\n• Starting from AED 2.2M for a 1BR\n• Projected 7% NET ROI (rental yield basis)\n• 5% developer commission fully waived for event attendees\n• 0% DLD fee promotion valid for closings before April 30, 2026\n• Payment plan: 40/60 (40% construction, 60% handover 2027)\n\nThis property is ideally suited for a portfolio anchor asset given its marina frontage and Emaar brand premium.',
+            budgetMatched: '5M AED',
+            stage: 'Sent',
+            aiGenerated: true,
+            generatedAt: ts('2026-04-10T16:30:00Z'),
+            sentAt: ts('2026-04-10T17:00:00Z'),
+            createdBy: IDS.usrKhalid,
+        });
+
+        b3.set(doc(db, 'proposals', IDS.propMamshaJohn), {
+            eventId: IDS.evtLondon,
+            clientName: 'John Smith',
+            clientEmail: 'john.smith@example.co.uk',
+            leadId: IDS.leadJohn,
+            agentId: IDS.usrSara,
+            agentName: 'Sara Almarzouqi',
+            property: 'Mamsha Gardens',
+            projectId: IDS.projMamsha,
+            title: 'Portfolio Diversification — Mamsha Gardens, Saadiyat Island',
+            content: 'Dear Mr. Smith,\n\nThank you for visiting our booth at the London VIP Roadshow. Following our conversation, we\'ve prepared a tailored proposal for Mamsha Gardens, ideally suited to diversify your UAE portfolio into Abu Dhabi.\n\nKey Highlights:\n• Starting from AED 3.5M for a 2BR beachfront apartment\n• Projected 6.2% gross rental yield\n• Premium Aldar warranty + managed community services\n• Abu Dhabi Golden Visa eligibility for investments from AED 2M\n• Completion: Q4 2027',
+            budgetMatched: '3.5M AED',
+            stage: 'Draft',
+            aiGenerated: true,
+            generatedAt: ts('2026-04-11T10:30:00Z'),
+            sentAt: null,
+            createdBy: IDS.usrSara,
+        });
+
+        b3.set(doc(db, 'proposals', IDS.propLouvreVip), {
+            eventId: IDS.evtLondon,
+            clientName: 'VIP Investor (Walk-in)',
+            clientEmail: null,
+            leadId: null,
+            agentId: IDS.usrAmr,
+            agentName: 'Amr ElFangary',
+            property: 'Louvre Abu Dhabi Residences',
+            projectId: IDS.projLouvre,
+            title: 'Ultra-Prime Presentation — Louvre Abu Dhabi Residences',
+            content: 'The Louvre Abu Dhabi Residences represent the pinnacle of Abu Dhabi\'s cultural and real estate ambition. Adjacent to the world-renowned Louvre museum on Saadiyat Island, these residences offer an unmatched combination of art, culture, and investment value.\n\n• Starting from AED 4.1M\n• 5BR penthouses available up to AED 18M\n• Exclusive Aldar owner benefits + museum membership\n• Saadiyat Island master plan: 7 world-class museums within 2km\n• Minimum 8% capital appreciation forecast (JLL Abu Dhabi 2026 Report)',
+            budgetMatched: '10M+ AED',
+            stage: 'Sent',
+            aiGenerated: false,
+            generatedAt: ts('2026-04-12T09:00:00Z'),
+            sentAt: ts('2026-04-12T09:30:00Z'),
+            createdBy: IDS.usrAmr,
+        });
+
+        written.proposals = 3;
+
+        // ── J. event_journal (live intel & updates feed) ─────────────────
+        b3.set(doc(db, 'event_journal', IDS.jrnlIntel1), {
+            eventId: IDS.evtLondon,
+            author: 'Amr ElFangary',
+            authorId: IDS.usrAmr,
+            type: 'Intel',
+            severity: 'High',
+            content: 'Competitor Emaar is offering 50% DLD waiver at Booth 4. Our response: push the PSI Golden Visa eligibility angle — Emaar does not offer this benefit.',
+            tags: ['competitor', 'emaar', 'DLD', 'counter-strategy'],
+            pinned: true,
+            timestamp: ts('2026-04-10T11:30:00Z'),
+        });
+
+        b3.set(doc(db, 'event_journal', IDS.jrnlUpdate1), {
+            eventId: IDS.evtLondon,
+            author: 'Sara Almarzouqi',
+            authorId: IDS.usrSara,
+            type: 'Update',
+            severity: 'Normal',
+            content: 'Day 1 wrap: 8 qualified leads captured. 3 Russian HNWIs showed strong interest in Mamsha Gardens. 2 follow-up meetings booked for Day 2 breakfast session.',
+            tags: ['day1', 'leads', 'mamsha'],
+            pinned: false,
+            timestamp: ts('2026-04-10T19:00:00Z'),
+        });
+
+        b3.set(doc(db, 'event_journal', IDS.jrnlAlert1), {
+            eventId: IDS.evtLondon,
+            author: 'Amr ElFangary',
+            authorId: IDS.usrAmr,
+            type: 'Alert',
+            severity: 'Critical',
+            content: 'VIP arrival confirmed: Sheikh Hamdan delegation (5 members) arriving at 14:30 tomorrow. Ensure Louvre Residences presentation deck is loaded and private meeting room is reserved.',
+            tags: ['VIP', 'sheikh', 'louvre', 'meeting'],
+            pinned: true,
+            timestamp: ts('2026-04-11T08:00:00Z'),
+        });
+
+        written.event_journal = 3;
+
+        // ── K. logistics_desk (travel, visa & hotel records) ─────────────
+        b3.set(doc(db, 'logistics_desk', IDS.lgstAmr), {
+            userId: IDS.usrAmr,
+            agentName: 'Amr ElFangary',
+            eventId: IDS.evtLondon,
+            eventName: 'London VIP Roadshow',
+            flightStatus: 'Booked',
+            flightRef: 'EK009 — DXB→LHR 08 Apr 2026, Business Class',
+            returnFlightRef: 'EK010 — LHR→DXB 14 Apr 2026, Business Class',
+            visaStatus: 'Approved',
+            visaRef: 'UK MRV-2026-AE-00341',
+            visaExpiry: ts('2027-04-01T00:00:00Z'),
+            hotel: 'The Dorchester, Park Lane',
+            hotelRef: 'DORCH-PSI-2026-AMR',
+            checkIn: '2026-04-09',
+            checkOut: '2026-04-14',
+            pcr: 'Cleared',
+            insurance: 'Covered — PSI Corporate Policy',
+            notes: 'Suite upgrade confirmed by hotel concierge.',
+            updatedAt: ts('2026-03-15T10:00:00Z'),
+        });
+
+        b3.set(doc(db, 'logistics_desk', IDS.lgstSara), {
+            userId: IDS.usrSara,
+            agentName: 'Sara Almarzouqi',
+            eventId: IDS.evtLondon,
+            eventName: 'London VIP Roadshow',
+            flightStatus: 'Booked',
+            flightRef: 'EK009 — DXB→LHR 08 Apr 2026, Economy',
+            returnFlightRef: 'EK010 — LHR→DXB 14 Apr 2026, Economy',
+            visaStatus: 'Approved',
+            visaRef: 'UK MRV-2026-AE-00425',
+            visaExpiry: ts('2028-03-01T00:00:00Z'),
+            hotel: 'Ritz-Carlton, Westminster',
+            hotelRef: 'RC-LDN-PSI-SARA-2026',
+            checkIn: '2026-04-09',
+            checkOut: '2026-04-14',
+            pcr: 'Cleared',
+            insurance: 'Covered — PSI Corporate Policy',
+            notes: '',
+            updatedAt: ts('2026-03-01T14:30:00Z'),
+        });
+
+        b3.set(doc(db, 'logistics_desk', IDS.lgstKhalid), {
+            userId: IDS.usrKhalid,
+            agentName: 'Khalid Al-Mansouri',
+            eventId: IDS.evtLondon,
+            eventName: 'London VIP Roadshow',
+            flightStatus: 'Booked',
+            flightRef: 'EK009 — DXB→LHR 09 Apr 2026, Economy',
+            returnFlightRef: 'EK010 — LHR→DXB 14 Apr 2026, Economy',
+            visaStatus: 'Pending',
+            visaRef: null,
+            visaExpiry: null,
+            hotel: 'Ritz-Carlton, Westminster',
+            hotelRef: 'RC-LDN-PSI-KHALID-2026',
+            checkIn: '2026-04-09',
+            checkOut: '2026-04-14',
+            pcr: 'Required',
+            insurance: 'Covered — PSI Corporate Policy',
+            notes: '⚠️ Visa application submitted 2026-03-20 — awaiting Home Office approval.',
+            updatedAt: ts('2026-03-20T09:00:00Z'),
+        });
+
+        written.logistics_desk = 3;
+
+        // ── L. venue_booths (floor plan / booth assignment data) ─────────
+        b3.set(doc(db, 'venue_booths', IDS.boothB12), {
+            eventId: IDS.evtLondon,
+            boothId: 'B-12',
+            label: 'PSI — Main Booth',
+            assignedTo: 'PSI Investments — Dubai Marina Team',
+            teamIds: [IDS.usrAmr, IDS.usrSara, IDS.usrKhalid],
+            status: 'Active',
+            zone: 'Hall B — Premium Zone',
+            sizeM2: 48,
+            screenCount: 4,
+            seatingCap: 12,
+            features: ['Digital Display Wall', '4K Demo Screens', 'Private Consultation Corner'],
+            setupAt: ts('2026-04-09T14:00:00Z'),
+            openedAt: ts('2026-04-10T09:00:00Z'),
+        });
+
+        b3.set(doc(db, 'venue_booths', IDS.boothC05), {
+            eventId: IDS.evtLondon,
+            boothId: 'C-05',
+            label: 'PSI — Project Showcase',
+            assignedTo: 'PSI Investments — Abu Dhabi HQ',
+            teamIds: [IDS.usrSara],
+            status: 'Active',
+            zone: 'Hall C — Developer Pavilion',
+            sizeM2: 24,
+            screenCount: 2,
+            seatingCap: 6,
+            features: ['3D Floor Plan Viewer', 'Brochure Station'],
+            setupAt: ts('2026-04-09T15:00:00Z'),
+            openedAt: ts('2026-04-10T09:00:00Z'),
+        });
+
+        b3.set(doc(db, 'venue_booths', IDS.boothA01), {
+            eventId: IDS.evtLondon,
+            boothId: 'A-01',
+            label: 'VIP Meeting Suite',
+            assignedTo: 'PSI Investments — Executive',
+            teamIds: [IDS.usrAmr],
+            status: 'Reserved',
+            zone: 'Hall A — VIP Atrium',
+            sizeM2: 16,
+            screenCount: 1,
+            seatingCap: 4,
+            features: ['Private Room', 'NDA Signing Station', 'Refreshments'],
+            setupAt: ts('2026-04-09T13:00:00Z'),
+            openedAt: ts('2026-04-10T09:00:00Z'),
+        });
+
+        written.venue_booths = 3;
+
+        // ── M. brochures (digital PDF metadata) ────────────────────────
+        b3.set(doc(db, 'brochures', IDS.brochVida), {
+            eventId: IDS.evtLondon,
+            propertyId: IDS.projVida,
+            propertyName: 'Vida Residence',
+            developer: 'Emaar',
+            title: 'Vida Residence — London VIP Edition 2026',
+            pdfUrl: 'https://storage.googleapis.com/psievents-pro.firebasestorage.app/brochures/vida_residence_london_2026.pdf',
+            coverImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
+            pages: 12,
+            language: 'English',
+            generatedBy: IDS.usrAmr,
+            downloads: 34,
+            shares: 8,
+            generatedAt: ts('2026-03-20T10:00:00Z'),
+            lastUpdated: ts('2026-04-01T09:00:00Z'),
+        });
+
+        b3.set(doc(db, 'brochures', IDS.brochMamsha), {
+            eventId: IDS.evtLondon,
+            propertyId: IDS.projMamsha,
+            propertyName: 'Mamsha Gardens',
+            developer: 'Aldar',
+            title: 'Mamsha Gardens — Saadiyat Beachfront Living',
+            pdfUrl: 'https://storage.googleapis.com/psievents-pro.firebasestorage.app/brochures/mamsha_gardens_2026.pdf',
+            coverImageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
+            pages: 16,
+            language: 'English',
+            generatedBy: IDS.usrSara,
+            downloads: 21,
+            shares: 5,
+            generatedAt: ts('2026-03-22T11:00:00Z'),
+            lastUpdated: ts('2026-04-01T09:00:00Z'),
+        });
+
+        written.brochures = 2;
+
+        await b3.commit();
+        console.log(`✅ Batch 3 committed — 3 proposals, 3 journal entries, 3 logistics, 3 booths, 2 brochures`);
 
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
