@@ -133,9 +133,11 @@ export async function injectSeedData(): Promise<{
 
     console.group('🌱 PSI Seeder — injectSeedData()');
 
+    // ── Batch 1: Projects, Events, Users ─────────────────────────────────────
+    // Each batch is independently try/caught so a permissions failure in one
+    // batch does not prevent the others from running.
+    console.log('📦 Batch 1 — crm_projects, events, crm_users...');
     try {
-        // ── Batch 1: Projects, Events, Users ─────────────────────────────────
-        console.log('📦 Batch 1 — crm_projects, events, crm_users...');
         const b1 = writeBatch(db);
 
         // ── A. crm_projects ──────────────────────────────────────────────────
@@ -270,9 +272,15 @@ export async function injectSeedData(): Promise<{
 
         await b1.commit();
         console.log('✅ Batch 1 committed — 3 projects, 2 events, 3 users');
+    } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`[Batch 1] ${msg}`);
+        console.error('❌ Batch 1 error:', msg);
+    }
 
-        // ── Batch 2: Rosters, Bounties, Expenses, Checklists, Leads ──────────
-        console.log('📦 Batch 2 — rosters, bounties, expenses, checklists, leads...');
+    // ── Batch 2: Rosters, Bounties, Expenses, Checklists, Leads ─────────────
+    console.log('📦 Batch 2 — rosters, bounties, expenses, checklists, leads...');
+    try {
         const b2 = writeBatch(db);
 
         // ── D. event_rosters (London) ────────────────────────────────────────
@@ -503,9 +511,15 @@ export async function injectSeedData(): Promise<{
 
         await b2.commit();
         console.log('✅ Batch 2 committed — 3 rosters, 2 bounties, 2 expenses, 2 checklists, 2 leads');
+    } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`[Batch 2] ${msg}`);
+        console.error('❌ Batch 2 error:', msg);
+    }
 
-        // ── Batch 3: Proposals, Journal, Logistics, Booths, Brochures ────────
-        console.log('📦 Batch 3 — proposals, event_journal, logistics_desk, venue_booths, brochures...');
+    // ── Batch 3: Proposals, Journal, Logistics, Booths, Brochures ───────────
+    console.log('📦 Batch 3 — proposals, event_journal, logistics_desk, venue_booths, brochures...');
+    try {
         const b3 = writeBatch(db);
 
         // ── I. proposals (AI pitch documents) ──────────────────────────────
@@ -762,12 +776,11 @@ export async function injectSeedData(): Promise<{
         written.brochures = 2;
 
         await b3.commit();
-        console.log(`✅ Batch 3 committed — 3 proposals, 3 journal entries, 3 logistics, 3 booths, 2 brochures`);
-
+        console.log('✅ Batch 3 committed — 3 proposals, 3 journal entries, 3 logistics, 3 booths, 2 brochures');
     } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        errors.push(message);
-        console.error('❌ Seeder error:', message);
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`[Batch 3] ${msg}`);
+        console.error('❌ Batch 3 error:', msg);
     }
 
     const durationMs = Date.now() - t0;
