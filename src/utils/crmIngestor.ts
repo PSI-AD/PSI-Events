@@ -34,10 +34,9 @@ import { db } from '../services/firebase/firebaseConfig';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
-// In development: requests to /crm-api are proxied by Vite → integration.psi-crm.com
-// (avoids CORS — the proxy runs in Node.js, not the browser).
-// In production: deploy a Firebase Cloud Function that does the same server-side forwarding.
-const CRM_BASE_URL = '/crm-api/ExternalApis';
+// Direct CRM endpoint — wrapped in corsproxy.io so the browser can reach it
+// from Firebase Hosting without needing a server-side proxy or Cloud Function.
+const CRM_DIRECT_BASE = 'https://integration.psi-crm.com/ExternalApis';
 const CRM_API_KEY = import.meta.env.VITE_PSI_CRM_API_KEY as string;
 
 // Firestore limits a single batch to 500 operations
@@ -172,12 +171,16 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
 
     // The server requires POST but reads params from the URL query string only.
     // Sending a JSON body causes a 500 server-side model-binding crash.
-    const url =
-        `${CRM_BASE_URL}/GetAllProperties` +
+    //
+    // In production (Firebase Hosting) there is no Vite proxy, so we route the
+    // request through corsproxy.io which adds the necessary CORS headers.
+    const targetUrl =
+        `${CRM_DIRECT_BASE}/GetAllProperties` +
         `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const url = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
 
-    // Debug: log the method + URL so you can verify in DevTools → Console
-    console.log('[CRM Ingestor] POST', url);
+    // Debug: log the resolved URL so you can verify in DevTools → Console
+    console.log('[CRM Ingestor] POST (via corsproxy.io)', targetUrl);
 
     const res = await fetch(url, {
         method: 'POST',
