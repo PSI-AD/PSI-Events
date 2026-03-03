@@ -11,10 +11,12 @@
  *   • crm_events/{id}/approvedAgents  — sub-collection for check-in module
  *   • crm_projects          — 4 premium UAE/Abu Dhabi developments
  *   • users                 — 5 agents + 1 branch manager
- *   • crm_leads             — 18 leads tied to the Moscow event
+ *   • crm_leads             — 18 leads tied to the Moscow event + 1 demo lead
  *   • event_rosters         — agent-event assignments with tier & financials
- *   • expenses              — 6 itemised expenses for the London event
+ *   • expenses              — 6 itemised expenses (London) + 2 Moscow preview docs
  *   • agent_debts           — 2 outstanding clawback debts (for demo settlement)
+ *   • checklists            — pre-event task templates
+ *   • bounties              — active agent incentive challenges
  *
  * WARNING:
  *   This function writes REAL data to your Firestore instance.
@@ -38,6 +40,7 @@ import {
     writeBatch,
     setDoc,
     Timestamp,
+    serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../services/firebase/firebaseConfig';
 
@@ -900,6 +903,185 @@ export async function injectSeedData(): Promise<{
 
         await batch2.commit();
         console.log(`✅ Batch 2 committed — ${allRosters.length} rosters, ${EXPENSES.length} expenses, ${AGENT_DEBTS.length} debts`);
+
+        // ── Batch 3: expenses (Moscow preview), crm_leads (demo), checklists, bounties ──
+
+        console.log('📦 Batch 3: Moscow Expenses, Demo Lead, Checklists, Bounties...');
+        const batch3 = writeBatch(db);
+
+        // ── 3a. Moscow expenses (2 preview docs so the collection is populated) ──
+        const MOSCOW_EXPENSES = [
+            {
+                id: 'exp_msc_001',
+                eventId: EVENT_MOSCOW_ID,
+                amount: 50_000,
+                currency: 'AED',
+                amountAed: 50_000,
+                category: 'Venue',
+                subcategory: 'Exhibition Space',
+                paidBy: 'Branch' as const,
+                status: 'Approved',
+                description: 'Crocus Expo — premium 6×8m exhibition booth, 3 days',
+                vendorName: 'Crocus Expo International',
+                receiptRef: 'CROCUS-2026-PSI-001',
+                createdAt: ts('2026-02-01T09:00:00Z'),
+                createdBy: MANAGER_ID,
+            },
+            {
+                id: 'exp_msc_002',
+                eventId: EVENT_MOSCOW_ID,
+                amount: 28_500,
+                currency: 'AED',
+                amountAed: 28_500,
+                category: 'Travel',
+                subcategory: 'Flights',
+                paidBy: 'Branch' as const,
+                status: 'Approved',
+                description: 'Emirates Business Class return — 6 agents (EK043/EK044)',
+                vendorName: 'Emirates Airlines',
+                receiptRef: 'EK-INV-20260210-992',
+                createdAt: ts('2026-02-10T10:00:00Z'),
+                createdBy: MANAGER_ID,
+            },
+        ];
+        MOSCOW_EXPENSES.forEach(({ id: expId, ...expData }) => {
+            batch3.set(doc(db, 'expenses', expId), expData);
+        });
+        written.expenses = (written.expenses ?? 0) + MOSCOW_EXPENSES.length;
+
+        // ── 3b. Demo CRM lead (Ahmed Al Maktoum — canonical demo persona) ─────
+        const DEMO_LEAD = {
+            id: 'lead_demo_ahmed_001',
+            name: 'Ahmed Al Maktoum',
+            fullName: 'Ahmed Al Maktoum',
+            interest: 'Vida Residence',
+            interestedProject: PROJECT_IDS.vida,
+            stage: 'Hot',
+            status: 'qualified',
+            budget: '3M AED',
+            budgetAed: 3_000_000,
+            eventId: EVENT_MOSCOW_ID,
+            assignedAgentId: AGENT_IDS.khalid,
+            assignedAgentName: 'Khalid Al-Mansouri',
+            nationality: 'Emirati',
+            phone: '+971-50-100-0001',
+            email: 'ahmed.almaktoum.demo@example.com',
+            source: 'vip_invitation',
+            notes: 'VIP invitee. Senior family member. High intent — seeking investment diversification.',
+            createdAt: ts('2026-03-15T09:00:00Z'),
+            updatedAt: ts('2026-03-15T09:00:00Z'),
+        };
+        const { id: demoLeadId, ...demoLeadData } = DEMO_LEAD;
+        batch3.set(doc(db, 'crm_leads', demoLeadId), demoLeadData);
+        written.crm_leads = (written.crm_leads ?? 0) + 1;
+
+        // ── 3c. Checklists ─────────────────────────────────────────────────────
+        const CHECKLISTS = [
+            {
+                id: 'chk_msc_001',
+                eventId: EVENT_MOSCOW_ID,
+                task: 'Confirm VIP Catering',
+                description: 'Coordinate with Ritz-Carlton banquet team. Confirm guest count and dietary requirements.',
+                assignedTo: 'Logistics',
+                assignedAgentId: MANAGER_ID,
+                status: 'Pending',
+                priority: 'High',
+                dueDate: ts('2026-03-08T17:00:00Z'),
+                createdAt: ts('2026-02-20T09:00:00Z'),
+                createdBy: MANAGER_ID,
+            },
+            {
+                id: 'chk_msc_002',
+                eventId: EVENT_MOSCOW_ID,
+                task: 'Submit Visa Applications',
+                description: 'Russian tourist visa required for all non-CIS agents. Submit via consular services.',
+                assignedTo: 'Logistics',
+                assignedAgentId: MANAGER_ID,
+                status: 'Done',
+                priority: 'Critical',
+                dueDate: ts('2026-02-15T12:00:00Z'),
+                createdAt: ts('2026-01-20T09:00:00Z'),
+                createdBy: MANAGER_ID,
+            },
+            {
+                id: 'chk_msc_003',
+                eventId: EVENT_MOSCOW_ID,
+                task: 'Print & Ship Collateral',
+                description: '500 brochures, 50 A4 project folders, 10 pull-up banners — ship by DHL before Feb 28.',
+                assignedTo: 'Marketing',
+                assignedAgentId: MANAGER_ID,
+                status: 'In Progress',
+                priority: 'Medium',
+                dueDate: ts('2026-02-28T23:59:59Z'),
+                createdAt: ts('2026-02-01T10:00:00Z'),
+                createdBy: MANAGER_ID,
+            },
+        ];
+        CHECKLISTS.forEach(({ id: chkId, ...chkData }) => {
+            batch3.set(doc(db, 'checklists', chkId), chkData);
+        });
+        written.checklists = CHECKLISTS.length;
+
+        // ── 3d. Bounties ───────────────────────────────────────────────────────
+        const BOUNTIES = [
+            {
+                id: 'bounty_001',
+                title: 'Sell 2 Penthouses',
+                description: 'First agent to close 2 penthouse units (any project) during the Moscow Expo earns a 2% bonus on both deals.',
+                reward: '2% Bonus',
+                rewardType: 'commission_bonus',
+                rewardValuePercent: 2,
+                status: 'Active',
+                eventId: EVENT_MOSCOW_ID,
+                targetProjectIds: [PROJECT_IDS.louvre, PROJECT_IDS.mamsha],
+                currentLeaderId: null,
+                progressCount: 0,
+                targetCount: 2,
+                createdAt: ts('2026-02-15T09:00:00Z'),
+                expiresAt: ts('2026-03-17T23:59:59Z'),
+                createdBy: MANAGER_ID,
+            },
+            {
+                id: 'bounty_002',
+                title: 'Top Lead Collector',
+                description: 'Agent with the most walk-in leads captured on Event Day 1 receives AED 5,000 cash bonus.',
+                reward: 'AED 5,000',
+                rewardType: 'cash',
+                rewardValueAed: 5_000,
+                status: 'Active',
+                eventId: EVENT_MOSCOW_ID,
+                targetProjectIds: [],
+                currentLeaderId: null,
+                progressCount: 0,
+                targetCount: 1,
+                createdAt: ts('2026-02-15T09:00:00Z'),
+                expiresAt: ts('2026-03-15T23:59:59Z'),
+                createdBy: MANAGER_ID,
+            },
+            {
+                id: 'bounty_003',
+                title: 'Revenue Sprint — AED 10M',
+                description: 'First agent to surpass AED 10M in confirmed closings during the event period earns Gold Tier for next 3 roadshows.',
+                reward: 'Gold Tier (3 events)',
+                rewardType: 'tier_upgrade',
+                status: 'Active',
+                eventId: EVENT_MOSCOW_ID,
+                targetProjectIds: [],
+                currentLeaderId: AGENT_IDS.khalid,
+                progressCount: 1,
+                targetCount: 1,
+                createdAt: ts('2026-02-15T09:00:00Z'),
+                expiresAt: ts('2026-03-17T23:59:59Z'),
+                createdBy: MANAGER_ID,
+            },
+        ];
+        BOUNTIES.forEach(({ id: btyId, ...btyData }) => {
+            batch3.set(doc(db, 'bounties', btyId), btyData);
+        });
+        written.bounties = BOUNTIES.length;
+
+        await batch3.commit();
+        console.log(`✅ Batch 3 committed — ${MOSCOW_EXPENSES.length} expenses, 1 demo lead, ${CHECKLISTS.length} checklists, ${BOUNTIES.length} bounties`);
 
         // ── Phase 3: approvedAgents sub-collections (sequential) ─────────────
         // These MUST be written after their parent event documents exist.

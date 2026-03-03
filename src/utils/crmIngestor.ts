@@ -242,23 +242,31 @@ async function flushBatch(batch: WriteBatch, count: number): Promise<void> {
 export async function syncCRMProperties(
     pageIndex = 1,
     pageSize = 100,
+    onLog?: (msg: string) => void,
 ): Promise<SyncResult> {
     const t0 = Date.now();
     const errors: string[] = [];
     let written = 0;
     let skipped = 0;
 
+    onLog?.('Initializing CRM connection...');
+    onLog?.(`Target endpoint: PSI CRM API (page ${pageIndex}, size ${pageSize})`);
+
     // 1. Fetch from CRM
     let rawProperties: CRMProperty[] = [];
     try {
+        onLog?.('Fetching properties from CRM...');
         rawProperties = await fetchPage(pageIndex, pageSize);
+        onLog?.(`API responded — ${rawProperties.length} properties received.`);
     } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        onLog?.('Error: ' + msg);
         return {
             success: false,
             fetched: 0,
             written: 0,
             skipped: 0,
-            errors: [err instanceof Error ? err.message : String(err)],
+            errors: [msg],
             durationMs: Date.now() - t0,
         };
     }
@@ -266,6 +274,7 @@ export async function syncCRMProperties(
     const fetched = rawProperties.length;
 
     if (fetched === 0) {
+        onLog?.('Warning: API returned 0 properties — check pageIndex/pageSize or API status.');
         return {
             success: true,
             fetched: 0,
@@ -277,6 +286,7 @@ export async function syncCRMProperties(
     }
 
     // 2. Normalise and chunk into Firestore batches (max 499 ops each)
+    onLog?.(`Normalising ${fetched} properties for Firestore...`);
     const colRef = collection(db, 'crm_projects');
     let batch = writeBatch(db);
     let opsInBatch = 0;
@@ -323,6 +333,9 @@ export async function syncCRMProperties(
             durationMs: Date.now() - t0,
         };
     }
+
+    onLog?.(`Success: ${written} properties written to crm_projects.${skipped > 0 ? ` (${skipped} skipped)` : ''}`);
+    onLog?.(`Completed in ${Date.now() - t0}ms.`);
 
     return {
         success: true,

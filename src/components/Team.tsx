@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Users as UsersIcon, Filter,
   CheckCircle2, XCircle,
-  Globe, MoreVertical, Plus, UserPlus, X,
+  MoreVertical, Plus, UserPlus, X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -237,19 +237,14 @@ export default function Team() {
           </>
         }
         actions={
-          <>
-            <Btn
-              id="add-team-member-btn"
-              variant="primary"
-              icon={<UserPlus size={15} />}
-              onClick={() => setShowAddModal(true)}
-            >
-              Add Member
-            </Btn>
-            <Btn variant="secondary" icon={<Globe size={15} className="text-psi-muted" />}>
-              Sync CRM
-            </Btn>
-          </>
+          <Btn
+            id="add-team-member-btn"
+            variant="primary"
+            icon={<UserPlus size={15} />}
+            onClick={() => setShowAddModal(true)}
+          >
+            Add Member
+          </Btn>
         }
       />
 

@@ -650,6 +650,10 @@ export default function Settings() {
     const [activeSection, setActiveSection] = useState<Section>('profile');
     const [seeding, setSeeding] = useState(false);
     const [syncing, setSyncing] = useState(false);
+    const [syncLogs, setSyncLogs] = useState<string[]>([]);
+
+    const addLog = (msg: string) =>
+        setSyncLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
 
     async function handleSeedData() {
         if (!window.confirm('⚠️  This will write seed data to Firestore.\n\nOnly run this ONCE on a fresh database.\n\nProceed?')) return;
@@ -676,9 +680,10 @@ export default function Settings() {
 
     async function handleSyncCRM() {
         setSyncing(true);
+        setSyncLogs([]);  // clear previous run
         const toastId = toast.loading('Connecting to PSI CRM…');
         try {
-            const result = await syncCRMProperties(1, 100);
+            const result = await syncCRMProperties(1, 100, addLog);
             if (result.success) {
                 toast.success(
                     `${result.written} Properties Synced from PSI CRM` +
@@ -692,8 +697,10 @@ export default function Settings() {
                 );
             }
         } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            addLog('Fatal: ' + msg);
             toast.error(
-                `CRM Sync crashed: ${err instanceof Error ? err.message : String(err)}`,
+                `CRM Sync crashed: ${msg}`,
                 { id: toastId, duration: 8000 }
             );
         } finally {
@@ -816,6 +823,51 @@ export default function Settings() {
                     <>🔄 Sync Live CRM Data</>
                 )}
             </button>
+
+            {/* ── CRM Live Terminal — shown only when there are logs or a sync is in progress ── */}
+            {(syncLogs.length > 0 || syncing) && (
+                <div className="fixed bottom-14 right-4 z-50 w-[420px] rounded-2xl overflow-hidden shadow-2xl border border-slate-700">
+                    {/* Terminal header bar */}
+                    <div className="flex items-center justify-between px-4 py-2 bg-[#111827] border-b border-slate-700">
+                        <div className="flex items-center gap-2">
+                            <div className="flex gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                            </div>
+                            <span className="text-[10px] text-slate-400 font-mono ml-1">crm-sync.log</span>
+                        </div>
+                        {syncing && (
+                            <span className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                LIVE
+                            </span>
+                        )}
+                    </div>
+                    {/* Terminal body */}
+                    <div
+                        id="crm-sync-terminal"
+                        className="bg-[#0a0a0a] p-4 h-48 overflow-y-auto font-mono text-xs text-emerald-400/90 shadow-inner flex flex-col gap-1 scrollbar-none"
+                    >
+                        {syncLogs.length === 0 ? (
+                            <span className="text-slate-500">&gt; System ready. Waiting for sync command...</span>
+                        ) : (
+                            syncLogs.map((line, i) => (
+                                <div key={i} className="leading-relaxed">
+                                    <span className="text-slate-500 select-none">&gt;&nbsp;</span>
+                                    <span>{line}</span>
+                                </div>
+                            ))
+                        )}
+                        {syncing && (
+                            <div className="flex items-center gap-1 text-emerald-300 mt-0.5">
+                                <span className="text-slate-500 select-none">&gt;&nbsp;</span>
+                                <span className="animate-pulse">_</span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* ── DEV: Seed Trigger — fixed bottom-right, low opacity, hidden in plain sight ── */}
             <button
