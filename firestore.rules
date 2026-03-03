@@ -1,0 +1,134 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PSI Event Portal — Firestore Security Rules
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// Strategy: open read/write for authenticated users across all portal
+// collections, so every component (Dashboard, Proposals, Team, etc.)
+// can perform live onSnapshot queries.
+//
+// Production hardening checklist (before real go-live):
+//   □ Scope writes to specific roles stored in users/{uid}.role
+//   □ Restrict crm_leads / event_rosters updates to the assigned agentId
+//   □ Move sensitive financial writes to Cloud Functions
+//   □ Enable Firebase App Check for additional request verification
+// ─────────────────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Authenticated-user helper ─────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // ── Events ────────────────────────────────────────────────────────────────
+    // crm_events — main event catalogue (read/write for all signed-in users)
+    match /crm_events/{eventId} {
+      allow read, write: if isSignedIn();
+
+      // approvedAgents sub-collection (check-in module)
+      match /approvedAgents/{agentId} {
+        allow read, write: if isSignedIn();
+      }
+
+      // roster sub-collection (presentation seeder compat)
+      match /roster/{rosterId} {
+        allow read, write: if isSignedIn();
+      }
+
+      // expenses sub-collection (presentation seeder compat)
+      match /expenses/{expenseId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+
+    // events collection (used by injectPresentationData seeder)
+    match /events/{eventId} {
+      allow read, write: if isSignedIn();
+
+      match /roster/{rosterId} {
+        allow read, write: if isSignedIn();
+      }
+
+      match /expenses/{expenseId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+
+    // ── Users / Team ──────────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /crm_users/{userId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Projects (CRM catalogue) ──────────────────────────────────────────────
+    match /crm_projects/{projectId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Leads ─────────────────────────────────────────────────────────────────
+    match /crm_leads/{leadId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Proposals ─────────────────────────────────────────────────────────────
+    match /crm_proposals/{proposalId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Rosters (flat event_rosters collection) ────────────────────────────────
+    match /event_rosters/{rosterId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Expenses (flat expenses collection) ───────────────────────────────────
+    match /expenses/{expenseId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Agent Debts ───────────────────────────────────────────────────────────
+    match /agent_debts/{debtId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Checklists ────────────────────────────────────────────────────────────
+    match /checklists/{checklistId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Bounties ──────────────────────────────────────────────────────────────
+    match /bounties/{bountyId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Checklist Templates (ChecklistBuilder in Settings) ────────────────────
+    match /checklist_templates/{templateId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Analytics snapshots ───────────────────────────────────────────────────
+    match /analytics/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Notifications ─────────────────────────────────────────────────────────
+    match /notifications/{notifId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Media Compliance ──────────────────────────────────────────────────────
+    match /media_compliance/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Event Journal ─────────────────────────────────────────────────────────
+    match /event_journal/{docId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}
