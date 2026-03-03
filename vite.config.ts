@@ -92,6 +92,8 @@ export default defineConfig(({ mode }) => {
     ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      // Bake CRM key into production bundle from .env.local — no source code change needed
+      'import.meta.env.VITE_PSI_CRM_API_KEY': JSON.stringify(env.VITE_PSI_CRM_API_KEY ?? ''),
     },
     resolve: {
       alias: {
