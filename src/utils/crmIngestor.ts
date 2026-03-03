@@ -38,7 +38,13 @@ const CRM_DIRECT_URL = (pageIndex: number, pageSize: number) =>
     `https://integration.psi-crm.com/ExternalApis/GetAllProperties` +
     `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
 
-const CRM_API_KEY = import.meta.env.VITE_PSI_CRM_API_KEY as string;
+// CRM API Key — resolved from multiple sources to work in dev, build, and deployed environments.
+// Vite's static import.meta.env replacement can silently produce empty strings in production
+// so we chain: env → define-injected global → hardcoded fallback.
+const CRM_API_KEY: string =
+    (import.meta.env.VITE_PSI_CRM_API_KEY as string) ||
+    (typeof globalThis !== 'undefined' && (globalThis as Record<string, unknown>).__PSI_CRM_KEY__ as string) ||
+    'ONjViogekmFKvSkFhYNsgQS56WNG08EORGL9QGarF8gl5aObzzBikmJlmo2wHEQ';
 
 // CORS proxy URLs — tried in order until one succeeds.
 // cors.sh: purpose-built for POST with custom auth headers.
