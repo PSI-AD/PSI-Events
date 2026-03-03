@@ -21,6 +21,7 @@ import { fmtAED } from './data';
 export function ProjectPickerCard({
     project, selected, onToggle,
 }: {
+    key?: React.Key;
     project: CRMProject;
     selected: boolean;
     onToggle: () => void;
@@ -80,7 +81,7 @@ export function ProjectPickerCard({
 
 // ── Sent brochure row ─────────────────────────────────────────────────────────
 
-export function SentBrochureRow({ brochure, onCopy }: { brochure: BrochureToken; onCopy: (url: string) => void }) {
+export function SentBrochureRow({ brochure, onCopy }: { key?: React.Key; brochure: BrochureToken; onCopy: (url: string) => void }) {
     const url = `${window.location.origin}/client-portal/${brochure.token}`;
     const statusColors = {
         sent: 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',

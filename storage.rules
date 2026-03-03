@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PSI Event Portal — Firebase Storage Security Rules
+// ─────────────────────────────────────────────────────────────────────────────
+//
+// Strategy: any authenticated user may read/write within their allowed paths.
+// brochures/  — generated PDF brochures uploaded by agents
+// journals/   — media attachments for event journal posts
+// expenses/   — receipt images for expense ledger
+//
+// Production hardening checklist (before real go-live):
+//   □ Scope brochures/ writes to request.auth.uid == agentId
+//   □ Limit file size: request.resource.size < 20 * 1024 * 1024
+//   □ Restrict content type: request.resource.contentType.matches('application/pdf')
+//   □ Add Firebase App Check for additional request verification
+// ─────────────────────────────────────────────────────────────────────────────
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Helper ──────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // ── Brochures (agent-generated PDF files) ──────────────────────────────
+    // Path: brochures/{filename}
+    match /brochures/{allPaths=**} {
+      allow read: if true;           // public read — clients access via signed URL
+      allow write: if isSignedIn();  // agents only
+    }
+
+    // ── Journal media (photos / videos attached to event posts) ───────────
+    // Path: journals/{eventId}/{filename}
+    match /journals/{eventId}/{allPaths=**} {
+      allow read:  if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // ── Expense receipts ──────────────────────────────────────────────────
+    // Path: expenses/{agentId}/{filename}
+    match /expenses/{agentId}/{allPaths=**} {
+      allow read:  if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // ── Default: deny everything else ─────────────────────────────────────
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

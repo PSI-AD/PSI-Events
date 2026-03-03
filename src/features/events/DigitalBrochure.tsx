@@ -26,8 +26,12 @@ import {
 } from 'lucide-react';
 import {
     collection, onSnapshot, query, where, orderBy,
+    addDoc, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../services/firebase/firebaseConfig';
+import { storage } from '../../services/firebase/firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { toast } from 'sonner';
 
 // Sub-modules
 import type { CRMProject, BrochureToken } from './brochure/types';
@@ -154,6 +158,79 @@ export default function DigitalBrochurePage({
             }
             const url = `${window.location.origin}/client-portal/${token}`;
             const projNames = snapshots.map(p => p.name).join(', ');
+
+            // ── Firebase Storage upload + Firestore record ──────────────────
+            // Build a self-contained brochure payload as a JSON blob,
+            // upload it to Storage so it becomes a permanent cloud asset,
+            // then write the metadata + download URL to the 'brochures'
+            // Firestore collection for indexing and audit trail.
+            try {
+                const brochurePayload = {
+                    token,
+                    clientPortalUrl: url,
+                    agentId,
+                    agentName,
+                    agentEmail,
+                    clientName: clientName.trim(),
+                    clientEmail: clientEmail.trim(),
+                    personalNote: personalNote.trim(),
+                    properties: snapshots.map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        developer: p.developer_name,
+                        location: p.location,
+                        priceRange: p.priceRange,
+                        tier: p.tier,
+                        imageUrl: p.imageUrl,
+                    })),
+                    generatedAt: new Date().toISOString(),
+                };
+
+                // Upload JSON blob to Storage: brochures/brochure_{timestamp}.json
+                const fileName = `brochure_${Date.now()}_${token}.json`;
+                const storageRef = ref(storage, `brochures/${fileName}`);
+                const blob = new Blob(
+                    [JSON.stringify(brochurePayload, null, 2)],
+                    { type: 'application/json' },
+                );
+                await uploadBytes(storageRef, blob, {
+                    contentType: 'application/json',
+                    customMetadata: { token, agentId, clientEmail: clientEmail.trim() },
+                });
+                const downloadUrl = await getDownloadURL(storageRef);
+
+                // Write permanent record to Firestore 'brochures' collection
+                await addDoc(collection(db, 'brochures'), {
+                    token,
+                    url: downloadUrl,
+                    clientPortalUrl: url,
+                    agentId,
+                    agentName,
+                    agentEmail,
+                    clientName: clientName.trim(),
+                    clientEmail: clientEmail.trim(),
+                    propertyIds: selectedProjectIds,
+                    propertyNames: projNames,
+                    propertyCount: snapshots.length,
+                    storagePath: `brochures/${fileName}`,
+                    status: 'sent',
+                    downloads: 0,
+                    shares: 0,
+                    generatedAt: serverTimestamp(),
+                });
+
+                toast.success('Brochure saved to company cloud', {
+                    description: `${snapshots.length} propert${snapshots.length === 1 ? 'y' : 'ies'} · ${clientName.trim()}`,
+                });
+            } catch (storageErr) {
+                // Non-blocking — the token URL is still valid even if cloud save fails
+                console.error('[DigitalBrochure] Storage/Firestore save failed:', storageErr);
+                toast.error('Cloud save failed — link still works', {
+                    description: storageErr instanceof Error ? storageErr.message : 'Unknown error',
+                });
+            }
+            // ── End Storage pipeline ────────────────────────────────────────
+
             setState(s => ({
                 ...s,
                 sending: false,
