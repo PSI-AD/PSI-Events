@@ -41,7 +41,8 @@ import {
     Timestamp,
     setDoc,
 } from 'firebase/firestore';
-import { db } from '../services/firebase/firebaseConfig';
+import { signInAnonymously } from 'firebase/auth';
+import { db, auth } from '../services/firebase/firebaseConfig';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers
@@ -132,6 +133,25 @@ export async function injectSeedData(): Promise<{
     const errors: string[] = [];
 
     console.group('🌱 PSI Seeder — injectSeedData()');
+
+    // ── Ensure Firebase Auth session exists before writing ────────────────────
+    // Firestore rules require request.auth != null for all collections.
+    // If the user isn't signed in (e.g. running from Settings before login),
+    // we sign in anonymously to get a valid auth token. This is safe because
+    // anonymous auth satisfies the isSignedIn() helper in firestore.rules.
+    if (!auth.currentUser) {
+        try {
+            await signInAnonymously(auth);
+            console.log('🔑 Seeder: signed in anonymously for Firestore access.');
+        } catch (authErr) {
+            const msg = authErr instanceof Error ? authErr.message : String(authErr);
+            console.error('❌ Seeder: anonymous sign-in failed:', msg);
+            errors.push(`[Auth] ${msg}`);
+            // Still attempt batches in case auth state is already valid
+        }
+    } else {
+        console.log(`🔑 Seeder: already signed in as ${auth.currentUser.uid}`);
+    }
 
     // ── Batch 1: Projects, Events, Users ─────────────────────────────────────
     // Each batch is independently try/caught so a permissions failure in one
