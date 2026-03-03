@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../services/firebase/firebaseConfig';
+import { mapsDb } from '../services/firebase/psiMapsConfig';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -36,6 +36,97 @@ interface CrmProject {
   total_units?: number;
   sold_units?: number;
   is_featured?: boolean;
+  // Raw PSI Maps passthrough (for future use)
+  _raw?: Record<string, unknown>;
+}
+
+// ── PSI Maps field normaliser ─────────────────────────────────────────────────
+// PSI Maps may use different field name conventions. This function reads from
+// all known variants so the UI works regardless of exact schema.
+// When the real schema is confirmed, unused branches can be removed.
+
+function str(d: Record<string, unknown>, ...keys: string[]): string {
+  for (const k of keys) if (typeof d[k] === 'string' && d[k]) return d[k] as string;
+  return '';
+}
+function num(d: Record<string, unknown>, ...keys: string[]): number {
+  for (const k of keys) if (typeof d[k] === 'number') return d[k] as number;
+  return 0;
+}
+
+function normaliseTier(raw: string): CrmProject['tier'] {
+  const t = (raw ?? '').toLowerCase();
+  if (t.includes('luxury') || t.includes('premium') || t.includes('ultra')) return 'Luxury';
+  if (t.includes('medium') || t.includes('mid') || t.includes('standard')) return 'Medium';
+  return 'Average';
+}
+
+function normalise(id: string, d: Record<string, unknown>): CrmProject {
+  // ── Name ──────────────────────────────────────────────────────────────────
+  const name = str(d, 'name', 'title', 'projectName', 'property_name', 'propertyName', 'project_name') || 'Unnamed Project';
+
+  // ── Developer ──────────────────────────────────────────────────────────────
+  const developer = str(d, 'developer', 'developerName', 'developer_name', 'company', 'builder', 'developer_company');
+
+  // ── Tier ──────────────────────────────────────────────────────────────────
+  const tierRaw = str(d, 'tier', 'category', 'grade', 'type', 'class', 'segment');
+  const tier = normaliseTier(tierRaw);
+
+  // ── Location ──────────────────────────────────────────────────────────────
+  const locationRaw = d['location'];
+  let location: CrmProject['location'] = {};
+  if (locationRaw && typeof locationRaw === 'object') {
+    const loc = locationRaw as Record<string, unknown>;
+    location = {
+      city: str(loc, 'city', 'emirate') || str(d, 'city', 'emirate'),
+      community: str(loc, 'community', 'area', 'district', 'neighborhood', 'neighbourhood') || str(d, 'community', 'area', 'district'),
+    };
+  } else {
+    // Flat structure — city/community at root level  
+    location = {
+      city: str(d, 'city', 'emirate', 'location'),
+      community: str(d, 'community', 'area', 'district', 'neighborhood', 'neighbourhood', 'sub_location'),
+    };
+  }
+
+  // ── Price range ──────────────────────────────────────────────────────────
+  let price_range_aed: CrmProject['price_range_aed'] | undefined;
+  const priceRaw = d['price_range_aed'] ?? d['price_range'] ?? d['priceRange'];
+  if (priceRaw && typeof priceRaw === 'object') {
+    const pr = priceRaw as Record<string, unknown>;
+    price_range_aed = {
+      min: num(pr, 'min', 'from', 'start', 'minimum'),
+      max: num(pr, 'max', 'to', 'end', 'maximum'),
+    };
+  } else {
+    const pMin = num(d, 'price_min', 'priceMin', 'min_price', 'minPrice', 'starting_price', 'startingPrice');
+    const pMax = num(d, 'price_max', 'priceMax', 'max_price', 'maxPrice');
+    if (pMin || pMax) price_range_aed = { min: pMin, max: pMax || pMin };
+  }
+
+  // ── Misc fields ───────────────────────────────────────────────────────────
+  const completion_date = str(d, 'completion_date', 'completionDate', 'handover_date', 'handoverDate', 'completion_year', 'completionYear');
+  const handover_status = str(d, 'handover_status', 'handoverStatus', 'status', 'project_status', 'salesStatus');
+  const commission_pct = num(d, 'commission_pct', 'commissionPct', 'commission', 'commission_percent', 'agentCommission') || undefined;
+  const commission_notes = str(d, 'commission_notes', 'commissionNotes', 'commission_note', 'commissionNote', 'commission_details');
+  const description = str(d, 'description', 'overview', 'summary', 'about', 'details');
+  const total_units = num(d, 'total_units', 'totalUnits', 'units', 'unit_count') || undefined;
+  const sold_units = num(d, 'sold_units', 'soldUnits', 'units_sold') || undefined;
+  const is_featured = !!(d['is_featured'] ?? d['isFeatured'] ?? d['featured']);
+
+  // unit_types can be string[] or comma-separated string
+  let unit_types: string[] | undefined;
+  const utRaw = d['unit_types'] ?? d['unitTypes'] ?? d['bedroom_types'] ?? d['bedroomTypes'];
+  if (Array.isArray(utRaw)) unit_types = utRaw.map(String);
+  else if (typeof utRaw === 'string' && utRaw) unit_types = utRaw.split(',').map(s => s.trim());
+
+  return {
+    id, name, developer, tier, location,
+    price_range_aed, completion_date, handover_status,
+    commission_pct, commission_notes, description,
+    total_units, sold_units, is_featured, unit_types,
+    _raw: d,   // keep raw for debugging — remove when schema is confirmed
+  };
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -131,13 +222,23 @@ export default function Projects() {
   const [query, setQuery] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // ── Live Firestore listener ─────────────────────────────────────────────────
+  // ── Live PSI Maps listener ────────────────────────────────────────────────
+  // Reads from psimaps-pro Firestore via the secondary 'PSI_MAPS' Firebase app.
+  // Collection is 'properties' — the PSI Maps canonical name.
   useEffect(() => {
     const unsub = onSnapshot(
-      collection(db, 'crm_projects'),
+      collection(mapsDb, 'properties'),
       snap => {
-        const docs = snap.docs.map(d => ({ id: d.id, ...d.data() } as CrmProject));
-        // Luxury first, then by name
+        if (snap.empty) {
+          console.warn('[Projects] PSI Maps \'properties\' collection is empty — using demo data.');
+          setLoading(false);
+          return;
+        }
+        // Log raw first doc so the admin can confirm field mapping
+        if (snap.docs.length > 0) {
+          console.info('[Projects] PSI Maps raw doc sample:', snap.docs[0].data());
+        }
+        const docs = snap.docs.map(d => normalise(d.id, d.data() as Record<string, unknown>));
         docs.sort((a, b) => {
           const tierOrder = ['Luxury', 'Medium', 'Average'];
           const ai = tierOrder.indexOf(a.tier);
@@ -145,12 +246,11 @@ export default function Projects() {
           if (ai !== bi) return ai - bi;
           return a.name.localeCompare(b.name);
         });
-        // Use Firebase data if available, otherwise keep demo fallback
         setProjects(docs.length > 0 ? docs : DEMO_PROJECTS);
         setLoading(false);
       },
       err => {
-        console.error('[Projects] Firestore error:', err);
+        console.error('[Projects] PSI Maps Firestore error:', err);
         setLoading(false);
       }
     );
@@ -188,8 +288,10 @@ export default function Projects() {
         <div>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-psi-primary">Projects & L&D</h2>
           <p className="text-psi-secondary mt-1 text-sm">
-            Live from <code className="text-xs bg-psi-subtle px-1.5 py-0.5 rounded font-mono">crm_projects</code> ·{' '}
-            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{projects.length} projects</span>
+            Live from{' '}
+            <code className="text-xs bg-psi-subtle px-1.5 py-0.5 rounded font-mono">psimaps-pro → properties</code>
+            {' '}·{' '}
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">{projects.length} properties</span>
           </p>
         </div>
         <button className="flex items-center gap-2 btn-accent px-5 py-2.5 rounded-xl font-medium active:scale-[0.98] transition-all shadow-sm select-none min-h-[44px]">
@@ -399,9 +501,9 @@ export default function Projects() {
               {filtered.length === 0 && (
                 <div className="md:col-span-2 py-20 text-center bg-psi-subtle border-2 border-dashed border-psi rounded-3xl">
                   <Layers size={36} className="mx-auto text-psi-muted mb-3" />
-                  <p className="font-bold text-psi-primary">No projects found</p>
+                  <p className="font-bold text-psi-primary">No properties found</p>
                   <p className="text-psi-secondary text-sm mt-1">
-                    {query ? 'Try different search terms.' : 'Run the seeder to populate crm_projects.'}
+                    {query ? 'Try different search terms.' : "PSI Maps 'properties' collection appears empty."}
                   </p>
                 </div>
               )}

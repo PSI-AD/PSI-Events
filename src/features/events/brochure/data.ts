@@ -9,6 +9,7 @@ import {
     increment, query, where, Timestamp,
 } from 'firebase/firestore';
 import { db } from '../../../services/firebase/firebaseConfig';
+import { mapsDb } from '../../../services/firebase/psiMapsConfig';
 import type { BrochureToken } from './types';
 
 // ── Demo data ─────────────────────────────────────────────────────────────────
@@ -125,12 +126,87 @@ export function fmtAED(n: number): string {
 
 // ── Firestore helpers ─────────────────────────────────────────────────────────
 
+// ── PSI Maps → CRMProject normaliser ─────────────────────────────────────────
+// Maps all known PSI Maps field name variants to the CRMProject interface
+// used by the Digital Brochure feature.
+
+function _str(d: Record<string, unknown>, ...keys: string[]): string {
+    for (const k of keys) if (typeof d[k] === 'string' && d[k]) return d[k] as string;
+    return '';
+}
+function _num(d: Record<string, unknown>, ...keys: string[]): number {
+    for (const k of keys) if (typeof d[k] === 'number') return d[k] as number;
+    return 0;
+}
+function _normaliseTier(raw: string): CRMProject['tier'] {
+    const t = (raw ?? '').toLowerCase();
+    if (t.includes('luxury') || t.includes('premium') || t.includes('ultra')) return 'Luxury';
+    if (t.includes('medium') || t.includes('mid') || t.includes('standard')) return 'Medium';
+    return 'Average';
+}
+
+function normaliseToCRMProject(id: string, d: Record<string, unknown>): CRMProject {
+    const name = _str(d, 'name', 'title', 'projectName', 'property_name', 'propertyName') || 'Unnamed';
+    const developer_name = _str(d, 'developer', 'developerName', 'developer_name', 'company', 'builder');
+    const tier = _normaliseTier(_str(d, 'tier', 'category', 'grade', 'type', 'segment'));
+    const description = _str(d, 'description', 'overview', 'summary', 'about');
+    const imageUrl = _str(d, 'imageUrl', 'image_url', 'image', 'photo', 'thumbnail', 'cover_image');
+    const completionYear = _str(d, 'completionYear', 'completion_year', 'completion_date', 'handover_date');
+    const bedrooms = _str(d, 'bedrooms', 'bedroom_types', 'unit_types', 'bedroomTypes');
+    const highlights = Array.isArray(d['highlights']) ? d['highlights'].map(String) : [];
+    const training_material_url = _str(d, 'training_material_url', 'trainingUrl', 'training_url');
+
+    // Price range — stored as 'AED X – Y' string or numeric min/max
+    let priceRange = _str(d, 'priceRange', 'price_range', 'price_range_str');
+    if (!priceRange) {
+        const pRaw = d['price_range_aed'] ?? d['price_range'];
+        if (pRaw && typeof pRaw === 'object') {
+            const pr = pRaw as Record<string, unknown>;
+            const mn = _num(pr, 'min', 'from') / 1_000_000;
+            const mx = _num(pr, 'max', 'to') / 1_000_000;
+            if (mn || mx) priceRange = `AED ${mn.toFixed(1)}M – ${mx.toFixed(1)}M`;
+        } else {
+            const mn = _num(d, 'price_min', 'priceMin', 'starting_price') / 1_000_000;
+            const mx = _num(d, 'price_max', 'priceMax') / 1_000_000;
+            if (mn || mx) priceRange = `AED ${mn.toFixed(1)}M – ${mx.toFixed(1)}M`;
+        }
+    }
+
+    const expected_avg_deal = _num(d, 'expected_avg_deal', 'expectedAvgDeal', 'avg_deal', 'price_min', 'priceMin', 'starting_price');
+
+    // Location — can be object or flat string fields
+    const locRaw = d['location'];
+    let location = _str(d, 'community', 'area', 'district', 'city', 'emirate');
+    if (!location && locRaw) {
+        if (typeof locRaw === 'string') location = locRaw;
+        else if (typeof locRaw === 'object') {
+            const l = locRaw as Record<string, unknown>;
+            location = [_str(l, 'community', 'area', 'district'), _str(l, 'city', 'emirate')].filter(Boolean).join(', ');
+        }
+    }
+
+    return {
+        id, name, developer_name, tier, description, imageUrl,
+        completionYear, bedrooms, highlights, priceRange,
+        expected_avg_deal, location, training_material_url,
+    };
+}
+
 export async function fetchCRMProjects(): Promise<CRMProject[]> {
     try {
-        const snap = await getDocs(collection(db, 'crm_projects'));
-        if (snap.empty) return DEMO_PROJECTS;
-        return snap.docs.map(d => ({ id: d.id, ...d.data() } as CRMProject));
-    } catch {
+        // First try PSI Maps 'properties' collection (primary source)
+        const snap = await getDocs(collection(mapsDb, 'properties'));
+        if (!snap.empty) {
+            console.info('[BrochureData] Loaded', snap.size, 'properties from PSI Maps');
+            return snap.docs.map(d => normaliseToCRMProject(d.id, d.data() as Record<string, unknown>));
+        }
+        // Fallback: local crm_projects (seeded data)
+        console.warn('[BrochureData] PSI Maps empty — falling back to local crm_projects');
+        const localSnap = await getDocs(collection(db, 'crm_projects'));
+        if (!localSnap.empty) return localSnap.docs.map(d => ({ id: d.id, ...d.data() } as CRMProject));
+        return DEMO_PROJECTS;
+    } catch (err) {
+        console.error('[BrochureData] fetchCRMProjects error:', err);
         return DEMO_PROJECTS;
     }
 }
