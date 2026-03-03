@@ -7,7 +7,7 @@ import {
     BrainCircuit, Zap, Crown, Flame, Gift,
     Map as MapIcon, Plane, Radio, Wallet, MessageSquare,
     ChevronRight, ChevronLeft, Search, ClipboardCheck, Network, Activity,
-    Map, Store, LibraryBig, BotMessageSquare,
+    Map, Store, LibraryBig, BotMessageSquare, Shield,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
@@ -18,6 +18,7 @@ import {
     GlobalActionButtons,
 } from '../components/GlobalFeatures';
 import EventSwitcher from '../components/EventSwitcher';
+import { useDemoRole, type DemoRole } from '../contexts/DemoAuthContext';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -80,6 +81,26 @@ const NAV_GROUPS = [
         ],
     },
 ];
+
+// ── RBAC: which routes each role can see ──────────────────────────────────────
+// Route `to` values are the source of truth — groups with zero visible
+// items after filtering are hidden entirely.
+
+const ROLE_ALLOWED: Record<DemoRole, Set<string> | 'all'> = {
+    admin: 'all',
+    hr: new Set([
+        '/', '/team', '/check-in', '/traffic-controller', '/travel-desk', '/checklist',
+    ]),
+    agent: new Set([
+        '/', '/proposals', '/digital-brochure', '/check-in', '/manual',
+    ]),
+};
+
+const ROLE_META: Record<DemoRole, { label: string; accent: string; dot: string; ring: string }> = {
+    admin: { label: 'Admin', accent: 'text-emerald-400', dot: 'bg-emerald-400', ring: 'ring-emerald-500/30' },
+    hr: { label: 'Logistics', accent: 'text-blue-400', dot: 'bg-blue-400', ring: 'ring-blue-500/30' },
+    agent: { label: 'Agent', accent: 'text-amber-400', dot: 'bg-amber-400', ring: 'ring-amber-500/30' },
+};
 
 // Flat list (kept for page-title lookup)
 const NAV_ITEMS = NAV_GROUPS.flatMap(g => g.items);
@@ -227,6 +248,21 @@ export default function DashboardLayout() {
     const groupRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const pageTitle = usePageTitle();
 
+    // ── Demo RBAC ─────────────────────────────────────────────────────────────
+    const { demoRole, setDemoRole } = useDemoRole();
+    const allowed = ROLE_ALLOWED[demoRole];
+    const filteredGroups = NAV_GROUPS
+        .map(group => ({
+            ...group,
+            items: allowed === 'all'
+                ? group.items
+                : group.items.filter(item => (allowed as Set<string>).has(item.to)),
+        }))
+        .filter(group => group.items.length > 0);
+
+    const meta = ROLE_META[demoRole];
+    const ROLES: DemoRole[] = ['admin', 'hr', 'agent'];
+
     const toggleGroup = (label: string) => {
         setOpenGroup(prev => {
             const opening = prev !== label;
@@ -247,7 +283,55 @@ export default function DashboardLayout() {
         <GlobalFeaturesProvider>
             <div className="flex h-screen bg-psi-page font-sans overflow-hidden">
 
-                {/* ── Desktop Sidebar ──────────────────────────────────── */}
+                {/* ── Demo Role Switcher (floating pill, top-center) ─────── */}
+                <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+                    <motion.div
+                        initial={{ opacity: 0, y: -12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                        className="pointer-events-auto flex items-center gap-3 px-3 py-2 rounded-full bg-slate-900/90 backdrop-blur-xl border border-white/[0.08] shadow-2xl shadow-black/50"
+                    >
+                        {/* Role identity — icon + current label + pulse dot */}
+                        <div className="flex items-center gap-1.5 pr-3 border-r border-white/10">
+                            <Shield size={11} className={meta.accent} />
+                            <span className={`text-[10px] font-black uppercase tracking-[0.18em] ${meta.accent}`}>
+                                {meta.label}
+                            </span>
+                            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${meta.dot} animate-pulse`} />
+                        </div>
+
+                        {/* Segmented role buttons with spring-animated background */}
+                        <div className="relative flex items-center gap-0.5">
+                            {ROLES.map(role => {
+                                const m = ROLE_META[role];
+                                const isActive = demoRole === role;
+                                return (
+                                    <button
+                                        key={role}
+                                        id={`demo-role-${role}`}
+                                        onClick={() => setDemoRole(role)}
+                                        title={`Switch to ${m.label} view`}
+                                        className={cn(
+                                            'relative px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors duration-200 select-none',
+                                            isActive ? 'text-slate-900' : 'text-slate-400 hover:text-slate-200',
+                                        )}
+                                    >
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="demo-role-pill"
+                                                className={`absolute inset-0 rounded-full ${m.dot}`}
+                                                transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                                            />
+                                        )}
+                                        <span className="relative z-10">{m.label}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
+                </div>
+
+
                 <aside
                     className={cn(
                         'hidden md:flex flex-col shrink-0',
@@ -282,67 +366,78 @@ export default function DashboardLayout() {
 
                     {/* ── Nav groups ── */}
                     <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-1">
-                        {NAV_GROUPS.map(group => {
-                            const isOpen = openGroup === group.label;
-                            return (
-                                <div
-                                    key={group.label}
-                                    ref={el => { groupRefs.current[group.label] = el; }}
-                                >
-                                    {/* Group header — clickable accordion toggle */}
-                                    {!isCollapsed ? (
-                                        <button
-                                            onClick={() => toggleGroup(group.label)}
-                                            className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-psi-subtle transition-colors group/header"
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={demoRole}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.18, ease: 'easeInOut' }}
+                            >
+                                {filteredGroups.map(group => {
+                                    const isOpen = openGroup === group.label;
+                                    return (
+                                        <div
+                                            key={group.label}
+                                            ref={el => { groupRefs.current[group.label] = el; }}
                                         >
-                                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
-                                            <ChevronRight
-                                                size={10}
-                                                className={cn(
-                                                    'text-psi-muted transition-transform duration-200',
-                                                    isOpen && 'rotate-90'
-                                                )}
-                                            />
-                                        </button>
-                                    ) : (
-                                        /* Collapsed: divider + tooltip on hover */
-                                        <div className="relative group/grphdr flex items-center justify-center py-1">
-                                            <div className="mx-3 h-px bg-psi-border w-full" />
-                                            {/* Collapsed group tooltip */}
-                                            <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover/grphdr:opacity-100 group-hover/grphdr:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
-                                                {group.label}
-                                            </span>
-                                        </div>
-                                    )}
-                                    {/* Collapsible children — overflow-hidden only when expanded (not collapsed), so tooltips can escape */}
-                                    <AnimatePresence initial={false}>
-                                        {(isCollapsed || isOpen) && (
-                                            <motion.div
-                                                key={`${group.label}-items`}
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                                                className={isCollapsed ? undefined : 'overflow-hidden'}
-                                            >
-                                                <div className="space-y-0.5">
-                                                    {group.items.map(({ to, icon, label }) => (
-                                                        <SidebarLink
-                                                            key={to}
-                                                            to={to}
-                                                            icon={icon}
-                                                            label={label}
-                                                            collapsed={isCollapsed}
-                                                        />
-                                                    ))}
+                                            {/* Group header — clickable accordion toggle */}
+                                            {!isCollapsed ? (
+                                                <button
+                                                    onClick={() => toggleGroup(group.label)}
+                                                    className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-psi-subtle transition-colors group/header"
+                                                >
+                                                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
+                                                    <ChevronRight
+                                                        size={10}
+                                                        className={cn(
+                                                            'text-psi-muted transition-transform duration-200',
+                                                            isOpen && 'rotate-90'
+                                                        )}
+                                                    />
+                                                </button>
+                                            ) : (
+                                                /* Collapsed: divider + tooltip on hover */
+                                                <div className="relative group/grphdr flex items-center justify-center py-1">
+                                                    <div className="mx-3 h-px bg-psi-border w-full" />
+                                                    {/* Collapsed group tooltip */}
+                                                    <span className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-md shadow-xl opacity-0 invisible group-hover/grphdr:opacity-100 group-hover/grphdr:visible transition-all duration-200 z-50 whitespace-nowrap before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-slate-900 pointer-events-none">
+                                                        {group.label}
+                                                    </span>
                                                 </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            );
-                        })}
+                                            )}
+                                            {/* Collapsible children — overflow-hidden only when expanded (not collapsed), so tooltips can escape */}
+                                            <AnimatePresence initial={false}>
+                                                {(isCollapsed || isOpen) && (
+                                                    <motion.div
+                                                        key={`${group.label}-items`}
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                                        className={isCollapsed ? undefined : 'overflow-hidden'}
+                                                    >
+                                                        <div className="space-y-0.5">
+                                                            {group.items.map(({ to, icon, label }) => (
+                                                                <SidebarLink
+                                                                    key={to}
+                                                                    to={to}
+                                                                    icon={icon}
+                                                                    label={label}
+                                                                    collapsed={isCollapsed}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    );
+                                })}
+                            </motion.div>
+                        </AnimatePresence>
                     </nav>
+
 
                     {/* ── Footer links ── */}
                     <div className="border-t border-psi p-2 space-y-0.5">
@@ -456,7 +551,7 @@ export default function DashboardLayout() {
 
                                 {/* Drawer nav groups */}
                                 <nav className="flex-1 overflow-y-auto scrollbar-none py-3 px-2 space-y-4">
-                                    {NAV_GROUPS.map(group => (
+                                    {filteredGroups.map(group => (
                                         <div key={group.label}>
                                             <div className="px-3 mb-1">
                                                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-psi-muted">{group.label}</p>
