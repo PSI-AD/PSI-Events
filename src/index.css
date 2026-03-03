@@ -214,6 +214,41 @@
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
+  /* ── Global form element reset ─────────────────────────────────────────
+     Prevents the browser from applying OS-native white/black backgrounds
+     to inputs, selects, and textareas. Using inherit ensures they pick up
+     the nearest ancestor’s --psi-* token values automatically across all
+     themes (default, dark, modern, glass, minimal).
+  ─────────────────────────────────────────────────────────────────────── */
+
+  input,
+  select,
+  textarea {
+    /* Pull bg + text from the PSI token stack — never hard white/black */
+    background-color: var(--psi-bg-subtle);
+    color: var(--psi-text-primary);
+    /* Keep any component-level border/radius overrides from still working */
+    border-color: var(--psi-border);
+  }
+
+  /* <option> elements are rendered by the OS dropdown overlay.
+     Setting explicit bg + fg keeps them readable in both modes.
+     Note: Firefox + Windows honour these; macOS/Safari ignores them
+     for the native overlay (a known browser limitation). */
+  option {
+    background-color: var(--psi-surface-raised);
+    color: var(--psi-text-primary);
+  }
+
+  /* Disabled state: visually muted regardless of theme */
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background-color: var(--psi-bg-subtle);
+  }
+
   /* Smooth transitions when theme is toggled */
   *,
   *::before,
@@ -1618,15 +1653,37 @@
   filter: brightness(1.15);
 }
 
-/* Minimal — inputs: very light fill, thin border */
+/* Minimal — inputs: use the token stack, not the hardcoded off-white.
+   --min-off-white (#fafafa) is correct in light mode but wrong in dark mode
+   and looks harsh against Minimal’s warm-neutral surfaces.
+   Referencing --psi-bg-subtle gives us the right value in every mode
+   because dark.theme-minimal already remaps --psi-bg-subtle to #1a1a1a. */
 .theme-minimal .psi-input {
-  background-color: var(--min-off-white);
+  background-color: var(--psi-bg-subtle);
   border-color: var(--min-border);
+  color: var(--psi-text-primary);
 }
 
 .theme-minimal .psi-input:focus {
   border-color: var(--min-accent);
   box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.10);
+}
+
+/* Minimal — native select element: force token colours so OS dropdown
+   doesn’t snap to white-on-white in dark mode */
+.theme-minimal select,
+.theme-minimal input,
+.theme-minimal textarea {
+  background-color: var(--psi-bg-subtle);
+  color: var(--psi-text-primary);
+  border-color: var(--psi-border);
+}
+
+/* Dark Minimal: ensure focus ring uses a visible colour (not the
+   near-invisible default rgba) */
+.dark.theme-minimal .psi-input:focus {
+  border-color: rgba(249, 250, 251, 0.60);
+  box-shadow: 0 0 0 2px rgba(249, 250, 251, 0.08);
 }
 
 /* Minimal — table: hairline rows */
