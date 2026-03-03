@@ -77,6 +77,12 @@ service cloud.firestore {
     }
 
     // ── Proposals ─────────────────────────────────────────────────────────────
+    // 'proposals' — used by injectSeedData() Batch 3
+    match /proposals/{proposalId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // 'crm_proposals' — legacy alias kept for backward compat
     match /crm_proposals/{proposalId} {
       allow read, write: if isSignedIn();
     }
@@ -128,6 +134,21 @@ service cloud.firestore {
 
     // ── Event Journal ─────────────────────────────────────────────────────────
     match /event_journal/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Logistics Desk (travel, visa & hotel records) ─────────────────────────
+    match /logistics_desk/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Venue Booths (floor plan / booth assignment) ───────────────────────────
+    match /venue_booths/{docId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // ── Brochures (digital PDF metadata) ──────────────────────────────────────
+    match /brochures/{docId} {
       allow read, write: if isSignedIn();
     }
   }
