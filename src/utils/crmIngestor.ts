@@ -34,10 +34,19 @@ import { db } from '../services/firebase/firebaseConfig';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
-// Direct CRM endpoint — wrapped in corsproxy.io so the browser can reach it
-// from Firebase Hosting without needing a server-side proxy or Cloud Function.
-const CRM_DIRECT_BASE = 'https://integration.psi-crm.com/ExternalApis';
+const CRM_DIRECT_URL = (pageIndex: number, pageSize: number) =>
+    `https://integration.psi-crm.com/ExternalApis/GetAllProperties` +
+    `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
+
 const CRM_API_KEY = import.meta.env.VITE_PSI_CRM_API_KEY as string;
+
+// CORS proxy URLs — tried in order until one succeeds.
+// cors.sh: purpose-built for POST with custom auth headers.
+// corsproxy.io: general proxy, sometimes blocks preflight.
+const CORS_PROXIES = [
+    (url: string) => `https://proxy.cors.sh/${url}`,
+    (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+];
 
 // Firestore limits a single batch to 500 operations
 const BATCH_LIMIT = 499;
@@ -162,6 +171,26 @@ function normalise(raw: CRMProperty): NormalisedProject {
 
 // ── API fetch helper ──────────────────────────────────────────────────────────
 
+async function tryFetchViaCorsProxy(
+    targetUrl: string,
+    proxyFn: (url: string) => string,
+    apiKey: string,
+): Promise<Response> {
+    const proxied = proxyFn(targetUrl);
+    return fetch(proxied, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'X-Api-Key': apiKey,
+            // cors.sh requires this header to whitelist the request
+            'x-cors-api-key': 'temp_6ac6b5a7c2d242dcb49cbf4e4a7e97b2',
+        },
+        body: JSON.stringify({}),
+    });
+}
+
 async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProperty[]> {
     if (!CRM_API_KEY) {
         throw new Error(
@@ -169,57 +198,43 @@ async function fetchPage(pageIndex: number, pageSize: number): Promise<CRMProper
         );
     }
 
-    // The server requires POST but reads params from the URL query string only.
-    // Sending a JSON body causes a 500 server-side model-binding crash.
-    //
-    // In production (Firebase Hosting) there is no Vite proxy, so we route the
-    // request through corsproxy.io which adds the necessary CORS headers.
-    const targetUrl =
-        `${CRM_DIRECT_BASE}/GetAllProperties` +
-        `?pageIndex=${pageIndex}&pageSize=${pageSize}`;
-    const url = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+    const targetUrl = CRM_DIRECT_URL(pageIndex, pageSize);
+    let lastError: Error | null = null;
 
-    // Debug: log the resolved URL so you can verify in DevTools → Console
-    console.log('[CRM Ingestor] POST (via corsproxy.io)', targetUrl);
+    for (let i = 0; i < CORS_PROXIES.length; i++) {
+        const proxyFn = CORS_PROXIES[i];
+        const proxyName = i === 0 ? 'cors.sh' : 'corsproxy.io';
+        console.log(`[CRM Ingestor] attempt ${i + 1} via ${proxyName}`);
 
-    const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${CRM_API_KEY}`,
-            'X-Api-Key': CRM_API_KEY,
-        },
-        // Server requires Content-Type: application/json (returns 415 without it).
-        // Pagination params are read from URL query string; body must be valid JSON.
-        body: JSON.stringify({}),
-    });
+        try {
+            const res = await tryFetchViaCorsProxy(targetUrl, proxyFn, CRM_API_KEY);
 
-    if (!res.ok) {
-        const body = await res.text().catch(() => '');
-        throw new Error(`CRM API ${res.status} ${res.statusText}${body ? ': ' + body.slice(0, 200) : ''}`);
-    }
+            if (!res.ok) {
+                const body = await res.text().catch(() => '');
+                throw new Error(`${proxyName} ${res.status} ${res.statusText}${body ? ': ' + body.slice(0, 200) : ''}`);
+            }
 
-    const json: unknown = await res.json();
+            const json: unknown = await res.json();
+            console.log(`[CRM Ingestor] success via ${proxyName}`);
 
-    // Handle different envelope shapes the API might return:
-    //   • Array directly         → [{ ... }, ...]
-    //   • { data: [...] }        → common REST pattern
-    //   • { result: [...] }
-    //   • { properties: [...] }
-    //   • { value: [...] }      → OData
-    if (Array.isArray(json)) return json as CRMProperty[];
+            if (Array.isArray(json)) return json as CRMProperty[];
+            if (json && typeof json === 'object') {
+                const obj = json as Record<string, unknown>;
+                for (const key of ['data', 'result', 'properties', 'value', 'items', 'records']) {
+                    if (Array.isArray(obj[key])) return obj[key] as CRMProperty[];
+                }
+                return [obj as CRMProperty];
+            }
+            return [];
 
-    if (json && typeof json === 'object') {
-        const obj = json as Record<string, unknown>;
-        for (const key of ['data', 'result', 'properties', 'value', 'items', 'records']) {
-            if (Array.isArray(obj[key])) return obj[key] as CRMProperty[];
+        } catch (err) {
+            lastError = err instanceof Error ? err : new Error(String(err));
+            console.warn(`[CRM Ingestor] ${proxyName} failed: ${lastError.message}`);
+            // Try next proxy
         }
-        // Single object response — wrap in array
-        return [obj as CRMProperty];
     }
 
-    return [];
+    throw lastError ?? new Error('All CORS proxies failed');
 }
 
 // ── Batch writer helper ───────────────────────────────────────────────────────

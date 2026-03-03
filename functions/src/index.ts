@@ -5,6 +5,7 @@ import { distributeLeads } from './api/leadDistribution';
 import { logisticsNudger } from './scheduledJobs/logisticsNudger';
 import { processReceiptOCR } from './processReceiptOCR';
 import { onLeadQualified } from './leadNurture';
+import { crmProxy } from './api/crmProxy';
 
 /**
  * index.ts
@@ -20,5 +21,6 @@ export {
   logisticsNudger,
   processReceiptOCR,
   onLeadQualified,
+  crmProxy,
 };
 
