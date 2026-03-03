@@ -8,11 +8,12 @@ import React, { useState, useEffect } from 'react';
 import {
   Users as UsersIcon, Filter,
   CheckCircle2, XCircle,
-  Globe, MoreVertical,
+  Globe, MoreVertical, Plus, UserPlus, X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase/firebaseConfig';
+import { toast } from 'sonner';
 import {
   PageShell, PageHeader, SectionCard,
   DataTable, DataRow, DataCell,
@@ -137,6 +138,52 @@ export default function Team() {
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
 
+  // ── Add User modal state ──────────────────────────────────────────────
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [newMember, setNewMember] = useState({
+    full_name: '',
+    email: '',
+    role: 'Agent' as 'Agent' | 'Manager' | 'God-Mode Organizer',
+    branch: '',
+    rera_number: '',
+    nationality: '',
+  });
+
+  // ── handleAddMember ──────────────────────────────────────────────────
+  const handleAddMember = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await addDoc(collection(db, 'crm_users'), {
+        full_name: newMember.full_name.trim(),
+        email: newMember.email.trim().toLowerCase(),
+        role: newMember.role,
+        branch: newMember.branch.trim(),
+        rera_number: newMember.rera_number.trim(),
+        nationality: newMember.nationality.trim(),
+        is_active: true,
+        is_penalized: false,
+        languages: [],
+        performance: {},
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      });
+      toast.success('Team member added', {
+        description: `${newMember.full_name} has been saved to crm_users.`,
+      });
+      setShowAddModal(false);
+      setNewMember({ full_name: '', email: '', role: 'Agent', branch: '', rera_number: '', nationality: '' });
+    } catch (err) {
+      console.error('[Team] addDoc failed:', err);
+      toast.error('Failed to add team member', {
+        description: err instanceof Error ? err.message : 'Unknown Firestore error',
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // ── Live Firestore listener ─────────────────────────────────────────────────
   useEffect(() => {
     const unsub = onSnapshot(
@@ -190,9 +237,19 @@ export default function Team() {
           </>
         }
         actions={
-          <Btn variant="secondary" icon={<Globe size={15} className="text-psi-muted" />}>
-            Sync CRM
-          </Btn>
+          <>
+            <Btn
+              id="add-team-member-btn"
+              variant="primary"
+              icon={<UserPlus size={15} />}
+              onClick={() => setShowAddModal(true)}
+            >
+              Add Member
+            </Btn>
+            <Btn variant="secondary" icon={<Globe size={15} className="text-psi-muted" />}>
+              Sync CRM
+            </Btn>
+          </>
         }
       />
 
@@ -374,6 +431,144 @@ export default function Team() {
           ))}
         </DataTable>
       </SectionCard>
+
+      {/* ── Add Team Member Modal ──────────────────────────────────── */}
+      <AnimatePresence>
+        {showAddModal && (
+          <motion.div
+            key="add-member-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowAddModal(false); }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              className="bg-psi-raised rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden border border-psi"
+            >
+              {/* Modal header */}
+              <div className="p-6 border-b border-psi flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-psi-accent-subtle flex items-center justify-center">
+                    <UserPlus size={16} className="text-psi-accent" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-psi-primary">Add Team Member</h3>
+                    <p className="text-[11px] text-psi-muted">Saves to <code className="font-mono">crm_users</code> collection</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="p-2 rounded-xl text-psi-muted hover:text-psi-primary hover:bg-psi-subtle transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleAddMember} className="p-6 space-y-4">
+                {/* Full name */}
+                <div>
+                  <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Full Name *</label>
+                  <input
+                    required type="text"
+                    value={newMember.full_name}
+                    onChange={e => setNewMember({ ...newMember, full_name: e.target.value })}
+                    placeholder="e.g. Khalid Al-Mansouri"
+                    className="psi-input w-full px-4 py-2.5"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Email *</label>
+                  <input
+                    required type="email"
+                    value={newMember.email}
+                    onChange={e => setNewMember({ ...newMember, email: e.target.value })}
+                    placeholder="agent@psi-events.ae"
+                    className="psi-input w-full px-4 py-2.5"
+                  />
+                </div>
+
+                {/* Role + Branch */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Role *</label>
+                    <select
+                      value={newMember.role}
+                      onChange={e => setNewMember({ ...newMember, role: e.target.value as typeof newMember.role })}
+                      className="psi-input w-full px-4 py-2.5"
+                    >
+                      <option value="Agent">Agent</option>
+                      <option value="Manager">Manager</option>
+                      <option value="God-Mode Organizer">God-Mode Organizer</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Branch</label>
+                    <input
+                      type="text"
+                      value={newMember.branch}
+                      onChange={e => setNewMember({ ...newMember, branch: e.target.value })}
+                      placeholder="Dubai Marina"
+                      className="psi-input w-full px-4 py-2.5"
+                    />
+                  </div>
+                </div>
+
+                {/* RERA + Nationality */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">RERA / BRN</label>
+                    <input
+                      type="text"
+                      value={newMember.rera_number}
+                      onChange={e => setNewMember({ ...newMember, rera_number: e.target.value })}
+                      placeholder="BRN-12345"
+                      className="psi-input w-full px-4 py-2.5"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-psi-muted uppercase tracking-widest mb-1">Nationality</label>
+                    <input
+                      type="text"
+                      value={newMember.nationality}
+                      onChange={e => setNewMember({ ...newMember, nationality: e.target.value })}
+                      placeholder="Emirati"
+                      className="psi-input w-full px-4 py-2.5"
+                    />
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    id="add-member-submit-btn"
+                    className="btn-accent w-full py-3 rounded-xl font-bold active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed select-none flex items-center justify-center gap-2 min-h-[48px]"
+                  >
+                    {saving ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                        </svg>
+                        <span>Saving to Firestore…</span>
+                      </>
+                    ) : 'Add Team Member'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageShell>
   );
 }
